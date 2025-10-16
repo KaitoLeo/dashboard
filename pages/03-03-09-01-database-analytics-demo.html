@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database Analytics Demo - Actiwell CMS</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css"
+    />
+    <style>
+      .sql-query {
+        background: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 15px;
+        margin: 10px 0;
+        font-family: "Courier New", monospace;
+        border-radius: 4px;
+      }
+      .result-table {
+        margin: 15px 0;
+      }
+      .result-table table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .result-table th,
+      .result-table td {
+        border: 1px solid #dee2e6;
+        padding: 8px 12px;
+        text-align: left;
+      }
+      .result-table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+      }
+      .metric-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid #28a745;
+      }
+      .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #28a745;
+      }
+      .metric-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Preloader -->
+    <div id="preloader">
+      <div id="status">
+        <div class="spinner-chase">
+          <div class="chase-dot"></div>
+          <div class="chase-dot"></div>
+          <div class="chase-dot"></div>
+          <div class="chase-dot"></div>
+          <div class="chase-dot"></div>
+          <div class="chase-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout Wrapper -->
+    <div id="layout-wrapper">
+      <!-- Header -->
+      <header id="page-topbar">
+        <div class="navbar-header">
+          <div class="d-flex justify-content-center align-items-center">
+            <button
+              type="button"
+              class="btn btn-sm font-size-16 header-item"
+              id="vertical-menu-btn"
+            >
+              <img
+                src="../assets/images/logo.png"
+                alt="Logo"
+                style="width: 2rem"
+              />
+            </button>
+            <h3 class="header-title">Database Analytics Demo</h3>
+            <h3 class="header-subtitle">/ SQL Query Results</h3>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="page-content">
+          <div class="container-fluid">
+            <!-- Page Title -->
+            <div class="row">
+              <div class="col-12">
+                <div
+                  class="page-title-box d-sm-flex align-items-center justify-content-between"
+                >
+                  <h4 class="mb-sm-0 font-size-18">Database Analytics Demo</h4>
+                  <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                      <li class="breadcrumb-item">
+                        <a href="../index.html">Dashboard</a>
+                      </li>
+                      <li class="breadcrumb-item active">Database Analytics</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SQL Query 1: Monthly Bookings by Location -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      <i class="bx bx-data me-2"></i>
+                      Query 1: Monthly Bookings by Location
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="sql-query">
+                      <strong>SQL Query:</strong><br />
+                      SELECT location_id, date_trunc('month', created_at) AS
+                      year_month, COUNT(*) <br />
+                      FROM bookings <br />
+                      WHERE status IN (1,2,3) <br />
+                      GROUP BY 1,2
+                    </div>
+                    <div class="result-table">
+                      <table id="monthlyBookingsTable">
+                        <thead>
+                          <tr>
+                            <th>Location ID</th>
+                            <th>Location Name</th>
+                            <th>Year-Month</th>
+                            <th>Count</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SQL Query 2: Confirmed Bookings by Location -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      <i class="bx bx-check-circle me-2"></i>
+                      Query 2: Confirmed Bookings by Location
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="sql-query">
+                      <strong>SQL Query:</strong><br />
+                      SELECT location_id, COUNT(*) <br />
+                      FROM bookings <br />
+                      WHERE status = 2 <br />
+                      GROUP BY 1
+                    </div>
+                    <div class="result-table">
+                      <table id="confirmedBookingsTable">
+                        <thead>
+                          <tr>
+                            <th>Location ID</th>
+                            <th>Location Name</th>
+                            <th>Confirmed Count</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SQL Query 3: Booking Statistics -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      <i class="bx bx-bar-chart me-2"></i>
+                      Query 3: Booking Statistics
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <div class="metric-card">
+                          <div class="metric-value" id="pendingCount">-</div>
+                          <div class="metric-label">Pending Bookings</div>
+                          <div class="sql-query mt-2">
+                            <small
+                              >SELECT COUNT(*) FROM bookings WHERE status =
+                              1</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="metric-card">
+                          <div class="metric-value" id="completedCount">-</div>
+                          <div class="metric-label">Completed Bookings</div>
+                          <div class="sql-query mt-2">
+                            <small
+                              >SELECT COUNT(*) FROM bookings WHERE status =
+                              3</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="metric-card">
+                          <div class="metric-value" id="todayCount">-</div>
+                          <div class="metric-label">Today's Bookings</div>
+                          <div class="sql-query mt-2">
+                            <small
+                              >SELECT COUNT(*) FROM bookings WHERE
+                              DATE(created_at) = CURDATE()</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <div class="metric-card">
+                          <div class="metric-value" id="totalLocations">-</div>
+                          <div class="metric-label">Total Locations</div>
+                          <div class="sql-query mt-2">
+                            <small>SELECT COUNT(*) FROM locations</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SQL Query 4: Bookings by Location and Department -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      <i class="bx bx-building me-2"></i>
+                      Query 4: Bookings by Location and Department
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="sql-query">
+                      <strong>SQL Query:</strong><br />
+                      SELECT b.location_id, d.department_id, COUNT(*) <br />
+                      FROM bookings b <br />
+                      JOIN departments d ON b.location_id = d.location_id <br />
+                      GROUP BY 1,2
+                    </div>
+                    <div class="result-table">
+                      <table id="locationDeptTable">
+                        <thead>
+                          <tr>
+                            <th>Location ID</th>
+                            <th>Location Name</th>
+                            <th>Department ID</th>
+                            <th>Department Name</th>
+                            <th>Count</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SQL Query 5: Cancellation Rate -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      <i class="bx bx-x-circle me-2"></i>
+                      Query 5: Cancellation Rate
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="sql-query">
+                      <strong>SQL Query:</strong><br />
+                      SELECT SUM(CASE WHEN status='cancelled' THEN 1 ELSE 0 END)
+                      / NULLIF(COUNT(*),0) AS cancellation_rate<br />
+                      FROM bookings
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="metric-card">
+                          <div class="metric-value" id="cancellationRate">
+                            -
+                          </div>
+                          <div class="metric-label">Tỉ lệ hủy tổng thể (%)</div>
+                          <div class="sql-query mt-2">
+                            <small
+                              >SUM(CASE WHEN status='cancelled' THEN 1 ELSE 0
+                              END) / NULLIF(COUNT(*),0)</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="metric-card">
+                          <div class="metric-value" id="cancelledCount">-</div>
+                          <div class="metric-label">Số booking bị hủy</div>
+                          <div class="sql-query mt-2">
+                            <small>COUNT(*) WHERE status = 4</small>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="metric-card">
+                          <div class="metric-value" id="totalBookings">-</div>
+                          <div class="metric-label">Tổng số booking</div>
+                          <div class="sql-query mt-2">
+                            <small>COUNT(*) FROM bookings</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="result-table">
+                      <h6>Tỉ lệ hủy theo cơ sở:</h6>
+                      <table id="cancellationRateTable">
+                        <thead>
+                          <tr>
+                            <th>Location ID</th>
+                            <th>Location Name</th>
+                            <th>Total Bookings</th>
+                            <th>Cancelled</th>
+                            <th>Cancellation Rate (%)</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Raw Data Display -->
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      <i class="bx bx-code-alt me-2"></i>
+                      Raw Database Data
+                    </h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h6>Class Bookings</h6>
+                        <pre
+                          id="bookingsData"
+                          style="
+                            background: #f8f9fa;
+                            padding: 10px;
+                            border-radius: 4px;
+                            font-size: 12px;
+                            max-height: 300px;
+                            overflow-y: auto;
+                          "
+                        ></pre>
+                      </div>
+                      <div class="col-md-6">
+                        <h6>PT Bookings</h6>
+                        <pre
+                          id="ptBookingsData"
+                          style="
+                            background: #f8f9fa;
+                            padding: 10px;
+                            border-radius: 4px;
+                            font-size: 12px;
+                            max-height: 300px;
+                            overflow-y: auto;
+                          "
+                        ></pre>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../data/sample-data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script>
+      // Database Analytics Helper Functions
+      const DatabaseAnalytics = {
+        getMonthlyBookingsByLocation: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return [];
+          return window.SampleData.analytics.getMonthlyBookingsByLocation();
+        },
+        getConfirmedBookingsByLocation: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return [];
+          return window.SampleData.analytics.getConfirmedBookingsByLocation();
+        },
+        getPendingBookingsCount: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return 0;
+          return window.SampleData.analytics.getPendingBookingsCount();
+        },
+        getCompletedBookingsCount: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return 0;
+          return window.SampleData.analytics.getCompletedBookingsCount();
+        },
+        getTodayBookingsCount: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return 0;
+          return window.SampleData.analytics.getTodayBookingsCount();
+        },
+        getBookingsByLocationAndDepartment: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return [];
+          return window.SampleData.analytics.getBookingsByLocationAndDepartment();
+        },
+        getCancellationRate: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return 0;
+          return window.SampleData.analytics.getCancellationRate();
+        },
+        getCancellationRateByLocation: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return [];
+          return window.SampleData.analytics.getCancellationRateByLocation();
+        },
+        getCancelledBookingsCount: function () {
+          if (!window.SampleData || !window.SampleData.analytics) return 0;
+          return window.SampleData.analytics.getCancelledBookingsCount();
+        },
+      };
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadAnalyticsData();
+      });
+
+      function loadAnalyticsData() {
+        console.log("Loading analytics data...");
+        console.log("SampleData available:", !!window.SampleData);
+        console.log("Analytics available:", !!window.SampleData?.analytics);
+
+        // Load monthly bookings by location
+        loadMonthlyBookingsTable();
+
+        // Load confirmed bookings by location
+        loadConfirmedBookingsTable();
+
+        // Load booking statistics
+        loadBookingStatistics();
+
+        // Load bookings by location and department
+        loadLocationDeptTable();
+
+        // Load cancellation rate data
+        loadCancellationRateData();
+
+        // Load raw data
+        loadRawData();
+      }
+
+      function loadMonthlyBookingsTable() {
+        const data = DatabaseAnalytics.getMonthlyBookingsByLocation();
+        const tbody = document.querySelector("#monthlyBookingsTable tbody");
+
+        tbody.innerHTML = data
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item.location_id}</td>
+                    <td>${item.location_name}</td>
+                    <td>${item.year_month}</td>
+                    <td>${item.count}</td>
+                </tr>
+            `
+          )
+          .join("");
+      }
+
+      function loadConfirmedBookingsTable() {
+        const data = DatabaseAnalytics.getConfirmedBookingsByLocation();
+        const tbody = document.querySelector("#confirmedBookingsTable tbody");
+
+        tbody.innerHTML = data
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item.location_id}</td>
+                    <td>${item.location_name}</td>
+                    <td>${item.count}</td>
+                </tr>
+            `
+          )
+          .join("");
+      }
+
+      function loadBookingStatistics() {
+        document.getElementById("pendingCount").textContent =
+          DatabaseAnalytics.getPendingBookingsCount();
+        document.getElementById("completedCount").textContent =
+          DatabaseAnalytics.getCompletedBookingsCount();
+        document.getElementById("todayCount").textContent =
+          DatabaseAnalytics.getTodayBookingsCount();
+        document.getElementById("totalLocations").textContent =
+          window.SampleData?.locations?.length || 0;
+      }
+
+      function loadLocationDeptTable() {
+        const data = DatabaseAnalytics.getBookingsByLocationAndDepartment();
+        const tbody = document.querySelector("#locationDeptTable tbody");
+
+        tbody.innerHTML = data
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item.location_id}</td>
+                    <td>${item.location_name}</td>
+                    <td>${item.department_id}</td>
+                    <td>${item.department_name}</td>
+                    <td>${item.count}</td>
+                </tr>
+            `
+          )
+          .join("");
+      }
+
+      function loadCancellationRateData() {
+        // Load cancellation rate metrics
+        document.getElementById("cancellationRate").textContent =
+          DatabaseAnalytics.getCancellationRate().toFixed(2) + "%";
+        document.getElementById("cancelledCount").textContent =
+          DatabaseAnalytics.getCancelledBookingsCount();
+        document.getElementById("totalBookings").textContent =
+          (window.SampleData?.bookings?.length || 0) +
+          (window.SampleData?.pt_bookings?.length || 0);
+
+        // Load cancellation rate by location table
+        const data = DatabaseAnalytics.getCancellationRateByLocation();
+        const tbody = document.querySelector("#cancellationRateTable tbody");
+
+        tbody.innerHTML = data
+          .map(
+            (item) => `
+                 <tr>
+                     <td>${item.location_id}</td>
+                     <td>${item.location_name}</td>
+                     <td>${item.total}</td>
+                     <td>${item.cancelled}</td>
+                     <td>${item.rate.toFixed(2)}%</td>
+                 </tr>
+             `
+          )
+          .join("");
+      }
+
+      function loadRawData() {
+        document.getElementById("bookingsData").textContent = JSON.stringify(
+          window.SampleData?.bookings || [],
+          null,
+          2
+        );
+        document.getElementById("ptBookingsData").textContent = JSON.stringify(
+          window.SampleData?.pt_bookings || [],
+          null,
+          2
+        );
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

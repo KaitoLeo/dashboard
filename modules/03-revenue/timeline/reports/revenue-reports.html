@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo doanh thu - Actiwell Report System</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                <i class="fas fa-chart-line me-1"></i>Báo cáo doanh thu
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-2">
+                  <label class="form-label">Từ ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDate"
+                    value="2024-01-01"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Đến ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDate"
+                    value="2024-12-31"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Trung tâm:</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="1">Tôn Thất Thuyết</option>
+                    <option value="2">Huỳnh Thúc Kháng</option>
+                    <option value="3">Giảng Võ</option>
+                    <option value="4">Hào Nam</option>
+                    <option value="5">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Bộ phận:</label>
+                  <select class="form-select" id="departmentFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="membership">Membership</option>
+                    <option value="fitness">Fitness</option>
+                    <option value="pool">Pool</option>
+                    <option value="pilates">Pilates</option>
+                    <option value="operation">Operation</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Nhân viên:</label>
+                  <select class="form-select" id="staffFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="1">Nguyễn Văn A</option>
+                    <option value="2">Trần Thị B</option>
+                    <option value="3">Lê Văn C</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-search me-1"></i>Lọc
+                  </button>
+                  <button class="btn btn-success ms-2" onclick="exportReport()">
+                    <i class="fas fa-download me-1"></i>Xuất
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Tổng doanh thu</h6>
+                  <h3 class="mb-0">1,850,000,000</h3>
+                  <small>VNĐ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-chart-line fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Đặt cọc</h6>
+                  <h3 class="mb-0">120,000,000</h3>
+                  <small>VNĐ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-hand-holding-usd fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Thu đủ</h6>
+                  <h3 class="mb-0">1,500,000,000</h3>
+                  <small>VNĐ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-check-circle fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Thu nợ</h6>
+                  <h3 class="mb-0">230,000,000</h3>
+                  <small>VNĐ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-exclamation-triangle fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Club -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Doanh số theo CLB</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped data-table">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Tên CLB</th>
+                      <th>Mục tiêu (VNĐ)</th>
+                      <th>Doanh thu MTD (VNĐ)</th>
+                      <th>Doanh thu ngày (VNĐ)</th>
+                      <th>Tỉ lệ hoàn thành (%)</th>
+                      <th>Tỉ trọng (%)</th>
+                      <th>Doanh số còn lại (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>500,000,000</td>
+                      <td>375,000,000</td>
+                      <td>18,500,000</td>
+                      <td><span class="badge bg-success">75%</span></td>
+                      <td>20.3%</td>
+                      <td>125,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>600,000,000</td>
+                      <td>450,000,000</td>
+                      <td>22,000,000</td>
+                      <td><span class="badge bg-success">75%</span></td>
+                      <td>24.3%</td>
+                      <td>150,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Giảng Võ</td>
+                      <td>550,000,000</td>
+                      <td>412,500,000</td>
+                      <td>20,500,000</td>
+                      <td><span class="badge bg-success">75%</span></td>
+                      <td>22.3%</td>
+                      <td>137,500,000</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Hào Nam</td>
+                      <td>450,000,000</td>
+                      <td>337,500,000</td>
+                      <td>16,500,000</td>
+                      <td><span class="badge bg-success">75%</span></td>
+                      <td>18.2%</td>
+                      <td>112,500,000</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>Nguyễn Tuân</td>
+                      <td>400,000,000</td>
+                      <td>275,000,000</td>
+                      <td>14,000,000</td>
+                      <td><span class="badge bg-warning">69%</span></td>
+                      <td>14.9%</td>
+                      <td>125,000,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Service -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Doanh số theo dịch vụ</h5>
+            </div>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-md-3">
+                  <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                      <h4>Membership</h4>
+                      <h2>1,200,000,000</h2>
+                      <small>VNĐ (64.9%)</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                      <h4>Fitness</h4>
+                      <h2>450,000,000</h2>
+                      <small>VNĐ (24.3%)</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                      <h4>Pool</h4>
+                      <h2>150,000,000</h2>
+                      <small>VNĐ (8.1%)</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="card bg-warning text-white">
+                    <div class="card-body text-center">
+                      <h4>Pilates</h4>
+                      <h2>50,000,000</h2>
+                      <small>VNĐ (2.7%)</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped data-table">
+                  <thead>
+                    <tr>
+                      <th>Dịch vụ</th>
+                      <th>Doanh thu (VNĐ)</th>
+                      <th>Tỉ trọng (%)</th>
+                      <th>Số hợp đồng</th>
+                      <th>Giá trị TB/HĐ (VNĐ)</th>
+                      <th>Đặt cọc (VNĐ)</th>
+                      <th>Thu đủ (VNĐ)</th>
+                      <th>Thu nợ (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Gói 1 tháng</td>
+                      <td>600,000,000</td>
+                      <td>32.4%</td>
+                      <td>1,200</td>
+                      <td>500,000</td>
+                      <td>60,000,000</td>
+                      <td>480,000,000</td>
+                      <td>60,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>Gói 3 tháng</td>
+                      <td>450,000,000</td>
+                      <td>24.3%</td>
+                      <td>300</td>
+                      <td>1,500,000</td>
+                      <td>45,000,000</td>
+                      <td>360,000,000</td>
+                      <td>45,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>Gói 6 tháng</td>
+                      <td>300,000,000</td>
+                      <td>16.2%</td>
+                      <td>100</td>
+                      <td>3,000,000</td>
+                      <td>30,000,000</td>
+                      <td>240,000,000</td>
+                      <td>30,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>Gói 12 tháng</td>
+                      <td>500,000,000</td>
+                      <td>27.0%</td>
+                      <td>50</td>
+                      <td>10,000,000</td>
+                      <td>50,000,000</td>
+                      <td>400,000,000</td>
+                      <td>50,000,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Staff -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Doanh số theo nhân viên bán hàng</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped data-table">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Mã NV</th>
+                      <th>Tên nhân viên</th>
+                      <th>Đặt cọc (VNĐ)</th>
+                      <th>Thu đủ (VNĐ)</th>
+                      <th>Thu nợ (VNĐ)</th>
+                      <th>Tổng doanh số (VNĐ)</th>
+                      <th>Số HĐ</th>
+                      <th>Hoa hồng (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>NV001</td>
+                      <td>Nguyễn Văn A</td>
+                      <td>50,000,000</td>
+                      <td>200,000,000</td>
+                      <td>100,000,000</td>
+                      <td>350,000,000</td>
+                      <td>25</td>
+                      <td>35,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>NV002</td>
+                      <td>Trần Thị B</td>
+                      <td>30,000,000</td>
+                      <td>180,000,000</td>
+                      <td>80,000,000</td>
+                      <td>290,000,000</td>
+                      <td>20</td>
+                      <td>29,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>NV003</td>
+                      <td>Lê Văn C</td>
+                      <td>40,000,000</td>
+                      <td>150,000,000</td>
+                      <td>60,000,000</td>
+                      <td>250,000,000</td>
+                      <td>18</td>
+                      <td>25,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>NV004</td>
+                      <td>Phạm Thị D</td>
+                      <td>25,000,000</td>
+                      <td>120,000,000</td>
+                      <td>50,000,000</td>
+                      <td>195,000,000</td>
+                      <td>15</td>
+                      <td>19,500,000</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>NV005</td>
+                      <td>Hoàng Văn E</td>
+                      <td>20,000,000</td>
+                      <td>100,000,000</td>
+                      <td>40,000,000</td>
+                      <td>160,000,000</td>
+                      <td>12</td>
+                      <td>16,000,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Payment Method -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                Doanh số theo hình thức thanh toán
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-md-4">
+                  <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                      <h4>Tiền mặt</h4>
+                      <h2>800,000,000</h2>
+                      <small>43.2%</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                      <h4>Chuyển khoản</h4>
+                      <h2>700,000,000</h2>
+                      <small>37.8%</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-warning text-white">
+                    <div class="card-body text-center">
+                      <h4>MPOS/Card</h4>
+                      <h2>350,000,000</h2>
+                      <small>18.9%</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped data-table">
+                  <thead>
+                    <tr>
+                      <th>Hình thức thanh toán</th>
+                      <th>Doanh thu (VNĐ)</th>
+                      <th>Tỉ trọng (%)</th>
+                      <th>Số giao dịch</th>
+                      <th>Giá trị TB/GD (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Tiền mặt</td>
+                      <td>800,000,000</td>
+                      <td>43.2%</td>
+                      <td>1,600</td>
+                      <td>500,000</td>
+                    </tr>
+                    <tr>
+                      <td>Chuyển khoản</td>
+                      <td>700,000,000</td>
+                      <td>37.8%</td>
+                      <td>350</td>
+                      <td>2,000,000</td>
+                    </tr>
+                    <tr>
+                      <td>MPOS/Card</td>
+                      <td>350,000,000</td>
+                      <td>18.9%</td>
+                      <td>700</td>
+                      <td>500,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

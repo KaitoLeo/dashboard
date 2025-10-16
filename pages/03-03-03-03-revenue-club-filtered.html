@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo doanh số theo CLB - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  
+    <!-- Revenue Calculation Modules -->
+    <script src="../assets/js/revenue/revenue-calculations.js"></script>
+    <script src="../assets/js/revenue/revenue-mock-data.js"></script>
+    <!-- API Layer -->
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/api/api-services.js"></script>
+    <script src="../assets/js/api/data-adapter.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-chart-line me-2"></i>
+                Báo cáo doanh số theo CLB
+              </h2>
+              <p class="text-muted">
+                Báo cáo chi tiết doanh số theo từng câu lạc bộ với điều kiện lọc
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-filter me-2"></i>
+                Điều kiện lọc
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <!-- Thời gian -->
+                <div class="col-md-3 mb-3">
+                  <label class="form-label">Thời gian:</label>
+                  <select class="form-select" id="timeFilter">
+                    <option value="date">Từ ngày/đến ngày</option>
+                    <option value="month">Tháng</option>
+                    <option value="quarter">Quý</option>
+                    <option value="year">Năm</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-3" id="fromDateDiv">
+                  <label class="form-label">Từ ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="fromDate"
+                    value="2024-12-01"
+                  />
+                </div>
+                <div class="col-md-2 mb-3" id="toDateDiv">
+                  <label class="form-label">Đến ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="toDate"
+                    value="2024-12-15"
+                  />
+                </div>
+                <div class="col-md-2 mb-3" id="monthDiv" style="display: none">
+                  <label class="form-label">Tháng:</label>
+                  <select class="form-select" id="monthSelect">
+                    <option value="1">Tháng 1</option>
+                    <option value="2">Tháng 2</option>
+                    <option value="3">Tháng 3</option>
+                    <option value="4">Tháng 4</option>
+                    <option value="5">Tháng 5</option>
+                    <option value="6">Tháng 6</option>
+                    <option value="7">Tháng 7</option>
+                    <option value="8">Tháng 8</option>
+                    <option value="9">Tháng 9</option>
+                    <option value="10">Tháng 10</option>
+                    <option value="11">Tháng 11</option>
+                    <option value="12" selected>Tháng 12</option>
+                  </select>
+                </div>
+                <div
+                  class="col-md-2 mb-3"
+                  id="quarterDiv"
+                  style="display: none"
+                >
+                  <label class="form-label">Quý:</label>
+                  <select class="form-select" id="quarterSelect">
+                    <option value="1">Quý 1</option>
+                    <option value="2">Quý 2</option>
+                    <option value="3">Quý 3</option>
+                    <option value="4" selected>Quý 4</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-3" id="yearDiv" style="display: none">
+                  <label class="form-label">Năm:</label>
+                  <select class="form-select" id="yearSelect">
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024" selected>2024</option>
+                  </select>
+                </div>
+                <div class="col-md-1 mb-3">
+                  <label class="form-label">&nbsp;</label>
+                  <button
+                    class="btn btn-primary w-100"
+                    onclick="applyFilters()"
+                  >
+                    <i class="fas fa-search me-1"></i>Lọc
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <!-- Mã nhân viên -->
+                <div class="col-md-3 mb-3">
+                  <label class="form-label">Mã nhân viên:</label>
+                  <select class="form-select" id="staffFilter">
+                    <option value="all">Tất cả nhân viên</option>
+                    <option value="NV001">NV001 - Nguyễn Văn A</option>
+                    <option value="NV002">NV002 - Trần Thị B</option>
+                    <option value="NV003">NV003 - Lê Văn C</option>
+                    <option value="NV004">NV004 - Phạm Thị D</option>
+                    <option value="NV005">NV005 - Hoàng Văn E</option>
+                  </select>
+                </div>
+                <!-- CLB -->
+                <div class="col-md-3 mb-3">
+                  <label class="form-label">CLB:</label>
+                  <select class="form-select" id="clubFilter">
+                    <option value="all">Tất cả CLB</option>
+                    <option value="1">Tôn Thất Thuyết</option>
+                    <option value="2">Huỳnh Thúc Kháng</option>
+                    <option value="3">Giảng Võ</option>
+                    <option value="4">Hào Nam</option>
+                    <option value="5">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <!-- Bộ phận -->
+                <div class="col-md-3 mb-3">
+                  <label class="form-label">Bộ phận:</label>
+                  <select class="form-select" id="departmentFilter">
+                    <option value="all">Tất cả bộ phận</option>
+                    <option value="membership">Membership</option>
+                    <option value="fitness">Fitness</option>
+                    <option value="pool">Pool</option>
+                    <option value="pilates">Pilates</option>
+                    <option value="operation">Operation</option>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <label class="form-label">&nbsp;</label>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-success" onclick="exportReport()">
+                      <i class="fas fa-download me-1"></i>Xuất Excel
+                    </button>
+                    <button class="btn btn-info" onclick="printReport()">
+                      <i class="fas fa-print me-1"></i>In
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Tổng doanh số</h6>
+                  <h3 class="mb-0" id="totalRevenue">0</h3>
+                  <small>VNĐ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-money-bill-wave fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Số phiếu thu</h6>
+                  <h3 class="mb-0" id="totalReceipts">0</h3>
+                  <small>phiếu</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-receipt fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Trung bình/phiếu</h6>
+                  <h3 class="mb-0" id="avgPerReceipt">0</h3>
+                  <small>VNĐ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-calculator fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">CLB có doanh số cao nhất</h6>
+                  <h5 class="mb-0" id="topClub">-</h5>
+                  <small>CLB</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-trophy fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Club Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Chi tiết doanh số theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table
+                  id="revenueTable"
+                  class="table table-striped table-hover"
+                >
+                  <thead class="table-dark">
+                    <tr>
+                      <th>STT</th>
+                      <th>CLB</th>
+                      <th>Số phiếu thu</th>
+                      <th>Doanh số (VNĐ)</th>
+                      <th>Trung bình/phiếu (VNĐ)</th>
+                      <th>Tỉ trọng (%)</th>
+                      <th>Xếp hạng</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td><span class="badge bg-primary">285</span></td>
+                      <td>
+                        <strong class="text-success">1,250,000,000</strong>
+                      </td>
+                      <td><strong class="text-info">4,385,965</strong></td>
+                      <td><span class="badge bg-success">25.0%</span></td>
+                      <td><span class="badge bg-warning">#1</span></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td><span class="badge bg-primary">245</span></td>
+                      <td>
+                        <strong class="text-success">1,100,000,000</strong>
+                      </td>
+                      <td><strong class="text-info">4,489,796</strong></td>
+                      <td><span class="badge bg-success">22.0%</span></td>
+                      <td><span class="badge bg-warning">#2</span></td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td><span class="badge bg-primary">220</span></td>
+                      <td><strong class="text-success">980,000,000</strong></td>
+                      <td><strong class="text-info">4,454,545</strong></td>
+                      <td><span class="badge bg-success">19.6%</span></td>
+                      <td><span class="badge bg-warning">#3</span></td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td><strong>Hào Nam</strong></td>
+                      <td><span class="badge bg-primary">195</span></td>
+                      <td><strong class="text-success">850,000,000</strong></td>
+                      <td><strong class="text-info">4,358,974</strong></td>
+                      <td><span class="badge bg-success">17.0%</span></td>
+                      <td><span class="badge bg-warning">#4</span></td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td><span class="badge bg-primary">180</span></td>
+                      <td><strong class="text-success">750,000,000</strong></td>
+                      <td><strong class="text-info">4,166,667</strong></td>
+                      <td><span class="badge bg-success">15.0%</span></td>
+                      <td><span class="badge bg-warning">#5</span></td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td><strong></strong></td>
+                      <td><span class="badge bg-primary">165</span></td>
+                      <td><strong class="text-success">680,000,000</strong></td>
+                      <td><strong class="text-info">4,121,212</strong></td>
+                      <td><span class="badge bg-success">13.6%</span></td>
+                      <td><span class="badge bg-warning">#6</span></td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td><strong></strong></td>
+                      <td><span class="badge bg-primary">150</span></td>
+                      <td><strong class="text-success">620,000,000</strong></td>
+                      <td><strong class="text-info">4,133,333</strong></td>
+                      <td><span class="badge bg-success">12.4%</span></td>
+                      <td><span class="badge bg-warning">#7</span></td>
+                    </tr>
+                    <tr>
+                      <td>8</td>
+                      <td><strong></strong></td>
+                      <td><span class="badge bg-primary">135</span></td>
+                      <td><strong class="text-success">560,000,000</strong></td>
+                      <td><strong class="text-info">4,148,148</strong></td>
+                      <td><span class="badge bg-success">11.2%</span></td>
+                      <td><span class="badge bg-warning">#8</span></td>
+                    </tr>
+                    <tr>
+                      <td>9</td>
+                      <td><strong></strong></td>
+                      <td><span class="badge bg-primary">120</span></td>
+                      <td><strong class="text-success">490,000,000</strong></td>
+                      <td><strong class="text-info">4,083,333</strong></td>
+                      <td><span class="badge bg-success">9.8%</span></td>
+                      <td><span class="badge bg-warning">#9</span></td>
+                    </tr>
+                    <tr>
+                      <td>10</td>
+                      <td><strong></strong></td>
+                      <td><span class="badge bg-primary">105</span></td>
+                      <td><strong class="text-success">420,000,000</strong></td>
+                      <td><strong class="text-info">4,000,000</strong></td>
+                      <td><span class="badge bg-success">8.4%</span></td>
+                      <td><span class="badge bg-warning">#10</span></td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <td><strong>TỔNG CỘNG</strong></td>
+                      <td><strong>1,800</strong></td>
+                      <td>
+                        <strong class="text-success">7,900,000,000</strong>
+                      </td>
+                      <td><strong class="text-info">4,388,889</strong></td>
+                      <td><span class="badge bg-success">100.0%</span></td>
+                      <td><strong>-</strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Biểu đồ tỉ trọng doanh số theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="revenueChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Biểu đồ cột doanh số theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="barChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // Sample data
+      const revenueData = {
+        clubs: [
+          {
+            name: "Tôn Thất Thuyết",
+            receipts: 285,
+            revenue: 1250000000,
+            avg: 4385965,
+            ratio: 25.0,
+          },
+          {
+            name: "Huỳnh Thúc Kháng",
+            receipts: 245,
+            revenue: 1100000000,
+            avg: 4489796,
+            ratio: 22.0,
+          },
+          {
+            name: "Giảng Võ",
+            receipts: 220,
+            revenue: 980000000,
+            avg: 4454545,
+            ratio: 19.6,
+          },
+          {
+            name: "Hào Nam",
+            receipts: 195,
+            revenue: 850000000,
+            avg: 4358974,
+            ratio: 17.0,
+          },
+          {
+            name: "Nguyễn Tuân",
+            receipts: 180,
+            revenue: 750000000,
+            avg: 4166667,
+            ratio: 15.0,
+          },
+        ],
+      };
+
+      // Time filter change handler
+      document
+        .getElementById("timeFilter")
+        .addEventListener("change", function () {
+          const timeType = this.value;
+          document.getElementById("fromDateDiv").style.display =
+            timeType === "date" ? "block" : "none";
+          document.getElementById("toDateDiv").style.display =
+            timeType === "date" ? "block" : "none";
+          document.getElementById("monthDiv").style.display =
+            timeType === "month" ? "block" : "none";
+          document.getElementById("quarterDiv").style.display =
+            timeType === "quarter" ? "block" : "none";
+          document.getElementById("yearDiv").style.display =
+            timeType === "year" ? "block" : "none";
+        });
+
+      function applyFilters() {
+        const timeFilter = document.getElementById("timeFilter").value;
+        const fromDate = document.getElementById("fromDate").value;
+        const toDate = document.getElementById("toDate").value;
+        const month = document.getElementById("monthSelect").value;
+        const quarter = document.getElementById("quarterSelect").value;
+        const year = document.getElementById("yearSelect").value;
+        const staffFilter = document.getElementById("staffFilter").value;
+        const clubFilter = document.getElementById("clubFilter").value;
+        const departmentFilter =
+          document.getElementById("departmentFilter").value;
+
+        console.log("Filtering by:", {
+          timeFilter,
+          fromDate,
+          toDate,
+          month,
+          quarter,
+          year,
+          staffFilter,
+          clubFilter,
+          departmentFilter,
+        });
+
+        // Filter logic
+        filterTable(clubFilter, staffFilter, departmentFilter);
+        updateSummaryCards();
+
+        alert(
+          `Đã áp dụng bộ lọc:\n- Thời gian: ${getTimeDisplay()}\n- Nhân viên: ${getStaffDisplay()}\n- CLB: ${getClubDisplay()}\n- Bộ phận: ${getDepartmentDisplay()}`
+        );
+      }
+
+      function getTimeDisplay() {
+        const timeFilter = document.getElementById("timeFilter").value;
+        switch (timeFilter) {
+          case "date":
+            return `${document.getElementById("fromDate").value} - ${
+              document.getElementById("toDate").value
+            }`;
+          case "month":
+            return `Tháng ${document.getElementById("monthSelect").value}`;
+          case "quarter":
+            return `Quý ${document.getElementById("quarterSelect").value}`;
+          case "year":
+            return `Năm ${document.getElementById("yearSelect").value}`;
+          default:
+            return "Tất cả";
+        }
+      }
+
+      function getStaffDisplay() {
+        const staff = document.getElementById("staffFilter").value;
+        return staff === "all" ? "Tất cả nhân viên" : staff;
+      }
+
+      function getClubDisplay() {
+        const club = document.getElementById("clubFilter").value;
+        const clubNames = [
+          "",
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+          "",
+          "",
+          "",
+          "",
+          "",
+        ];
+        return club === "all" ? "Tất cả CLB" : clubNames[parseInt(club)];
+      }
+
+      function getDepartmentDisplay() {
+        const dept = document.getElementById("departmentFilter").value;
+        const deptNames = {
+          all: "Tất cả bộ phận",
+          membership: "Membership",
+          fitness: "Fitness",
+          pool: "Pool",
+          pilates: "Pilates",
+          operation: "Operation",
+        };
+        return deptNames[dept];
+      }
+
+      function filterTable(clubFilter, staffFilter, departmentFilter) {
+        const rows = document.querySelectorAll("#revenueTable tbody tr");
+        rows.forEach((row, index) => {
+          let showRow = true;
+
+          // Filter by club
+          if (clubFilter !== "all") {
+            const clubIndex = parseInt(clubFilter);
+            if (index + 1 !== clubIndex) {
+              showRow = false;
+            }
+          }
+
+          row.style.display = showRow ? "" : "none";
+        });
+      }
+
+      function updateSummaryCards() {
+        // Calculate totals from visible rows
+        const visibleRows = document.querySelectorAll(
+          '#revenueTable tbody tr:not([style*="display: none"])'
+        );
+        let totalRevenue = 0;
+        let totalReceipts = 0;
+        let topClub = "";
+        let topRevenue = 0;
+
+        visibleRows.forEach((row) => {
+          const revenue = parseInt(
+            row.cells[3].textContent.replace(/[^\d]/g, "")
+          );
+          const receipts = parseInt(row.cells[2].textContent);
+          const clubName = row.cells[1].textContent.trim();
+
+          totalRevenue += revenue;
+          totalReceipts += receipts;
+
+          if (revenue > topRevenue) {
+            topRevenue = revenue;
+            topClub = clubName;
+          }
+        });
+
+        const avgPerReceipt =
+          totalReceipts > 0 ? Math.round(totalRevenue / totalReceipts) : 0;
+
+        // Update cards
+        document.getElementById("totalRevenue").textContent =
+          totalRevenue.toLocaleString("vi-VN");
+        document.getElementById("totalReceipts").textContent =
+          totalReceipts.toLocaleString("vi-VN");
+        document.getElementById("avgPerReceipt").textContent =
+          avgPerReceipt.toLocaleString("vi-VN");
+        document.getElementById("topClub").textContent = topClub;
+      }
+
+      function exportReport() {
+        const timeDisplay = getTimeDisplay();
+        const staffDisplay = getStaffDisplay();
+        const clubDisplay = getClubDisplay();
+        const departmentDisplay = getDepartmentDisplay();
+
+        alert(
+          `Xuất báo cáo Excel:\n- Thời gian: ${timeDisplay}\n- Nhân viên: ${staffDisplay}\n- CLB: ${clubDisplay}\n- Bộ phận: ${departmentDisplay}`
+        );
+      }
+
+      function printReport() {
+        window.print();
+      }
+
+      // Initialize charts
+      document.addEventListener("DOMContentLoaded", function () {
+        // Pie Chart
+        const ctx1 = document.getElementById("revenueChart").getContext("2d");
+        new Chart(ctx1, {
+          type: "pie",
+          data: {
+            labels: revenueData.clubs.map((club) => club.name),
+            datasets: [
+              {
+                data: revenueData.clubs.map((club) => club.revenue),
+                backgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56",
+                  "#4BC0C0",
+                  "#9966FF",
+                  "#FF9F40",
+                  "#FF6384",
+                  "#C9CBCF",
+                  "#4BC0C0",
+                  "#FF6384",
+                ],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const total = context.dataset.data.reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+                    const percentage = ((context.parsed / total) * 100).toFixed(
+                      1
+                    );
+                    return context.label + ": " + percentage + "%";
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // Bar Chart
+        const ctx2 = document.getElementById("barChart").getContext("2d");
+        new Chart(ctx2, {
+          type: "bar",
+          data: {
+            labels: revenueData.clubs.map((club) => club.name),
+            datasets: [
+              {
+                label: "Doanh số (VNĐ)",
+                data: revenueData.clubs.map((club) => club.revenue),
+                backgroundColor: "#36A2EB",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function (value) {
+                    return value.toLocaleString("vi-VN") + " VNĐ";
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // Initialize summary cards
+        updateSummaryCards();
+      });
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

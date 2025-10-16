@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Booking hôm nay - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Booking Calculation Modules -->
+    <script src="../assets/js/booking/booking-calculations.js"></script>
+    <script src="../assets/js/booking/booking-mock-data.js"></script>
+
+    <style>
+      .metric-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+      }
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .chart-container {
+        position: relative;
+        height: 300px;
+      }
+      .status-badge {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-calendar-day me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-success">
+            <i class="fas fa-calendar-day me-2"></i>Chi tiết Booking hôm nay
+          </h2>
+          <p class="text-muted">
+            Thống kê chi tiết các lượt booking trong ngày
+          </p>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-day fa-2x mb-2"></i>
+              <h6>Tổng booking hôm nay</h6>
+              <h3>28</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-check-circle fa-2x mb-2"></i>
+              <h6>Đã hoàn thành</h6>
+              <h3>24</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-clock fa-2x mb-2"></i>
+              <h6>Đang chờ</h6>
+              <h3>3</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-times-circle fa-2x mb-2"></i>
+              <h6>Đã hủy</h6>
+              <h3>1</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ booking theo dịch
+                vụ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="serviceDistributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Booking theo giờ trong ngày
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="hourlyBookingChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Details Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <h5 class="mb-0">
+                    <i class="fas fa-table me-2"></i>Chi tiết từng booking
+                  </h5>
+                </div>
+                <div class="col-md-6">
+                  <div class="row g-2">
+                    <div class="col-md-3">
+                      <select
+                        class="form-select form-select-sm"
+                        id="statusFilter"
+                      >
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="completed">Hoàn thành</option>
+                        <option value="pending">Đang chờ</option>
+                        <option value="cancelled">Đã hủy</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <select
+                        class="form-select form-select-sm"
+                        id="serviceFilter"
+                      >
+                        <option value="">Tất cả dịch vụ</option>
+                        <option value="Gym">Gym</option>
+                        <option value="Pilates">Pilates</option>
+                        <option value="Swimming Coach">Swimming Coach</option>
+                        <option value="PT Fitness">PT Fitness</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <select
+                        class="form-select form-select-sm"
+                        id="locationFilter"
+                      >
+                        <option value="">Tất cả trung tâm</option>
+                        <option value="Tôn Thất Thuyết">Tôn Thất Thuyết</option>
+                        <option value="Huỳnh Thúc Kháng">
+                          Huỳnh Thúc Kháng
+                        </option>
+                        <option value="Giảng Võ">Giảng Võ</option>
+                        <option value="Hào Nam">Hào Nam</option>
+                        <option value="Nguyễn Tuân">Nguyễn Tuân</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <button
+                        class="btn btn-outline-secondary btn-sm w-100"
+                        id="clearFilters"
+                      >
+                        <i class="fas fa-times me-1"></i>Xóa bộ lọc
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div
+                class="d-flex justify-content-between align-items-center mb-3"
+              >
+                <span class="text-muted" id="resultCount"
+                  >Hiển thị 28 kết quả</span
+                >
+                <div class="btn-group btn-group-sm" role="group">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    id="exportBtn"
+                  >
+                    <i class="fas fa-download me-1"></i>Xuất Excel
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    id="refreshBtn"
+                  >
+                    <i class="fas fa-sync-alt me-1"></i>Làm mới
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table
+                  class="table table-striped table-hover"
+                  id="bookingTable"
+                >
+                  <thead class="table-dark">
+                    <tr>
+                      <th>STT</th>
+                      <th>Thời gian</th>
+                      <th>Hội viên</th>
+                      <th>Dịch vụ</th>
+                      <th>Trung tâm</th>
+                      <th>Trạng thái</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bookingTableBody">
+                    <tr
+                      data-status="completed"
+                      data-service="Gym"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>1</td>
+                      <td>06:30</td>
+                      <td>Nguyễn Văn A</td>
+                      <td>Gym</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Check-in đúng giờ</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Pilates"
+                      data-location="Huỳnh Thúc Kháng"
+                    >
+                      <td>2</td>
+                      <td>07:00</td>
+                      <td>Trần Thị B</td>
+                      <td>Pilates</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Lớp nhóm</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Swimming Coach"
+                      data-location="Giảng Võ"
+                    >
+                      <td>3</td>
+                      <td>08:15</td>
+                      <td>Lê Văn C</td>
+                      <td>Swimming Coach</td>
+                      <td>Giảng Võ</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Buổi cá nhân</td>
+                    </tr>
+                    <tr
+                      data-status="pending"
+                      data-service="PT Fitness"
+                      data-location="Hào Nam"
+                    >
+                      <td>4</td>
+                      <td>09:30</td>
+                      <td>Phạm Thị D</td>
+                      <td>PT Fitness</td>
+                      <td>Hào Nam</td>
+                      <td>
+                        <span class="badge bg-warning status-badge"
+                          >Đang chờ</span
+                        >
+                      </td>
+                      <td>Chờ trainer</td>
+                    </tr>
+                    <tr
+                      data-status="cancelled"
+                      data-service="Gym"
+                      data-location="Nguyễn Tuân"
+                    >
+                      <td>5</td>
+                      <td>10:00</td>
+                      <td>Hoàng Văn E</td>
+                      <td>Gym</td>
+                      <td>Nguyễn Tuân</td>
+                      <td>
+                        <span class="badge bg-danger status-badge">Đã hủy</span>
+                      </td>
+                      <td>Khách không đến</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>6</td>
+                      <td>14:00</td>
+                      <td>Vũ Thị F</td>
+                      <td>PT Fitness</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Lớp group</td>
+                    </tr>
+                    <tr
+                      data-status="pending"
+                      data-service="Pilates"
+                      data-location="Huỳnh Thúc Kháng"
+                    >
+                      <td>7</td>
+                      <td>15:30</td>
+                      <td>Đặng Văn G</td>
+                      <td>Pilates</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>
+                        <span class="badge bg-warning status-badge"
+                          >Đang chờ</span
+                        >
+                      </td>
+                      <td>Chờ phòng</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Swimming Coach"
+                      data-location="Giảng Võ"
+                    >
+                      <td>8</td>
+                      <td>17:00</td>
+                      <td>Bùi Thị H</td>
+                      <td>Swimming Coach</td>
+                      <td>Giảng Võ</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Buổi cá nhân</td>
+                    </tr>
+                    <!-- Thêm các booking khác để đủ 28 lượt -->
+                    <tr
+                      data-status="completed"
+                      data-service="Gym"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>9</td>
+                      <td>06:45</td>
+                      <td>Nguyễn Thị I</td>
+                      <td>Gym</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Cardio</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Pilates"
+                      data-location="Hào Nam"
+                    >
+                      <td>10</td>
+                      <td>07:30</td>
+                      <td>Trần Văn K</td>
+                      <td>Pilates</td>
+                      <td>Hào Nam</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Lớp cá nhân</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Nguyễn Tuân"
+                    >
+                      <td>11</td>
+                      <td>08:00</td>
+                      <td>Lê Thị L</td>
+                      <td>PT Fitness</td>
+                      <td>Nguyễn Tuân</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Yoga</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>12</td>
+                      <td>08:30</td>
+                      <td>Phạm Văn M</td>
+                      <td>PT Fitness</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Personal training</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Swimming Coach"
+                      data-location="Huỳnh Thúc Kháng"
+                    >
+                      <td>13</td>
+                      <td>09:00</td>
+                      <td>Hoàng Thị N</td>
+                      <td>Swimming Coach</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Học bơi</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Gym"
+                      data-location="Giảng Võ"
+                    >
+                      <td>14</td>
+                      <td>09:15</td>
+                      <td>Vũ Văn O</td>
+                      <td>Gym</td>
+                      <td>Giảng Võ</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Weight training</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Pilates"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>15</td>
+                      <td>10:30</td>
+                      <td>Đặng Thị P</td>
+                      <td>Pilates</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Lớp nhóm</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Hào Nam"
+                    >
+                      <td>16</td>
+                      <td>11:00</td>
+                      <td>Bùi Văn Q</td>
+                      <td>PT Fitness</td>
+                      <td>Hào Nam</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Zumba</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Nguyễn Tuân"
+                    >
+                      <td>17</td>
+                      <td>11:30</td>
+                      <td>Nguyễn Thị R</td>
+                      <td>PT Fitness</td>
+                      <td>Nguyễn Tuân</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Functional training</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Swimming Coach"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>18</td>
+                      <td>12:00</td>
+                      <td>Trần Văn S</td>
+                      <td>Swimming Coach</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Bơi lội</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Gym"
+                      data-location="Huỳnh Thúc Kháng"
+                    >
+                      <td>19</td>
+                      <td>12:30</td>
+                      <td>Lê Thị T</td>
+                      <td>Gym</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Cardio</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Pilates"
+                      data-location="Giảng Võ"
+                    >
+                      <td>20</td>
+                      <td>13:00</td>
+                      <td>Phạm Văn U</td>
+                      <td>Pilates</td>
+                      <td>Giảng Võ</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Lớp cá nhân</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Hào Nam"
+                    >
+                      <td>21</td>
+                      <td>13:30</td>
+                      <td>Hoàng Thị V</td>
+                      <td>PT Fitness</td>
+                      <td>Hào Nam</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Aerobics</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>22</td>
+                      <td>14:30</td>
+                      <td>Vũ Văn W</td>
+                      <td>PT Fitness</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Crossfit</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Swimming Coach"
+                      data-location="Nguyễn Tuân"
+                    >
+                      <td>23</td>
+                      <td>15:00</td>
+                      <td>Đặng Thị X</td>
+                      <td>Swimming Coach</td>
+                      <td>Nguyễn Tuân</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Học bơi</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Gym"
+                      data-location="Huỳnh Thúc Kháng"
+                    >
+                      <td>24</td>
+                      <td>15:45</td>
+                      <td>Bùi Văn Y</td>
+                      <td>Gym</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Weight training</td>
+                    </tr>
+                    <tr
+                      data-status="pending"
+                      data-service="Pilates"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>25</td>
+                      <td>16:00</td>
+                      <td>Nguyễn Thị Z</td>
+                      <td>Pilates</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-warning status-badge"
+                          >Đang chờ</span
+                        >
+                      </td>
+                      <td>Chờ phòng</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Giảng Võ"
+                    >
+                      <td>26</td>
+                      <td>16:30</td>
+                      <td>Trần Văn AA</td>
+                      <td>PT Fitness</td>
+                      <td>Giảng Võ</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Yoga</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="PT Fitness"
+                      data-location="Hào Nam"
+                    >
+                      <td>27</td>
+                      <td>17:30</td>
+                      <td>Lê Thị BB</td>
+                      <td>PT Fitness</td>
+                      <td>Hào Nam</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Personal training</td>
+                    </tr>
+                    <tr
+                      data-status="completed"
+                      data-service="Swimming Coach"
+                      data-location="Tôn Thất Thuyết"
+                    >
+                      <td>28</td>
+                      <td>18:00</td>
+                      <td>Phạm Văn CC</td>
+                      <td>Swimming Coach</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>
+                        <span class="badge bg-success status-badge"
+                          >Hoàn thành</span
+                        >
+                      </td>
+                      <td>Bơi lội</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <nav aria-label="Booking pagination">
+                <ul class="pagination justify-content-center" id="pagination">
+                  <!-- Pagination will be generated by JavaScript -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics -->
+      <div class="row mb-4">
+        <div class="col-lg-4 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-percentage fa-2x text-success mb-2"></i>
+              <h6>Tỷ lệ hoàn thành</h6>
+              <h4 class="text-success">85.7%</h4>
+              <small class="text-muted">24/28 booking</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+              <h6>Thời gian chờ TB</h6>
+              <h4 class="text-warning">12 phút</h4>
+              <small class="text-muted">trung bình</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-star fa-2x text-primary mb-2"></i>
+              <h6>Đánh giá TB</h6>
+              <h4 class="text-primary">4.6/5</h4>
+              <small class="text-muted">từ hội viên</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("📅 Booking Today Detail page loaded");
+
+        // Check if booking modules are loaded
+        if (
+          typeof window.bookingCalc !== "undefined" &&
+          typeof window.todayBookings !== "undefined"
+        ) {
+          console.log("💼 Using dynamic booking calculations");
+          updateBookingMetricsDynamic();
+        } else {
+          console.warn("⚠️ Booking modules not loaded, using static data");
+        }
+
+        createCharts();
+        initializeFilters();
+      });
+
+      /**
+       * Update booking metrics with dynamic data
+       */
+      function updateBookingMetricsDynamic() {
+        try {
+          const todayBookings = window.todayBookings;
+
+          // Calculate metrics
+          const byStatus = window.bookingCalc.calculateByStatus(todayBookings);
+          const avgPerDay = window.bookingCalc.calculateAveragePerDay(
+            todayBookings,
+            1
+          );
+          const completionRate =
+            window.bookingCalc.calculateCompletionRate(todayBookings);
+
+          // Update metric cards
+          updateMetricCard("totalBookings", byStatus.total);
+          updateMetricCard("completedBookings", byStatus.completed);
+          updateMetricCard("pendingBookings", byStatus.pending);
+          updateMetricCard("cancelledBookings", byStatus.cancelled);
+
+          console.log("✅ Booking Today metrics updated:");
+          console.log(`   📊 Total: ${byStatus.total}`);
+          console.log(`   ✅ Completed: ${byStatus.completed}`);
+          console.log(`   ⏳ Pending: ${byStatus.pending}`);
+          console.log(`   ❌ Cancelled: ${byStatus.cancelled}`);
+          console.log(`   📈 Completion Rate: ${completionRate.toFixed(1)}%`);
+        } catch (error) {
+          console.error("❌ Error updating booking metrics:", error);
+        }
+      }
+
+      /**
+       * Update metric card value
+       */
+      function updateMetricCard(id, value) {
+        const elements = document.querySelectorAll(`[id*="${id}"], .${id}`);
+        elements.forEach((el) => {
+          if (el.tagName === "H3" || el.tagName === "H4") {
+            el.textContent = value;
+          }
+        });
+      }
+
+      function initializeFilters() {
+        const statusFilter = document.getElementById("statusFilter");
+        const serviceFilter = document.getElementById("serviceFilter");
+        const locationFilter = document.getElementById("locationFilter");
+        const clearFiltersBtn = document.getElementById("clearFilters");
+        const resultCount = document.getElementById("resultCount");
+        const exportBtn = document.getElementById("exportBtn");
+        const refreshBtn = document.getElementById("refreshBtn");
+        const table = document.getElementById("bookingTable");
+        const tbody = document.getElementById("bookingTableBody");
+        const pagination = document.getElementById("pagination");
+        const rows = table.querySelectorAll("tbody tr");
+
+        // Pagination settings
+        const itemsPerPage = 10;
+        let currentPage = 1;
+        let filteredData = [];
+
+        function filterTable() {
+          const statusValue = statusFilter.value;
+          const serviceValue = serviceFilter.value;
+          const locationValue = locationFilter.value;
+
+          // Filter data
+          filteredData = Array.from(rows).filter((row) => {
+            const status = row.getAttribute("data-status");
+            const service = row.getAttribute("data-service");
+            const location = row.getAttribute("data-location");
+
+            let showRow = true;
+
+            if (statusValue && status !== statusValue) {
+              showRow = false;
+            }
+            if (serviceValue && service !== serviceValue) {
+              showRow = false;
+            }
+            if (locationValue && location !== locationValue) {
+              showRow = false;
+            }
+
+            return showRow;
+          });
+
+          currentPage = 1;
+          displayPage();
+          updatePagination();
+        }
+
+        function displayPage() {
+          const startIndex = (currentPage - 1) * itemsPerPage;
+          const endIndex = startIndex + itemsPerPage;
+          const pageData = filteredData.slice(startIndex, endIndex);
+
+          // Hide all rows first
+          rows.forEach((row) => {
+            row.style.display = "none";
+          });
+
+          // Show only current page rows
+          pageData.forEach((row, index) => {
+            row.style.display = "";
+            row.querySelector("td:first-child").textContent =
+              startIndex + index + 1;
+          });
+
+          updateResultCount(filteredData.length);
+        }
+
+        function updatePagination() {
+          const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+          pagination.innerHTML = "";
+
+          if (totalPages <= 1) return;
+
+          // Previous button
+          const prevLi = document.createElement("li");
+          prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+          prevLi.innerHTML = `<a class="page-link" href="#" data-page="${
+            currentPage - 1
+          }">Trước</a>`;
+          pagination.appendChild(prevLi);
+
+          // Page numbers
+          for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement("li");
+            li.className = `page-item ${i === currentPage ? "active" : ""}`;
+            li.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+            pagination.appendChild(li);
+          }
+
+          // Next button
+          const nextLi = document.createElement("li");
+          nextLi.className = `page-item ${
+            currentPage === totalPages ? "disabled" : ""
+          }`;
+          nextLi.innerHTML = `<a class="page-link" href="#" data-page="${
+            currentPage + 1
+          }">Sau</a>`;
+          pagination.appendChild(nextLi);
+
+          // Add click event listeners
+          pagination.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (e.target.classList.contains("page-link")) {
+              const page = parseInt(e.target.getAttribute("data-page"));
+              if (page >= 1 && page <= totalPages && page !== currentPage) {
+                currentPage = page;
+                displayPage();
+                updatePagination();
+              }
+            }
+          });
+        }
+
+        function updateResultCount(count) {
+          const startIndex = (currentPage - 1) * itemsPerPage + 1;
+          const endIndex = Math.min(currentPage * itemsPerPage, count);
+          resultCount.textContent = `Hiển thị ${startIndex}-${endIndex} trong ${count} kết quả`;
+        }
+
+        function clearAllFilters() {
+          statusFilter.value = "";
+          serviceFilter.value = "";
+          locationFilter.value = "";
+          filterTable();
+        }
+
+        function exportToExcel() {
+          // Simple CSV export functionality
+          let csvContent =
+            "STT,Thời gian,Hội viên,Dịch vụ,Trung tâm,Trạng thái,Ghi chú\n";
+
+          filteredData.forEach((row, index) => {
+            const cells = row.querySelectorAll("td");
+            const rowData = [
+              index + 1,
+              cells[1].textContent,
+              cells[2].textContent,
+              cells[3].textContent,
+              cells[4].textContent,
+              cells[5].textContent.replace(/\s+/g, " ").trim(),
+              cells[6].textContent,
+            ];
+            csvContent += rowData.join(",") + "\n";
+          });
+
+          const blob = new Blob([csvContent], {
+            type: "text/csv;charset=utf-8;",
+          });
+          const link = document.createElement("a");
+          const url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute(
+            "download",
+            `booking-hom-nay-${new Date().toISOString().split("T")[0]}.csv`
+          );
+          link.style.visibility = "hidden";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+
+        function refreshData() {
+          // Simulate data refresh
+          clearAllFilters();
+          // You can add actual data refresh logic here
+          console.log("Data refreshed");
+        }
+
+        // Initialize
+        filterTable();
+
+        // Add event listeners
+        statusFilter.addEventListener("change", filterTable);
+        serviceFilter.addEventListener("change", filterTable);
+        locationFilter.addEventListener("change", filterTable);
+        clearFiltersBtn.addEventListener("click", clearAllFilters);
+        exportBtn.addEventListener("click", exportToExcel);
+        refreshBtn.addEventListener("click", refreshData);
+      }
+
+      function createCharts() {
+        try {
+          console.log("Creating charts...");
+
+          // Service Distribution Chart
+          const serviceCtx = document.getElementById(
+            "serviceDistributionChart"
+          );
+          if (serviceCtx && typeof Chart !== "undefined") {
+            new Chart(serviceCtx, {
+              type: "doughnut",
+              data: {
+                labels: ["Gym", "Pilates", "Swimming Coach", "PT Fitness"],
+                datasets: [
+                  {
+                    data: [8, 6, 5, 9],
+                    backgroundColor: [
+                      "#28a745",
+                      "#17a2b8",
+                      "#ffc107",
+                      "#dc3545",
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        const total = context.dataset.data.reduce(
+                          (a, b) => a + b,
+                          0
+                        );
+                        const percentage = (
+                          (context.parsed / total) *
+                          100
+                        ).toFixed(1);
+                        return (
+                          context.label +
+                          ": " +
+                          context.parsed +
+                          " (" +
+                          percentage +
+                          "%)"
+                        );
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+
+          // Hourly Booking Chart
+          const hourlyCtx = document.getElementById("hourlyBookingChart");
+          if (hourlyCtx && typeof Chart !== "undefined") {
+            new Chart(hourlyCtx, {
+              type: "bar",
+              data: {
+                labels: [
+                  "6h",
+                  "7h",
+                  "8h",
+                  "9h",
+                  "10h",
+                  "11h",
+                  "12h",
+                  "13h",
+                  "14h",
+                  "15h",
+                  "16h",
+                  "17h",
+                  "18h",
+                  "19h",
+                  "20h",
+                ],
+                datasets: [
+                  {
+                    label: "Số lượng booking",
+                    data: [2, 3, 2, 1, 1, 0, 0, 0, 2, 1, 1, 3, 4, 3, 2],
+                    backgroundColor: "rgba(40, 167, 69, 0.8)",
+                    borderColor: "#28a745",
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 1,
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          }
+
+          console.log("Charts created successfully");
+        } catch (error) {
+          console.error("Error creating charts:", error);
+        }
+      }
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

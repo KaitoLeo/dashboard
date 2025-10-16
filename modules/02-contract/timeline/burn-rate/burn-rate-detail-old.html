@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Burn Rate Analysis - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-primary">
+            <i class="fas fa-fire me-2"></i>Burn Rate Analysis
+          </h2>
+          <p class="text-muted">
+            Phân tích tần suất sử dụng dịch vụ của hội viên
+          </p>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Bộ lọc</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Khoảng thời gian</label>
+                  <select class="form-select" id="timeRangeFilter">
+                    <option value="this-month">Tháng này</option>
+                    <option value="last-month">Tháng trước</option>
+                    <option value="last-3-months">3 tháng gần đây</option>
+                    <option value="last-6-months">6 tháng gần đây</option>
+                    <option value="this-year">Năm nay</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Loại membership</label>
+                  <select class="form-select" id="membershipFilter">
+                    <option value="all">Tất cả loại</option>
+                    <option value="basic">Basic</option>
+                    <option value="premium">Premium</option>
+                    <option value="vip">VIP</option>
+                    <option value="corporate">Corporate</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">&nbsp;</label>
+                  <button
+                    class="btn btn-primary w-100"
+                    onclick="applyFilters()"
+                  >
+                    <i class="fas fa-search me-1"></i>Áp dụng bộ lọc
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-fire fa-2x mb-2"></i>
+              <h6>Avg Burn Rate</h6>
+              <h3>4.2</h3>
+              <small>lượt/khách/tháng</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x mb-2"></i>
+              <h6>High Burn Rate</h6>
+              <h3>156</h3>
+              <small>khách >6 lượt/tháng</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line-down fa-2x mb-2"></i>
+              <h6>Low Burn Rate</h6>
+              <h3>89</h3>
+              <small>khách <2 lượt/tháng</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-secondary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-user-slash fa-2x mb-2"></i>
+              <h6>Silent Members</h6>
+              <h3>25</h3>
+              <small>không check-in</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Phân bố Burn Rate
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="burnRateDistributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng Burn Rate theo
+                thời gian
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="burnRateTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Analysis Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Phân tích chi tiết theo cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>STT</th>
+                      <th>Cơ sở</th>
+                      <th>Avg Burn Rate</th>
+                      <th>High Burn Rate</th>
+                      <th>Low Burn Rate</th>
+                      <th>Silent Members</th>
+                      <th>Tổng hội viên</th>
+                      <th>Tỉ lệ active</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td><span class="badge bg-primary">4.5</span></td>
+                      <td><span class="badge bg-success">45</span></td>
+                      <td><span class="badge bg-warning">12</span></td>
+                      <td><span class="badge bg-secondary">3</span></td>
+                      <td>250</td>
+                      <td><span class="text-success">94.0%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td><span class="badge bg-primary">4.8</span></td>
+                      <td><span class="badge bg-success">52</span></td>
+                      <td><span class="badge bg-warning">8</span></td>
+                      <td><span class="badge bg-secondary">2</span></td>
+                      <td>300</td>
+                      <td><span class="text-success">96.7%</span></td>
+                      <td><span class="badge bg-success">Xuất sắc</span></td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td><span class="badge bg-primary">3.9</span></td>
+                      <td><span class="badge bg-success">38</span></td>
+                      <td><span class="badge bg-warning">15</span></td>
+                      <td><span class="badge bg-secondary">5</span></td>
+                      <td>280</td>
+                      <td><span class="text-warning">89.3%</span></td>
+                      <td><span class="badge bg-warning">Trung bình</span></td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td><strong>Hào Nam</strong></td>
+                      <td><span class="badge bg-primary">4.1</span></td>
+                      <td><span class="badge bg-success">42</span></td>
+                      <td><span class="badge bg-warning">18</span></td>
+                      <td><span class="badge bg-secondary">4</span></td>
+                      <td>220</td>
+                      <td><span class="text-success">92.7%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td><span class="badge bg-primary">3.2</span></td>
+                      <td><span class="badge bg-success">21</span></td>
+                      <td><span class="badge bg-warning">36</span></td>
+                      <td><span class="badge bg-secondary">11</span></td>
+                      <td>200</td>
+                      <td><span class="text-danger">78.0%</span></td>
+                      <td>
+                        <span class="badge bg-danger">Cần cải thiện</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Details by Burn Rate -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-users me-2"></i>Chi tiết hội viên theo Burn
+                Rate
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-success">
+                    High Burn Rate Members (>6 lượt/tháng)
+                  </h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tên</th>
+                          <th>Cơ sở</th>
+                          <th>Burn Rate</th>
+                          <th>Loại thẻ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Nguyễn Văn A</td>
+                          <td>Huỳnh Thúc Kháng</td>
+                          <td><span class="badge bg-success">8.5</span></td>
+                          <td>VIP</td>
+                        </tr>
+                        <tr>
+                          <td>Trần Thị B</td>
+                          <td>Tôn Thất Thuyết</td>
+                          <td><span class="badge bg-success">7.2</span></td>
+                          <td>Premium</td>
+                        </tr>
+                        <tr>
+                          <td>Lê Văn C</td>
+                          <td>Hào Nam</td>
+                          <td><span class="badge bg-success">6.8</span></td>
+                          <td>Basic</td>
+                        </tr>
+                        <tr>
+                          <td>Phạm Thị D</td>
+                          <td>Giảng Võ</td>
+                          <td><span class="badge bg-success">6.5</span></td>
+                          <td>Premium</td>
+                        </tr>
+                        <tr>
+                          <td>Hoàng Văn E</td>
+                          <td>Nguyễn Tuân</td>
+                          <td><span class="badge bg-success">6.1</span></td>
+                          <td>VIP</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-warning">
+                    Low Burn Rate Members (<2 lượt/tháng)
+                  </h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tên</th>
+                          <th>Cơ sở</th>
+                          <th>Burn Rate</th>
+                          <th>Loại thẻ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Vũ Thị F</td>
+                          <td>Nguyễn Tuân</td>
+                          <td><span class="badge bg-warning">1.2</span></td>
+                          <td>Basic</td>
+                        </tr>
+                        <tr>
+                          <td>Đặng Văn G</td>
+                          <td>Giảng Võ</td>
+                          <td><span class="badge bg-warning">1.5</span></td>
+                          <td>Premium</td>
+                        </tr>
+                        <tr>
+                          <td>Bùi Thị H</td>
+                          <td>Hào Nam</td>
+                          <td><span class="badge bg-warning">1.8</span></td>
+                          <td>Basic</td>
+                        </tr>
+                        <tr>
+                          <td>Phan Văn I</td>
+                          <td>Tôn Thất Thuyết</td>
+                          <td><span class="badge bg-warning">1.3</span></td>
+                          <td>VIP</td>
+                        </tr>
+                        <tr>
+                          <td>Ngô Thị K</td>
+                          <td>Huỳnh Thúc Kháng</td>
+                          <td><span class="badge bg-warning">1.6</span></td>
+                          <td>Premium</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-lightbulb me-2"></i>Khuyến nghị hành động
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-success">Cho High Burn Rate Members:</h6>
+                  <ul>
+                    <li>Ưu đãi đặc biệt cho việc duy trì tần suất cao</li>
+                    <li>Chương trình loyalty points</li>
+                    <li>Mời tham gia các lớp premium</li>
+                    <li>Referral program với phần thưởng hấp dẫn</li>
+                  </ul>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-warning">Cho Low Burn Rate Members:</h6>
+                  <ul>
+                    <li>Liên hệ trực tiếp để tìm hiểu nguyên nhân</li>
+                    <li>Gửi lịch tập phù hợp với thời gian rảnh</li>
+                    <li>Mời tham gia các sự kiện đặc biệt</li>
+                    <li>Hỗ trợ cá nhân hóa chương trình tập</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Burn Rate Distribution Chart
+      const burnRateDistributionCtx = document
+        .getElementById("burnRateDistributionChart")
+        .getContext("2d");
+      new Chart(burnRateDistributionCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "0-1 lượt",
+            "1-2 lượt",
+            "2-4 lượt",
+            "4-6 lượt",
+            "6-8 lượt",
+            "8+ lượt",
+          ],
+          datasets: [
+            {
+              label: "Số lượng hội viên",
+              data: [25, 64, 180, 220, 156, 45],
+              backgroundColor: [
+                "#dc3545",
+                "#fd7e14",
+                "#ffc107",
+                "#20c997",
+                "#0d6efd",
+                "#6f42c1",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Phân bố Burn Rate của hội viên",
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Burn Rate Trend Chart
+      const burnRateTrendCtx = document
+        .getElementById("burnRateTrendChart")
+        .getContext("2d");
+      new Chart(burnRateTrendCtx, {
+        type: "line",
+        data: {
+          labels: [
+            "T1",
+            "T2",
+            "T3",
+            "T4",
+            "T5",
+            "T6",
+            "T7",
+            "T8",
+            "T9",
+            "T10",
+            "T11",
+            "T12",
+          ],
+          datasets: [
+            {
+              label: "Tỷ lệ Burn trung bình",
+              data: [
+                3.8, 4.0, 4.1, 3.9, 4.2, 4.3, 4.1, 4.0, 4.2, 4.1, 4.3, 4.2,
+              ],
+              borderColor: "#dc3545",
+              backgroundColor: "rgba(220, 53, 69, 0.1)",
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Xu hướng Burn Rate theo tháng",
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Filter functionality
+      function applyFilters() {
+        const location = document.getElementById("locationFilter").value;
+        const timeRange = document.getElementById("timeRangeFilter").value;
+        const membership = document.getElementById("membershipFilter").value;
+
+        // Show loading
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-1"></i>Đang tải...';
+        button.disabled = true;
+
+        // Simulate API call
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.disabled = false;
+
+          // Show success message
+          const alert = document.createElement("div");
+          alert.className =
+            "alert alert-success alert-dismissible fade show mt-3";
+          alert.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>
+                    Đã áp dụng bộ lọc: ${getLocationName(
+                      location
+                    )} - ${getTimeRangeName(timeRange)} - ${getMembershipName(
+            membership
+          )}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+          document.querySelector(".card-body").appendChild(alert);
+        }, 1000);
+      }
+
+      function getLocationName(value) {
+        const locations = {
+          all: "Tất cả cơ sở",
+          "ton-that-thuyet": "Tôn Thất Thuyết",
+          "huynh-thuc-khang": "Huỳnh Thúc Kháng",
+          "giang-vo": "Giảng Võ",
+          "hao-nam": "Hào Nam",
+          "nguyen-tuan": "Nguyễn Tuân",
+        };
+        return locations[value] || value;
+      }
+
+      function getTimeRangeName(value) {
+        const timeRanges = {
+          "this-month": "Tháng này",
+          "last-month": "Tháng trước",
+          "last-3-months": "3 tháng gần đây",
+          "last-6-months": "6 tháng gần đây",
+          "this-year": "Năm nay",
+        };
+        return timeRanges[value] || value;
+      }
+
+      function getMembershipName(value) {
+        const memberships = {
+          all: "Tất cả loại",
+          basic: "Basic",
+          premium: "Premium",
+          vip: "VIP",
+          corporate: "Corporate",
+        };
+        return memberships[value] || value;
+      }
+    </script>
+    <!-- Filter Integration Script -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/filter-handler.js"></script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thống kê Check-in sai giờ hôm qua - Actiwell Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-clock text-danger fs-3 me-3"></i>
+              <div>
+                <h2 class="text-danger mb-0">
+                  Thống kê Check-in sai giờ hôm qua
+                </h2>
+                <p class="text-muted mb-0">
+                  Danh sách hội viên check-in sai giờ hôm qua
+                </p>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-outline-secondary me-2" onclick="goBack()">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+              </button>
+              <button class="btn btn-primary" onclick="refreshData()">
+                <i class="fas fa-sync-alt me-1"></i>Làm mới
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Card -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i
+                  class="fas fa-exclamation-triangle text-danger fs-3 me-3"
+                ></i>
+                <h4 class="text-danger mb-0">
+                  Tổng lượt check-in sai giờ hôm qua
+                </h4>
+              </div>
+              <h1 class="text-danger mb-0" id="totalLateCheckins">8</h1>
+              <small class="text-muted">hội viên check-in sai giờ</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Thống kê số lượt check-in
+                sai giờ hôm qua
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th></th>
+                      <th class="text-center">Membership</th>
+                      <th class="text-center">PT Fitness</th>
+                      <th class="text-center">Pilates</th>
+                      <th class="text-center">Swimming Coach</th>
+                      <th class="text-center">Tổng cộng</th>
+                    </tr>
+                  </thead>
+                  <tbody id="statisticsTableBody">
+                    <tr>
+                      <td class="fw-bold">Tôn Thất Thuyết</td>
+                      <td class="text-center">1</td>
+                      <td class="text-center">1</td>
+                      <td class="text-center">1</td>
+                      <td class="text-center">0</td>
+                      <td class="fw-bold text-center">3</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Huỳnh Thúc Kháng</td>
+                      <td class="text-center">1</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">0</td>
+                      <td class="fw-bold text-center">1</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Giảng Võ</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">1</td>
+                      <td class="fw-bold text-center">1</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Hào Nam</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">1</td>
+                      <td class="text-center">0</td>
+                      <td class="fw-bold text-center">1</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Nguyễn Tuân</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">1</td>
+                      <td class="text-center">0</td>
+                      <td class="text-center">0</td>
+                      <td class="fw-bold text-center">1</td>
+                    </tr>
+                    <tr class="table-info">
+                      <td class="fw-bold">Tổng cộng</td>
+                      <td class="fw-bold text-center">2</td>
+                      <td class="fw-bold text-center">2</td>
+                      <td class="fw-bold text-center">2</td>
+                      <td class="fw-bold text-center">2</td>
+                      <td class="fw-bold text-center">8</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Late Check-in Table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Danh sách hội viên check-in sai
+                giờ hôm qua
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Filter Section -->
+              <div class="row mb-3">
+                <div class="col-md-3 mb-2">
+                  <label class="form-label">Bộ phận</label>
+                  <select class="form-select" id="department">
+                    <option value="all">Tất cả</option>
+                    <option value="membership">Membership</option>
+                    <option value="pt-fitness">PT Fitness</option>
+                    <option value="pilates">Pilates</option>
+                    <option value="swimming-coach">Swimming Coach</option>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="location">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <label class="form-label">Loại sai giờ</label>
+                  <select class="form-select" id="lateType">
+                    <option value="all">Tất cả</option>
+                    <option value="late">Muộn</option>
+                    <option value="early">Sớm</option>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-2 d-flex align-items-end">
+                  <button
+                    class="btn btn-primary w-100"
+                    onclick="applyFilters()"
+                  >
+                    <i class="fas fa-search me-1"></i>Áp dụng
+                  </button>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Hội viên</th>
+                      <th>Bộ phận</th>
+                      <th>Cơ sở</th>
+                      <th>Nhân viên phụ trách</th>
+                      <th>Giờ check-in</th>
+                      <th>Giờ quy định</th>
+                      <th>Thời gian chênh lệch</th>
+                      <th>Loại sai giờ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lateCheckinTableBody">
+                    <!-- Data will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // Sample data for late check-ins (8 records total)
+      const lateCheckinData = [
+        {
+          id: 1,
+          name: "Nguyễn Văn A",
+          department: "PT Fitness",
+          location: "Tôn Thất Thuyết",
+          locationKey: "ton-that-thuyet",
+          staffInCharge: "Nguyễn Thị Lan",
+          checkinTime: "08:15",
+          requiredTime: "08:00",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 2,
+          name: "Trần Thị B",
+          department: "Membership",
+          location: "Huỳnh Thúc Kháng",
+          locationKey: "huynh-thuc-khang",
+          staffInCharge: "Trần Văn Minh",
+          checkinTime: "08:25",
+          requiredTime: "08:00",
+          timeDifference: 25,
+          lateType: "late",
+        },
+        {
+          id: 3,
+          name: "Lê Văn C",
+          department: "Swimming Coach",
+          location: "Giảng Võ",
+          locationKey: "giang-vo",
+          staffInCharge: "Lê Thị Hương",
+          checkinTime: "08:35",
+          requiredTime: "08:00",
+          timeDifference: 35,
+          lateType: "late",
+        },
+        {
+          id: 4,
+          name: "Phạm Thị D",
+          department: "Pilates",
+          location: "Hào Nam",
+          locationKey: "hao-nam",
+          staffInCharge: "Phạm Văn Đức",
+          checkinTime: "08:45",
+          requiredTime: "08:00",
+          timeDifference: 45,
+          lateType: "late",
+        },
+        {
+          id: 5,
+          name: "Hoàng Văn E",
+          department: "PT Fitness",
+          location: "Nguyễn Tuân",
+          locationKey: "nguyen-tuan",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinTime: "07:50",
+          requiredTime: "08:00",
+          timeDifference: -10,
+          lateType: "early",
+        },
+        {
+          id: 6,
+          name: "Võ Thị F",
+          department: "Pilates",
+          location: "Tôn Thất Thuyết",
+          locationKey: "ton-that-thuyet",
+          staffInCharge: "Võ Văn Sơn",
+          checkinTime: "07:45",
+          requiredTime: "08:00",
+          timeDifference: -15,
+          lateType: "early",
+        },
+        {
+          id: 7,
+          name: "Ngô Văn G",
+          department: "Membership",
+          location: "Huỳnh Thúc Kháng",
+          locationKey: "huynh-thuc-khang",
+          staffInCharge: "Ngô Thị Linh",
+          checkinTime: "08:20",
+          requiredTime: "08:00",
+          timeDifference: 20,
+          lateType: "late",
+        },
+        {
+          id: 8,
+          name: "Lý Thị H",
+          department: "Swimming Coach",
+          location: "Giảng Võ",
+          locationKey: "giang-vo",
+          checkinTime: "07:55",
+          requiredTime: "08:00",
+          timeDifference: -5,
+          lateType: "early",
+        },
+      ];
+
+      // Update data from ConsistentData
+      function updateLateCheckinData() {
+        if (window.ConsistentData) {
+          const yesterdayData = window.ConsistentData.getData(
+            "yesterday",
+            "all"
+          );
+          const totalElement = document.getElementById("totalLateCheckins");
+          if (totalElement) {
+            totalElement.textContent = yesterdayData.lateCheckin;
+          }
+        } else {
+          // Fallback to hardcoded values
+          const totalElement = document.getElementById("totalLateCheckins");
+          if (totalElement) {
+            totalElement.textContent = "8";
+          }
+        }
+      }
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        loadLateCheckinData();
+        updateStatisticsTable();
+        updateLateCheckinData();
+      });
+
+      function loadLateCheckinData(data = lateCheckinData) {
+        const tbody = document.getElementById("lateCheckinTableBody");
+        tbody.innerHTML = "";
+
+        // Chỉ hiển thị những hội viên check-in sai giờ (timeDifference != 0)
+        const lateCheckinOnly = data.filter(
+          (item) => item.timeDifference !== 0
+        );
+
+        // Update total count - hiển thị tổng số check-in sai giờ
+        const totalElement = document.getElementById("totalLateCheckins");
+        if (totalElement) {
+          const totalLateCheckins = lateCheckinData.filter(
+            (item) => item.timeDifference !== 0
+          ).length;
+          totalElement.textContent = totalLateCheckins;
+        }
+
+        lateCheckinOnly.forEach((employee, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                                ${employee.name.charAt(0)}
+                            </div>
+                            <div>
+                                <div class="fw-bold">${employee.name}</div>
+                                <small class="text-muted">ID: ${
+                                  employee.id
+                                }</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge bg-info">${
+                          employee.department
+                        }</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-secondary">${
+                          employee.location
+                        }</span>
+                    </td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px; font-size: 10px;">
+                                ${
+                                  employee.staffInCharge
+                                    ? employee.staffInCharge
+                                        .split(" ")
+                                        .pop()
+                                        .charAt(0)
+                                    : "N/A"
+                                }
+                            </div>
+                            <div>
+                                <div class="fw-bold small">${
+                                  employee.staffInCharge || "Chưa phân công"
+                                }</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="text-danger fw-bold">${
+                          employee.checkinTime
+                        }</span>
+                    </td>
+                    <td>
+                        <span class="text-success">${
+                          employee.requiredTime
+                        }</span>
+                    </td>
+                    <td>
+                        <span class="badge ${getTimeDifferenceBadgeClass(
+                          employee.timeDifference
+                        )}">
+                            ${formatTimeDifference(employee.timeDifference)}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge ${
+                          employee.lateType === "late"
+                            ? "bg-danger"
+                            : employee.lateType === "early"
+                            ? "bg-warning"
+                            : "bg-success"
+                        }">${
+            employee.lateType === "late"
+              ? "Muộn"
+              : employee.lateType === "early"
+              ? "Sớm"
+              : "Đúng giờ"
+          }</span>
+                    </td>
+                `;
+          tbody.appendChild(row);
+        });
+      }
+
+      function getTimeDifferenceBadgeClass(timeDifference) {
+        if (timeDifference > 0) {
+          return "badge bg-danger";
+        } else if (timeDifference < 0) {
+          return "badge bg-warning";
+        } else {
+          return "badge bg-success";
+        }
+      }
+
+      function formatTimeDifference(timeDifference) {
+        const absDiff = Math.abs(timeDifference);
+        if (timeDifference > 0) {
+          return `+${absDiff} phút`;
+        } else if (timeDifference < 0) {
+          return `-${absDiff} phút`;
+        } else {
+          return "Đúng giờ";
+        }
+      }
+
+      function updateStatisticsTable(data = lateCheckinData) {
+        const locations = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+
+        const departments = [
+          "Membership",
+          "PT Fitness",
+          "Pilates",
+          "Swimming Coach",
+        ];
+
+        // Initialize statistics object
+        const stats = {};
+        locations.forEach((location) => {
+          stats[location] = {};
+          departments.forEach((dept) => {
+            stats[location][dept] = 0;
+          });
+        });
+
+        // Count late check-ins by location and department
+        data.forEach((item) => {
+          if (item.timeDifference !== 0) {
+            // Only count check-ins that are not on time
+            const location = item.location;
+            const department = item.department;
+
+            if (stats[location] && stats[location][department] !== undefined) {
+              stats[location][department]++;
+            }
+          }
+        });
+
+        // Calculate totals
+        const departmentTotals = {};
+        departments.forEach((dept) => {
+          departmentTotals[dept] = locations.reduce(
+            (sum, location) => sum + (stats[location][dept] || 0),
+            0
+          );
+        });
+
+        const locationTotals = {};
+        locations.forEach((location) => {
+          locationTotals[location] = departments.reduce(
+            (sum, dept) => sum + (stats[location][dept] || 0),
+            0
+          );
+        });
+
+        const grandTotal = Object.values(locationTotals).reduce(
+          (sum, total) => sum + total,
+          0
+        );
+
+        // Update table
+        const tbody = document.getElementById("statisticsTableBody");
+        tbody.innerHTML = "";
+
+        locations.forEach((location) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="fw-bold">${location}</td>
+            <td class="text-center">${stats[location]["Membership"] || 0}</td>
+            <td class="text-center">${stats[location]["PT Fitness"] || 0}</td>
+            <td class="text-center">${stats[location]["Pilates"] || 0}</td>
+            <td class="text-center">${
+              stats[location]["Swimming Coach"] || 0
+            }</td>
+            <td class="fw-bold text-center">${locationTotals[location]}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Add total row
+        const totalRow = document.createElement("tr");
+        totalRow.className = "table-info";
+        totalRow.innerHTML = `
+          <td class="fw-bold">Tổng cộng</td>
+          <td class="fw-bold text-center">${departmentTotals["Membership"]}</td>
+          <td class="fw-bold text-center">${departmentTotals["PT Fitness"]}</td>
+          <td class="fw-bold text-center">${departmentTotals["Pilates"]}</td>
+          <td class="fw-bold text-center">${departmentTotals["Swimming Coach"]}</td>
+          <td class="fw-bold text-center">${grandTotal}</td>
+        `;
+        tbody.appendChild(totalRow);
+      }
+
+      function applyFilters() {
+        const department = document.getElementById("department").value;
+        const location = document.getElementById("location").value;
+        const lateType = document.getElementById("lateType").value;
+
+        let filteredData = lateCheckinData.filter((item) => {
+          // Chỉ lấy những hội viên check-in sai giờ (timeDifference != 0)
+          if (item.timeDifference === 0) return false;
+
+          const departmentMatch =
+            department === "all" ||
+            item.department.toLowerCase().replace(" ", "-") === department ||
+            (department === "pt-fitness" && item.department === "PT Fitness");
+          const locationMatch =
+            location === "all" || item.locationKey === location;
+
+          let lateTypeMatch = true;
+          if (lateType !== "all") {
+            if (lateType === "late") {
+              lateTypeMatch = item.timeDifference > 0;
+            } else if (lateType === "early") {
+              lateTypeMatch = item.timeDifference < 0;
+            }
+          }
+
+          return departmentMatch && locationMatch && lateTypeMatch;
+        });
+
+        loadLateCheckinData(filteredData);
+        updateStatisticsTable(); // Luôn hiển thị toàn bộ dữ liệu cho bảng thống kê
+      }
+
+      function viewDetails(employeeId) {
+        alert(`Xem chi tiết nhân viên ID: ${employeeId}`);
+      }
+
+      function editCheckin(employeeId) {
+        alert(`Chỉnh sửa check-in ID: ${employeeId}`);
+      }
+
+      function goBack() {
+        window.history.back();
+      }
+
+      function refreshData() {
+        loadLateCheckinData();
+      }
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <script>
+      // Ensure data is updated after all scripts load
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          updateLateCheckinData();
+        }, 100);
+      });
+    </script>
+  </body>
+</html>

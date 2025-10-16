@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thống kê hợp đồng - Actiwell Report System</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">
+                <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="revenue-reports.html">
+                <i class="fas fa-chart-line me-1"></i>Báo cáo doanh thu
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                <i class="fas fa-file-contract me-1"></i>Thống kê hợp đồng
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-2">
+                  <label class="form-label">Từ ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDate"
+                    value="2024-01-01"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Đến ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDate"
+                    value="2024-12-31"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Trung tâm:</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="1">Tôn Thất Thuyết</option>
+                    <option value="2">Huỳnh Thúc Kháng</option>
+                    <option value="3">Giảng Võ</option>
+                    <option value="4">Hào Nam</option>
+                    <option value="5">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Bộ phận:</label>
+                  <select class="form-select" id="departmentFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="membership">Membership</option>
+                    <option value="fitness">Fitness</option>
+                    <option value="pool">Pool</option>
+                    <option value="pilates">Pilates</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Loại hợp đồng:</label>
+                  <select class="form-select" id="contractTypeFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="member">Hội viên</option>
+                    <option value="trainer">Huấn luyện viên</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-search me-1"></i>Lọc
+                  </button>
+                  <button class="btn btn-success ms-2" onclick="exportReport()">
+                    <i class="fas fa-download me-1"></i>Xuất
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contract Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Hợp đồng mới</h6>
+                  <h3 class="mb-0">125</h3>
+                  <small>tháng này</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-file-contract fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Còn hiệu lực</h6>
+                  <h3 class="mb-0">1,850</h3>
+                  <small>hợp đồng</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-check-circle fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Hết hiệu lực</h6>
+                  <h3 class="mb-0">45</h3>
+                  <small>tháng này</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-exclamation-triangle fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Chưa kích hoạt</h6>
+                  <h3 class="mb-0">12</h3>
+                  <small>hợp đồng</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-clock fa-2x"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contract Tabs -->
+      <ul class="nav nav-tabs" id="contractTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="member-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#member"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-users me-1"></i>Hợp đồng hội viên
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="trainer-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#trainer"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-dumbbell me-1"></i>Hợp đồng HLV
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="contractTabsContent">
+        <!-- Member Contracts Tab -->
+        <div class="tab-pane fade show active" id="member" role="tabpanel">
+          <!-- Member Contract Summary -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Tổng quan hợp đồng hội viên</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                          <h4>Đăng ký mới</h4>
+                          <h2>85</h2>
+                          <small>hợp đồng</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                          <h4>Tái ký</h4>
+                          <h2>30</h2>
+                          <small>hợp đồng</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                          <h4>Nâng cấp</h4>
+                          <h2>10</h2>
+                          <small>hợp đồng</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-warning text-white">
+                        <div class="card-body text-center">
+                          <h4>Tạm ngưng</h4>
+                          <h2>5</h2>
+                          <small>hợp đồng</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member Contract Details -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Chi tiết hợp đồng hội viên</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped data-table">
+                      <thead>
+                        <tr>
+                          <th>STT</th>
+                          <th>Mã HĐ</th>
+                          <th>Khách hàng</th>
+                          <th>Loại hợp đồng</th>
+                          <th>Gói dịch vụ</th>
+                          <th>Ngày bắt đầu</th>
+                          <th>Ngày kết thúc</th>
+                          <th>Trạng thái</th>
+                          <th>Giá trị (VNĐ)</th>
+                          <th>Đã thanh toán (VNĐ)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>HD001</td>
+                          <td>Nguyễn Văn A</td>
+                          <td>
+                            <span class="badge bg-primary">Đăng ký mới</span>
+                          </td>
+                          <td>Gói 1 tháng</td>
+                          <td>01/01/2024</td>
+                          <td>31/01/2024</td>
+                          <td>
+                            <span class="badge bg-success">Hiệu lực</span>
+                          </td>
+                          <td>500,000</td>
+                          <td>500,000</td>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>HD002</td>
+                          <td>Trần Thị B</td>
+                          <td><span class="badge bg-success">Tái ký</span></td>
+                          <td>Gói 3 tháng</td>
+                          <td>15/01/2024</td>
+                          <td>14/04/2024</td>
+                          <td>
+                            <span class="badge bg-success">Hiệu lực</span>
+                          </td>
+                          <td>1,500,000</td>
+                          <td>1,500,000</td>
+                        </tr>
+                        <tr>
+                          <td>3</td>
+                          <td>HD003</td>
+                          <td>Lê Văn C</td>
+                          <td><span class="badge bg-info">Nâng cấp</span></td>
+                          <td>Gói 6 tháng</td>
+                          <td>20/01/2024</td>
+                          <td>19/07/2024</td>
+                          <td>
+                            <span class="badge bg-success">Hiệu lực</span>
+                          </td>
+                          <td>3,000,000</td>
+                          <td>1,500,000</td>
+                        </tr>
+                        <tr>
+                          <td>4</td>
+                          <td>HD004</td>
+                          <td>Phạm Thị D</td>
+                          <td>
+                            <span class="badge bg-primary">Đăng ký mới</span>
+                          </td>
+                          <td>Gói 12 tháng</td>
+                          <td>25/01/2024</td>
+                          <td>24/01/2025</td>
+                          <td>
+                            <span class="badge bg-warning">Chưa kích hoạt</span>
+                          </td>
+                          <td>10,000,000</td>
+                          <td>5,000,000</td>
+                        </tr>
+                        <tr>
+                          <td>5</td>
+                          <td>HD005</td>
+                          <td>Hoàng Văn E</td>
+                          <td><span class="badge bg-success">Tái ký</span></td>
+                          <td>Gói 1 tháng</td>
+                          <td>10/01/2024</td>
+                          <td>09/02/2024</td>
+                          <td>
+                            <span class="badge bg-danger">Hết hiệu lực</span>
+                          </td>
+                          <td>500,000</td>
+                          <td>500,000</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member Contract Statistics -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    Thống kê hợp đồng hội viên theo loại
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped data-table">
+                      <thead>
+                        <tr>
+                          <th>Loại hợp đồng</th>
+                          <th>Số lượng</th>
+                          <th>Doanh thu (VNĐ)</th>
+                          <th>Tỉ lệ (%)</th>
+                          <th>Giá trị TB (VNĐ)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Đăng ký mới</td>
+                          <td>85</td>
+                          <td>425,000,000</td>
+                          <td>68%</td>
+                          <td>5,000,000</td>
+                        </tr>
+                        <tr>
+                          <td>Tái ký</td>
+                          <td>30</td>
+                          <td>150,000,000</td>
+                          <td>24%</td>
+                          <td>5,000,000</td>
+                        </tr>
+                        <tr>
+                          <td>Nâng cấp</td>
+                          <td>10</td>
+                          <td>50,000,000</td>
+                          <td>8%</td>
+                          <td>5,000,000</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trainer Contracts Tab -->
+        <div class="tab-pane fade" id="trainer" role="tabpanel">
+          <!-- Trainer Contract Summary -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    Tổng quan hợp đồng huấn luyện viên
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                          <h4>Đăng ký mới</h4>
+                          <h2>45</h2>
+                          <small>hợp đồng</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                          <h4>Tái ký</h4>
+                          <h2>20</h2>
+                          <small>hợp đồng</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                          <h4>Nâng cấp</h4>
+                          <h2>8</h2>
+                          <small>hợp đồng</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-warning text-white">
+                        <div class="card-body text-center">
+                          <h4>Tạm ngưng</h4>
+                          <h2>3</h2>
+                          <small>hợp đồng</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trainer Contract Details -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    Chi tiết hợp đồng huấn luyện viên
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped data-table">
+                      <thead>
+                        <tr>
+                          <th>STT</th>
+                          <th>Mã HĐ</th>
+                          <th>HLV</th>
+                          <th>Loại hợp đồng</th>
+                          <th>Gói dịch vụ</th>
+                          <th>Ngày bắt đầu</th>
+                          <th>Ngày kết thúc</th>
+                          <th>Sessions</th>
+                          <th>Trạng thái</th>
+                          <th>Giá trị (VNĐ)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>PT001</td>
+                          <td>Nguyễn Văn A</td>
+                          <td>
+                            <span class="badge bg-primary">Đăng ký mới</span>
+                          </td>
+                          <td>PT 1:1 - 30 buổi</td>
+                          <td>01/01/2024</td>
+                          <td>31/03/2024</td>
+                          <td>30</td>
+                          <td>
+                            <span class="badge bg-success">Hiệu lực</span>
+                          </td>
+                          <td>6,000,000</td>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>PT002</td>
+                          <td>Trần Thị B</td>
+                          <td><span class="badge bg-success">Tái ký</span></td>
+                          <td>PT 1:1 - 20 buổi</td>
+                          <td>15/01/2024</td>
+                          <td>14/02/2024</td>
+                          <td>20</td>
+                          <td>
+                            <span class="badge bg-success">Hiệu lực</span>
+                          </td>
+                          <td>4,000,000</td>
+                        </tr>
+                        <tr>
+                          <td>3</td>
+                          <td>PT003</td>
+                          <td>Lê Văn C</td>
+                          <td><span class="badge bg-info">Nâng cấp</span></td>
+                          <td>PT 1:1 - 50 buổi</td>
+                          <td>20/01/2024</td>
+                          <td>19/04/2024</td>
+                          <td>50</td>
+                          <td>
+                            <span class="badge bg-success">Hiệu lực</span>
+                          </td>
+                          <td>10,000,000</td>
+                        </tr>
+                        <tr>
+                          <td>4</td>
+                          <td>PT004</td>
+                          <td>Phạm Thị D</td>
+                          <td>
+                            <span class="badge bg-primary">Đăng ký mới</span>
+                          </td>
+                          <td>PT 1:1 - 10 buổi</td>
+                          <td>25/01/2024</td>
+                          <td>24/02/2024</td>
+                          <td>10</td>
+                          <td>
+                            <span class="badge bg-warning">Chưa kích hoạt</span>
+                          </td>
+                          <td>2,000,000</td>
+                        </tr>
+                        <tr>
+                          <td>5</td>
+                          <td>PT005</td>
+                          <td>Hoàng Văn E</td>
+                          <td><span class="badge bg-success">Tái ký</span></td>
+                          <td>PT 1:1 - 15 buổi</td>
+                          <td>10/01/2024</td>
+                          <td>09/02/2024</td>
+                          <td>15</td>
+                          <td>
+                            <span class="badge bg-danger">Hết hiệu lực</span>
+                          </td>
+                          <td>3,000,000</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trainer Contract Statistics -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    Thống kê hợp đồng huấn luyện viên theo loại
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped data-table">
+                      <thead>
+                        <tr>
+                          <th>Loại hợp đồng</th>
+                          <th>Số lượng</th>
+                          <th>Tổng buổi tập</th>
+                          <th>Doanh thu (VNĐ)</th>
+                          <th>Tỉ lệ (%)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Đăng ký mới</td>
+                          <td>45</td>
+                          <td>1,350</td>
+                          <td>270,000,000</td>
+                          <td>61%</td>
+                        </tr>
+                        <tr>
+                          <td>Tái ký</td>
+                          <td>20</td>
+                          <td>600</td>
+                          <td>120,000,000</td>
+                          <td>27%</td>
+                        </tr>
+                        <tr>
+                          <td>Nâng cấp</td>
+                          <td>8</td>
+                          <td>240</td>
+                          <td>48,000,000</td>
+                          <td>11%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo vận hành hội viên - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title mb-0">
+                <i class="fas fa-cogs me-2"></i>
+                Báo cáo vận hành hội viên
+              </h4>
+              <small class="text-muted">Tháng 12/2024</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Check-in hôm nay</h5>
+              <h2 class="mb-0">245</h2>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Check-in MTD</h5>
+              <h2 class="mb-0">1,850</h2>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Khách tham quan</h5>
+              <h2 class="mb-0">10</h2>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Khách tập thử</h5>
+              <h2 class="mb-0">8</h2>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Check-in theo giờ trong ngày</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="hourlyCheckinChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Check-in theo CLB</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="clubCheckinChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Tables -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Thống kê check-in theo thời gian</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Thời gian</th>
+                      <th>Check-in</th>
+                      <th>Khách tham quan</th>
+                      <th>Khách tập thử</th>
+                      <th>Tổng lượt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Hôm nay</strong></td>
+                      <td>245</td>
+                      <td>12</td>
+                      <td>8</td>
+                      <td>265</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hôm qua</strong></td>
+                      <td>230</td>
+                      <td>15</td>
+                      <td>6</td>
+                      <td>251</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Tuần này</strong></td>
+                      <td>1,680</td>
+                      <td>85</td>
+                      <td>45</td>
+                      <td>1,810</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Tháng này</strong></td>
+                      <td>7,250</td>
+                      <td>350</td>
+                      <td>180</td>
+                      <td>7,780</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Check-in theo CLB</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>CLB</th>
+                      <th>Check-in hôm nay</th>
+                      <th>Check-in MTD</th>
+                      <th>Khách tham quan</th>
+                      <th>Khách tập thử</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td>50</td>
+                      <td>375</td>
+                      <td>3</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td>60</td>
+                      <td>450</td>
+                      <td>4</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td>55</td>
+                      <td>412</td>
+                      <td>2</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hào Nam</strong></td>
+                      <td>45</td>
+                      <td>337</td>
+                      <td>2</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td>35</td>
+                      <td>276</td>
+                      <td>1</td>
+                      <td>1</td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <th>TỔNG CỘNG</th>
+                      <th>245</th>
+                      <th>1,850</th>
+                      <th>12</th>
+                      <th>8</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peak Hours Analysis -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Phân tích giờ cao điểm</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="peakHoursChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Xu hướng check-in theo ngày</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="dailyTrendChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Activity Analysis -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Phân tích hoạt động hội viên</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-4 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h6 class="card-title">Hội viên tích cực</h6>
+                      <h3 class="text-success">1,250</h3>
+                      <small>Check-in > 10 lần/tháng</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h6 class="card-title">Hội viên trung bình</h6>
+                      <h3 class="text-info">850</h3>
+                      <small>Check-in 5-10 lần/tháng</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h6 class="card-title">Hội viên ít hoạt động</h6>
+                      <h3 class="text-warning">200</h3>
+                      <small>Check-in < 5 lần/tháng</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equipment Usage -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Sử dụng thiết bị</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Thiết bị</th>
+                      <th>Số lần sử dụng</th>
+                      <th>Thời gian sử dụng (phút)</th>
+                      <th>Hội viên sử dụng</th>
+                      <th>Mức độ phổ biến</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Treadmill</strong></td>
+                      <td>450</td>
+                      <td>2,250</td>
+                      <td>180</td>
+                      <td><span class="badge bg-success">Rất cao</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Weight Machine</strong></td>
+                      <td>380</td>
+                      <td>1,900</td>
+                      <td>150</td>
+                      <td><span class="badge bg-success">Cao</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Stationary Bike</strong></td>
+                      <td>320</td>
+                      <td>1,600</td>
+                      <td>120</td>
+                      <td><span class="badge bg-info">Trung bình</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Rowing Machine</strong></td>
+                      <td>180</td>
+                      <td>900</td>
+                      <td>80</td>
+                      <td><span class="badge bg-warning">Thấp</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Elliptical</strong></td>
+                      <td>150</td>
+                      <td>750</td>
+                      <td>60</td>
+                      <td><span class="badge bg-warning">Thấp</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis and Recommendations -->
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Phân tích hiệu suất</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <h6>Giờ cao điểm:</h6>
+                <p class="text-success">18:00-20:00 - 85 lượt check-in</p>
+              </div>
+              <div class="mb-3">
+                <h6>CLB có nhiều hoạt động nhất:</h6>
+                <p class="text-success">Huỳnh Thúc Kháng - 60 lượt/ngày</p>
+              </div>
+              <div class="mb-3">
+                <h6>Thiết bị phổ biến nhất:</h6>
+                <p class="text-info">Treadmill - 450 lần sử dụng</p>
+              </div>
+              <div class="mb-3">
+                <h6>Tỉ lệ hội viên tích cực:</h6>
+                <p class="text-success">54.3% - Tốt</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Khuyến nghị cải thiện</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tăng cường nhân sự vào giờ cao điểm
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Khuyến khích hội viên tập vào giờ thấp điểm
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Cải thiện dịch vụ cho hội viên ít hoạt động
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Bổ sung thêm thiết bị phổ biến
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tối ưu hóa không gian tập luyện
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Phân tích nguyên nhân hội viên ít hoạt động
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Initialize charts when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeOperationCharts();
+      });
+
+      function initializeOperationCharts() {
+        // Hourly Check-in Chart
+        const ctx1 = document.getElementById("hourlyCheckinChart");
+        if (ctx1) {
+          new Chart(ctx1, {
+            type: "bar",
+            data: {
+              labels: [
+                "6h",
+                "7h",
+                "8h",
+                "9h",
+                "10h",
+                "11h",
+                "12h",
+                "13h",
+                "14h",
+                "15h",
+                "16h",
+                "17h",
+                "18h",
+                "19h",
+                "20h",
+                "21h",
+                "22h",
+              ],
+              datasets: [
+                {
+                  label: "Check-in",
+                  data: [
+                    5, 15, 25, 20, 18, 22, 30, 25, 20, 18, 22, 35, 45, 50, 40,
+                    25, 10,
+                  ],
+                  backgroundColor: "rgba(40, 167, 69, 0.8)",
+                  borderColor: "rgba(40, 167, 69, 1)",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Check-in theo giờ trong ngày",
+                },
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            },
+          });
+        }
+
+        // Club Check-in Chart
+        const ctx2 = document.getElementById("clubCheckinChart");
+        if (ctx2) {
+          new Chart(ctx2, {
+            type: "doughnut",
+            data: {
+              labels: [
+                "Tôn Thất Thuyết",
+                "Huỳnh Thúc Kháng",
+                "Giảng Võ",
+                "Hào Nam",
+                "Nguyễn Tuân",
+              ],
+              datasets: [
+                {
+                  data: [50, 60, 55, 45, 35],
+                  backgroundColor: [
+                    "rgba(40, 167, 69, 0.8)",
+                    "rgba(0, 123, 255, 0.8)",
+                    "rgba(23, 162, 184, 0.8)",
+                    "rgba(255, 193, 7, 0.8)",
+                    "rgba(220, 53, 69, 0.8)",
+                  ],
+                  borderColor: [
+                    "rgba(40, 167, 69, 1)",
+                    "rgba(0, 123, 255, 1)",
+                    "rgba(23, 162, 184, 1)",
+                    "rgba(255, 193, 7, 1)",
+                    "rgba(220, 53, 69, 1)",
+                  ],
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Check-in theo CLB hôm nay",
+                },
+                legend: {
+                  position: "bottom",
+                },
+              },
+            },
+          });
+        }
+
+        // Peak Hours Chart
+        const ctx3 = document.getElementById("peakHoursChart");
+        if (ctx3) {
+          new Chart(ctx3, {
+            type: "line",
+            data: {
+              labels: [
+                "6h-8h",
+                "8h-10h",
+                "10h-12h",
+                "12h-14h",
+                "14h-16h",
+                "16h-18h",
+                "18h-20h",
+                "20h-22h",
+              ],
+              datasets: [
+                {
+                  label: "Check-in",
+                  data: [20, 45, 52, 55, 38, 57, 90, 65],
+                  borderColor: "rgba(40, 167, 69, 1)",
+                  backgroundColor: "rgba(40, 167, 69, 0.1)",
+                  tension: 0.3,
+                  fill: true,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Phân tích giờ cao điểm",
+                },
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            },
+          });
+        }
+
+        // Daily Trend Chart
+        const ctx4 = document.getElementById("dailyTrendChart");
+        if (ctx4) {
+          new Chart(ctx4, {
+            type: "line",
+            data: {
+              labels: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+              datasets: [
+                {
+                  label: "Check-in",
+                  data: [180, 220, 240, 250, 280, 320, 200],
+                  borderColor: "rgba(0, 123, 255, 1)",
+                  backgroundColor: "rgba(0, 123, 255, 0.1)",
+                  tension: 0.3,
+                  fill: true,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Xu hướng check-in theo ngày trong tuần",
+                },
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            },
+          });
+        }
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

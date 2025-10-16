@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Doanh thu ngày - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="../assets/js/revenue-data-sync.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-calendar-day me-2"></i>
+                Chi tiết Doanh thu ngày
+              </h2>
+              <p class="text-muted">
+                Doanh thu chi tiết theo ngày và so sánh với các ngày trước
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Revenue Overview -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <h6 class="card-title">Doanh thu hôm nay</h6>
+              <h3 class="mb-0" id="todayRevenue">75,000,000</h3>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <h6 class="card-title">Doanh thu hôm qua</h6>
+              <h3 class="mb-0" id="yesterdayRevenueDetail">78,000,000</h3>
+              <small>VNĐ (+9%)</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <h6 class="card-title">Trung bình 7 ngày</h6>
+              <h3 class="mb-0">82,500,000</h3>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <h6 class="card-title">Cao nhất tháng</h6>
+              <h3 class="mb-0">95,000,000</h3>
+              <small>VNĐ (15/12)</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Club Today -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-building me-2"></i>
+                Doanh thu theo CLB hôm nay
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>CLB</th>
+                      <th>Doanh thu hôm nay</th>
+                      <th>Doanh thu hôm qua</th>
+                      <th>Chênh lệch</th>
+                      <th>% Thay đổi</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td>22,000,000</td>
+                      <td>20,000,000</td>
+                      <td class="text-success">+2,000,000</td>
+                      <td class="text-success">+10%</td>
+                      <td><span class="badge bg-success">Tăng</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td>18,500,000</td>
+                      <td>19,000,000</td>
+                      <td class="text-danger">-500,000</td>
+                      <td class="text-danger">-2.6%</td>
+                      <td><span class="badge bg-warning">Giảm nhẹ</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td>15,000,000</td>
+                      <td>14,500,000</td>
+                      <td class="text-success">+500,000</td>
+                      <td class="text-success">+3.4%</td>
+                      <td><span class="badge bg-success">Tăng</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hào Nam</strong></td>
+                      <td>17,000,000</td>
+                      <td>16,000,000</td>
+                      <td class="text-success">+1,000,000</td>
+                      <td class="text-success">+6.3%</td>
+                      <td><span class="badge bg-success">Tăng</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td>12,500,000</td>
+                      <td>8,500,000</td>
+                      <td class="text-success">+4,000,000</td>
+                      <td class="text-success">+47.1%</td>
+                      <td><span class="badge bg-success">Tăng mạnh</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Service Today -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Doanh thu theo dịch vụ hôm nay
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="serviceRevenueChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-credit-card me-2"></i>
+                Doanh thu theo hình thức thanh toán
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="paymentMethodChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Revenue Trend -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Xu hướng doanh thu 30 ngày gần nhất
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="dailyTrendChart" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hourly Revenue Breakdown -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-clock me-2"></i>
+                Doanh thu theo giờ hôm nay
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="hourlyRevenueChart" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Performers Today -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-trophy me-2"></i>
+                Top nhân viên hôm nay
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Nhân viên</th>
+                      <th>CLB</th>
+                      <th>Doanh thu</th>
+                      <th>Số giao dịch</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="badge bg-warning">1</span></td>
+                      <td>Nguyễn Văn A</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>8,500,000</td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge bg-secondary">2</span></td>
+                      <td>Trần Thị B</td>
+                      <td>Hào Nam</td>
+                      <td>7,200,000</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge bg-secondary">3</span></td>
+                      <td>Lê Văn C</td>
+                      <td>Giảng Võ</td>
+                      <td>6,800,000</td>
+                      <td>4</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge bg-secondary">4</span></td>
+                      <td>Phạm Thị D</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>6,500,000</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td><span class="badge bg-secondary">5</span></td>
+                      <td>Hoàng Văn E</td>
+                      <td>Nguyễn Tuân</td>
+                      <td>5,200,000</td>
+                      <td>3</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                So sánh với các ngày trong tuần
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="weeklyComparisonChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Details -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-list me-2"></i>
+                Chi tiết giao dịch hôm nay
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Thời gian</th>
+                      <th>CLB</th>
+                      <th>Nhân viên</th>
+                      <th>Khách hàng</th>
+                      <th>Dịch vụ</th>
+                      <th>Số tiền</th>
+                      <th>Hình thức</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>09:15</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>Nguyễn Văn A</td>
+                      <td>Trần Thị Lan</td>
+                      <td>Membership 12 tháng</td>
+                      <td>15,000,000</td>
+                      <td>Chuyển khoản</td>
+                      <td><span class="badge bg-success">Hoàn thành</span></td>
+                    </tr>
+                    <tr>
+                      <td>10:30</td>
+                      <td>Hào Nam</td>
+                      <td>Trần Thị B</td>
+                      <td>Lê Văn Minh</td>
+                      <td>PT 20 buổi</td>
+                      <td>8,000,000</td>
+                      <td>Tiền mặt</td>
+                      <td><span class="badge bg-success">Hoàn thành</span></td>
+                    </tr>
+                    <tr>
+                      <td>11:45</td>
+                      <td>Giảng Võ</td>
+                      <td>Lê Văn C</td>
+                      <td>Phạm Thị Hoa</td>
+                      <td>Pilates 10 buổi</td>
+                      <td>3,500,000</td>
+                      <td>MPOS</td>
+                      <td><span class="badge bg-success">Hoàn thành</span></td>
+                    </tr>
+                    <tr>
+                      <td>14:20</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>Phạm Thị D</td>
+                      <td>Hoàng Văn Nam</td>
+                      <td>Swimming Coach 6 tháng</td>
+                      <td>4,200,000</td>
+                      <td>Cà thẻ</td>
+                      <td><span class="badge bg-success">Hoàn thành</span></td>
+                    </tr>
+                    <tr>
+                      <td>16:10</td>
+                      <td>Nguyễn Tuân</td>
+                      <td>Hoàng Văn E</td>
+                      <td>Vũ Thị Mai</td>
+                      <td>Membership 6 tháng</td>
+                      <td>7,500,000</td>
+                      <td>Chuyển khoản</td>
+                      <td>
+                        <span class="badge bg-warning">Chờ xác nhận</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Service Revenue Chart
+      const serviceCtx = document
+        .getElementById("serviceRevenueChart")
+        .getContext("2d");
+      new Chart(serviceCtx, {
+        type: "doughnut",
+        data: {
+          labels: [
+            "Membership",
+            "Personal Training",
+            "Swimming Coach",
+            "Pilates",
+          ],
+          datasets: [
+            {
+              data: [51, 30, 12, 7],
+              backgroundColor: ["#007bff", "#28a745", "#17a2b8", "#ffc107"],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        },
+      });
+
+      // Payment Method Chart
+      const paymentCtx = document
+        .getElementById("paymentMethodChart")
+        .getContext("2d");
+      new Chart(paymentCtx, {
+        type: "doughnut",
+        data: {
+          labels: ["Tiền mặt", "Chuyển khoản", "MPOS", "Cà thẻ"],
+          datasets: [
+            {
+              data: [50, 30, 15, 5],
+              backgroundColor: ["#28a745", "#007bff", "#17a2b8", "#ffc107"],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        },
+      });
+
+      // Daily Trend Chart
+      const trendCtx = document
+        .getElementById("dailyTrendChart")
+        .getContext("2d");
+      const last30Days = [];
+      const revenueData = [];
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        last30Days.push(date.getDate() + "/" + (date.getMonth() + 1));
+        revenueData.push(60000000 + rng.next() * 40000000);
+      }
+
+      new Chart(trendCtx, {
+        type: "line",
+        data: {
+          labels: last30Days,
+          datasets: [
+            {
+              label: "Doanh thu hàng ngày (VNĐ)",
+              data: revenueData,
+              borderColor: "#007bff",
+              backgroundColor: "rgba(0, 123, 255, 0.1)",
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return value / 1000000 + "M";
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Hourly Revenue Chart
+      const hourlyCtx = document
+        .getElementById("hourlyRevenueChart")
+        .getContext("2d");
+      new Chart(hourlyCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "6h",
+            "7h",
+            "8h",
+            "9h",
+            "10h",
+            "11h",
+            "12h",
+            "13h",
+            "14h",
+            "15h",
+            "16h",
+            "17h",
+            "18h",
+            "19h",
+            "20h",
+            "21h",
+            "22h",
+          ],
+          datasets: [
+            {
+              label: "Doanh thu theo giờ (VNĐ)",
+              data: [
+                0, 0, 0, 5000000, 8000000, 12000000, 15000000, 10000000,
+                12000000, 8000000, 10000000, 5000000, 0, 0, 0, 0, 0,
+              ],
+              backgroundColor: "#007bff",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return value / 1000000 + "M";
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Weekly Comparison Chart
+      const weeklyCtx = document
+        .getElementById("weeklyComparisonChart")
+        .getContext("2d");
+      new Chart(weeklyCtx, {
+        type: "bar",
+        data: {
+          labels: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "CN"],
+          datasets: [
+            {
+              label: "Doanh thu (VNĐ)",
+              data: [
+                75000000, 82000000, 78000000, 85000000, 90000000, 95000000,
+                80000000,
+              ],
+              backgroundColor: [
+                "#6c757d",
+                "#6c757d",
+                "#6c757d",
+                "#6c757d",
+                "#6c757d",
+                "#6c757d",
+                "#007bff",
+              ],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return value / 1000000 + "M";
+                },
+              },
+            },
+          },
+        },
+      });
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+</body>
+</html>

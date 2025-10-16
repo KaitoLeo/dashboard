@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thống kê hợp đồng HLV - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-dumbbell me-2"></i>
+                Thống kê hợp đồng huấn luyện viên
+              </h2>
+              <p class="text-muted">
+                Phân tích chi tiết các hợp đồng PT Fitness và Fit Classes
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Hợp đồng mới</h5>
+              <h2 class="mb-0">45</h2>
+              <small>tháng này</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Còn hiệu lực</h5>
+              <h2 class="mb-0">180</h2>
+              <small>hợp đồng</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tổng buổi tập</h5>
+              <h2 class="mb-0">2,190</h2>
+              <small>buổi</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Doanh thu</h5>
+              <h2 class="mb-0">438,000,000</h2>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contract Analysis -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Phân tích hợp đồng theo loại
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Loại hợp đồng</th>
+                      <th>Số lượng</th>
+                      <th>Tổng buổi tập</th>
+                      <th>Doanh thu (VNĐ)</th>
+                      <th>Giá TB/buổi (VNĐ)</th>
+                      <th>Tỉ lệ (%)</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Đăng ký mới</strong></td>
+                      <td>45</td>
+                      <td>1,350</td>
+                      <td>270,000,000</td>
+                      <td>200,000</td>
+                      <td>61.6%</td>
+                      <td><span class="badge bg-success">Hiệu lực</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Tái ký</strong></td>
+                      <td>20</td>
+                      <td>600</td>
+                      <td>120,000,000</td>
+                      <td>200,000</td>
+                      <td>27.4%</td>
+                      <td><span class="badge bg-success">Hiệu lực</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nâng cấp</strong></td>
+                      <td>8</td>
+                      <td>240</td>
+                      <td>48,000,000</td>
+                      <td>200,000</td>
+                      <td>11.0%</td>
+                      <td><span class="badge bg-success">Hiệu lực</span></td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <th>TỔNG CỘNG</th>
+                      <th>73</th>
+                      <th>2,190</th>
+                      <th>438,000,000</th>
+                      <th>200,000</th>
+                      <th>100%</th>
+                      <th>-</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Phân bố hợp đồng theo loại
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="contractTypeChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Xu hướng hợp đồng theo tháng
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="contractTrendChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trainer Performance -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-trophy me-2"></i>
+                Hiệu suất HLV theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>CLB</th>
+                      <th>Số HLV</th>
+                      <th>Hợp đồng mới</th>
+                      <th>Tổng buổi tập</th>
+                      <th>Doanh thu (VNĐ)</th>
+                      <th>TB/HLV (VNĐ)</th>
+                      <th>Hiệu suất</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td>8</td>
+                      <td>12</td>
+                      <td>360</td>
+                      <td>72,000,000</td>
+                      <td>9,000,000</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td>10</td>
+                      <td>15</td>
+                      <td>450</td>
+                      <td>90,000,000</td>
+                      <td>9,000,000</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td>6</td>
+                      <td>8</td>
+                      <td>240</td>
+                      <td>48,000,000</td>
+                      <td>8,000,000</td>
+                      <td><span class="badge bg-warning">Khá</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hào Nam</strong></td>
+                      <td>7</td>
+                      <td>6</td>
+                      <td>180</td>
+                      <td>36,000,000</td>
+                      <td>5,142,857</td>
+                      <td><span class="badge bg-warning">Khá</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td>4</td>
+                      <td>4</td>
+                      <td>120</td>
+                      <td>24,000,000</td>
+                      <td>6,000,000</td>
+                      <td><span class="badge bg-info">Trung bình</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis and Recommendations -->
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-area me-2"></i>
+                Phân tích hiệu suất
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <h6>CLB có hiệu suất cao nhất:</h6>
+                <p class="text-success">
+                  Tôn Thất Thuyết & Huỳnh Thúc Kháng - 9M VNĐ/HLV
+                </p>
+              </div>
+              <div class="mb-3">
+                <h6>Loại hợp đồng phổ biến nhất:</h6>
+                <p class="text-info">Đăng ký mới - 61.6% (45 HĐ)</p>
+              </div>
+              <div class="mb-3">
+                <h6>Giá trung bình/buổi tập:</h6>
+                <p class="text-primary">200,000 VNĐ</p>
+              </div>
+              <div class="mb-3">
+                <h6>Tỉ lệ tái ký:</h6>
+                <p class="text-warning">27.4% - Cần cải thiện</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-lightbulb me-2"></i>
+                Khuyến nghị cải thiện
+              </h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tăng cường đào tạo HLV tại Nguyễn Tuân
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Cải thiện chương trình tái ký hợp đồng
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Nhân rộng mô hình thành công từ Tôn Thất Thuyết
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tăng cường marketing cho dịch vụ PT
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Phát triển gói PT Fitness hấp dẫn hơn
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Contract Type Chart
+      const typeCtx = document.getElementById("contractTypeChart");
+      if (typeCtx) {
+        new Chart(typeCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Đăng ký mới", "Tái ký", "Nâng cấp"],
+            datasets: [
+              {
+                data: [61.6, 27.4, 11.0],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(0, 123, 255, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(0, 123, 255, 1)",
+                  "rgba(255, 193, 7, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Phân bố hợp đồng theo loại (%)",
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+      }
+
+      // Contract Trend Chart
+      const trendCtx = document.getElementById("contractTrendChart");
+      if (trendCtx) {
+        new Chart(trendCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "T1",
+              "T2",
+              "T3",
+              "T4",
+              "T5",
+              "T6",
+              "T7",
+              "T8",
+              "T9",
+              "T10",
+              "T11",
+              "T12",
+            ],
+            datasets: [
+              {
+                label: "Hợp đồng mới",
+                data: [35, 40, 38, 42, 45, 41, 43, 47, 40, 50, 48, 45],
+                borderColor: "rgba(40, 167, 69, 1)",
+                backgroundColor: "rgba(40, 167, 69, 0.1)",
+                tension: 0.3,
+              },
+              {
+                label: "Tái ký",
+                data: [15, 18, 16, 20, 22, 19, 21, 23, 18, 25, 24, 20],
+                borderColor: "rgba(0, 123, 255, 1)",
+                backgroundColor: "rgba(0, 123, 255, 0.1)",
+                tension: 0.3,
+              },
+              {
+                label: "Nâng cấp",
+                data: [5, 6, 5, 7, 8, 6, 7, 8, 6, 9, 8, 8],
+                borderColor: "rgba(255, 193, 7, 1)",
+                backgroundColor: "rgba(255, 193, 7, 0.1)",
+                tension: 0.3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Xu hướng hợp đồng 12 tháng",
+              },
+              legend: {
+                position: "top",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>
+
+
+

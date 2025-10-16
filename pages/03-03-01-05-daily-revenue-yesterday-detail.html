@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Doanh thu hôm qua - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+
+    <!-- Shared data layer -->
+    <script src="../assets/js/shared/constants.js" defer></script>
+    <script src="../assets/js/shared/time-utils.js" defer></script>
+    <script src="../assets/js/shared/state.js" defer></script>
+    <script src="../assets/js/shared/persist.js" defer></script>
+    <script src="../assets/js/shared/compute.js" defer></script>
+    <script src="../assets/js/shared/sync.js" defer></script>
+    <script src="../assets/js/shared/navigation.js" defer></script>
+  
+    <!-- Revenue Calculation Modules -->
+    <script src="../assets/js/revenue/revenue-calculations.js"></script>
+    <script src="../assets/js/revenue/revenue-mock-data.js"></script>
+    <!-- API Layer -->
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/api/api-services.js"></script>
+    <script src="../assets/js/api/data-adapter.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a
+            class="nav-link"
+            href="#"
+            onclick="Navigation.navigateTo('../index.html'); return false;"
+          >
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-calendar-minus me-2 text-secondary"></i>
+                Chi tiết Doanh thu hôm qua
+              </h2>
+              <p class="text-muted">
+                Doanh thu chi tiết hôm qua và so sánh với các ngày trước
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Yesterday Revenue Overview -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-secondary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-minus fa-2x mb-2"></i>
+              <h6>Doanh thu hôm qua</h6>
+              <h3 id="yesterdayRevenue">78,000,000</h3>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x mb-2"></i>
+              <h6>Thay đổi</h6>
+              <h3 id="changeRate">-5.1%</h3>
+              <small>so với 2 ngày trước</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-target fa-2x mb-2"></i>
+              <h6>Mục tiêu ngày</h6>
+              <h3 id="dailyTarget">100,000,000</h3>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-percentage fa-2x mb-2"></i>
+              <h6>Hoàn thành</h6>
+              <h3 id="completionRate">78.0%</h3>
+              <small>mục tiêu ngày</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Service -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Doanh thu theo dịch vụ
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="serviceRevenueChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-building me-2"></i>Doanh thu theo cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="locationRevenueChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hourly Revenue Trend -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng doanh thu theo
+                giờ
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="hourlyRevenueChart" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Comparison -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-balance-scale me-2"></i>So sánh với các ngày
+                trước
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Ngày</th>
+                      <th>Doanh thu</th>
+                      <th>Thay đổi</th>
+                      <th>Tỷ lệ</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody id="comparisonTable">
+                    <tr>
+                      <td>Hôm nay</td>
+                      <td>80,434,783 VNĐ</td>
+                      <td><span class="text-success">+15.2%</span></td>
+                      <td>80.4%</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr class="table-secondary">
+                      <td><strong>Hôm qua</strong></td>
+                      <td><strong>78,000,000 VNĐ</strong></td>
+                      <td><span class="text-danger">-5.1%</span></td>
+                      <td>78.0%</td>
+                      <td><span class="badge bg-warning">Trung bình</span></td>
+                    </tr>
+                    <tr>
+                      <td>2 ngày trước</td>
+                      <td>82,150,000 VNĐ</td>
+                      <td><span class="text-success">+2.1%</span></td>
+                      <td>82.2%</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>3 ngày trước</td>
+                      <td>75,300,000 VNĐ</td>
+                      <td><span class="text-danger">-6.2%</span></td>
+                      <td>75.3%</td>
+                      <td><span class="badge bg-warning">Trung bình</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics -->
+      <div class="row mb-4">
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-clock fa-2x text-secondary mb-2"></i>
+              <h6>Giờ cao điểm</h6>
+              <h4 class="text-secondary">19:00-21:00</h4>
+              <small class="text-muted">22,000,000 VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-users fa-2x text-danger mb-2"></i>
+              <h6>Giao dịch</h6>
+              <h4 class="text-danger">142</h4>
+              <small class="text-muted">lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-dollar-sign fa-2x text-warning mb-2"></i>
+              <h6>Trung bình/GD</h6>
+              <h4 class="text-warning">549,296</h4>
+              <small class="text-muted">VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-trophy fa-2x text-info mb-2"></i>
+              <h6>Xếp hạng</h6>
+              <h4 class="text-info">#3</h4>
+              <small class="text-muted">trong tuần</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Initialize page with data layer
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Daily Revenue Yesterday Detail page loaded");
+
+        // Initialize data layer
+        DataSync.initDataLayer();
+
+        // Get current state and computed data
+        const state = SharedState.getState();
+        const computedData = Compute.computeAll(state);
+
+        // Render page with computed data
+        renderPage(computedData, state);
+
+        // Setup state change listener
+        DataSync.onStateChange((newState) => {
+          const newComputedData = Compute.computeAll(newState);
+          renderPage(newComputedData, newState);
+        });
+      });
+
+      // Render page with computed data
+      function renderPage(data, state) {
+        console.log("Rendering page with data:", data);
+
+        // Update revenue data
+        updateRevenueData(data.revenue.stats);
+
+        // Create charts
+        createCharts(data);
+
+        // Update page title with time range
+        updatePageTitle(state);
+      }
+
+      // Update revenue data
+      function updateRevenueData(stats) {
+        // Update yesterday's revenue
+        const yesterdayElement = document.getElementById("yesterdayRevenue");
+        if (yesterdayElement) {
+          yesterdayElement.textContent = stats.totalRevenue.toLocaleString();
+        }
+
+        // Update other metrics as needed
+        console.log("Updated revenue data with stats:", stats);
+      }
+
+      // Update page title with time range
+      function updatePageTitle(state) {
+        const titleElement = document.querySelector("h2.card-title");
+        if (titleElement) {
+          const timeLabel = TimeUtils.getTimeKeyLabel(state.timeKey);
+          titleElement.innerHTML = `<i class="fas fa-calendar-minus me-2 text-secondary"></i>Chi tiết Doanh thu ${timeLabel}`;
+        }
+      }
+
+      // Create charts
+      function createCharts(data) {
+        // Service Revenue Chart
+        const serviceCtx = document.getElementById("serviceRevenueChart");
+        if (serviceCtx && typeof Chart !== "undefined") {
+          new Chart(serviceCtx, {
+            type: "doughnut",
+            data: {
+              labels: ["Membership", "PT Fitness", "Pilates", "Swimming Coach"],
+              datasets: [
+                {
+                  data: [31000000, 24000000, 14000000, 9000000],
+                  backgroundColor: ["#17a2b8", "#dc3545", "#ffc107", "#6f42c1"],
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: "bottom",
+                },
+              },
+            },
+          });
+        }
+
+        // Location Revenue Chart
+        const locationCtx = document.getElementById("locationRevenueChart");
+        if (locationCtx && typeof Chart !== "undefined") {
+          new Chart(locationCtx, {
+            type: "bar",
+            data: {
+              labels: [
+                "Tôn Thất Thuyết",
+                "Huỳnh Thúc Kháng",
+                "Giảng Võ",
+                "Hào Nam",
+                "Nguyễn Tuân",
+              ],
+              datasets: [
+                {
+                  label: "Doanh thu (VNĐ)",
+                  data: [24000000, 19000000, 17000000, 11000000, 7000000],
+                  backgroundColor: [
+                    "rgba(108, 117, 125, 0.8)",
+                    "rgba(40, 167, 69, 0.8)",
+                    "rgba(255, 193, 7, 0.8)",
+                    "rgba(220, 53, 69, 0.8)",
+                    "rgba(111, 66, 193, 0.8)",
+                  ],
+                  borderColor: [
+                    "#6c757d",
+                    "#28a745",
+                    "#ffc107",
+                    "#dc3545",
+                    "#6f42c1",
+                  ],
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function (value) {
+                      return value.toLocaleString() + " VNĐ";
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // Hourly Revenue Chart
+        const hourlyCtx = document.getElementById("hourlyRevenueChart");
+        if (hourlyCtx && typeof Chart !== "undefined") {
+          new Chart(hourlyCtx, {
+            type: "line",
+            data: {
+              labels: [
+                "6:00",
+                "7:00",
+                "8:00",
+                "9:00",
+                "10:00",
+                "11:00",
+                "12:00",
+                "13:00",
+                "14:00",
+                "15:00",
+                "16:00",
+                "17:00",
+                "18:00",
+                "19:00",
+                "20:00",
+                "21:00",
+                "22:00",
+              ],
+              datasets: [
+                {
+                  label: "Doanh thu hôm qua",
+                  data: [
+                    1800000, 2800000, 4800000, 3800000, 3200000, 5500000,
+                    7500000, 6500000, 4200000, 5200000, 3800000, 3200000,
+                    11000000, 12000000, 7000000, 2500000, 800000,
+                  ],
+                  borderColor: "#6c757d",
+                  backgroundColor: "rgba(108, 117, 125, 0.1)",
+                  tension: 0.4,
+                  fill: true,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function (value) {
+                      return (value / 1000000).toFixed(1) + "M VNĐ";
+                    },
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+            },
+          });
+        }
+      }
+    </script>
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+

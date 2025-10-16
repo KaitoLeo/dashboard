@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thống kê hợp đồng hội viên - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-file-contract me-2"></i>
+                Thống kê hợp đồng hội viên
+              </h2>
+              <p class="text-muted">
+                Phân tích chi tiết các hợp đồng hội viên theo loại hình và trạng
+                thái
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Hợp đồng mới</h5>
+              <h2 class="mb-0">125</h2>
+              <small>tháng này</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Còn hiệu lực</h5>
+              <h2 class="mb-0">1,850</h2>
+              <small>hợp đồng</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Hết hiệu lực</h5>
+              <h2 class="mb-0">320</h2>
+              <small>hợp đồng</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Chưa kích hoạt</h5>
+              <h2 class="mb-0">45</h2>
+              <small>hợp đồng</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hợp đồng theo loại hình -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Hợp đồng theo loại hình dịch vụ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Loại hình dịch vụ</th>
+                      <th>Đăng ký mới [new]</th>
+                      <th>Tái ký [renew]</th>
+                      <th>Nâng cấp [upgrade]</th>
+                      <th>Tổng cộng</th>
+                      <th>Tỉ lệ (%)</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Membership (Hội viên)</strong></td>
+                      <td>85</td>
+                      <td>45</td>
+                      <td>12</td>
+                      <td><strong>142</strong></td>
+                      <td><span class="badge bg-primary">56.8%</span></td>
+                      <td><span class="badge bg-success">Hiệu lực</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Fitness (Tập luyện)</strong></td>
+                      <td>65</td>
+                      <td>38</td>
+                      <td>8</td>
+                      <td><strong>111</strong></td>
+                      <td><span class="badge bg-info">44.4%</span></td>
+                      <td><span class="badge bg-success">Hiệu lực</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Pool (Bơi lội)</strong></td>
+                      <td>42</td>
+                      <td>25</td>
+                      <td>5</td>
+                      <td><strong>72</strong></td>
+                      <td><span class="badge bg-warning">28.8%</span></td>
+                      <td><span class="badge bg-success">Hiệu lực</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Pilates</strong></td>
+                      <td>28</td>
+                      <td>15</td>
+                      <td>3</td>
+                      <td><strong>46</strong></td>
+                      <td><span class="badge bg-secondary">18.4%</span></td>
+                      <td><span class="badge bg-success">Hiệu lực</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>PT (Personal Training)</strong></td>
+                      <td>35</td>
+                      <td>20</td>
+                      <td>6</td>
+                      <td><strong>61</strong></td>
+                      <td><span class="badge bg-danger">24.4%</span></td>
+                      <td><span class="badge bg-success">Hiệu lực</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Phân bố hợp đồng theo loại hình
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="contractTypeChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Hợp đồng theo trạng thái
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="contractStatusChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hợp đồng sắp hết hiệu lực -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Hợp đồng sắp hết hiệu lực
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Mã hợp đồng</th>
+                      <th>Tên khách hàng</th>
+                      <th>Loại hình</th>
+                      <th>CLB</th>
+                      <th>Ngày hết hạn</th>
+                      <th>Số ngày còn lại</th>
+                      <th>Trạng thái</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>HD001</strong></td>
+                      <td>Nguyễn Văn A</td>
+                      <td>Membership</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>25/12/2024</td>
+                      <td><span class="badge bg-danger">5 ngày</span></td>
+                      <td><span class="badge bg-warning">Sắp hết hạn</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary">Gia hạn</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>HD002</strong></td>
+                      <td>Trần Thị B</td>
+                      <td>Fitness</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>28/12/2024</td>
+                      <td><span class="badge bg-warning">8 ngày</span></td>
+                      <td><span class="badge bg-warning">Sắp hết hạn</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary">Gia hạn</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>HD003</strong></td>
+                      <td>Lê Văn C</td>
+                      <td>Pool</td>
+                      <td>Giảng Võ</td>
+                      <td>30/12/2024</td>
+                      <td><span class="badge bg-warning">10 ngày</span></td>
+                      <td><span class="badge bg-warning">Sắp hết hạn</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary">Gia hạn</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>HD004</strong></td>
+                      <td>Phạm Thị D</td>
+                      <td>Pilates</td>
+                      <td>Hào Nam</td>
+                      <td>02/01/2025</td>
+                      <td><span class="badge bg-info">13 ngày</span></td>
+                      <td><span class="badge bg-info">Cần theo dõi</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary">Gia hạn</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>HD005</strong></td>
+                      <td>Hoàng Văn E</td>
+                      <td>PT</td>
+                      <td>Nguyễn Tuân</td>
+                      <td>05/01/2025</td>
+                      <td><span class="badge bg-info">16 ngày</span></td>
+                      <td><span class="badge bg-info">Cần theo dõi</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary">Gia hạn</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hợp đồng chưa thanh toán đủ -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-money-bill-wave me-2"></i>
+                Hợp đồng chưa thanh toán đủ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Mã hợp đồng</th>
+                      <th>Tên khách hàng</th>
+                      <th>Loại hình</th>
+                      <th>CLB</th>
+                      <th>Tổng giá trị</th>
+                      <th>Đã thanh toán</th>
+                      <th>Còn nợ</th>
+                      <th>Ngày đáo hạn</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>HD006</strong></td>
+                      <td>Nguyễn Thị F</td>
+                      <td>Membership</td>
+                      <td>Tôn Thất Thuyết</td>
+                      <td>15,000,000</td>
+                      <td>5,000,000</td>
+                      <td><span class="badge bg-danger">10,000,000</span></td>
+                      <td>15/01/2025</td>
+                      <td>
+                        <button class="btn btn-sm btn-warning">Thu nợ</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>HD007</strong></td>
+                      <td>Trần Văn G</td>
+                      <td>Fitness</td>
+                      <td>Huỳnh Thúc Kháng</td>
+                      <td>12,000,000</td>
+                      <td>8,000,000</td>
+                      <td><span class="badge bg-warning">4,000,000</span></td>
+                      <td>20/01/2025</td>
+                      <td>
+                        <button class="btn btn-sm btn-warning">Thu nợ</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>HD008</strong></td>
+                      <td>Lê Thị H</td>
+                      <td>Pool</td>
+                      <td>Giảng Võ</td>
+                      <td>8,000,000</td>
+                      <td>3,000,000</td>
+                      <td><span class="badge bg-danger">5,000,000</span></td>
+                      <td>25/01/2025</td>
+                      <td>
+                        <button class="btn btn-sm btn-warning">Thu nợ</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis and Recommendations -->
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-area me-2"></i>
+                Phân tích hiệu quả
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <h6>Loại hình phổ biến nhất:</h6>
+                <p class="text-primary">Membership - 56.8% (142 HĐ)</p>
+              </div>
+              <div class="mb-3">
+                <h6>Tỉ lệ tái ký cao nhất:</h6>
+                <p class="text-success">Membership - 31.7% (45/142)</p>
+              </div>
+              <div class="mb-3">
+                <h6>Hợp đồng sắp hết hạn:</h6>
+                <p class="text-warning">5 hợp đồng cần gia hạn ngay</p>
+              </div>
+              <div class="mb-3">
+                <h6>Hợp đồng chưa thanh toán đủ:</h6>
+                <p class="text-danger">3 hợp đồng cần thu nợ</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-lightbulb me-2"></i>
+                Khuyến nghị cải thiện
+              </h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tăng cường chương trình tái ký cho Membership
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Liên hệ khách hàng sắp hết hạn để gia hạn
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Thu nợ các hợp đồng chưa thanh toán đủ
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Phát triển gói dịch vụ hấp dẫn hơn
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Cải thiện chất lượng dịch vụ để tăng tỉ lệ tái ký
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Contract Type Chart
+      const typeCtx = document.getElementById("contractTypeChart");
+      if (typeCtx) {
+        new Chart(typeCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Membership (Hội viên)",
+              "Fitness (Tập luyện)",
+              "Pool (Bơi lội)",
+              "Pilates",
+              "PT (Personal Training)",
+            ],
+            datasets: [
+              {
+                data: [142, 111, 72, 46, 61],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(0, 123, 255, 0.8)",
+                  "rgba(23, 162, 184, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                  "rgba(220, 53, 69, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(0, 123, 255, 1)",
+                  "rgba(23, 162, 184, 1)",
+                  "rgba(255, 193, 7, 1)",
+                  "rgba(220, 53, 69, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Phân bố hợp đồng theo loại hình",
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+      }
+
+      // Contract Status Chart
+      const statusCtx = document.getElementById("contractStatusChart");
+      if (statusCtx) {
+        new Chart(statusCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Còn hiệu lực",
+              "Hết hiệu lực",
+              "Chưa kích hoạt",
+              "Tạm ngưng",
+              "Sắp hết hạn",
+            ],
+            datasets: [
+              {
+                label: "Số lượng hợp đồng",
+                data: [1850, 320, 45, 12, 5],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(108, 117, 125, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                  "rgba(220, 53, 69, 0.8)",
+                  "rgba(255, 87, 34, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(108, 117, 125, 1)",
+                  "rgba(255, 193, 7, 1)",
+                  "rgba(220, 53, 69, 1)",
+                  "rgba(255, 87, 34, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Hợp đồng theo trạng thái",
+              },
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

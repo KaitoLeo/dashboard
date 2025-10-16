@@ -1,0 +1,76 @@
+# GitLab CI/CD Pipeline for Actiwell Dashboard MockUI (HTML thuần)
+# Tự động deploy HTML tĩnh lên GitLab Pages
+
+# Stages trong pipeline
+stages:
+  - deploy
+
+# Deploy trực tiếp lên GitLab Pages (không cần build vì là HTML thuần)
+pages:
+  stage: deploy
+  image: alpine:latest
+  script:
+    # Copy tất cả files HTML tĩnh vào thư mục public
+    - mkdir -p public
+    - cp -r assets/ public/ 2>/dev/null || echo "No assets folder"
+    - cp -r pages/ public/ 2>/dev/null || echo "No pages folder"  
+    - cp -r data/ public/ 2>/dev/null || echo "No data folder"
+    - cp index.html public/ 2>/dev/null || echo "No index.html"
+    - cp test-charts.html public/ 2>/dev/null || echo "No test-charts.html"
+    # Copy các file markdown để documentation
+    - cp *.md public/ 2>/dev/null || echo "No markdown files"
+    # Tạo file .htaccess cho Apache
+    - echo "DirectoryIndex index.html" > public/.htaccess
+    - echo "Options -Indexes" >> public/.htaccess
+    # Tạo file 404.html
+    - if [ ! -f public/404.html ]; then cp public/index.html public/404.html; fi
+    # List files để kiểm tra
+    - ls -la public/
+    - echo "HTML static files deployment completed!"
+  artifacts:
+    paths:
+      - public/
+  only:
+    - main
+    - master
+
+# Deploy cho staging branch (manual trigger)
+pages_staging:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - mkdir -p public
+    - cp -r assets/ public/ 2>/dev/null || echo "No assets folder"
+    - cp -r pages/ public/ 2>/dev/null || echo "No pages folder"
+    - cp -r data/ public/ 2>/dev/null || echo "No data folder"
+    - cp index.html public/ 2>/dev/null || echo "No index.html"
+    - cp test-charts.html public/ 2>/dev/null || echo "No test-charts.html"
+    - cp *.md public/ 2>/dev/null || echo "No markdown files"
+    - echo "DirectoryIndex index.html" > public/.htaccess
+    - echo "Options -Indexes" >> public/.htaccess
+    - if [ ! -f public/404.html ]; then cp public/index.html public/404.html; fi
+    - ls -la public/
+    - echo "Staging deployment completed!"
+  artifacts:
+    paths:
+      - public/
+  only:
+    - develop
+  when: manual
+
+# Job test để kiểm tra files có tồn tại
+test_files:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Testing file structure..."
+    - ls -la
+    - echo "Checking required files:"
+    - test -f index.html && echo "✓ index.html exists" || echo "✗ index.html missing"
+    - test -d assets && echo "✓ assets/ directory exists" || echo "✗ assets/ directory missing"
+    - test -d pages && echo "✓ pages/ directory exists" || echo "✗ pages/ directory missing"
+    - test -d data && echo "✓ data/ directory exists" || echo "✗ data/ directory missing"
+    - echo "File structure test completed!"
+  only:
+    - merge_requests
+    - develop

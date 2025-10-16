@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo Biên nhận - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-receipt me-2"></i>
+                Báo cáo Biên nhận
+              </h2>
+              <p class="text-muted">
+                Quản lý và theo dõi các biên nhận thanh toán
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-2">
+                  <label class="form-label">Từ ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDate"
+                    value="2024-01-01"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Đến ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDate"
+                    value="2024-12-31"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Trung tâm:</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="1">Tôn Thất Thuyết</option>
+                    <option value="2">Huỳnh Thúc Kháng</option>
+                    <option value="3">Giảng Võ</option>
+                    <option value="4">Hào Nam</option>
+                    <option value="5">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Loại biên nhận:</label>
+                  <select class="form-select" id="receiptTypeFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="mbs">MBS</option>
+                    <option value="pt">PT</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Trạng thái:</label>
+                  <select class="form-select" id="statusFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="signed">Đã ký</option>
+                    <option value="unsigned">Chưa ký</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-search me-1"></i>Lọc
+                  </button>
+                  <button class="btn btn-success ms-2" onclick="exportReport()">
+                    <i class="fas fa-download me-1"></i>Xuất
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tổng biên nhận</h5>
+              <h2 class="mb-0">1,245</h2>
+              <small>biên nhận</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Đã ký</h5>
+              <h2 class="mb-0">1,180</h2>
+              <small>biên nhận</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Chưa ký</h5>
+              <h2 class="mb-0">65</h2>
+              <small>biên nhận</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tổng tiền</h5>
+              <h2 class="mb-0">2.8B</h2>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Receipt Tabs -->
+      <ul class="nav nav-tabs" id="receiptTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="all-receipts-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#all-receipts"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-list me-1"></i>Tất cả biên nhận
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="mbs-receipts-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#mbs-receipts"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-users me-1"></i>Biên nhận MBS
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="pt-receipts-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#pt-receipts"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-dumbbell me-1"></i>Biên nhận PT
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="unsigned-receipts-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#unsigned-receipts"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-exclamation-triangle me-1"></i>Chưa ký
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="receiptTabsContent">
+        <!-- All Receipts Tab -->
+        <div
+          class="tab-pane fade show active"
+          id="all-receipts"
+          role="tabpanel"
+        >
+          <!-- Receipt List -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-table me-2"></i>
+                    Danh sách biên nhận
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Mã biên nhận</th>
+                          <th>Khách hàng</th>
+                          <th>Loại</th>
+                          <th>Số tiền (VNĐ)</th>
+                          <th>Ngày tạo</th>
+                          <th>Người tạo</th>
+                          <th>Trạng thái</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>BN001</strong></td>
+                          <td>Nguyễn Văn A</td>
+                          <td><span class="badge bg-primary">MBS</span></td>
+                          <td>
+                            <strong class="text-success">5,000,000</strong>
+                          </td>
+                          <td>15/12/2024</td>
+                          <td>Trần Thị B</td>
+                          <td><span class="badge bg-success">Đã ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN001')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN001')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN002</strong></td>
+                          <td>Lê Văn C</td>
+                          <td><span class="badge bg-info">PT</span></td>
+                          <td>
+                            <strong class="text-success">2,500,000</strong>
+                          </td>
+                          <td>15/12/2024</td>
+                          <td>Phạm Thị D</td>
+                          <td><span class="badge bg-warning">Chưa ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN002')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN002')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-warning"
+                              onclick="signReceipt('BN002')"
+                            >
+                              <i class="fas fa-signature"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN003</strong></td>
+                          <td>Hoàng Văn E</td>
+                          <td><span class="badge bg-primary">MBS</span></td>
+                          <td>
+                            <strong class="text-success">8,000,000</strong>
+                          </td>
+                          <td>14/12/2024</td>
+                          <td>Nguyễn Văn F</td>
+                          <td><span class="badge bg-success">Đã ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN003')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN003')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN004</strong></td>
+                          <td>Vũ Thị G</td>
+                          <td><span class="badge bg-info">PT</span></td>
+                          <td>
+                            <strong class="text-success">3,200,000</strong>
+                          </td>
+                          <td>14/12/2024</td>
+                          <td>Đặng Văn H</td>
+                          <td><span class="badge bg-success">Đã ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN004')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN004')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN005</strong></td>
+                          <td>Bùi Văn I</td>
+                          <td><span class="badge bg-primary">MBS</span></td>
+                          <td>
+                            <strong class="text-success">6,500,000</strong>
+                          </td>
+                          <td>13/12/2024</td>
+                          <td>Lý Thị K</td>
+                          <td><span class="badge bg-warning">Chưa ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN005')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN005')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-warning"
+                              onclick="signReceipt('BN005')"
+                            >
+                              <i class="fas fa-signature"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MBS Receipts Tab -->
+        <div class="tab-pane fade" id="mbs-receipts" role="tabpanel">
+          <!-- MBS Receipt List -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-users me-2"></i>
+                    Biên nhận MBS
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Mã biên nhận</th>
+                          <th>Khách hàng</th>
+                          <th>Gói dịch vụ</th>
+                          <th>Số tiền (VNĐ)</th>
+                          <th>Hình thức thanh toán</th>
+                          <th>Ngày tạo</th>
+                          <th>Trạng thái</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>BN001</strong></td>
+                          <td>Nguyễn Văn A</td>
+                          <td>6 tháng Premium</td>
+                          <td>
+                            <strong class="text-success">5,000,000</strong>
+                          </td>
+                          <td>
+                            <span class="badge bg-success">Chuyển khoản</span>
+                          </td>
+                          <td>15/12/2024</td>
+                          <td><span class="badge bg-success">Đã ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN001')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN001')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN003</strong></td>
+                          <td>Hoàng Văn E</td>
+                          <td>12 tháng VIP</td>
+                          <td>
+                            <strong class="text-success">8,000,000</strong>
+                          </td>
+                          <td>
+                            <span class="badge bg-primary">Tiền mặt</span>
+                          </td>
+                          <td>14/12/2024</td>
+                          <td><span class="badge bg-success">Đã ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN003')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN003')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN005</strong></td>
+                          <td>Bùi Văn I</td>
+                          <td>3 tháng Basic</td>
+                          <td>
+                            <strong class="text-success">6,500,000</strong>
+                          </td>
+                          <td><span class="badge bg-info">MPOS</span></td>
+                          <td>13/12/2024</td>
+                          <td><span class="badge bg-warning">Chưa ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN005')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN005')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-warning"
+                              onclick="signReceipt('BN005')"
+                            >
+                              <i class="fas fa-signature"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PT Fitness Receipts Tab -->
+        <div class="tab-pane fade" id="pt-receipts" role="tabpanel">
+          <!-- PT Fitness Receipt List -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-dumbbell me-2"></i>
+                    Biên nhận PT
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Mã biên nhận</th>
+                          <th>Khách hàng</th>
+                          <th>HLV</th>
+                          <th>Số buổi</th>
+                          <th>Số tiền (VNĐ)</th>
+                          <th>Hình thức thanh toán</th>
+                          <th>Ngày tạo</th>
+                          <th>Trạng thái</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>BN002</strong></td>
+                          <td>Lê Văn C</td>
+                          <td>Trần Thị B</td>
+                          <td>20 buổi</td>
+                          <td>
+                            <strong class="text-success">2,500,000</strong>
+                          </td>
+                          <td>
+                            <span class="badge bg-success">Chuyển khoản</span>
+                          </td>
+                          <td>15/12/2024</td>
+                          <td><span class="badge bg-warning">Chưa ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN002')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN002')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-warning"
+                              onclick="signReceipt('BN002')"
+                            >
+                              <i class="fas fa-signature"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN004</strong></td>
+                          <td>Vũ Thị G</td>
+                          <td>Phạm Thị D</td>
+                          <td>30 buổi</td>
+                          <td>
+                            <strong class="text-success">3,200,000</strong>
+                          </td>
+                          <td>
+                            <span class="badge bg-primary">Tiền mặt</span>
+                          </td>
+                          <td>14/12/2024</td>
+                          <td><span class="badge bg-success">Đã ký</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN004')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printReceipt('BN004')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unsigned Receipts Tab -->
+        <div class="tab-pane fade" id="unsigned-receipts" role="tabpanel">
+          <!-- Unsigned Receipt List -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Biên nhận chưa ký
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Mã biên nhận</th>
+                          <th>Khách hàng</th>
+                          <th>Loại</th>
+                          <th>Số tiền (VNĐ)</th>
+                          <th>Ngày tạo</th>
+                          <th>Thời gian chờ</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>BN002</strong></td>
+                          <td>Lê Văn C</td>
+                          <td><span class="badge bg-info">PT</span></td>
+                          <td>
+                            <strong class="text-success">2,500,000</strong>
+                          </td>
+                          <td>15/12/2024</td>
+                          <td><span class="text-warning">0 ngày</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-warning"
+                              onclick="signReceipt('BN002')"
+                            >
+                              <i class="fas fa-signature"></i> Ký ngay
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN002')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN005</strong></td>
+                          <td>Bùi Văn I</td>
+                          <td><span class="badge bg-primary">MBS</span></td>
+                          <td>
+                            <strong class="text-success">6,500,000</strong>
+                          </td>
+                          <td>13/12/2024</td>
+                          <td><span class="text-danger">2 ngày</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-warning"
+                              onclick="signReceipt('BN005')"
+                            >
+                              <i class="fas fa-signature"></i> Ký ngay
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN005')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>BN006</strong></td>
+                          <td>Ngô Văn L</td>
+                          <td><span class="badge bg-info">PT</span></td>
+                          <td>
+                            <strong class="text-success">1,800,000</strong>
+                          </td>
+                          <td>12/12/2024</td>
+                          <td><span class="text-danger">3 ngày</span></td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-warning"
+                              onclick="signReceipt('BN006')"
+                            >
+                              <i class="fas fa-signature"></i> Ký ngay
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewReceipt('BN006')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // Receipt Functions
+      function viewReceipt(receiptId) {
+        alert("Xem chi tiết biên nhận: " + receiptId);
+      }
+
+      function printReceipt(receiptId) {
+        alert("In biên nhận: " + receiptId);
+      }
+
+      function signReceipt(receiptId) {
+        if (
+          confirm("Bạn có chắc chắn ký xác nhận biên nhận " + receiptId + "?")
+        ) {
+          alert("Đã ký xác nhận biên nhận: " + receiptId);
+          // Reload page or update table
+          location.reload();
+        }
+      }
+
+      function applyFilters() {
+        alert("Áp dụng bộ lọc");
+      }
+
+      function exportReport() {
+        alert("Xuất báo cáo biên nhận");
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <style>
+      .metric-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      .clickable-row:hover {
+        background-color: #f8f9fa !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-heartbeat me-2"></i>Actiwell Reports
+        </a>
+        <a class="nav-link text-light" href="javascript:history.back()">
+          <i class="fas fa-arrow-left me-1"></i>Quay lại
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h1 class="card-title mb-2">
+                <i class="fas fa-chart-bar me-2 text-primary"></i>
+                Chi tiết dữ liệu
+              </h1>
+              <p class="text-muted mb-0" id="reportInfo">
+                Trang chi tiết này đang được phát triển
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coming Soon -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body text-center py-5">
+              <i class="fas fa-tools fa-4x text-muted mb-4"></i>
+              <h3 class="text-muted">Trang đang được phát triển</h3>
+              <p class="text-muted">
+                Chức năng chi tiết sẽ sớm được triển khai
+              </p>
+              <button class="btn btn-primary" onclick="history.back()">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>
+

@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thống kê Khách tham quan - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .metric-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .gradient-bg-2 {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .gradient-bg-3 {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      }
+
+      .gradient-bg-4 {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      }
+
+      .gradient-bg-5 {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      }
+
+      .gradient-bg-6 {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      }
+
+      .clickable-card {
+        cursor: pointer;
+      }
+
+      .clickable-card:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .stats-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Report table styling */
+      #demandSourceReport {
+        font-size: 0.9rem;
+      }
+
+      #demandSourceReport th {
+        border: 2px solid #dee2e6;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 12px 8px;
+      }
+
+      #demandSourceReport td {
+        border: 1px solid #dee2e6;
+        padding: 10px 8px;
+        vertical-align: middle;
+      }
+
+      #demandSourceReport tbody tr:hover {
+        background-color: #f8f9fa;
+      }
+
+      #demandSourceReport .table-danger {
+        background-color: #f8d7da !important;
+      }
+
+      #demandSourceReport .table-danger td {
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb;
+      }
+
+      /* Inbody report table styling */
+    </style>
+  
+    <!-- Visitor Calculation Modules -->
+    <script src="../assets/js/visitor/visitor-calculations.js"></script>
+    <script src="../assets/js/visitor/visitor-mock-data.js"></script>
+    <!-- API Layer -->
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/api/api-services.js"></script>
+    <script src="../assets/js/api/data-adapter.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark gradient-bg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-bar me-2"></i>Thống kê Khách tham quan
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-home me-1"></i>Trang chủ
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card border-0 shadow-sm">
+            <div class="card-body">
+              <h1 class="card-title mb-2">
+                <i class="fas fa-chart-line me-2 text-primary"></i>
+                Thống kê Tổng quan Khách tham quan
+              </h1>
+              <p class="text-muted mb-0">
+                Phân tích chi tiết về khách tham quan theo các khoảng thời gian
+                khác nhau
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <!-- Khách tham quan Hôm qua -->
+        <div class="col-lg-4 col-md-6 mb-3">
+          <div
+            class="card stats-card text-white gradient-bg-2 clickable-card"
+            onclick="openVisitorYesterdayDetail()"
+          >
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-calendar-minus text-white fs-4 me-2"></i>
+                <h6 class="mb-0 text-white">Khách tham quan Hôm qua</h6>
+              </div>
+              <h2 class="text-white mb-0" id="yesterdayVisitors">8</h2>
+              <small class="text-white-50">lượt hôm qua</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Khách tham quan Hôm nay -->
+        <div class="col-lg-4 col-md-6 mb-3">
+          <div
+            class="card stats-card text-white gradient-bg-3 clickable-card"
+            onclick="openVisitorTodayDetail()"
+          >
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-calendar-day text-white fs-4 me-2"></i>
+                <h6 class="mb-0 text-white">Khách tham quan Hôm nay</h6>
+              </div>
+              <h2 class="text-white mb-0" id="todayVisitors">12</h2>
+              <small class="text-white-50">lượt hôm nay</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Khách tham quan MTD -->
+        <div class="col-lg-4 col-md-6 mb-3">
+          <div
+            class="card stats-card text-white gradient-bg-4 clickable-card"
+            onclick="openVisitorsDetail('mtd')"
+          >
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-calendar-alt text-white fs-4 me-2"></i>
+                <h6 class="mb-0 text-white">Khách tham quan MTD</h6>
+              </div>
+              <h2 class="text-white mb-0" id="mtdVisitors">25</h2>
+              <small class="text-white-50">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Báo cáo Nhu cầu theo Nguồn khách tham quan -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card border-0 shadow-sm">
+            <div class="card-body">
+              <h3 class="card-title mb-4">
+                <i class="fas fa-table me-2 text-primary"></i>
+                Báo cáo Nhu cầu theo Nguồn khách tham quan
+              </h3>
+
+              <!-- Chart Section -->
+              <div class="row mb-4">
+                <div class="col-lg-8">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                      <h5 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Tỷ lệ Nguồn khách tham quan (%)
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-8">
+                          <canvas
+                            id="sourceDistributionChart"
+                            height="300"
+                          ></canvas>
+                        </div>
+                        <div class="col-4">
+                          <!-- Legend will be positioned here by Chart.js -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                      <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Top 5 Nguồn khách tham quan
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <canvas id="topSourcesChart" height="300"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab Navigation -->
+              <ul class="nav nav-tabs mb-3" id="demandTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active"
+                    id="ton-that-thuyet-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#ton-that-thuyet"
+                    type="button"
+                    role="tab"
+                  >
+                    Tôn Thất Thuyết
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="huynh-thuc-khang-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#huynh-thuc-khang"
+                    type="button"
+                    role="tab"
+                  >
+                    Huỳnh Thúc Kháng
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="giang-vo-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#giang-vo"
+                    type="button"
+                    role="tab"
+                  >
+                    Giảng Võ
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="hao-nam-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#hao-nam"
+                    type="button"
+                    role="tab"
+                  >
+                    Hào Nam
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="nguyen-tuan-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nguyen-tuan"
+                    type="button"
+                    role="tab"
+                  >
+                    Nguyễn Tuân
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="summary-by-source-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#summary-by-source"
+                    type="button"
+                    role="tab"
+                  >
+                    Tổng theo Nguồn
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="summary-by-demand-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#summary-by-demand"
+                    type="button"
+                    role="tab"
+                  >
+                    Tổng theo Nhu cầu
+                  </button>
+                </li>
+              </ul>
+
+              <!-- Tab Content -->
+              <div class="tab-content" id="demandTabContent">
+                <!-- Tôn Thất Thuyết -->
+                <div
+                  class="tab-pane fade show active"
+                  id="ton-that-thuyet"
+                  role="tabpanel"
+                >
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped mb-0"
+                      id="ton-that-thuyet-table"
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                            style="min-width: 120px"
+                          >
+                            NGUỒN
+                          </th>
+                          <th
+                            colspan="9"
+                            class="text-center bg-dark text-white fw-bold"
+                          >
+                            NHU CẦU
+                          </th>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                          >
+                            TỔNG
+                          </th>
+                        </tr>
+                        <tr>
+                          <th class="text-center bg-dark text-white">
+                            Member Full Service
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Gym
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Yoga
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Group X
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Pool
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            PT Fitness
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Stretching
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Pilates
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Swimming Coach
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="ton-that-thuyet-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Huỳnh Thúc Kháng -->
+                <div
+                  class="tab-pane fade"
+                  id="huynh-thuc-khang"
+                  role="tabpanel"
+                >
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped mb-0"
+                      id="huynh-thuc-khang-table"
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                            style="min-width: 120px"
+                          >
+                            NGUỒN
+                          </th>
+                          <th
+                            colspan="9"
+                            class="text-center bg-dark text-white fw-bold"
+                          >
+                            NHU CẦU
+                          </th>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                          >
+                            TỔNG
+                          </th>
+                        </tr>
+                        <tr>
+                          <th class="text-center bg-dark text-white">
+                            Member Full Service
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Gym
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Yoga
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Group X
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Pool
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            PT Fitness
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Stretching
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Pilates
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Swimming Coach
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="huynh-thuc-khang-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Giảng Võ -->
+                <div class="tab-pane fade" id="giang-vo" role="tabpanel">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped mb-0"
+                      id="giang-vo-table"
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                            style="min-width: 120px"
+                          >
+                            NGUỒN
+                          </th>
+                          <th
+                            colspan="9"
+                            class="text-center bg-dark text-white fw-bold"
+                          >
+                            NHU CẦU
+                          </th>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                          >
+                            TỔNG
+                          </th>
+                        </tr>
+                        <tr>
+                          <th class="text-center bg-dark text-white">
+                            Member Full Service
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Gym
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Yoga
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Group X
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Pool
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            PT Fitness
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Stretching
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Pilates
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Swimming Coach
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="giang-vo-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Hào Nam -->
+                <div class="tab-pane fade" id="hao-nam" role="tabpanel">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped mb-0"
+                      id="hao-nam-table"
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                            style="min-width: 120px"
+                          >
+                            NGUỒN
+                          </th>
+                          <th
+                            colspan="9"
+                            class="text-center bg-dark text-white fw-bold"
+                          >
+                            NHU CẦU
+                          </th>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                          >
+                            TỔNG
+                          </th>
+                        </tr>
+                        <tr>
+                          <th class="text-center bg-dark text-white">
+                            Member Full Service
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Gym
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Yoga
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Group X
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Pool
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            PT Fitness
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Stretching
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Pilates
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Swimming Coach
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="hao-nam-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Nguyễn Tuân -->
+                <div class="tab-pane fade" id="nguyen-tuan" role="tabpanel">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped mb-0"
+                      id="nguyen-tuan-table"
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                            style="min-width: 120px"
+                          >
+                            NGUỒN
+                          </th>
+                          <th
+                            colspan="9"
+                            class="text-center bg-dark text-white fw-bold"
+                          >
+                            NHU CẦU
+                          </th>
+                          <th
+                            rowspan="2"
+                            class="text-center align-middle bg-dark text-white fw-bold"
+                          >
+                            TỔNG
+                          </th>
+                        </tr>
+                        <tr>
+                          <th class="text-center bg-dark text-white">
+                            Member Full Service
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Gym
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Yoga
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Group X
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Member Pool
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            PT Fitness
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Stretching
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Pilates
+                          </th>
+                          <th class="text-center bg-dark text-white">
+                            Swimming Coach
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="nguyen-tuan-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Tổng theo Nguồn -->
+                <div
+                  class="tab-pane fade"
+                  id="summary-by-source"
+                  role="tabpanel"
+                >
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped mb-0"
+                      id="summary-by-source-table"
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            class="text-center bg-dark text-white fw-bold"
+                            style="min-width: 150px"
+                          >
+                            NGUỒN
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Tôn Thất Thuyết
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Huỳnh Thúc Kháng
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Giảng Võ
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Hào Nam
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Nguyễn Tuân
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            TỔNG
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="summary-by-source-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Tổng theo Nhu cầu -->
+                <div
+                  class="tab-pane fade"
+                  id="summary-by-demand"
+                  role="tabpanel"
+                >
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped mb-0"
+                      id="summary-by-demand-table"
+                    >
+                      <thead>
+                        <tr>
+                          <th
+                            class="text-center bg-dark text-white fw-bold"
+                            style="min-width: 150px"
+                          >
+                            NHU CẦU
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Tôn Thất Thuyết
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Huỳnh Thúc Kháng
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Giảng Võ
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Hào Nam
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            Nguyễn Tuân
+                          </th>
+                          <th class="text-center bg-dark text-white fw-bold">
+                            TỔNG
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody id="summary-by-demand-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Báo cáo Lượt đo Inbody -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card border-0 shadow-sm">
+            <div class="card-body">
+              <h3 class="card-title mb-4">
+                <i class="fas fa-chart-line me-2 text-primary"></i>
+                Báo cáo Lượt đo Inbody
+              </h3>
+
+              <!-- Inbody Metrics Cards -->
+              <div class="row">
+                <!-- Sale tiếp Card -->
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                  <div
+                    class="card stats-card text-white gradient-bg clickable-card"
+                    onclick="showCustomerList('sale')"
+                  >
+                    <div class="card-body text-center">
+                      <div
+                        class="d-flex align-items-center justify-content-center mb-2"
+                      >
+                        <i class="fas fa-handshake text-white fs-4 me-2"></i>
+                        <h6 class="mb-0 text-white">Sale tiếp</h6>
+                      </div>
+                      <h2 class="text-white mb-0" id="totalSaleTiep">281</h2>
+                      <small class="text-white-50">lượt tiếp cận</small>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PT tiếp Card -->
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                  <div
+                    class="card stats-card text-white gradient-bg-2 clickable-card"
+                    onclick="showCustomerList('pt')"
+                  >
+                    <div class="card-body text-center">
+                      <div
+                        class="d-flex align-items-center justify-content-center mb-2"
+                      >
+                        <i class="fas fa-dumbbell text-white fs-4 me-2"></i>
+                        <h6 class="mb-0 text-white">PT tiếp</h6>
+                      </div>
+                      <h2 class="text-white mb-0" id="totalPtTiep">160</h2>
+                      <small class="text-white-50">lượt PT</small>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Số khách đo Inbody Card -->
+                <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+                  <div
+                    class="card stats-card text-white gradient-bg-3 clickable-card"
+                    onclick="showCustomerList('inbody')"
+                  >
+                    <div class="card-body text-center">
+                      <div
+                        class="d-flex align-items-center justify-content-center mb-2"
+                      >
+                        <i class="fas fa-weight text-white fs-4 me-2"></i>
+                        <h6 class="mb-0 text-white">Số khách đo Inbody</h6>
+                      </div>
+                      <h2 class="text-white mb-0" id="totalInbodyCustomers">
+                        68
+                      </h2>
+                      <small class="text-white-50">khách đo</small>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tỉ lệ PT tiếp Card (không click) -->
+                <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                  <div class="card stats-card text-white gradient-bg-4">
+                    <div class="card-body text-center">
+                      <div
+                        class="d-flex align-items-center justify-content-center mb-2"
+                      >
+                        <i class="fas fa-percentage text-white fs-4 me-2"></i>
+                        <h6 class="mb-0 text-white">Tỉ lệ PT tiếp</h6>
+                      </div>
+                      <h2 class="text-white mb-0" id="ptTiepRate">56.94%</h2>
+                      <small class="text-white-50">tỷ lệ chuyển đổi</small>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tỉ lệ đo Inbody Card (không click) -->
+                <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+                  <div class="card stats-card text-white gradient-bg-5">
+                    <div class="card-body text-center">
+                      <div
+                        class="d-flex align-items-center justify-content-center mb-2"
+                      >
+                        <i class="fas fa-chart-pie text-white fs-4 me-2"></i>
+                        <h6 class="mb-0 text-white">Tỉ lệ đo Inbody</h6>
+                      </div>
+                      <h2 class="text-white mb-0" id="inbodyRate">24.20%</h2>
+                      <small class="text-white-50">tỷ lệ đo Inbody</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer List Modal -->
+    <div
+      class="modal fade"
+      id="customerListModal"
+      tabindex="-1"
+      aria-labelledby="customerListModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="customerListModalTitle">
+              Danh sách khách hàng
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="customerListModalBody">
+            <!-- Filter Section -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h6 class="mb-0">
+                      <i class="fas fa-filter me-2"></i>Bộ lọc
+                    </h6>
+                  </div>
+                  <div class="card-body">
+                    <div class="row g-3">
+                      <div class="col-md-3">
+                        <label class="form-label">Tìm kiếm</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="customerSearchInput"
+                          placeholder="Tên khách hàng, SĐT..."
+                        />
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">Nguồn</label>
+                        <select class="form-select" id="customerSourceFilter">
+                          <option value="">Tất cả nguồn</option>
+                          <option value="Walk-in">Walk-in</option>
+                          <option value="Hotline">Hotline</option>
+                          <option value="Marketing Web">Marketing Web</option>
+                          <option value="Marketing Facebook">
+                            Marketing Facebook
+                          </option>
+                          <option value="Refer">Refer</option>
+                          <option value="Renew">Renew</option>
+                          <option value="Voucher">Voucher</option>
+                          <option value="Thị trường">Thị trường</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">Cơ sở</label>
+                        <select class="form-select" id="customerClubFilter">
+                          <option value="">Tất cả cơ sở</option>
+                          <option value="Huỳnh Thúc Kháng">
+                            Huỳnh Thúc Kháng
+                          </option>
+                          <option value="Tôn Thất Thuyết">
+                            Tôn Thất Thuyết
+                          </option>
+                          <option value="Giảng Võ">Giảng Võ</option>
+                          <option value="Nguyễn Tuân">Nguyễn Tuân</option>
+                          <option value="Hào Nam">Hào Nam</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <label class="form-label">Trạng thái</label>
+                        <select class="form-select" id="customerStatusFilter">
+                          <option value="">Tất cả trạng thái</option>
+                          <option value="Đã tiếp">Đã tiếp</option>
+                          <option value="Chưa tiếp">Chưa tiếp</option>
+                          <option value="Đăng ký">Đăng ký</option>
+                          <option value="Không đăng ký">Không đăng ký</option>
+                          <option value="Quan tâm">Quan tâm</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mt-3">
+                      <div class="col-12">
+                        <button
+                          class="btn btn-primary me-2"
+                          onclick="applyCustomerFilters()"
+                        >
+                          <i class="fas fa-search me-1"></i>Áp dụng bộ lọc
+                        </button>
+                        <button
+                          class="btn btn-secondary me-2"
+                          onclick="resetCustomerFilters()"
+                        >
+                          <i class="fas fa-undo me-1"></i>Reset bộ lọc
+                        </button>
+                        <button
+                          class="btn btn-success"
+                          onclick="exportCustomerData()"
+                        >
+                          <i class="fas fa-download me-1"></i>Xuất Excel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer Table -->
+            <div class="table-responsive">
+              <table class="table table-striped table-hover" id="customerTable">
+                <thead class="table-dark">
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên khách hàng</th>
+                    <th>Số điện thoại</th>
+                    <th>Nguồn</th>
+                    <th>Cơ sở</th>
+                    <th>Ngày</th>
+                    <th>Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody id="customerTableBody">
+                  <!-- Data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="d-flex align-items-center">
+                <label class="form-label me-2 mb-0">Hiển thị:</label>
+                <select
+                  class="form-select form-select-sm"
+                  id="customerPageSize"
+                  style="width: auto"
+                >
+                  <option value="5">5</option>
+                  <option value="10" selected>10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+                <span class="ms-2 text-muted" id="customerPaginationInfo">
+                  Hiển thị 1-10 của 0 kết quả
+                </span>
+              </div>
+              <nav aria-label="Page navigation">
+                <ul
+                  class="pagination pagination-sm mb-0"
+                  id="customerPagination"
+                >
+                  <!-- Pagination buttons will be generated here -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Generate visitor statistics data
+      function generateVisitorStatsData() {
+        return {
+          yesterday: {
+            total: 8,
+          },
+          today: {
+            total: 12,
+          },
+          mtd: {
+            total: 25,
+          },
+        };
+      }
+
+      // Generate demand source report data
+      function generateDemandSourceData() {
+        const sources = [
+          "Walk-in",
+          "Hotline",
+          "Marketing Web",
+          "Marketing Facebook",
+          "Refer",
+          "Renew",
+          "Voucher",
+          "Thị trường",
+          "Seeding",
+          "Data",
+          "Hội viên Bơi",
+          "Hội viên Fitness",
+        ];
+
+        const needs = [
+          "Member Full Service",
+          "Member Gym",
+          "Member Yoga",
+          "Member Group X",
+          "Member Pool",
+          "PT Fitness",
+          "Stretching",
+          "Pilates",
+          "Swimming Coach",
+        ];
+
+        const data = {};
+
+        // Generate random data for each source-need combination
+        sources.forEach((source) => {
+          data[source] = {};
+          needs.forEach((need) => {
+            // Generate realistic numbers (0-20 for most, some sources might have higher numbers)
+            const baseNumber = Math.floor(rng.next() * 15);
+            const multiplier =
+              source === "Walk-in" || source === "Marketing Facebook" ? 1.5 : 1;
+            data[source][need] = Math.floor(baseNumber * multiplier);
+          });
+        });
+
+        return data;
+      }
+
+      // Populate demand source tables for all tabs
+      function populateDemandSourceTable() {
+        const data = generateDemandSourceData();
+        const branches = [
+          "ton-that-thuyet",
+          "huynh-thuc-khang",
+          "giang-vo",
+          "hao-nam",
+          "nguyen-tuan",
+        ];
+        const needs = [
+          "Member Full Service",
+          "Member Gym",
+          "Member Yoga",
+          "Member Group X",
+          "Member Pool",
+          "PT Fitness",
+          "Stretching",
+          "Pilates",
+          "Swimming Coach",
+        ];
+
+        // Generate data for each branch
+        branches.forEach((branch, branchIndex) => {
+          const tbody = document.getElementById(`${branch}-tbody`);
+          if (!tbody) return;
+
+          // Calculate totals for this branch
+          const totals = {};
+          needs.forEach((need) => (totals[need] = 0));
+
+          // Generate rows for each source
+          Object.entries(data).forEach(([source, sourceData]) => {
+            const row = document.createElement("tr");
+
+            // Source cell
+            const sourceCell = document.createElement("td");
+            sourceCell.className = "fw-bold text-start";
+            sourceCell.textContent = source;
+            row.appendChild(sourceCell);
+
+            // Data cells for each need
+            let sourceTotal = 0;
+            needs.forEach((need) => {
+              // Generate different data for each branch
+              const baseValue = sourceData[need] || 0;
+              const variation = Math.floor(Math.random() * 20) - 10; // -10 to +10 variation
+              const value = Math.max(0, baseValue + variation);
+
+              totals[need] += value;
+              sourceTotal += value;
+
+              const cell = document.createElement("td");
+              cell.className = "text-center fw-bold";
+              cell.textContent = value;
+              row.appendChild(cell);
+            });
+
+            // Add total cell for this source
+            const totalCell = document.createElement("td");
+            totalCell.className = "text-center fw-bold bg-info text-white";
+            totalCell.textContent = sourceTotal;
+            row.appendChild(totalCell);
+
+            tbody.appendChild(row);
+          });
+
+          // Add totals row
+          const totalsRow = document.createElement("tr");
+          totalsRow.className = "table-danger";
+
+          const totalsSourceCell = document.createElement("td");
+          totalsSourceCell.className =
+            "fw-bold text-start bg-danger text-white";
+          totalsSourceCell.textContent = "TỔNG";
+          totalsRow.appendChild(totalsSourceCell);
+
+          let grandTotal = 0;
+          needs.forEach((need) => {
+            const cell = document.createElement("td");
+            cell.className = "text-center fw-bold bg-danger text-white";
+            cell.textContent = totals[need];
+            totalsRow.appendChild(cell);
+            grandTotal += totals[need];
+          });
+
+          // Add grand total cell
+          const grandTotalCell = document.createElement("td");
+          grandTotalCell.className = "text-center fw-bold bg-danger text-white";
+          grandTotalCell.textContent = grandTotal;
+          totalsRow.appendChild(grandTotalCell);
+
+          tbody.appendChild(totalsRow);
+        });
+
+        // Populate summary tables
+        populateSummaryTables();
+
+        // Create charts after table is populated
+        createSourceCharts();
+      }
+
+      // Populate summary tables
+      function populateSummaryTables() {
+        // Summary by Source
+        const summaryBySourceTbody = document.getElementById(
+          "summary-by-source-tbody"
+        );
+        if (summaryBySourceTbody) {
+          const sources = [
+            "Walk-in",
+            "Hotline",
+            "Marketing Web",
+            "Marketing Facebook",
+            "Refer",
+            "Renew",
+            "Voucher",
+            "Thị trường",
+            "Seeding",
+            "Data",
+            "Hội viên Bơi",
+            "Hội viên Fitness",
+          ];
+
+          sources.forEach((source) => {
+            const row = document.createElement("tr");
+
+            // Source name
+            const sourceCell = document.createElement("td");
+            sourceCell.className = "fw-bold text-start";
+            sourceCell.textContent = source;
+            row.appendChild(sourceCell);
+
+            // Data for each branch
+            let sourceTotal = 0;
+            const branches = [
+              "Tôn Thất Thuyết",
+              "Huỳnh Thúc Kháng",
+              "Giảng Võ",
+              "Hào Nam",
+              "Nguyễn Tuân",
+            ];
+            branches.forEach((branch) => {
+              const value = Math.floor(Math.random() * 50) + 10;
+              sourceTotal += value;
+
+              const cell = document.createElement("td");
+              cell.className = "text-center fw-bold";
+              cell.textContent = value;
+              row.appendChild(cell);
+            });
+
+            // Total column
+            const totalCell = document.createElement("td");
+            totalCell.className = "text-center fw-bold bg-info text-white";
+            totalCell.textContent = sourceTotal;
+            row.appendChild(totalCell);
+
+            summaryBySourceTbody.appendChild(row);
+          });
+        }
+
+        // Summary by Demand
+        const summaryByDemandTbody = document.getElementById(
+          "summary-by-demand-tbody"
+        );
+        if (summaryByDemandTbody) {
+          const needs = [
+            "Member Full Service",
+            "Member Gym",
+            "Member Yoga",
+            "Member Group X",
+            "Member Pool",
+            "PT Fitness",
+            "Stretching",
+            "Pilates",
+            "Swimming Coach",
+          ];
+
+          needs.forEach((need) => {
+            const row = document.createElement("tr");
+
+            // Need name
+            const needCell = document.createElement("td");
+            needCell.className = "fw-bold text-start";
+            needCell.textContent = need;
+            row.appendChild(needCell);
+
+            // Data for each branch
+            let needTotal = 0;
+            const branches = [
+              "Tôn Thất Thuyết",
+              "Huỳnh Thúc Kháng",
+              "Giảng Võ",
+              "Hào Nam",
+              "Nguyễn Tuân",
+            ];
+            branches.forEach((branch) => {
+              const value = Math.floor(Math.random() * 40) + 5;
+              needTotal += value;
+
+              const cell = document.createElement("td");
+              cell.className = "text-center fw-bold";
+              cell.textContent = value;
+              row.appendChild(cell);
+            });
+
+            // Total column
+            const totalCell = document.createElement("td");
+            totalCell.className = "text-center fw-bold bg-info text-white";
+            totalCell.textContent = needTotal;
+            row.appendChild(totalCell);
+
+            summaryByDemandTbody.appendChild(row);
+          });
+        }
+      }
+
+      // Generate inbody source report data
+      function generateInbodySourceData() {
+        const sources = [
+          "Walk-in",
+          "Hotline",
+          "Marketing Web",
+          "Marketing Facebook",
+          "Refer",
+          "Renew",
+          "Voucher",
+          "Thị trường",
+          "Seeding",
+          "Data",
+          "Hội viên Bơi",
+          "Hội viên Fitness",
+        ];
+
+        const data = {};
+
+        // Generate random data for each source
+        sources.forEach((source) => {
+          const saleTiep = Math.floor(rng.next() * 50) + 5; // 5-55
+          const ptTiep = Math.floor(saleTiep * (rng.next() * 0.8 + 0.2)); // 20-100% of sale
+          const soKhachDoInbody = Math.floor(ptTiep * (rng.next() * 0.9 + 0.1)); // 10-100% of PT
+
+          data[source] = {
+            saleTiep: saleTiep,
+            ptTiep: ptTiep,
+            soKhachDoInbody: soKhachDoInbody,
+          };
+        });
+
+        return data;
+      }
+
+      // Populate inbody source table
+      function populateInbodySourceTable() {
+        const data = generateInbodySourceData();
+        const tbody = document.getElementById("inbodySourceTableBody");
+
+        // Calculate totals
+        let totalSaleTiep = 0;
+        let totalPtTiep = 0;
+        let totalSoKhachDoInbody = 0;
+
+        // Generate rows for each source
+        Object.entries(data).forEach(([source, sourceData]) => {
+          const row = document.createElement("tr");
+
+          // Source cell
+          const sourceCell = document.createElement("td");
+          sourceCell.className = "fw-bold text-start";
+          sourceCell.textContent = source;
+          row.appendChild(sourceCell);
+
+          // Sale Tiếp cell
+          const saleTiepCell = document.createElement("td");
+          saleTiepCell.className = "text-center fw-bold";
+          saleTiepCell.textContent = sourceData.saleTiep;
+          row.appendChild(saleTiepCell);
+
+          // PT Tiếp cell
+          const ptTiepCell = document.createElement("td");
+          ptTiepCell.className = "text-center fw-bold";
+          ptTiepCell.textContent = sourceData.ptTiep;
+          row.appendChild(ptTiepCell);
+
+          // Số khách đo Inbody cell
+          const soKhachDoInbodyCell = document.createElement("td");
+          soKhachDoInbodyCell.className = "text-center fw-bold";
+          soKhachDoInbodyCell.textContent = sourceData.soKhachDoInbody;
+          row.appendChild(soKhachDoInbodyCell);
+
+          // Tỉ lệ PT Tiếp cell
+          const tiLePtTiepCell = document.createElement("td");
+          tiLePtTiepCell.className = "text-center fw-bold";
+          const tiLePtTiep =
+            sourceData.saleTiep > 0
+              ? ((sourceData.ptTiep / sourceData.saleTiep) * 100).toFixed(2)
+              : "0.00";
+          tiLePtTiepCell.textContent = tiLePtTiep + "%";
+          row.appendChild(tiLePtTiepCell);
+
+          // Tỉ lệ đo Inbody cell
+          const tiLeDoInbodyCell = document.createElement("td");
+          tiLeDoInbodyCell.className = "text-center fw-bold";
+          const tiLeDoInbody =
+            sourceData.saleTiep > 0
+              ? (
+                  (sourceData.soKhachDoInbody / sourceData.saleTiep) *
+                  100
+                ).toFixed(2)
+              : "0.00";
+          tiLeDoInbodyCell.textContent = tiLeDoInbody + "%";
+          row.appendChild(tiLeDoInbodyCell);
+
+          // Add to totals
+          totalSaleTiep += sourceData.saleTiep;
+          totalPtTiep += sourceData.ptTiep;
+          totalSoKhachDoInbody += sourceData.soKhachDoInbody;
+
+          tbody.appendChild(row);
+        });
+
+        // Add totals row
+        const totalsRow = document.createElement("tr");
+        totalsRow.className = "table-danger";
+
+        const totalsSourceCell = document.createElement("td");
+        totalsSourceCell.className = "fw-bold text-start bg-danger text-white";
+        totalsSourceCell.textContent = "TỔNG";
+        totalsRow.appendChild(totalsSourceCell);
+
+        const totalsSaleTiepCell = document.createElement("td");
+        totalsSaleTiepCell.className =
+          "text-center fw-bold bg-danger text-white";
+        totalsSaleTiepCell.textContent = totalSaleTiep;
+        totalsRow.appendChild(totalsSaleTiepCell);
+
+        const totalsPtTiepCell = document.createElement("td");
+        totalsPtTiepCell.className = "text-center fw-bold bg-danger text-white";
+        totalsPtTiepCell.textContent = totalPtTiep;
+        totalsRow.appendChild(totalsPtTiepCell);
+
+        const totalsSoKhachDoInbodyCell = document.createElement("td");
+        totalsSoKhachDoInbodyCell.className =
+          "text-center fw-bold bg-danger text-white";
+        totalsSoKhachDoInbodyCell.textContent = totalSoKhachDoInbody;
+        totalsRow.appendChild(totalsSoKhachDoInbodyCell);
+
+        const totalsTiLePtTiepCell = document.createElement("td");
+        totalsTiLePtTiepCell.className =
+          "text-center fw-bold bg-danger text-white";
+        const totalTiLePtTiep =
+          totalSaleTiep > 0
+            ? ((totalPtTiep / totalSaleTiep) * 100).toFixed(2)
+            : "0.00";
+        totalsTiLePtTiepCell.textContent = totalTiLePtTiep + "%";
+        totalsRow.appendChild(totalsTiLePtTiepCell);
+
+        const totalsTiLeDoInbodyCell = document.createElement("td");
+        totalsTiLeDoInbodyCell.className =
+          "text-center fw-bold bg-danger text-white";
+        const totalTiLeDoInbody =
+          totalSaleTiep > 0
+            ? ((totalSoKhachDoInbody / totalSaleTiep) * 100).toFixed(2)
+            : "0.00";
+        totalsTiLeDoInbodyCell.textContent = totalTiLeDoInbody + "%";
+        totalsRow.appendChild(totalsTiLeDoInbodyCell);
+
+        tbody.appendChild(totalsRow);
+      }
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        const statsData = generateVisitorStatsData();
+
+        // Update metric cards
+        document.getElementById("yesterdayVisitors").textContent =
+          statsData.yesterday.total;
+        document.getElementById("todayVisitors").textContent =
+          statsData.today.total;
+        document.getElementById("mtdVisitors").textContent =
+          statsData.mtd.total;
+
+        // Populate demand source table
+        populateDemandSourceTable();
+
+        // Populate inbody source table
+      });
+
+      // Navigation functions
+      function openVisitorsDetail(timeFilter) {
+        let url = "03-01-08-03-visitors-detail.html";
+        if (timeFilter) {
+          url += `?filter=${timeFilter}`;
+        }
+        window.location.href = url;
+      }
+
+      function openVisitorYesterdayDetail() {
+        window.location.href = "03-01-08-06-visitor-yesterday-detail.html";
+      }
+
+      function openVisitorTodayDetail() {
+        window.location.href = "03-01-08-07-visitor-today-detail.html";
+      }
+    </script>
+
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat(
+            (this.next() * (max - min) + min).toFixed(decimals)
+          );
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+
+      // Create charts for demand source analysis
+      function createSourceCharts() {
+        const data = generateDemandSourceData();
+
+        // Calculate total visitors per source
+        const sourceTotals = {};
+        Object.entries(data).forEach(([source, sourceData]) => {
+          sourceTotals[source] = Object.values(sourceData).reduce(
+            (sum, value) => sum + value,
+            0
+          );
+        });
+
+        // Create pie chart for source distribution
+        createSourceDistributionChart(sourceTotals);
+
+        // Create bar chart for top 5 sources
+        createTopSourcesChart(sourceTotals);
+      }
+
+      // Create pie chart showing percentage distribution of sources
+      function createSourceDistributionChart(sourceTotals) {
+        const ctx = document
+          .getElementById("sourceDistributionChart")
+          .getContext("2d");
+
+        const total = Object.values(sourceTotals).reduce(
+          (sum, value) => sum + value,
+          0
+        );
+        const labels = Object.keys(sourceTotals);
+        const data = Object.values(sourceTotals);
+        const backgroundColors = [
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+          "#4BC0C0",
+          "#9966FF",
+          "#FF9F40",
+          "#FF6384",
+          "#C9CBCF",
+          "#4BC0C0",
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56",
+        ];
+
+        new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                data: data,
+                backgroundColor: backgroundColors.slice(0, labels.length),
+                borderWidth: 2,
+                borderColor: "#fff",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right",
+                labels: {
+                  padding: 20,
+                  usePointStyle: true,
+                  boxWidth: 12,
+                  boxHeight: 12,
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const value = context.parsed;
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return (
+                      context.label + ": " + value + " (" + percentage + "%)"
+                    );
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // Create bar chart for top 5 sources
+      function createTopSourcesChart(sourceTotals) {
+        const ctx = document.getElementById("topSourcesChart").getContext("2d");
+
+        // Sort sources by total visitors and get top 5
+        const sortedSources = Object.entries(sourceTotals)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 5);
+
+        const labels = sortedSources.map(([source]) => source);
+        const data = sortedSources.map(([, total]) => total);
+        const total = Object.values(sourceTotals).reduce(
+          (sum, value) => sum + value,
+          0
+        );
+
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Số lượng khách tham quan",
+                data: data,
+                backgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56",
+                  "#4BC0C0",
+                  "#9966FF",
+                ],
+                borderColor: [
+                  "#FF6384",
+                  "#36A2EB",
+                  "#FFCE56",
+                  "#4BC0C0",
+                  "#9966FF",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const value = context.parsed.y;
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return (
+                      context.label + ": " + value + " (" + percentage + "%)"
+                    );
+                  },
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1,
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // Global variables for customer list
+      let currentCustomerType = "";
+      let allCustomers = [];
+      let filteredCustomers = [];
+      let currentCustomerPage = 1;
+      let customerPageSize = 10;
+      let customerTotalPages = 1;
+
+      // Function to show customer list modal
+      function showCustomerList(type) {
+        const modal = document.getElementById("customerListModal");
+        const modalTitle = document.getElementById("customerListModalTitle");
+
+        currentCustomerType = type;
+        let title = "";
+
+        switch (type) {
+          case "sale":
+            title = "Danh sách Sale tiếp";
+            allCustomers = generateSaleCustomers();
+            break;
+          case "pt":
+            title = "Danh sách PT tiếp";
+            allCustomers = generatePtCustomers();
+            break;
+          case "inbody":
+            title = "Danh sách Khách đo Inbody";
+            allCustomers = generateInbodyCustomers();
+            break;
+        }
+
+        modalTitle.textContent = title;
+        filteredCustomers = [...allCustomers];
+        currentCustomerPage = 1;
+
+        // Load customer table with pagination
+        loadCustomerTable();
+
+        // Setup filter event listeners
+        setupCustomerFilters();
+
+        // Show modal
+        const bsModal = new bootstrap.Modal(modal);
+        bsModal.show();
+      }
+
+      // Load customer table with pagination
+      function loadCustomerTable() {
+        const tbody = document.getElementById("customerTableBody");
+
+        if (!tbody) {
+          console.error("Customer table body not found!");
+          return;
+        }
+
+        // Clear existing data
+        tbody.innerHTML = "";
+
+        // Calculate pagination
+        customerTotalPages = Math.ceil(
+          filteredCustomers.length / customerPageSize
+        );
+        if (currentCustomerPage > customerTotalPages) {
+          currentCustomerPage = customerTotalPages || 1;
+        }
+
+        // Get data for current page
+        const startIndex = (currentCustomerPage - 1) * customerPageSize;
+        const endIndex = startIndex + customerPageSize;
+        const pageData = filteredCustomers.slice(startIndex, endIndex);
+
+        console.log(
+          "Loading customer table with",
+          pageData.length,
+          "customers on page",
+          currentCustomerPage,
+          "of",
+          customerTotalPages
+        );
+
+        // Render table rows
+        pageData.forEach((customer, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td><strong>${startIndex + index + 1}</strong></td>
+            <td><strong>${customer.name}</strong></td>
+            <td><code>${customer.phone}</code></td>
+            <td><span class="badge bg-warning">${customer.source}</span></td>
+            <td><span class="badge bg-primary">${customer.club}</span></td>
+            <td><span class="badge bg-info">${customer.date}</span></td>
+            <td><span class="badge ${getCustomerStatusBadgeClass(
+              customer.status
+            )}">${customer.status}</span></td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Update pagination
+        updateCustomerPagination(filteredCustomers.length);
+      }
+
+      // Get customer status badge class
+      function getCustomerStatusBadgeClass(status) {
+        switch (status) {
+          case "Đã tiếp":
+            return "bg-success";
+          case "Chưa tiếp":
+            return "bg-warning";
+          case "Đăng ký":
+            return "bg-primary";
+          case "Không đăng ký":
+            return "bg-danger";
+          case "Quan tâm":
+            return "bg-info";
+          default:
+            return "bg-secondary";
+        }
+      }
+
+      // Update customer pagination controls
+      function updateCustomerPagination(totalItems) {
+        const pagination = document.getElementById("customerPagination");
+        const paginationInfo = document.getElementById(
+          "customerPaginationInfo"
+        );
+
+        if (!pagination || !paginationInfo) return;
+
+        // Clear existing pagination
+        pagination.innerHTML = "";
+
+        // Update pagination info
+        const startItem =
+          totalItems === 0
+            ? 0
+            : (currentCustomerPage - 1) * customerPageSize + 1;
+        const endItem = Math.min(
+          currentCustomerPage * customerPageSize,
+          totalItems
+        );
+        paginationInfo.textContent = `Hiển thị ${startItem}-${endItem} của ${totalItems} kết quả`;
+
+        // Don't show pagination if only one page
+        if (customerTotalPages <= 1) return;
+
+        // Previous button
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${
+          currentCustomerPage === 1 ? "disabled" : ""
+        }`;
+        prevLi.innerHTML = `
+          <a class="page-link" href="#" onclick="changeCustomerPage(${
+            currentCustomerPage - 1
+          })" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        `;
+        pagination.appendChild(prevLi);
+
+        // Page numbers
+        const maxVisiblePages = 5;
+        let startPage = Math.max(
+          1,
+          currentCustomerPage - Math.floor(maxVisiblePages / 2)
+        );
+        let endPage = Math.min(
+          customerTotalPages,
+          startPage + maxVisiblePages - 1
+        );
+
+        // Adjust start page if we're near the end
+        if (endPage - startPage + 1 < maxVisiblePages) {
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        // First page
+        if (startPage > 1) {
+          const firstLi = document.createElement("li");
+          firstLi.className = "page-item";
+          firstLi.innerHTML = `<a class="page-link" href="#" onclick="changeCustomerPage(1)">1</a>`;
+          pagination.appendChild(firstLi);
+
+          if (startPage > 2) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+        }
+
+        // Page numbers
+        for (let i = startPage; i <= endPage; i++) {
+          const pageLi = document.createElement("li");
+          pageLi.className = `page-item ${
+            i === currentCustomerPage ? "active" : ""
+          }`;
+          pageLi.innerHTML = `<a class="page-link" href="#" onclick="changeCustomerPage(${i})">${i}</a>`;
+          pagination.appendChild(pageLi);
+        }
+
+        // Last page
+        if (endPage < customerTotalPages) {
+          if (endPage < customerTotalPages - 1) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+
+          const lastLi = document.createElement("li");
+          lastLi.className = "page-item";
+          lastLi.innerHTML = `<a class="page-link" href="#" onclick="changeCustomerPage(${customerTotalPages})">${customerTotalPages}</a>`;
+          pagination.appendChild(lastLi);
+        }
+
+        // Next button
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${
+          currentCustomerPage === customerTotalPages ? "disabled" : ""
+        }`;
+        nextLi.innerHTML = `
+          <a class="page-link" href="#" onclick="changeCustomerPage(${
+            currentCustomerPage + 1
+          })" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        `;
+        pagination.appendChild(nextLi);
+      }
+
+      // Change customer page
+      function changeCustomerPage(page) {
+        if (
+          page < 1 ||
+          page > customerTotalPages ||
+          page === currentCustomerPage
+        )
+          return;
+        currentCustomerPage = page;
+        loadCustomerTable();
+      }
+
+      // Change customer page size
+      function changeCustomerPageSize() {
+        const pageSizeSelect = document.getElementById("customerPageSize");
+        if (pageSizeSelect) {
+          customerPageSize = parseInt(pageSizeSelect.value);
+          currentCustomerPage = 1; // Reset to first page
+          loadCustomerTable();
+        }
+      }
+
+      // Setup customer filters
+      function setupCustomerFilters() {
+        // Add event listeners
+        document
+          .getElementById("customerSearchInput")
+          .addEventListener("input", applyCustomerFilters);
+        document
+          .getElementById("customerSourceFilter")
+          .addEventListener("change", applyCustomerFilters);
+        document
+          .getElementById("customerClubFilter")
+          .addEventListener("change", applyCustomerFilters);
+        document
+          .getElementById("customerStatusFilter")
+          .addEventListener("change", applyCustomerFilters);
+        document
+          .getElementById("customerPageSize")
+          .addEventListener("change", changeCustomerPageSize);
+      }
+
+      // Apply customer filters
+      function applyCustomerFilters() {
+        const searchTerm = document
+          .getElementById("customerSearchInput")
+          .value.toLowerCase();
+        const sourceFilter = document.getElementById(
+          "customerSourceFilter"
+        ).value;
+        const clubFilter = document.getElementById("customerClubFilter").value;
+        const statusFilter = document.getElementById(
+          "customerStatusFilter"
+        ).value;
+
+        filteredCustomers = allCustomers.filter((customer) => {
+          const matchesSearch =
+            !searchTerm ||
+            customer.name.toLowerCase().includes(searchTerm) ||
+            customer.phone.includes(searchTerm);
+
+          const matchesSource =
+            !sourceFilter || customer.source === sourceFilter;
+          const matchesClub = !clubFilter || customer.club === clubFilter;
+          const matchesStatus =
+            !statusFilter || customer.status === statusFilter;
+
+          return matchesSearch && matchesSource && matchesClub && matchesStatus;
+        });
+
+        // Reset to first page when applying filters
+        currentCustomerPage = 1;
+        loadCustomerTable();
+      }
+
+      // Reset customer filters
+      function resetCustomerFilters() {
+        document.getElementById("customerSearchInput").value = "";
+        document.getElementById("customerSourceFilter").value = "";
+        document.getElementById("customerClubFilter").value = "";
+        document.getElementById("customerStatusFilter").value = "";
+
+        filteredCustomers = [...allCustomers];
+        currentCustomerPage = 1;
+        loadCustomerTable();
+      }
+
+      // Export customer data
+      function exportCustomerData() {
+        const csvContent =
+          "data:text/csv;charset=utf-8," +
+          "STT,Tên khách hàng,Số điện thoại,Nguồn,Cơ sở,Ngày,Trạng thái\n" +
+          filteredCustomers
+            .map(
+              (customer, index) =>
+                `${index + 1},"${customer.name}","${customer.phone}","${
+                  customer.source
+                }","${customer.club}","${customer.date}","${customer.status}"`
+            )
+            .join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute(
+          "download",
+          `danh_sach_${currentCustomerType}_${
+            new Date().toISOString().split("T")[0]
+          }.csv`
+        );
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      // Generate sample sale customers
+      function generateSaleCustomers() {
+        const customers = [];
+        const names = [
+          "Nguyễn Văn A",
+          "Trần Thị B",
+          "Lê Văn C",
+          "Phạm Thị D",
+          "Hoàng Văn E",
+          "Vũ Thị F",
+          "Đặng Văn G",
+          "Bùi Thị H",
+        ];
+        const sources = [
+          "Walk-in",
+          "Hotline",
+          "Marketing Web",
+          "Marketing Facebook",
+          "Refer",
+          "Renew",
+          "Voucher",
+          "Thị trường",
+        ];
+        const branches = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+        const statuses = [
+          "Đăng ký",
+          "Quan tâm",
+          "Không đăng ký",
+          "Đã tiếp",
+          "Chưa tiếp",
+        ];
+
+        for (let i = 0; i < 20; i++) {
+          customers.push({
+            id: i + 1,
+            name: names[Math.floor(Math.random() * names.length)],
+            phone: `0${Math.floor(Math.random() * 900000000) + 100000000}`,
+            source: sources[Math.floor(Math.random() * sources.length)],
+            branch: branches[Math.floor(Math.random() * branches.length)],
+            date: new Date(
+              Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+            ).toLocaleDateString("vi-VN"),
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+          });
+        }
+        return customers;
+      }
+
+      // Generate sample PT customers
+      function generatePtCustomers() {
+        const customers = [];
+        const names = [
+          "Nguyễn Văn A",
+          "Trần Thị B",
+          "Lê Văn C",
+          "Phạm Thị D",
+          "Hoàng Văn E",
+          "Vũ Thị F",
+          "Đặng Văn G",
+          "Bùi Thị H",
+        ];
+        const sources = [
+          "Walk-in",
+          "Hotline",
+          "Marketing Web",
+          "Marketing Facebook",
+          "Refer",
+          "Renew",
+          "Voucher",
+          "Thị trường",
+        ];
+        const branches = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+        const statuses = [
+          "Đăng ký",
+          "Quan tâm",
+          "Không đăng ký",
+          "Đã PT",
+          "Chưa PT",
+        ];
+
+        for (let i = 0; i < 15; i++) {
+          customers.push({
+            id: i + 1,
+            name: names[Math.floor(Math.random() * names.length)],
+            phone: `0${Math.floor(Math.random() * 900000000) + 100000000}`,
+            source: sources[Math.floor(Math.random() * sources.length)],
+            branch: branches[Math.floor(Math.random() * branches.length)],
+            date: new Date(
+              Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+            ).toLocaleDateString("vi-VN"),
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+          });
+        }
+        return customers;
+      }
+
+      // Generate sample Inbody customers
+      function generateInbodyCustomers() {
+        const customers = [];
+        const names = [
+          "Nguyễn Văn A",
+          "Trần Thị B",
+          "Lê Văn C",
+          "Phạm Thị D",
+          "Hoàng Văn E",
+          "Vũ Thị F",
+          "Đặng Văn G",
+          "Bùi Thị H",
+        ];
+        const sources = [
+          "Walk-in",
+          "Hotline",
+          "Marketing Web",
+          "Marketing Facebook",
+          "Refer",
+          "Renew",
+          "Voucher",
+          "Thị trường",
+        ];
+        const branches = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+        const statuses = [
+          "Đăng ký",
+          "Quan tâm",
+          "Không đăng ký",
+          "Đã đo",
+          "Chưa đo",
+        ];
+
+        for (let i = 0; i < 10; i++) {
+          customers.push({
+            id: i + 1,
+            name: names[Math.floor(Math.random() * names.length)],
+            phone: `0${Math.floor(Math.random() * 900000000) + 100000000}`,
+            source: sources[Math.floor(Math.random() * sources.length)],
+            branch: branches[Math.floor(Math.random() * branches.length)],
+            date: new Date(
+              Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+            ).toLocaleDateString("vi-VN"),
+            weight: (Math.random() * 30 + 50).toFixed(1),
+            bmi: (Math.random() * 10 + 18).toFixed(1),
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+          });
+        }
+        return customers;
+      }
+    </script>
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

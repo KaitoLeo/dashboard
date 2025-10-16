@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example Refactored Page - Actiwell Dashboard</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h2 class="mb-0">
+              <i class="fas fa-chart-line me-2"></i>
+              Example Dashboard Page
+            </h2>
+            <div id="breadcrumb-container" class="mt-2"></div>
+          </div>
+          <div class="col-md-6 text-end">
+            <a href="../index.html" class="btn btn-outline-light">
+              <i class="fas fa-home me-1"></i>Trang chủ
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Filter Bar -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-3">
+                  <label class="form-label">Thời gian</label>
+                  <select id="timeFilter" class="form-select">
+                    <option value="today">Hôm nay</option>
+                    <option value="yesterday">Hôm qua</option>
+                    <option value="week">Tuần này</option>
+                    <option value="month">Tháng này</option>
+                    <option value="mtd">MTD</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Địa điểm</label>
+                  <select id="locationFilter" class="form-select">
+                    <option value="all">Tất cả</option>
+                    <option value="1">Cơ sở 1</option>
+                    <option value="2">Cơ sở 2</option>
+                    <option value="3">Cơ sở 3</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Dịch vụ</label>
+                  <select id="serviceFilter" class="form-select">
+                    <option value="all">Tất cả</option>
+                    <option value="Membership">Membership</option>
+                    <option value="PT Fitness">PT Fitness</option>
+                    <option value="Pilates">Pilates</option>
+                    <option value="Swimming Coach">Swimming Coach</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">&nbsp;</label>
+                  <button id="applyFilter" class="btn btn-primary w-100">
+                    <i class="fas fa-filter me-1"></i>Áp dụng
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Total Bookings</h6>
+              <h3 class="mb-0" id="totalBookings">0</h3>
+              <small class="text-muted"
+                >Confirmed: <span id="confirmedBookings">0</span></small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Confirmation Rate</h6>
+              <h3 class="mb-0" id="confirmationRate">0%</h3>
+              <small class="text-muted"
+                >Cancellation: <span id="cancellationRate">0%</span></small
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Total Revenue</h6>
+              <h3 class="mb-0" id="totalRevenue">0₫</h3>
+              <small class="text-muted">ARPB: <span id="arpb">0₫</span></small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Total Check-ins</h6>
+              <h3 class="mb-0" id="totalCheckins">0</h3>
+              <small class="text-muted"
+                >Peak: <span id="peakHour">N/A</span></small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Revenue by Service</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="revenueChart" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Booking Details</h5>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Service</th>
+                    <th>Total</th>
+                    <th>Confirmed</th>
+                    <th>Pending</th>
+                    <th>Cancelled</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingTableBody">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js UMD for file:// protocol -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <!-- Shared Data Layer - SSOT -->
+    <script src="../data/sample-data.js"></script>
+    <script src="../assets/js/shared/data-source.js"></script>
+    <script src="../assets/js/shared/state.js"></script>
+    <script src="../assets/js/shared/compute-kpi.js"></script>
+    <script src="../assets/js/shared/reconcile.js"></script>
+    <script src="../assets/js/shared/labels.js"></script>
+    <script src="../assets/js/shared/service-order.js"></script>
+    <script src="../assets/js/shared/init-shared.js"></script>
+
+    <!-- Page Script -->
+    <script>
+      (function () {
+        "use strict";
+
+        // Global chart instance
+        let revenueChart = null;
+
+        /**
+         * Initialize page with shared data layer
+         */
+        function initPage() {
+          console.log("=== Initializing Example Page ===");
+
+          // Wait for all dependencies
+          SharedDataLayer.waitForDependencies(function () {
+            console.log("✅ Dependencies ready");
+
+            // Get URL parameters or use defaults
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialState = {
+              timeKey: urlParams.get("time") || "today",
+              location: urlParams.get("location") || "all",
+              service: urlParams.get("service") || "all",
+            };
+
+            // Set filter UI to match state
+            document.getElementById("timeFilter").value = initialState.timeKey;
+            document.getElementById("locationFilter").value =
+              initialState.location;
+            document.getElementById("serviceFilter").value =
+              initialState.service;
+
+            // Set state
+            SharedState.setState(initialState);
+
+            // Compute KPIs
+            const kpis = ComputeKPI.computeAllKPIs(initialState);
+
+            // Update UI
+            updateUI(kpis);
+
+            // Setup event listeners
+            setupEventListeners();
+
+            // Run consistency checks
+            runConsistencyChecks(kpis);
+
+            console.log("✅ Page initialized with KPIs:", kpis);
+          });
+        }
+
+        /**
+         * Update UI with computed KPIs
+         */
+        function updateUI(kpis) {
+          if (!kpis) {
+            console.error("❌ No KPIs provided to updateUI");
+            return;
+          }
+
+          console.log("🔄 Updating UI with KPIs...");
+
+          // Update cards
+          updateCards(kpis);
+
+          // Update chart
+          updateChart(kpis);
+
+          // Update table
+          updateTable(kpis);
+
+          console.log("✅ UI updated");
+        }
+
+        /**
+         * Update KPI cards
+         */
+        function updateCards(kpis) {
+          // Booking cards
+          document.getElementById("totalBookings").textContent =
+            Labels.formatNumber(kpis.booking.totalBookings);
+          document.getElementById("confirmedBookings").textContent =
+            Labels.formatNumber(kpis.booking.byStatus.confirmed);
+          document.getElementById("confirmationRate").textContent =
+            Labels.formatPercent(kpis.booking.confirmationRatio);
+          document.getElementById("cancellationRate").textContent =
+            Labels.formatPercent(kpis.booking.cancellationRate);
+
+          // Revenue cards
+          document.getElementById("totalRevenue").textContent =
+            Labels.formatCurrency(kpis.revenue.totalRevenue);
+          document.getElementById("arpb").textContent = Labels.formatCurrency(
+            kpis.revenue.arpb
+          );
+
+          // Check-in cards
+          document.getElementById("totalCheckins").textContent =
+            Labels.formatNumber(kpis.checkin.totalCheckins);
+          document.getElementById("peakHour").textContent = kpis.checkin
+            .peakHour
+            ? Labels.formatTime(kpis.checkin.peakHour * 60)
+            : "N/A";
+        }
+
+        /**
+         * Update revenue chart with sorted service data
+         */
+        function updateChart(kpis) {
+          // Get revenue by service (sorted)
+          const byService = ServiceOrder.sortObjectKeys(kpis.revenue.byService);
+
+          const labels = Object.keys(byService);
+          const data = Object.values(byService);
+          const colors = labels.map((s) => ServiceOrder.getServiceColor(s));
+
+          // Create or update chart
+          const canvas = document.getElementById("revenueChart");
+          if (!canvas) return;
+
+          if (revenueChart) {
+            // Update existing chart
+            revenueChart.data.labels = labels;
+            revenueChart.data.datasets[0].data = data;
+            revenueChart.data.datasets[0].backgroundColor = colors;
+            revenueChart.update();
+          } else {
+            // Create new chart
+            const ctx = canvas.getContext("2d");
+            revenueChart = new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Revenue",
+                    data: data,
+                    backgroundColor: colors,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        return Labels.formatCurrency(context.raw);
+                      },
+                    },
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      callback: function (value) {
+                        return Labels.formatCurrency(value);
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+        }
+
+        /**
+         * Update data table with sorted services
+         */
+        function updateTable(kpis) {
+          const tbody = document.getElementById("bookingTableBody");
+          if (!tbody) return;
+
+          // Get bookings by service (sorted)
+          const byService = ServiceOrder.sortObjectKeys(kpis.booking.byService);
+
+          // Get state to filter by service
+          const state = SharedState.getState();
+          const bookings = DataSource.filterByState(DataSource.bookings, state);
+
+          // Calculate stats per service
+          const rows = Object.keys(byService).map((service) => {
+            const serviceBookings = bookings.filter(
+              (b) => b.serviceName === service
+            );
+            const confirmed = serviceBookings.filter(
+              (b) => b.status === "confirmed"
+            ).length;
+            const pending = serviceBookings.filter(
+              (b) => b.status === "pending"
+            ).length;
+            const cancelled = serviceBookings.filter(
+              (b) => b.status === "cancelled"
+            ).length;
+            const total = byService[service];
+
+            return { service, total, confirmed, pending, cancelled };
+          });
+
+          // Build table HTML
+          tbody.innerHTML = rows
+            .map(
+              (row) => `
+            <tr>
+                <td><strong>${row.service}</strong></td>
+                <td>${Labels.formatNumber(row.total)}</td>
+                <td>${Labels.formatNumber(row.confirmed)}</td>
+                <td>${Labels.formatNumber(row.pending)}</td>
+                <td>${Labels.formatNumber(row.cancelled)}</td>
+            </tr>
+        `
+            )
+            .join("");
+        }
+
+        /**
+         * Setup filter event listeners
+         */
+        function setupEventListeners() {
+          // Apply filter button
+          document
+            .getElementById("applyFilter")
+            .addEventListener("click", function () {
+              const newState = {
+                timeKey: document.getElementById("timeFilter").value,
+                location: document.getElementById("locationFilter").value,
+                service: document.getElementById("serviceFilter").value,
+              };
+
+              console.log("🔄 Applying filter:", newState);
+
+              // Update state (will trigger re-computation via subscriber)
+              SharedState.setState(newState);
+
+              // Compute and update
+              const kpis = ComputeKPI.computeAllKPIs(newState);
+              updateUI(kpis);
+              runConsistencyChecks(kpis);
+            });
+        }
+
+        /**
+         * Run consistency checks
+         */
+        function runConsistencyChecks(kpis) {
+          console.group("🔍 Running Consistency Checks");
+
+          // Build modules object
+          const modules = {
+            booking: {
+              dashboard: {
+                totalBookings: kpis.booking.totalBookings,
+                confirmed: kpis.booking.byStatus.confirmed,
+                pending: kpis.booking.byStatus.pending,
+                cancelled: kpis.booking.byStatus.cancelled,
+              },
+              // Table should match dashboard
+              table: {
+                totalBookings: kpis.booking.totalBookings,
+              },
+            },
+            revenue: {
+              dashboard: {
+                totalRevenue: kpis.revenue.totalRevenue,
+              },
+              chart: {
+                totalRevenue: Object.values(kpis.revenue.byService).reduce(
+                  (a, b) => a + b,
+                  0
+                ),
+              },
+              breakdown: {
+                totalRevenue: kpis.revenue.totalRevenue,
+                byService: kpis.revenue.byService,
+              },
+            },
+          };
+
+          Reconcile.assertConsistency(modules);
+
+          console.groupEnd();
+        }
+
+        // Initialize on DOM ready
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initPage);
+        } else {
+          initPage();
+        }
+      })();
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trung bình Ngày - Chi tiết Tính toán - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="revenue-mtd-detail.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại MTD Detail
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-info">
+            <i class="fas fa-calculator me-2"></i>Trung bình Ngày - Chi tiết
+            Tính toán
+          </h2>
+          <p class="text-muted">
+            Phân tích chi tiết cách tính toán doanh thu trung bình hàng ngày và
+            xu hướng
+          </p>
+        </div>
+      </div>
+
+      <!-- Key Metrics -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-calculator fa-2x mb-2"></i>
+              <h6>Trung bình ngày</h6>
+              <h3 id="dailyAvgValue">61,666,667</h3>
+              <small>VNĐ/ngày</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+              <h6>Số ngày đã qua</h6>
+              <h3>22</h3>
+              <small>ngày</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x mb-2"></i>
+              <h6>Ngày cao nhất</h6>
+              <h3>75,000,000</h3>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line-down fa-2x mb-2"></i>
+              <h6>Ngày thấp nhất</h6>
+              <h3>45,000,000</h3>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculation Formula -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-calculator me-2"></i>Công thức tính toán trung
+                bình ngày
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="alert alert-info">
+                <h6 class="mb-3">
+                  <i class="fas fa-formula me-2"></i>Công thức chính:
+                </h6>
+                <div class="formula-box bg-light p-3 rounded">
+                  <h5 class="text-info mb-3">
+                    <strong
+                      >Trung bình ngày = Tổng doanh thu MTD / Số ngày đã qua
+                      trong tháng</strong
+                    >
+                  </h5>
+                  <div class="example-calculation">
+                    <h6 class="text-primary mb-2">Ví dụ tính toán thực tế:</h6>
+                    <div
+                      class="calculation-example bg-white p-3 rounded border"
+                    >
+                      <h4 class="text-info mb-0">
+                        <strong>61,666,667 = 1,850,000,000 ÷ 22 ngày</strong>
+                      </h4>
+                      <small class="text-muted"
+                        >Tính từ ngày 1/9/2025 đến 22/9/2025</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Revenue Chart -->
+      <div class="row mb-4">
+        <div class="col-lg-8 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Doanh thu theo ngày trong
+                tháng
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="dailyRevenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bố theo ngày trong
+                tuần
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="weeklyDistributionChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Revenue Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Chi tiết doanh thu từng ngày
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Ngày</th>
+                      <th>Thứ</th>
+                      <th>Doanh thu (VNĐ)</th>
+                      <th>So với TB</th>
+                      <th>Xu hướng</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>01/09</td>
+                      <td>Chủ nhật</td>
+                      <td>45,000,000</td>
+                      <td><span class="text-danger">-27%</span></td>
+                      <td><i class="fas fa-arrow-down text-danger"></i></td>
+                      <td>Ngày nghỉ</td>
+                    </tr>
+                    <tr>
+                      <td>02/09</td>
+                      <td>Thứ 2</td>
+                      <td>65,000,000</td>
+                      <td><span class="text-success">+5%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Đầu tuần</td>
+                    </tr>
+                    <tr>
+                      <td>03/09</td>
+                      <td>Thứ 3</td>
+                      <td>70,000,000</td>
+                      <td><span class="text-success">+14%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>04/09</td>
+                      <td>Thứ 4</td>
+                      <td>68,000,000</td>
+                      <td><span class="text-success">+10%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>05/09</td>
+                      <td>Thứ 5</td>
+                      <td>75,000,000</td>
+                      <td><span class="text-success">+22%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>06/09</td>
+                      <td>Thứ 6</td>
+                      <td>80,000,000</td>
+                      <td><span class="text-success">+30%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td>07/09</td>
+                      <td>Thứ 7</td>
+                      <td>75,000,000</td>
+                      <td><span class="text-success">+38%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td>08/09</td>
+                      <td>Chủ nhật</td>
+                      <td>50,000,000</td>
+                      <td><span class="text-danger">-19%</span></td>
+                      <td><i class="fas fa-arrow-down text-danger"></i></td>
+                      <td>Ngày nghỉ</td>
+                    </tr>
+                    <tr>
+                      <td>09/09</td>
+                      <td>Thứ 2</td>
+                      <td>62,000,000</td>
+                      <td><span class="text-success">+1%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Đầu tuần</td>
+                    </tr>
+                    <tr>
+                      <td>10/09</td>
+                      <td>Thứ 3</td>
+                      <td>58,000,000</td>
+                      <td><span class="text-danger">-6%</span></td>
+                      <td><i class="fas fa-arrow-down text-danger"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>11/09</td>
+                      <td>Thứ 4</td>
+                      <td>72,000,000</td>
+                      <td><span class="text-success">+17%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>12/09</td>
+                      <td>Thứ 5</td>
+                      <td>78,000,000</td>
+                      <td><span class="text-success">+27%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>13/09</td>
+                      <td>Thứ 6</td>
+                      <td>82,000,000</td>
+                      <td><span class="text-success">+33%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td>14/09</td>
+                      <td>Thứ 7</td>
+                      <td>88,000,000</td>
+                      <td><span class="text-success">+43%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td>15/09</td>
+                      <td>Chủ nhật</td>
+                      <td>52,000,000</td>
+                      <td><span class="text-danger">-16%</span></td>
+                      <td><i class="fas fa-arrow-down text-danger"></i></td>
+                      <td>Ngày nghỉ</td>
+                    </tr>
+                    <tr>
+                      <td>16/09</td>
+                      <td>Thứ 2</td>
+                      <td>68,000,000</td>
+                      <td><span class="text-success">+10%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Đầu tuần</td>
+                    </tr>
+                    <tr>
+                      <td>17/09</td>
+                      <td>Thứ 3</td>
+                      <td>74,000,000</td>
+                      <td><span class="text-success">+20%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>18/09</td>
+                      <td>Thứ 4</td>
+                      <td>71,000,000</td>
+                      <td><span class="text-success">+15%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>19/09</td>
+                      <td>Thứ 5</td>
+                      <td>76,000,000</td>
+                      <td><span class="text-success">+23%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>20/09</td>
+                      <td>Thứ 6</td>
+                      <td>83,000,000</td>
+                      <td><span class="text-success">+35%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td>21/09</td>
+                      <td>Thứ 7</td>
+                      <td>89,000,000</td>
+                      <td><span class="text-success">+44%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td>22/09</td>
+                      <td>Chủ nhật</td>
+                      <td>55,000,000</td>
+                      <td><span class="text-danger">-11%</span></td>
+                      <td><i class="fas fa-arrow-down text-danger"></i></td>
+                      <td>Ngày nghỉ</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis by Day of Week -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Phân tích theo ngày trong
+                tuần
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Ngày trong tuần</th>
+                      <th>Trung bình (VNĐ)</th>
+                      <th>Số ngày</th>
+                      <th>So với TB chung</th>
+                      <th>Xu hướng</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Thứ 2</strong></td>
+                      <td>65,000,000</td>
+                      <td>3</td>
+                      <td><span class="text-success">+5%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Đầu tuần, khách hàng mới</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thứ 3</strong></td>
+                      <td>67,333,333</td>
+                      <td>3</td>
+                      <td><span class="text-success">+9%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thứ 4</strong></td>
+                      <td>70,333,333</td>
+                      <td>3</td>
+                      <td><span class="text-success">+14%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thứ 5</strong></td>
+                      <td>76,333,333</td>
+                      <td>3</td>
+                      <td><span class="text-success">+24%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thứ 6</strong></td>
+                      <td>81,666,667</td>
+                      <td>3</td>
+                      <td><span class="text-success">+32%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thứ 7</strong></td>
+                      <td>87,333,333</td>
+                      <td>3</td>
+                      <td><span class="text-success">+42%</span></td>
+                      <td><i class="fas fa-arrow-up text-success"></i></td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Chủ nhật</strong></td>
+                      <td>50,666,667</td>
+                      <td>3</td>
+                      <td><span class="text-danger">-18%</span></td>
+                      <td><i class="fas fa-arrow-down text-danger"></i></td>
+                      <td>Ngày nghỉ</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Methodology and Data Sources -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-database me-2"></i>Phương pháp tính toán và
+                nguồn dữ liệu
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-primary">Công thức tính toán:</h6>
+                  <ol>
+                    <li>
+                      <strong>Thu thập dữ liệu:</strong> Lấy doanh thu từng ngày
+                      từ hệ thống POS
+                    </li>
+                    <li>
+                      <strong>Tính tổng:</strong> Cộng tất cả doanh thu từ ngày
+                      1 đến ngày hiện tại
+                    </li>
+                    <li>
+                      <strong>Chia trung bình:</strong> Chia tổng cho số ngày đã
+                      qua
+                    </li>
+                    <li>
+                      <strong>Làm tròn:</strong> Làm tròn đến hàng nghìn VNĐ
+                    </li>
+                  </ol>
+
+                  <h6 class="text-success">Nguồn dữ liệu:</h6>
+                  <ul>
+                    <li>
+                      <strong>Hệ thống POS:</strong> Doanh thu real-time từng cơ
+                      sở
+                    </li>
+                    <li>
+                      <strong>CRM System:</strong> Lịch sử giao dịch khách hàng
+                    </li>
+                    <li>
+                      <strong>Bank Integration:</strong> Xác nhận thanh toán
+                    </li>
+                    <li>
+                      <strong>Manual Reports:</strong> Báo cáo thủ công từ các
+                      cơ sở
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-info">Tiêu chí đánh giá:</h6>
+                  <ul>
+                    <li><strong>Trên 70M VNĐ/ngày:</strong> Xuất sắc</li>
+                    <li><strong>60-70M VNĐ/ngày:</strong> Tốt</li>
+                    <li><strong>50-60M VNĐ/ngày:</strong> Trung bình</li>
+                    <li><strong>Dưới 50M VNĐ/ngày:</strong> Cần cải thiện</li>
+                  </ul>
+
+                  <h6 class="text-warning">Lưu ý quan trọng:</h6>
+                  <ul>
+                    <li>Chỉ tính các ngày có hoạt động kinh doanh</li>
+                    <li>Loại trừ các ngày nghỉ lễ đặc biệt</li>
+                    <li>Xem xét yếu tố mùa vụ</li>
+                    <li>So sánh với cùng kỳ năm trước</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Daily Revenue Chart
+      const dailyRevenueCtx = document
+        .getElementById("dailyRevenueChart")
+        .getContext("2d");
+      new Chart(dailyRevenueCtx, {
+        type: "line",
+        data: {
+          labels: [
+            "1/9",
+            "2/9",
+            "3/9",
+            "4/9",
+            "5/9",
+            "6/9",
+            "7/9",
+            "8/9",
+            "9/9",
+            "10/9",
+            "11/9",
+            "12/9",
+            "13/9",
+            "14/9",
+            "15/9",
+            "16/9",
+            "17/9",
+            "18/9",
+            "19/9",
+            "20/9",
+            "21/9",
+            "22/9",
+          ],
+          datasets: [
+            {
+              label: "Doanh thu hàng ngày",
+              data: [
+                45000000, 65000000, 70000000, 68000000, 75000000, 80000000,
+                85000000, 50000000, 62000000, 58000000, 72000000, 78000000,
+                82000000, 88000000, 52000000, 68000000, 74000000, 71000000,
+                76000000, 83000000, 89000000, 55000000,
+              ],
+              borderColor: "#0dcaf0",
+              backgroundColor: "rgba(13, 202, 240, 0.1)",
+              tension: 0.4,
+              fill: true,
+            },
+            {
+              label: "Trung bình ngày",
+              data: [
+                61666667, 61666667, 61666667, 61666667, 61666667, 61666667,
+                61666667, 61666667, 61666667, 61666667, 61666667, 61666667,
+                61666667, 61666667, 61666667, 61666667, 61666667, 61666667,
+                61666667, 61666667, 61666667, 61666667,
+              ],
+              borderColor: "#dc3545",
+              backgroundColor: "rgba(220, 53, 69, 0.1)",
+              borderDash: [5, 5],
+              tension: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: "Doanh thu theo ngày trong tháng 9/2025",
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return (value / 1000000).toFixed(0) + "M";
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Weekly Distribution Chart
+      const weeklyDistributionCtx = document
+        .getElementById("weeklyDistributionChart")
+        .getContext("2d");
+      new Chart(weeklyDistributionCtx, {
+        type: "doughnut",
+        data: {
+          labels: ["Thứ 2-6", "Thứ 7", "Chủ nhật"],
+          datasets: [
+            {
+              data: [70, 87, 51],
+              backgroundColor: ["#0dcaf0", "#198754", "#ffc107"],
+              borderWidth: 2,
+              borderColor: "#fff",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: "Trung bình theo ngày trong tuần (M VNĐ)",
+            },
+            legend: {
+              position: "bottom",
+            },
+          },
+        },
+      });
+    </script>
+    <!-- Filter Integration Script -->
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/filter-handler.js"></script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

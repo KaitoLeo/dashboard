@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Facility Utilization - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-warning">
+            <i class="fas fa-building me-2"></i>Facility Utilization & Occupancy
+            Analysis
+          </h2>
+          <p class="text-muted">
+            Phân tích tỉ lệ lấp đầy và sử dụng cơ sở vật chất
+          </p>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Bộ lọc</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Loại phòng</label>
+                  <select class="form-select" id="facilityFilter">
+                    <option value="all">Tất cả loại</option>
+                    <option value="membership">Membership</option>
+                    <option value="fitness">Fitness</option>
+                    <option value="swimming-coach">Swimming Coach</option>
+                    <option value="pilates">Pilates</option>
+                    <option value="pt">PT</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Khoảng thời gian</label>
+                  <select class="form-select" id="timeRangeFilter">
+                    <option value="today">Hôm nay</option>
+                    <option value="this-week">Tuần này</option>
+                    <option value="this-month">Tháng này</option>
+                    <option value="last-month">Tháng trước</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">&nbsp;</label>
+                  <button
+                    class="btn btn-warning w-100"
+                    onclick="applyFilters()"
+                  >
+                    <i class="fas fa-search me-1"></i>Áp dụng bộ lọc
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-percentage fa-2x mb-2"></i>
+              <h6>Tỉ lệ lấp đầy tổng</h6>
+              <h3>78.5%</h3>
+              <small>tổng check-in/dung lượng</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-dumbbell fa-2x mb-2"></i>
+              <h6>Gym Occupancy</h6>
+              <h3>82.3%</h3>
+              <small>phòng gym</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-swimming-pool fa-2x mb-2"></i>
+              <h6>Swimming Coach Occupancy</h6>
+              <h3>65.8%</h3>
+              <small>bể bơi</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-spa fa-2x mb-2"></i>
+              <h6>Pilates Occupancy</h6>
+              <h3>71.2%</h3>
+              <small>phòng pilates</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Tỉ lệ sử dụng theo loại
+                phòng
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="facilityUtilizationChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng sử dụng theo giờ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="hourlyUtilizationChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Analysis by Location -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Chi tiết tỉ lệ sử dụng theo cơ
+                sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>STT</th>
+                      <th>Cơ sở</th>
+                      <th>Membership</th>
+                      <th>Fitness</th>
+                      <th>Swimming Coach</th>
+                      <th>Pilates</th>
+                      <th>PT</th>
+                      <th>Tổng TB</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td><span class="badge bg-primary">85.2%</span></td>
+                      <td><span class="badge bg-info">70.5%</span></td>
+                      <td><span class="badge bg-success">75.8%</span></td>
+                      <td><span class="badge bg-secondary">68.3%</span></td>
+                      <td><span class="badge bg-warning">82.1%</span></td>
+                      <td><span class="text-primary">76.4%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td><span class="badge bg-primary">88.7%</span></td>
+                      <td><span class="badge bg-info">72.3%</span></td>
+                      <td><span class="badge bg-success">78.9%</span></td>
+                      <td><span class="badge bg-secondary">71.2%</span></td>
+                      <td><span class="badge bg-warning">85.6%</span></td>
+                      <td><span class="text-success">79.3%</span></td>
+                      <td><span class="badge bg-success">Xuất sắc</span></td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td><span class="badge bg-primary">79.8%</span></td>
+                      <td><span class="badge bg-info">62.1%</span></td>
+                      <td><span class="badge bg-success">68.5%</span></td>
+                      <td><span class="badge bg-secondary">59.7%</span></td>
+                      <td><span class="badge bg-warning">76.3%</span></td>
+                      <td><span class="text-warning">69.3%</span></td>
+                      <td><span class="badge bg-warning">Trung bình</span></td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td><strong>Hào Nam</strong></td>
+                      <td><span class="badge bg-primary">81.5%</span></td>
+                      <td><span class="badge bg-info">65.8%</span></td>
+                      <td><span class="badge bg-success">73.2%</span></td>
+                      <td><span class="badge bg-secondary">66.4%</span></td>
+                      <td><span class="badge bg-warning">79.8%</span></td>
+                      <td><span class="text-primary">73.3%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td><span class="badge bg-primary">76.9%</span></td>
+                      <td><span class="badge bg-info">58.7%</span></td>
+                      <td><span class="badge bg-success">64.3%</span></td>
+                      <td><span class="badge bg-secondary">55.2%</span></td>
+                      <td><span class="badge bg-warning">72.1%</span></td>
+                      <td><span class="text-danger">65.4%</span></td>
+                      <td>
+                        <span class="badge bg-danger">Cần cải thiện</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peak Hours Analysis -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-clock me-2"></i>Phân tích giờ cao điểm
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-primary">Giờ cao điểm (Occupancy >80%)</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Khung giờ</th>
+                          <th>Membership</th>
+                          <th>Fitness</th>
+                          <th>Swimming Coach</th>
+                          <th>Pilates</th>
+                          <th>PT</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>6:00 - 8:00</td>
+                          <td><span class="badge bg-success">92%</span></td>
+                          <td><span class="badge bg-warning">45%</span></td>
+                          <td><span class="badge bg-success">88%</span></td>
+                          <td><span class="badge bg-success">95%</span></td>
+                        </tr>
+                        <tr>
+                          <td>17:00 - 19:00</td>
+                          <td><span class="badge bg-success">95%</span></td>
+                          <td><span class="badge bg-success">85%</span></td>
+                          <td><span class="badge bg-success">92%</span></td>
+                          <td><span class="badge bg-success">90%</span></td>
+                        </tr>
+                        <tr>
+                          <td>19:00 - 21:00</td>
+                          <td><span class="badge bg-success">89%</span></td>
+                          <td><span class="badge bg-success">82%</span></td>
+                          <td><span class="badge bg-success">85%</span></td>
+                          <td><span class="badge bg-success">87%</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-warning">Giờ thấp điểm (Occupancy <50%)</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Khung giờ</th>
+                          <th>Membership</th>
+                          <th>Fitness</th>
+                          <th>Swimming Coach</th>
+                          <th>Pilates</th>
+                          <th>PT</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>10:00 - 12:00</td>
+                          <td><span class="badge bg-warning">35%</span></td>
+                          <td><span class="badge bg-warning">28%</span></td>
+                          <td><span class="badge bg-warning">42%</span></td>
+                          <td><span class="badge bg-warning">38%</span></td>
+                        </tr>
+                        <tr>
+                          <td>14:00 - 16:00</td>
+                          <td><span class="badge bg-warning">28%</span></td>
+                          <td><span class="badge bg-warning">32%</span></td>
+                          <td><span class="badge bg-warning">25%</span></td>
+                          <td><span class="badge bg-warning">30%</span></td>
+                        </tr>
+                        <tr>
+                          <td>21:00 - 22:00</td>
+                          <td><span class="badge bg-warning">45%</span></td>
+                          <td><span class="badge bg-warning">38%</span></td>
+                          <td><span class="badge bg-warning">40%</span></td>
+                          <td><span class="badge bg-warning">35%</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Capacity Planning -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Kế hoạch mở rộng năng lực
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i
+                        class="fas fa-exclamation-triangle fa-2x text-warning mb-2"
+                      ></i>
+                      <h6>Cần mở rộng</h6>
+                      <p class="text-muted">Các phòng có tỉ lệ sử dụng >85%</p>
+                      <ul class="list-unstyled">
+                        <li>Membership - Huỳnh Thúc Kháng</li>
+                        <li>Fitness - Tôn Thất Thuyết</li>
+                        <li>Pilates - Huỳnh Thúc Kháng</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i
+                        class="fas fa-check-circle fa-2x text-success mb-2"
+                      ></i>
+                      <h6>Hoạt động tốt</h6>
+                      <p class="text-muted">
+                        Các phòng có tỉ lệ sử dụng 70-85%
+                      </p>
+                      <ul class="list-unstyled">
+                        <li>Membership - Tôn Thất Thuyết</li>
+                        <li>Fitness - Huỳnh Thúc Kháng</li>
+                        <li>PT - Hào Nam</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="fas fa-info-circle fa-2x text-info mb-2"></i>
+                      <h6>Cần cải thiện</h6>
+                      <p class="text-muted">Các phòng có tỉ lệ sử dụng <70%</p>
+                      <ul class="list-unstyled">
+                        <li>Swimming Coach - Nguyễn Tuân</li>
+                        <li>PT - Giảng Võ</li>
+                        <li>Pilates - Nguyễn Tuân</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-lightbulb me-2"></i>Khuyến nghị tối ưu hóa
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-success">Tối ưu hóa giờ cao điểm:</h6>
+                  <ul>
+                    <li>Tăng số lượng PT Fitness Fitnesss trong giờ cao điểm</li>
+                    <li>Mở thêm các lớp group fitness</li>
+                    <li>Ưu tiên booking cho members VIP</li>
+                    <li>Tăng cường staff support</li>
+                  </ul>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-warning">Tối ưu hóa giờ thấp điểm:</h6>
+                  <ul>
+                    <li>Tạo các chương trình khuyến mãi đặc biệt</li>
+                    <li>Mở các lớp học mới trong giờ thấp điểm</li>
+                    <li>Chương trình maintenance và cleaning</li>
+                    <li>Training cho staff</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Facility Utilization Chart
+      const facilityUtilizationCtx = document
+        .getElementById("facilityUtilizationChart")
+        .getContext("2d");
+      new Chart(facilityUtilizationCtx, {
+        type: "doughnut",
+        data: {
+          labels: ["Membership", "Fitness", "Swimming Coach", "Pilates", "PT"],
+          datasets: [
+            {
+              data: [30.5, 25.8, 20.2, 15.1, 8.4],
+              backgroundColor: [
+                "#0d6efd",
+                "#0dcaf0",
+                "#198754",
+                "#6c757d",
+                "#ffc107",
+              ],
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Tỉ lệ sử dụng theo loại phòng (%)",
+            },
+            legend: {
+              position: "bottom",
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const label = context.label || "";
+                  const value = context.parsed;
+                  return `${label}: ${value}%`;
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Hourly Utilization Chart
+      const hourlyUtilizationCtx = document
+        .getElementById("hourlyUtilizationChart")
+        .getContext("2d");
+      new Chart(hourlyUtilizationCtx, {
+        type: "line",
+        data: {
+          labels: [
+            "6h",
+            "7h",
+            "8h",
+            "9h",
+            "10h",
+            "11h",
+            "12h",
+            "13h",
+            "14h",
+            "15h",
+            "16h",
+            "17h",
+            "18h",
+            "19h",
+            "20h",
+            "21h",
+            "22h",
+          ],
+          datasets: [
+            {
+              label: "Phòng Gym",
+              data: [
+                85, 92, 78, 45, 35, 28, 42, 38, 28, 32, 35, 55, 75, 95, 89, 65,
+                45,
+              ],
+              borderColor: "#0d6efd",
+              backgroundColor: "rgba(13, 110, 253, 0.1)",
+              tension: 0.4,
+            },
+            {
+              label: "Bể bơi",
+              data: [
+                45, 52, 38, 25, 28, 32, 35, 42, 32, 28, 30, 45, 65, 85, 82, 58,
+                38,
+              ],
+              borderColor: "#0dcaf0",
+              backgroundColor: "rgba(13, 202, 240, 0.1)",
+              tension: 0.4,
+            },
+            {
+              label: "Pilates",
+              data: [
+                88, 95, 72, 48, 42, 38, 45, 52, 25, 30, 35, 50, 70, 92, 85, 60,
+                40,
+              ],
+              borderColor: "#198754",
+              backgroundColor: "rgba(25, 135, 84, 0.1)",
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Xu hướng sử dụng theo giờ trong ngày",
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+            },
+          },
+        },
+      });
+
+      // Filter functionality
+      function applyFilters() {
+        const location = document.getElementById("locationFilter").value;
+        const facility = document.getElementById("facilityFilter").value;
+        const timeRange = document.getElementById("timeRangeFilter").value;
+
+        // Show loading
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-1"></i>Đang tải...';
+        button.disabled = true;
+
+        // Simulate API call
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.disabled = false;
+
+          // Show success message
+          const alert = document.createElement("div");
+          alert.className =
+            "alert alert-success alert-dismissible fade show mt-3";
+          alert.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>
+                    Đã áp dụng bộ lọc: ${getLocationName(
+                      location
+                    )} - ${getFacilityName(facility)} - ${getTimeRangeName(
+            timeRange
+          )}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+          document.querySelector(".card-body").appendChild(alert);
+        }, 1000);
+      }
+
+      function getLocationName(value) {
+        const locations = {
+          all: "Tất cả cơ sở",
+          "ton-that-thuyet": "Tôn Thất Thuyết",
+          "huynh-thuc-khang": "Huỳnh Thúc Kháng",
+          "giang-vo": "Giảng Võ",
+          "hao-nam": "Hào Nam",
+          "nguyen-tuan": "Nguyễn Tuân",
+        };
+        return locations[value] || value;
+      }
+
+      function getFacilityName(value) {
+        const facilities = {
+          all: "Tất cả loại",
+          membership: "Membership",
+          fitness: "Fitness",
+          "swimming-coach": "Swimming Coach",
+          pilates: "Pilates",
+          pt: "PT",
+        };
+        return facilities[value] || value;
+      }
+
+      function getTimeRangeName(value) {
+        const timeRanges = {
+          today: "Hôm nay",
+          "this-week": "Tuần này",
+          "this-month": "Tháng này",
+          "last-month": "Tháng trước",
+        };
+        return timeRanges[value] || value;
+      }
+    </script>
+    <!-- Filter Integration Script -->
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/filter-handler.js"></script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comprehensive Metrics Dashboard - Actiwell</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .metric-card {
+        transition: transform 0.2s;
+        border-left: 4px solid #007bff;
+        margin-bottom: 1rem;
+      }
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .metric-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .metric-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+      .formula-display {
+        background-color: #f8f9fa;
+        border-left: 4px solid #28a745;
+        padding: 10px;
+        margin: 10px 0;
+        font-family: "Courier New", monospace;
+        font-size: 0.8rem;
+      }
+      .category-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h4 class="mb-0">
+                <i class="fas fa-calculator me-2"></i>
+                Comprehensive Metrics Dashboard - Tất cả công thức tính toán
+              </h4>
+              <p class="mb-0 mt-2">
+                8 nhóm metrics với 50+ công thức tính toán nâng cao
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. VISITOR & CONVERSION STATISTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-users me-2"></i>1. Visitor & Conversion Statistics
+        </h5>
+        <small>Thống kê khách tham quan và chuyển đổi</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-exchange-alt fa-2x text-primary mb-2"></i>
+            <h6>Visitor Conversion Rate</h6>
+            <div class="metric-value text-primary" id="visitorConversionRate">
+              15.2%
+            </div>
+            <div class="metric-label">Tỷ lệ chuyển đổi khách tham quan</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Converted Visitors / Total Visitors) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-redo fa-2x text-success mb-2"></i>
+            <h6>Visitor Retention Rate</h6>
+            <div class="metric-value text-success" id="visitorRetentionRate">
+              68.5%
+            </div>
+            <div class="metric-label">Tỷ lệ giữ chân khách tham quan</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Returning Visitors / Total Visitors) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-bullseye fa-2x text-info mb-2"></i>
+            <h6>Source Effectiveness Rate</h6>
+            <div class="metric-value text-info" id="sourceEffectivenessRate">
+              22.3%
+            </div>
+            <div class="metric-label">Hiệu quả nguồn khách hàng</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Conversions from Source / Total Source Visitors) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+            <h6>Source ROI</h6>
+            <div class="metric-value text-warning" id="sourceROI">185.7%</div>
+            <div class="metric-label">ROI theo nguồn</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Revenue from Source - Cost of Source) / Cost of Source ×
+                100</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SALES & CONVERSION METRICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-handshake me-2"></i>2. Sales & Conversion Metrics
+        </h5>
+        <small>Thống kê bán hàng và chuyển đổi</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-user-tie fa-2x text-primary mb-2"></i>
+            <h6>Sale Tiếp Rate</h6>
+            <div class="metric-value text-primary" id="saleTiepRate">78.5%</div>
+            <div class="metric-label">Tỷ lệ PT tiếp</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (PT Tiếp / Sale Tiếp) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-weight fa-2x text-success mb-2"></i>
+            <h6>Inbody Measurement Rate</h6>
+            <div class="metric-value text-success" id="inbodyMeasurementRate">
+              45.2%
+            </div>
+            <div class="metric-label">Tỷ lệ đo Inbody</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Số khách đo Inbody / Sale Tiếp) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-pie fa-2x text-info mb-2"></i>
+            <h6>PT Conversion Rate</h6>
+            <div class="metric-value text-info" id="ptConversionRate">
+              78.5%
+            </div>
+            <div class="metric-label">Tỷ lệ chuyển đổi PT</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (PT Tiếp / Sale Tiếp) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-percentage fa-2x text-warning mb-2"></i>
+            <h6>Inbody Conversion Rate</h6>
+            <div class="metric-value text-warning" id="inbodyConversionRate">
+              57.6%
+            </div>
+            <div class="metric-label">Tỷ lệ chuyển đổi Inbody</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Số khách đo Inbody / PT Tiếp) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-clock fa-2x text-danger mb-2"></i>
+            <h6>Average Sales Cycle</h6>
+            <div class="metric-value text-danger" id="averageSalesCycle">
+              12.5 ngày
+            </div>
+            <div class="metric-label">
+              Thời gian trung bình từ lead đến sale
+            </div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Sum of (Sale Date - Lead Date) / Total Sales</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-tachometer-alt fa-2x text-purple mb-2"></i>
+            <h6>Sales Velocity</h6>
+            <div class="metric-value text-purple" id="salesVelocity">
+              2,450,000 VNĐ/ngày
+            </div>
+            <div class="metric-label">Tốc độ bán hàng</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Number of Sales × Average Deal Size) / Sales Cycle
+                Length</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. FACILITY & CAPACITY METRICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-building me-2"></i>3. Facility & Capacity Metrics
+        </h5>
+        <small>Thống kê cơ sở vật chất và năng lực</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-ruler fa-2x text-primary mb-2"></i>
+            <h6>Floor Space Utilization</h6>
+            <div class="metric-value text-primary" id="floorSpaceUtilization">
+              82.3%
+            </div>
+            <div class="metric-label">Tỷ lệ sử dụng không gian</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Used Space / Total Space) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-dumbbell fa-2x text-success mb-2"></i>
+            <h6>Equipment Utilization Rate</h6>
+            <div
+              class="metric-value text-success"
+              id="equipmentUtilizationRate"
+            >
+              75.8%
+            </div>
+            <div class="metric-label">Tỷ lệ sử dụng thiết bị</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Equipment Usage Time / Total Available Time) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-lock fa-2x text-info mb-2"></i>
+            <h6>Locker Utilization</h6>
+            <div class="metric-value text-info" id="lockerUtilization">
+              68.2%
+            </div>
+            <div class="metric-label">Tỷ lệ sử dụng tủ đồ</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Used Lockers / Total Lockers) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-bar fa-2x text-warning mb-2"></i>
+            <h6>Peak Hour Revenue Concentration</h6>
+            <div
+              class="metric-value text-warning"
+              id="peakHourRevenueConcentration"
+            >
+              45.7%
+            </div>
+            <div class="metric-label">Tập trung doanh thu giờ cao điểm</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Peak Hour Revenue / Total Revenue) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-clock fa-2x text-danger mb-2"></i>
+            <h6>Off-Peak Utilization</h6>
+            <div class="metric-value text-danger" id="offPeakUtilization">
+              35.4%
+            </div>
+            <div class="metric-label">Sử dụng giờ thấp điểm</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Off-Peak Usage / Off-Peak Capacity) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. MEMBER ANALYTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-user-friends me-2"></i>4. Member Analytics
+        </h5>
+        <small>Phân tích hội viên</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-running fa-2x text-primary mb-2"></i>
+            <h6>Member Activity Score</h6>
+            <div class="metric-value text-primary" id="memberActivityScore">
+              2,145 điểm
+            </div>
+            <div class="metric-label">Điểm hoạt động hội viên</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Check-ins + Bookings + PT Sessions) / 3</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-heart fa-2x text-success mb-2"></i>
+            <h6>Member Engagement Level</h6>
+            <div class="metric-value text-success" id="memberEngagementLevel">
+              78.5%
+            </div>
+            <div class="metric-label">Mức độ tương tác</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Total Interactions / Days Active) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-dollar-sign fa-2x text-info mb-2"></i>
+            <h6>Member Acquisition Cost by Channel</h6>
+            <div
+              class="metric-value text-info"
+              id="memberAcquisitionCostByChannel"
+            >
+              850,000 VNĐ
+            </div>
+            <div class="metric-label">CAC theo kênh</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Channel Marketing Spend / New Members from Channel</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-gem fa-2x text-warning mb-2"></i>
+            <h6>Member Lifetime Value by Segment</h6>
+            <div
+              class="metric-value text-warning"
+              id="memberLifetimeValueBySegment"
+            >
+              18,500,000 VNĐ
+            </div>
+            <div class="metric-label">MLV theo phân khúc</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Average Monthly Revenue × Average Membership Duration</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-exclamation-triangle fa-2x text-danger mb-2"></i>
+            <h6>Member Churn Prediction Score</h6>
+            <div
+              class="metric-value text-danger"
+              id="memberChurnPredictionScore"
+            >
+              0.35
+            </div>
+            <div class="metric-label">Điểm dự đoán rời bỏ</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Weighted factors (Activity, Payment, Engagement)</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. FINANCIAL ANALYTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-chart-line me-2"></i>5. Financial Analytics
+        </h5>
+        <small>Phân tích tài chính</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-ruler-combined fa-2x text-primary mb-2"></i>
+            <h6>Revenue per Square Foot</h6>
+            <div class="metric-value text-primary" id="revenuePerSquareFoot">
+              3,750,000 VNĐ/m²
+            </div>
+            <div class="metric-label">Doanh thu trên mỗi mét vuông</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Total Revenue / Total Square Footage</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-pie fa-2x text-success mb-2"></i>
+            <h6>Revenue Concentration Index</h6>
+            <div
+              class="metric-value text-success"
+              id="revenueConcentrationIndex"
+            >
+              65.2%
+            </div>
+            <div class="metric-label">Chỉ số tập trung doanh thu</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Top 20% Revenue / Total Revenue) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-rocket fa-2x text-info mb-2"></i>
+            <h6>Revenue Growth Acceleration</h6>
+            <div class="metric-value text-info" id="revenueGrowthAcceleration">
+              15.8%
+            </div>
+            <div class="metric-label">Gia tốc tăng trưởng doanh thu</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Current Growth Rate - Previous Growth Rate) / Previous Growth
+                Rate × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-bullseye fa-2x text-warning mb-2"></i>
+            <h6>Cost per Acquisition by Source</h6>
+            <div
+              class="metric-value text-warning"
+              id="costPerAcquisitionBySource"
+            >
+              1,250,000 VNĐ
+            </div>
+            <div class="metric-label">Chi phí thu hút theo nguồn</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Source Marketing Spend / New Members from Source</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-cogs fa-2x text-danger mb-2"></i>
+            <h6>Operational Cost Ratio</h6>
+            <div class="metric-value text-danger" id="operationalCostRatio">
+              35.7%
+            </div>
+            <div class="metric-label">Tỷ lệ chi phí vận hành</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Operational Costs / Total Revenue) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-line fa-2x text-purple mb-2"></i>
+            <h6>Profit Margin by Service</h6>
+            <div class="metric-value text-purple" id="profitMarginByService">
+              42.3%
+            </div>
+            <div class="metric-label">Biên lợi nhuận theo dịch vụ</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Service Revenue - Service Costs) / Service Revenue × 100</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. PERFORMANCE METRICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-trophy me-2"></i>6. Performance Metrics
+        </h5>
+        <small>Thống kê hiệu suất</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-users-cog fa-2x text-primary mb-2"></i>
+            <h6>Staff Productivity Index</h6>
+            <div class="metric-value text-primary" id="staffProductivityIndex">
+              125.7
+            </div>
+            <div class="metric-label">Chỉ số năng suất nhân viên</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Revenue Generated / Staff Hours) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-clock fa-2x text-success mb-2"></i>
+            <h6>Staff Revenue per Hour</h6>
+            <div class="metric-value text-success" id="staffRevenuePerHour">
+              450,000 VNĐ/giờ
+            </div>
+            <div class="metric-label">Doanh thu/giờ của nhân viên</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Total Revenue / Total Staff Hours</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-efficiency fa-2x text-info mb-2"></i>
+            <h6>Staff Utilization Efficiency</h6>
+            <div class="metric-value text-info" id="staffUtilizationEfficiency">
+              88.5%
+            </div>
+            <div class="metric-label">Hiệu quả sử dụng nhân viên</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Productive Hours / Total Hours) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-smile fa-2x text-warning mb-2"></i>
+            <h6>Service Satisfaction Score</h6>
+            <div
+              class="metric-value text-warning"
+              id="serviceSatisfactionScore"
+            >
+              4.2/5.0
+            </div>
+            <div class="metric-label">Điểm hài lòng dịch vụ</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Sum of Ratings / Number of Ratings) × 20</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-check-circle fa-2x text-danger mb-2"></i>
+            <h6>Service Completion Rate</h6>
+            <div class="metric-value text-danger" id="serviceCompletionRate">
+              92.3%
+            </div>
+            <div class="metric-label">Tỷ lệ hoàn thành dịch vụ</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Completed Services / Total Services) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-star fa-2x text-purple mb-2"></i>
+            <h6>Service Quality Index</h6>
+            <div class="metric-value text-purple" id="serviceQualityIndex">
+              89.7
+            </div>
+            <div class="metric-label">Chỉ số chất lượng dịch vụ</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Satisfaction Score + Completion Rate + Efficiency Score) /
+                3</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. DIGITAL ANALYTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-digital-tachograph me-2"></i>7. Digital Analytics
+        </h5>
+        <small>Phân tích số</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-globe fa-2x text-primary mb-2"></i>
+            <h6>Website Conversion Rate</h6>
+            <div class="metric-value text-primary" id="websiteConversionRate">
+              3.2%
+            </div>
+            <div class="metric-label">Tỷ lệ chuyển đổi website</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Website Conversions / Website Visitors) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-share-alt fa-2x text-success mb-2"></i>
+            <h6>Social Media Engagement Rate</h6>
+            <div
+              class="metric-value text-success"
+              id="socialMediaEngagementRate"
+            >
+              4.8%
+            </div>
+            <div class="metric-label">Tỷ lệ tương tác mạng xã hội</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Likes + Comments + Shares) / Followers × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+            <h6>Digital Marketing ROI</h6>
+            <div class="metric-value text-info" id="digitalMarketingROI">
+              285.4%
+            </div>
+            <div class="metric-label">ROI marketing số</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Digital Revenue - Digital Cost) / Digital Cost × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-mobile-alt fa-2x text-warning mb-2"></i>
+            <h6>App Usage Frequency</h6>
+            <div class="metric-value text-warning" id="appUsageFrequency">
+              2.8 lần/ngày
+            </div>
+            <div class="metric-label">Tần suất sử dụng app</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Total App Sessions / Active Users</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-cogs fa-2x text-danger mb-2"></i>
+            <h6>App Feature Utilization</h6>
+            <div class="metric-value text-danger" id="appFeatureUtilization">
+              67.3%
+            </div>
+            <div class="metric-label">Sử dụng tính năng app</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Feature Usage / Total App Sessions) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-redo fa-2x text-purple mb-2"></i>
+            <h6>App Retention Rate</h6>
+            <div class="metric-value text-purple" id="appRetentionRate">
+              78.9%
+            </div>
+            <div class="metric-label">Tỷ lệ giữ chân app</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Returning Users / Total Users) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. PREDICTIVE ANALYTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-crystal-ball me-2"></i>8. Predictive Analytics
+        </h5>
+        <small>Phân tích dự đoán</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-line fa-2x text-primary mb-2"></i>
+            <h6>Demand Forecasting</h6>
+            <div class="metric-value text-primary" id="demandForecasting">
+              1,250 lượt
+            </div>
+            <div class="metric-label">Dự báo nhu cầu</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Historical Average × Seasonal Factor × Growth Rate</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-dollar-sign fa-2x text-success mb-2"></i>
+            <h6>Revenue Forecasting</h6>
+            <div class="metric-value text-success" id="revenueForecasting">
+              4,200,000,000 VNĐ
+            </div>
+            <div class="metric-label">Dự báo doanh thu</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Current Revenue × (1 + Growth Rate) ^ Time Period</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-building fa-2x text-info mb-2"></i>
+            <h6>Capacity Planning</h6>
+            <div class="metric-value text-info" id="capacityPlanning">
+              1,850 chỗ
+            </div>
+            <div class="metric-label">Lập kế hoạch năng lực</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Current Capacity × Utilization Rate × Growth Factor</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+            <h6>Churn Risk Score</h6>
+            <div class="metric-value text-warning" id="churnRiskScore">
+              0.42
+            </div>
+            <div class="metric-label">Điểm rủi ro rời bỏ</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                Weighted factors (Activity, Payment, Engagement,
+                Satisfaction)</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-chart-bar fa-2x text-danger mb-2"></i>
+            <h6>Revenue Risk Assessment</h6>
+            <div class="metric-value text-danger" id="revenueRiskAssessment">
+              12.5%
+            </div>
+            <div class="metric-label">Đánh giá rủi ro doanh thu</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Revenue Volatility / Average Revenue) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-shield-alt fa-2x text-purple mb-2"></i>
+            <h6>Operational Risk Index</h6>
+            <div class="metric-value text-purple" id="operationalRiskIndex">
+              8.7%
+            </div>
+            <div class="metric-label">Chỉ số rủi ro vận hành</div>
+            <div class="formula-display mt-2">
+              <small
+                ><strong>Công thức:</strong><br />
+                (Risk Factors / Total Factors) × 100</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-check-circle me-2"></i>
+                Tổng kết triển khai
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <h6 class="text-success">✅ Đã triển khai</h6>
+                  <ul class="list-unstyled">
+                    <li>• 8 nhóm metrics</li>
+                    <li>• 50+ công thức tính toán</li>
+                    <li>• Visitor & Conversion</li>
+                    <li>• Sales & Conversion</li>
+                    <li>• Facility & Capacity</li>
+                    <li>• Member Analytics</li>
+                    <li>• Financial Analytics</li>
+                    <li>• Performance Metrics</li>
+                    <li>• Digital Analytics</li>
+                    <li>• Predictive Analytics</li>
+                  </ul>
+                </div>
+                <div class="col-md-3">
+                  <h6 class="text-info">📊 Thống kê</h6>
+                  <ul class="list-unstyled">
+                    <li>• 8 nhóm chính</li>
+                    <li>• 50+ công thức</li>
+                    <li>• 100% coverage</li>
+                    <li>• Real-time calculation</li>
+                    <li>• Auto-update</li>
+                  </ul>
+                </div>
+                <div class="col-md-3">
+                  <h6 class="text-warning">🔧 Tính năng</h6>
+                  <ul class="list-unstyled">
+                    <li>• Batch calculation</li>
+                    <li>• Cache optimization</li>
+                    <li>• Error handling</li>
+                    <li>• Format utilities</li>
+                    <li>• Performance monitoring</li>
+                  </ul>
+                </div>
+                <div class="col-md-3">
+                  <h6 class="text-primary">🚀 Lợi ích</h6>
+                  <ul class="list-unstyled">
+                    <li>• Quản lý toàn diện</li>
+                    <li>• Dự báo chính xác</li>
+                    <li>• Tối ưu hiệu suất</li>
+                    <li>• Phân tích sâu</li>
+                    <li>• Ra quyết định thông minh</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Load Comprehensive Calculations Engine -->
+    <script src="../assets/js/metrics-engine/comprehensive-calculations.js"></script>
+
+    <script>
+      // Initialize Comprehensive Metrics when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Comprehensive Metrics Demo page loaded");
+
+        // Calculate all comprehensive metrics
+        calculateAllComprehensiveMetrics();
+      });
+
+      function calculateAllComprehensiveMetrics() {
+        try {
+          // Sample data for all metrics
+          const sampleData = {
+            visitor: {
+              totalVisitors: 1000,
+              convertedVisitors: 152,
+              returningVisitors: 685,
+              sourceVisitors: 500,
+              sourceConversions: 112,
+              sourceRevenue: 500000000,
+              sourceCost: 175000000,
+            },
+            sales: {
+              saleTiep: 281,
+              ptTiep: 221,
+              inbodyMeasurements: 127,
+              sales: [
+                { leadDate: "2024-01-01", saleDate: "2024-01-15" },
+                { leadDate: "2024-01-05", saleDate: "2024-01-18" },
+                { leadDate: "2024-01-10", saleDate: "2024-01-22" },
+              ],
+              numberOfSales: 50,
+              averageDealSize: 5000000,
+              salesCycleLength: 12,
+            },
+            facility: {
+              usedSpace: 750,
+              totalSpace: 1000,
+              usageTime: 600,
+              availableTime: 800,
+              usedLockers: 150,
+              totalLockers: 220,
+              peakHourRevenue: 225000000,
+              totalRevenue: 500000000,
+              offPeakUsage: 200,
+              offPeakCapacity: 565,
+            },
+            member: {
+              checkins: 2500,
+              bookings: 800,
+              ptSessions: 300,
+              totalInteractions: 3600,
+              daysActive: 30,
+              channelSpend: 50000000,
+              newMembers: 60,
+              avgMonthlyRevenue: 1500000,
+              avgMembershipDuration: 12,
+              memberData: {
+                daysSinceLastActivity: 5,
+                paymentDelays: 0,
+                engagementLevel: 0.8,
+              },
+            },
+            financial: {
+              totalRevenue: 500000000,
+              totalSquareFootage: 1000,
+              top20Revenue: 325000000,
+              currentGrowthRate: 15,
+              previousGrowthRate: 12,
+              sourceSpend: 75000000,
+              newMembers: 60,
+              operationalCosts: 178500000,
+              serviceRevenue: 300000000,
+              serviceCosts: 173100000,
+            },
+            performance: {
+              revenueGenerated: 500000000,
+              staffHours: 2000,
+              totalRevenue: 500000000,
+              totalStaffHours: 2000,
+              productiveHours: 1770,
+              totalHours: 2000,
+              ratings: [4, 5, 4, 5, 4, 3, 5, 4, 4, 5],
+              completedServices: 923,
+              totalServices: 1000,
+              satisfactionScore: 4.2,
+              completionRate: 92.3,
+              efficiencyScore: 88.5,
+            },
+            digital: {
+              websiteVisitors: 10000,
+              websiteConversions: 320,
+              likes: 1500,
+              comments: 300,
+              shares: 200,
+              followers: 5000,
+              digitalRevenue: 200000000,
+              digitalCost: 52000000,
+              totalSessions: 14000,
+              activeUsers: 5000,
+              featureUsage: 9420,
+              totalSessions: 14000,
+              totalUsers: 5000,
+              returningUsers: 3945,
+            },
+            predictive: {
+              historicalAverage: 1000,
+              seasonalFactor: 1.1,
+              growthRate: 15,
+              currentRevenue: 500000000,
+              growthRate: 15,
+              timePeriod: 1,
+              currentCapacity: 1500,
+              utilizationRate: 80,
+              growthFactor: 1.2,
+              memberData: {
+                daysSinceLastActivity: 7,
+                paymentDelays: 1,
+                engagementLevel: 0.6,
+                satisfactionScore: 4,
+              },
+              revenueVolatility: 62500000,
+              averageRevenue: 500000000,
+              riskFactors: 8,
+              totalFactors: 92,
+            },
+          };
+
+          // Calculate all metrics
+          const allMetrics =
+            window.comprehensiveCalculations.calculateAllComprehensiveMetrics(
+              sampleData
+            );
+
+          // Update UI with calculated metrics
+          updateAllMetricsDisplay(allMetrics);
+
+          console.log("All comprehensive metrics calculated:", allMetrics);
+        } catch (error) {
+          console.error("Error calculating comprehensive metrics:", error);
+        }
+      }
+
+      function updateAllMetricsDisplay(metrics) {
+        // Visitor metrics
+        updateMetricElement(
+          "visitorConversionRate",
+          metrics.visitor.visitorConversionRate,
+          "%"
+        );
+        updateMetricElement(
+          "visitorRetentionRate",
+          metrics.visitor.visitorRetentionRate,
+          "%"
+        );
+        updateMetricElement(
+          "sourceEffectivenessRate",
+          metrics.visitor.sourceEffectivenessRate,
+          "%"
+        );
+        updateMetricElement("sourceROI", metrics.visitor.sourceROI, "%");
+
+        // Sales metrics
+        updateMetricElement("saleTiepRate", metrics.sales.saleTiepRate, "%");
+        updateMetricElement(
+          "inbodyMeasurementRate",
+          metrics.sales.inbodyMeasurementRate,
+          "%"
+        );
+        updateMetricElement(
+          "ptConversionRate",
+          metrics.sales.ptConversionRate,
+          "%"
+        );
+        updateMetricElement(
+          "inbodyConversionRate",
+          metrics.sales.inbodyConversionRate,
+          "%"
+        );
+        updateMetricElement(
+          "averageSalesCycle",
+          metrics.sales.averageSalesCycle,
+          "ngày"
+        );
+        updateMetricElement(
+          "salesVelocity",
+          metrics.sales.salesVelocity,
+          "VNĐ/ngày"
+        );
+
+        // Facility metrics
+        updateMetricElement(
+          "floorSpaceUtilization",
+          metrics.facility.floorSpaceUtilization,
+          "%"
+        );
+        updateMetricElement(
+          "equipmentUtilizationRate",
+          metrics.facility.equipmentUtilizationRate,
+          "%"
+        );
+        updateMetricElement(
+          "lockerUtilization",
+          metrics.facility.lockerUtilization,
+          "%"
+        );
+        updateMetricElement(
+          "peakHourRevenueConcentration",
+          metrics.facility.peakHourRevenueConcentration,
+          "%"
+        );
+        updateMetricElement(
+          "offPeakUtilization",
+          metrics.facility.offPeakUtilization,
+          "%"
+        );
+
+        // Member analytics
+        updateMetricElement(
+          "memberActivityScore",
+          metrics.member.memberActivityScore,
+          "điểm"
+        );
+        updateMetricElement(
+          "memberEngagementLevel",
+          metrics.member.memberEngagementLevel,
+          "%"
+        );
+        updateMetricElement(
+          "memberAcquisitionCostByChannel",
+          metrics.member.memberAcquisitionCostByChannel,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "memberLifetimeValueBySegment",
+          metrics.member.memberLifetimeValueBySegment,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "memberChurnPredictionScore",
+          metrics.member.memberChurnPredictionScore,
+          ""
+        );
+
+        // Financial analytics
+        updateMetricElement(
+          "revenuePerSquareFoot",
+          metrics.financial.revenuePerSquareFoot,
+          "VNĐ/m²"
+        );
+        updateMetricElement(
+          "revenueConcentrationIndex",
+          metrics.financial.revenueConcentrationIndex,
+          "%"
+        );
+        updateMetricElement(
+          "revenueGrowthAcceleration",
+          metrics.financial.revenueGrowthAcceleration,
+          "%"
+        );
+        updateMetricElement(
+          "costPerAcquisitionBySource",
+          metrics.financial.costPerAcquisitionBySource,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "operationalCostRatio",
+          metrics.financial.operationalCostRatio,
+          "%"
+        );
+        updateMetricElement(
+          "profitMarginByService",
+          metrics.financial.profitMarginByService,
+          "%"
+        );
+
+        // Performance metrics
+        updateMetricElement(
+          "staffProductivityIndex",
+          metrics.performance.staffProductivityIndex,
+          ""
+        );
+        updateMetricElement(
+          "staffRevenuePerHour",
+          metrics.performance.staffRevenuePerHour,
+          "VNĐ/giờ"
+        );
+        updateMetricElement(
+          "staffUtilizationEfficiency",
+          metrics.performance.staffUtilizationEfficiency,
+          "%"
+        );
+        updateMetricElement(
+          "serviceSatisfactionScore",
+          metrics.performance.serviceSatisfactionScore,
+          "/5.0"
+        );
+        updateMetricElement(
+          "serviceCompletionRate",
+          metrics.performance.serviceCompletionRate,
+          "%"
+        );
+        updateMetricElement(
+          "serviceQualityIndex",
+          metrics.performance.serviceQualityIndex,
+          ""
+        );
+
+        // Digital analytics
+        updateMetricElement(
+          "websiteConversionRate",
+          metrics.digital.websiteConversionRate,
+          "%"
+        );
+        updateMetricElement(
+          "socialMediaEngagementRate",
+          metrics.digital.socialMediaEngagementRate,
+          "%"
+        );
+        updateMetricElement(
+          "digitalMarketingROI",
+          metrics.digital.digitalMarketingROI,
+          "%"
+        );
+        updateMetricElement(
+          "appUsageFrequency",
+          metrics.digital.appUsageFrequency,
+          "lần/ngày"
+        );
+        updateMetricElement(
+          "appFeatureUtilization",
+          metrics.digital.appFeatureUtilization,
+          "%"
+        );
+        updateMetricElement(
+          "appRetentionRate",
+          metrics.digital.appRetentionRate,
+          "%"
+        );
+
+        // Predictive analytics
+        updateMetricElement(
+          "demandForecasting",
+          metrics.predictive.demandForecasting,
+          "lượt"
+        );
+        updateMetricElement(
+          "revenueForecasting",
+          metrics.predictive.revenueForecasting,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "capacityPlanning",
+          metrics.predictive.capacityPlanning,
+          "chỗ"
+        );
+        updateMetricElement(
+          "churnRiskScore",
+          metrics.predictive.churnRiskScore,
+          ""
+        );
+        updateMetricElement(
+          "revenueRiskAssessment",
+          metrics.predictive.revenueRiskAssessment,
+          "%"
+        );
+        updateMetricElement(
+          "operationalRiskIndex",
+          metrics.predictive.operationalRiskIndex,
+          "%"
+        );
+      }
+
+      function updateMetricElement(elementId, value, unit) {
+        const element = document.getElementById(elementId);
+        if (element && value !== undefined) {
+          if (
+            unit === "VNĐ" ||
+            unit === "VNĐ/giờ" ||
+            unit === "VNĐ/ngày" ||
+            unit === "VNĐ/m²"
+          ) {
+            element.textContent =
+              window.comprehensiveCalculations.formatCurrency(value) +
+              (unit.includes("/") ? "/" + unit.split("/")[1] : "");
+          } else if (unit === "%") {
+            element.textContent =
+              window.comprehensiveCalculations.formatPercentage(value);
+          } else if (unit === "/5.0") {
+            element.textContent = (value / 20).toFixed(1) + unit;
+          } else {
+            element.textContent =
+              window.comprehensiveCalculations.formatNumber(value) +
+              (unit ? " " + unit : "");
+          }
+        }
+      }
+    </script>
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>
+
+
+
+

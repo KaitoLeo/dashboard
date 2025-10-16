@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo - Tách bảng Nhu cầu theo Nguồn khách tham quan</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .stats-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .table-responsive {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .table th {
+        background-color: #343a40;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+        padding: 12px 8px;
+        border: 1px solid #dee2e6;
+      }
+
+      .table td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px 8px;
+        border: 1px solid #dee2e6;
+        font-weight: bold;
+      }
+
+      .table tbody tr:hover {
+        background-color: #f8f9fa;
+      }
+
+      .table-danger {
+        background-color: #f8d7da !important;
+      }
+
+      .table-danger td {
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb;
+        font-weight: bold;
+        color: #721c24;
+      }
+
+      .table-info {
+        background-color: #d1ecf1 !important;
+      }
+
+      .table-info td {
+        background-color: #d1ecf1 !important;
+        border-color: #bee5eb;
+        font-weight: bold;
+        color: #0c5460;
+      }
+
+      .section-header {
+        color: #28a745;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+      }
+
+      .card-header h5 {
+        margin: 0;
+        font-weight: bold;
+      }
+    </style>
+  
+    <!-- Visitor Calculation Modules -->
+    <script src="../assets/js/visitor/visitor-calculations.js"></script>
+    <script src="../assets/js/visitor/visitor-mock-data.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/api/api-services.js"></script>
+    <script src="../assets/js/api/data-adapter.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid py-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h1 class="text-center text-primary">
+            <i class="fas fa-chart-bar me-2"></i>
+            Demo - Tách bảng Nhu cầu theo Nguồn khách tham quan
+          </h1>
+          <p class="text-center text-muted">
+            Bảng được tách thành các cơ sở riêng biệt và 2 bảng tổng
+          </p>
+        </div>
+      </div>
+
+      <!-- Cơ sở 1: Actiwell Central -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-building me-2"></i>
+                Cơ sở 1: Actiwell Central
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-0">
+                  <thead>
+                    <tr>
+                      <th
+                        rowspan="2"
+                        class="text-center align-middle"
+                        style="min-width: 150px"
+                      >
+                        NGUỒN
+                      </th>
+                      <th colspan="9" class="text-center">NHU CẦU</th>
+                      <th rowspan="2" class="text-center align-middle">TỔNG</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">Full dịch vụ</th>
+                      <th class="text-center">Member Gym</th>
+                      <th class="text-center">Member Yoga</th>
+                      <th class="text-center">Member Group X</th>
+                      <th class="text-center">Member Pool</th>
+                      <th class="text-center">PT Fitness</th>
+                      <th class="text-center">Stretching</th>
+                      <th class="text-center">Pilates</th>
+                      <th class="text-center">Swimming Coach</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold text-start">Walk-in</td>
+                      <td>5</td>
+                      <td>0</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td>4</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>0</td>
+                      <td class="table-info">18</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Hotline</td>
+                      <td>8</td>
+                      <td>2</td>
+                      <td>4</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td>5</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>1</td>
+                      <td class="table-info">30</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Marketing Web</td>
+                      <td>12</td>
+                      <td>3</td>
+                      <td>8</td>
+                      <td>5</td>
+                      <td>4</td>
+                      <td>6</td>
+                      <td>3</td>
+                      <td>4</td>
+                      <td>2</td>
+                      <td class="table-info">47</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Marketing Facebook</td>
+                      <td>15</td>
+                      <td>4</td>
+                      <td>10</td>
+                      <td>6</td>
+                      <td>5</td>
+                      <td>8</td>
+                      <td>4</td>
+                      <td>6</td>
+                      <td>3</td>
+                      <td class="table-info">61</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Refer</td>
+                      <td>3</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td>0</td>
+                      <td class="table-info">12</td>
+                    </tr>
+                    <tr class="table-danger">
+                      <td class="fw-bold text-start">TỔNG</td>
+                      <td>43</td>
+                      <td>10</td>
+                      <td>27</td>
+                      <td>17</td>
+                      <td>13</td>
+                      <td>25</td>
+                      <td>11</td>
+                      <td>16</td>
+                      <td>6</td>
+                      <td class="fw-bold">168</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cơ sở 2: Actiwell West -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-building me-2"></i>
+                Cơ sở 2: Actiwell West
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-0">
+                  <thead>
+                    <tr>
+                      <th
+                        rowspan="2"
+                        class="text-center align-middle"
+                        style="min-width: 150px"
+                      >
+                        NGUỒN
+                      </th>
+                      <th colspan="9" class="text-center">NHU CẦU</th>
+                      <th rowspan="2" class="text-center align-middle">TỔNG</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">Full dịch vụ</th>
+                      <th class="text-center">Member Gym</th>
+                      <th class="text-center">Member Yoga</th>
+                      <th class="text-center">Member Group X</th>
+                      <th class="text-center">Member Pool</th>
+                      <th class="text-center">PT Fitness</th>
+                      <th class="text-center">Stretching</th>
+                      <th class="text-center">Pilates</th>
+                      <th class="text-center">Swimming Coach</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold text-start">Walk-in</td>
+                      <td>4</td>
+                      <td>0</td>
+                      <td>4</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td>3</td>
+                      <td>1</td>
+                      <td>3</td>
+                      <td>0</td>
+                      <td class="table-info">18</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Hotline</td>
+                      <td>6</td>
+                      <td>1</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td>4</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td class="table-info">21</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Marketing Web</td>
+                      <td>9</td>
+                      <td>2</td>
+                      <td>6</td>
+                      <td>4</td>
+                      <td>3</td>
+                      <td>5</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>1</td>
+                      <td class="table-info">35</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Marketing Facebook</td>
+                      <td>11</td>
+                      <td>3</td>
+                      <td>7</td>
+                      <td>5</td>
+                      <td>4</td>
+                      <td>6</td>
+                      <td>3</td>
+                      <td>4</td>
+                      <td>2</td>
+                      <td class="table-info">45</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Refer</td>
+                      <td>2</td>
+                      <td>0</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td>0</td>
+                      <td>1</td>
+                      <td>0</td>
+                      <td>1</td>
+                      <td>0</td>
+                      <td class="table-info">6</td>
+                    </tr>
+                    <tr class="table-danger">
+                      <td class="fw-bold text-start">TỔNG</td>
+                      <td>32</td>
+                      <td>6</td>
+                      <td>21</td>
+                      <td>14</td>
+                      <td>9</td>
+                      <td>19</td>
+                      <td>7</td>
+                      <td>13</td>
+                      <td>4</td>
+                      <td class="fw-bold">125</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cơ sở 3: Actiwell East -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-building me-2"></i>
+                Cơ sở 3: Actiwell East
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-0">
+                  <thead>
+                    <tr>
+                      <th
+                        rowspan="2"
+                        class="text-center align-middle"
+                        style="min-width: 150px"
+                      >
+                        NGUỒN
+                      </th>
+                      <th colspan="9" class="text-center">NHU CẦU</th>
+                      <th rowspan="2" class="text-center align-middle">TỔNG</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center">Full dịch vụ</th>
+                      <th class="text-center">Member Gym</th>
+                      <th class="text-center">Member Yoga</th>
+                      <th class="text-center">Member Group X</th>
+                      <th class="text-center">Member Pool</th>
+                      <th class="text-center">PT Fitness</th>
+                      <th class="text-center">Stretching</th>
+                      <th class="text-center">Pilates</th>
+                      <th class="text-center">Swimming Coach</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold text-start">Walk-in</td>
+                      <td>3</td>
+                      <td>0</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>0</td>
+                      <td>1</td>
+                      <td>0</td>
+                      <td class="table-info">10</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Hotline</td>
+                      <td>5</td>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td>3</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td class="table-info">16</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Marketing Web</td>
+                      <td>7</td>
+                      <td>2</td>
+                      <td>4</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td>4</td>
+                      <td>2</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td class="table-info">27</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Marketing Facebook</td>
+                      <td>9</td>
+                      <td>2</td>
+                      <td>5</td>
+                      <td>3</td>
+                      <td>3</td>
+                      <td>5</td>
+                      <td>2</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td class="table-info">34</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Refer</td>
+                      <td>1</td>
+                      <td>0</td>
+                      <td>1</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>1</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td class="table-info">3</td>
+                    </tr>
+                    <tr class="table-danger">
+                      <td class="fw-bold text-start">TỔNG</td>
+                      <td>25</td>
+                      <td>5</td>
+                      <td>14</td>
+                      <td>8</td>
+                      <td>7</td>
+                      <td>15</td>
+                      <td>5</td>
+                      <td>7</td>
+                      <td>4</td>
+                      <td class="fw-bold">90</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bảng Tổng theo Nguồn -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Tổng theo Nguồn khách tham quan
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-center" style="min-width: 150px">
+                        NGUỒN
+                      </th>
+                      <th class="text-center">Cơ sở 1</th>
+                      <th class="text-center">Cơ sở 2</th>
+                      <th class="text-center">Cơ sở 3</th>
+                      <th class="text-center">TỔNG</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold text-start">Walk-in</td>
+                      <td>18</td>
+                      <td>18</td>
+                      <td>10</td>
+                      <td class="table-info fw-bold">46</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Hotline</td>
+                      <td>30</td>
+                      <td>21</td>
+                      <td>16</td>
+                      <td class="table-info fw-bold">67</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Marketing Web</td>
+                      <td>47</td>
+                      <td>35</td>
+                      <td>27</td>
+                      <td class="table-info fw-bold">109</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Marketing Facebook</td>
+                      <td>61</td>
+                      <td>45</td>
+                      <td>34</td>
+                      <td class="table-info fw-bold">140</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Refer</td>
+                      <td>12</td>
+                      <td>6</td>
+                      <td>3</td>
+                      <td class="table-info fw-bold">21</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Renew</td>
+                      <td>15</td>
+                      <td>12</td>
+                      <td>8</td>
+                      <td class="table-info fw-bold">35</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Voucher</td>
+                      <td>8</td>
+                      <td>6</td>
+                      <td>4</td>
+                      <td class="table-info fw-bold">18</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Thị trường</td>
+                      <td>22</td>
+                      <td>18</td>
+                      <td>12</td>
+                      <td class="table-info fw-bold">52</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Seeding</td>
+                      <td>25</td>
+                      <td>20</td>
+                      <td>15</td>
+                      <td class="table-info fw-bold">60</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Data</td>
+                      <td>18</td>
+                      <td>15</td>
+                      <td>10</td>
+                      <td class="table-info fw-bold">43</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Hội viên Bơi</td>
+                      <td>12</td>
+                      <td>10</td>
+                      <td>8</td>
+                      <td class="table-info fw-bold">30</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Hội viên Fitness</td>
+                      <td>15</td>
+                      <td>12</td>
+                      <td>9</td>
+                      <td class="table-info fw-bold">36</td>
+                    </tr>
+                    <tr class="table-danger">
+                      <td class="fw-bold text-start">TỔNG</td>
+                      <td class="fw-bold">168</td>
+                      <td class="fw-bold">125</td>
+                      <td class="fw-bold">90</td>
+                      <td class="fw-bold">383</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bảng Tổng theo Nhu cầu -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card stats-card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Tổng theo Nhu cầu dịch vụ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-center" style="min-width: 150px">
+                        NHU CẦU
+                      </th>
+                      <th class="text-center">Cơ sở 1</th>
+                      <th class="text-center">Cơ sở 2</th>
+                      <th class="text-center">Cơ sở 3</th>
+                      <th class="text-center">TỔNG</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold text-start">Full dịch vụ</td>
+                      <td>43</td>
+                      <td>32</td>
+                      <td>25</td>
+                      <td class="table-info fw-bold">100</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Member Gym</td>
+                      <td>10</td>
+                      <td>6</td>
+                      <td>5</td>
+                      <td class="table-info fw-bold">21</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Member Yoga</td>
+                      <td>27</td>
+                      <td>21</td>
+                      <td>14</td>
+                      <td class="table-info fw-bold">62</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Member Group X</td>
+                      <td>17</td>
+                      <td>14</td>
+                      <td>8</td>
+                      <td class="table-info fw-bold">39</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Member Pool</td>
+                      <td>13</td>
+                      <td>9</td>
+                      <td>7</td>
+                      <td class="table-info fw-bold">29</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">PT Fitness</td>
+                      <td>25</td>
+                      <td>19</td>
+                      <td>15</td>
+                      <td class="table-info fw-bold">59</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Stretching</td>
+                      <td>11</td>
+                      <td>7</td>
+                      <td>5</td>
+                      <td class="table-info fw-bold">23</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Pilates</td>
+                      <td>16</td>
+                      <td>13</td>
+                      <td>7</td>
+                      <td class="table-info fw-bold">36</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-start">Swimming Coach</td>
+                      <td>6</td>
+                      <td>4</td>
+                      <td>4</td>
+                      <td class="table-info fw-bold">14</td>
+                    </tr>
+                    <tr class="table-danger">
+                      <td class="fw-bold text-start">TỔNG</td>
+                      <td class="fw-bold">168</td>
+                      <td class="fw-bold">125</td>
+                      <td class="fw-bold">90</td>
+                      <td class="fw-bold">383</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thông tin Demo -->
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-info">
+            <h5><i class="fas fa-info-circle me-2"></i>Thông tin Demo</h5>
+            <ul class="mb-0">
+              <li>
+                <strong>3 Cơ sở:</strong> Actiwell Central, Actiwell West,
+                Actiwell East
+              </li>
+              <li>
+                <strong>Mỗi cơ sở:</strong> Có bảng riêng với đầy đủ nguồn và
+                nhu cầu
+              </li>
+              <li>
+                <strong>Bảng Tổng theo Nguồn:</strong> Tổng hợp số liệu theo
+                từng nguồn khách tham quan
+              </li>
+              <li>
+                <strong>Bảng Tổng theo Nhu cầu:</strong> Tổng hợp số liệu theo
+                từng loại nhu cầu dịch vụ
+              </li>
+              <li>
+                <strong>Dữ liệu mẫu:</strong> Được tạo ngẫu nhiên để demo, sẽ
+                được thay thế bằng dữ liệu thực tế
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>
+
+
+
+
+
+

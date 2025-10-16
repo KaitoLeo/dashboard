@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Tỉ lệ hoàn thành - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="../assets/js/dynamic-revenue.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-percentage me-2"></i>
+                Chi tiết Tỉ lệ hoàn thành mục tiêu
+              </h2>
+              <p class="text-muted">
+                Phân tích chi tiết tỉ lệ hoàn thành mục tiêu doanh số theo từng
+                CLB và bộ phận
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Rate Overview -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <h6 class="card-title">Tỉ lệ hoàn thành tổng</h6>
+              <h3 class="mb-0" id="completionRate">62%</h3>
+              <small id="completionDetails">1,850M / 3,000M VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <h6 class="card-title">CLB tốt nhất</h6>
+              <h3 class="mb-0">80%</h3>
+              <small>Giảng Võ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <h6 class="card-title">CLB cần cải thiện</h6>
+              <h3 class="mb-0">62.2%</h3>
+              <small>Nguyễn Tuân</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <h6 class="card-title">Dự kiến cuối tháng</h6>
+              <h3 class="mb-0">98%</h3>
+              <small>Với tốc độ hiện tại</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Rate by Club -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-building me-2"></i>
+                Tỉ lệ hoàn thành theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>CLB</th>
+                      <th>Mục tiêu</th>
+                      <th>Đã đạt</th>
+                      <th>Còn thiếu</th>
+                      <th>% Hoàn thành</th>
+                      <th>Tiến độ</th>
+                      <th>Đánh giá</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td>400,000,000</td>
+                      <td>320,000,000</td>
+                      <td>80,000,000</td>
+                      <td><span class="badge bg-success">80%</span></td>
+                      <td>
+                        <div class="progress" style="height: 25px">
+                          <div
+                            class="progress-bar bg-success"
+                            style="width: 80%"
+                          >
+                            80%
+                          </div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-success">Xuất sắc</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hào Nam</strong></td>
+                      <td>550,000,000</td>
+                      <td>420,000,000</td>
+                      <td>130,000,000</td>
+                      <td><span class="badge bg-warning">76.4%</span></td>
+                      <td>
+                        <div class="progress" style="height: 25px">
+                          <div
+                            class="progress-bar bg-warning"
+                            style="width: 76.4%"
+                          >
+                            76.4%
+                          </div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-warning">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td>500,000,000</td>
+                      <td>380,000,000</td>
+                      <td>120,000,000</td>
+                      <td><span class="badge bg-warning">76%</span></td>
+                      <td>
+                        <div class="progress" style="height: 25px">
+                          <div
+                            class="progress-bar bg-warning"
+                            style="width: 76%"
+                          >
+                            76%
+                          </div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-warning">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td>600,000,000</td>
+                      <td>450,000,000</td>
+                      <td>150,000,000</td>
+                      <td><span class="badge bg-warning">75%</span></td>
+                      <td>
+                        <div class="progress" style="height: 25px">
+                          <div
+                            class="progress-bar bg-warning"
+                            style="width: 75%"
+                          >
+                            75%
+                          </div>
+                        </div>
+                      </td>
+                      <td><span class="badge bg-warning">Khá</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td>450,000,000</td>
+                      <td>280,000,000</td>
+                      <td>170,000,000</td>
+                      <td><span class="badge bg-danger">62.2%</span></td>
+                      <td>
+                        <div class="progress" style="height: 25px">
+                          <div
+                            class="progress-bar bg-danger"
+                            style="width: 62.2%"
+                          >
+                            62.2%
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="badge bg-danger">Cần cải thiện</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Rate Charts -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Biểu đồ tỉ lệ hoàn thành theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="clubCompletionChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Phân bố mục tiêu còn lại
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="remainingTargetChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Rate by Department -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-cogs me-2"></i>
+                Tỉ lệ hoàn thành theo bộ phận
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card border-primary">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-primary">Membership</h6>
+                      <div class="progress mb-2" style="height: 20px">
+                        <div class="progress-bar bg-primary" style="width: 62%">
+                          62%
+                        </div>
+                      </div>
+                      <small class="text-muted">1,110M / 1,500M VNĐ</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card border-success">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-success">Personal Training</h6>
+                      <div class="progress mb-2" style="height: 20px">
+                        <div class="progress-bar bg-success" style="width: 62%">
+                          62%
+                        </div>
+                      </div>
+                      <small class="text-muted">555M / 750M VNĐ</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card border-info">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-info">Swimming Coach</h6>
+                      <div class="progress mb-2" style="height: 20px">
+                        <div class="progress-bar bg-info" style="width: 62%">
+                          62%
+                        </div>
+                      </div>
+                      <small class="text-muted">111M / 150M VNĐ</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card border-warning">
+                    <div class="card-body text-center">
+                      <h6 class="card-title text-warning">Pilates</h6>
+                      <div class="progress mb-2" style="height: 20px">
+                        <div class="progress-bar bg-warning" style="width: 62%">
+                          62%
+                        </div>
+                      </div>
+                      <small class="text-muted">74M / 100M VNĐ</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Completion Rate Timeline -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Tiến độ hoàn thành theo thời gian
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="completionTimelineChart" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Analysis -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-trophy me-2"></i>
+                CLB có thành tích tốt
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group">
+                <div class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Giảng Võ</h6>
+                    <span class="badge bg-success">80%</span>
+                  </div>
+                  <p class="mb-1">Vượt mục tiêu trung bình 6%</p>
+                  <small>Chỉ cần 10.3M VNĐ/ngày để hoàn thành</small>
+                </div>
+                <div class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Hào Nam</h6>
+                    <span class="badge bg-warning">76.4%</span>
+                  </div>
+                  <p class="mb-1">Gần đạt mục tiêu trung bình</p>
+                  <small>Cần 16.7M VNĐ/ngày để hoàn thành</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                CLB cần hỗ trợ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group">
+                <div class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Nguyễn Tuân</h6>
+                    <span class="badge bg-danger">62.2%</span>
+                  </div>
+                  <p class="mb-1">Thấp hơn mục tiêu trung bình 11.8%</p>
+                  <small>Cần 21.8M VNĐ/ngày để hoàn thành</small>
+                </div>
+                <div class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Tôn Thất Thuyết</h6>
+                    <span class="badge bg-warning">75%</span>
+                  </div>
+                  <p class="mb-1">Gần đạt mục tiêu trung bình</p>
+                  <small>Cần 19.2M VNĐ/ngày để hoàn thành</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Recommendations -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-lightbulb me-2"></i>
+                Khuyến nghị hành động
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-4 mb-3">
+                  <div class="alert alert-danger">
+                    <h6>
+                      <i class="fas fa-exclamation-circle me-2"></i>Nguyễn Tuân
+                      - Ưu tiên cao
+                    </h6>
+                    <ul class="mb-0">
+                      <li>Tăng cường đội ngũ sales</li>
+                      <li>Triển khai chương trình khuyến mãi đặc biệt</li>
+                      <li>Hỗ trợ marketing từ trung tâm</li>
+                      <li>Đào tạo kỹ năng bán hàng</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <div class="alert alert-warning">
+                    <h6>
+                      <i class="fas fa-exclamation-triangle me-2"></i>Tôn Thất
+                      Thuyết - Cần theo dõi
+                    </h6>
+                    <ul class="mb-0">
+                      <li>Phân tích nguyên nhân chậm tiến độ</li>
+                      <li>Tăng cường hoạt động marketing</li>
+                      <li>Kiểm tra hiệu quả đội ngũ sales</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <div class="alert alert-success">
+                    <h6>
+                      <i class="fas fa-check-circle me-2"></i>Giảng Võ - Duy trì
+                    </h6>
+                    <ul class="mb-0">
+                      <li>Duy trì tốc độ hiện tại</li>
+                      <li>Chia sẻ kinh nghiệm với các CLB khác</li>
+                      <li>Đặt mục tiêu cao hơn cho tháng sau</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Club Completion Chart
+      const clubCtx = document
+        .getElementById("clubCompletionChart")
+        .getContext("2d");
+      new Chart(clubCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "Giảng Võ",
+            "Hào Nam",
+            "Huỳnh Thúc Kháng",
+            "Tôn Thất Thuyết",
+            "Nguyễn Tuân",
+          ],
+          datasets: [
+            {
+              label: "% Hoàn thành",
+              data: [80, 76.4, 76, 75, 62.2],
+              backgroundColor: [
+                "#28a745",
+                "#ffc107",
+                "#ffc107",
+                "#ffc107",
+                "#dc3545",
+              ],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function (value) {
+                  return value + "%";
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Remaining Target Chart
+      const remainingCtx = document
+        .getElementById("remainingTargetChart")
+        .getContext("2d");
+      new Chart(remainingCtx, {
+        type: "doughnut",
+        data: {
+          labels: [
+            "Nguyễn Tuân",
+            "Tôn Thất Thuyết",
+            "Hào Nam",
+            "Huỳnh Thúc Kháng",
+            "Giảng Võ",
+          ],
+          datasets: [
+            {
+              data: [170000000, 150000000, 130000000, 120000000, 80000000],
+              backgroundColor: [
+                "#dc3545",
+                "#ffc107",
+                "#ffc107",
+                "#ffc107",
+                "#28a745",
+              ],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "bottom",
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const total = context.dataset.data.reduce(
+                    (a, b) => a + b,
+                    0
+                  );
+                  const percentage = (
+                    (context.parsed / total) *
+                    100
+                  ).toFixed(1);
+                  return context.label + ": " + percentage + "%";
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Completion Timeline Chart
+      const timelineCtx = document
+        .getElementById("completionTimelineChart")
+        .getContext("2d");
+      new Chart(timelineCtx, {
+        type: "line",
+        data: {
+          labels: ["1/12", "5/12", "10/12", "15/12", "20/12", "23/12"],
+          datasets: [
+            {
+              label: "Tỉ lệ hoàn thành (%)",
+              data: [24, 32, 48, 60, 68, 74],
+              borderColor: "#007bff",
+              backgroundColor: "rgba(0, 123, 255, 0.1)",
+              tension: 0.4,
+            },
+            {
+              label: "Mục tiêu (%)",
+              data: [32, 40, 60, 80, 100, 100],
+              borderColor: "#dc3545",
+              backgroundColor: "rgba(220, 53, 69, 0.1)",
+              tension: 0.4,
+              borderDash: [5, 5],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function (value) {
+                  return value + "%";
+                },
+              },
+            },
+          },
+        },
+      });
+    </script>
+
+    <!-- Dynamic Update Script -->
+    <script>
+      // Update completion details when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        if (window.revenueCalculator) {
+          const metrics = window.revenueCalculator.getMetrics();
+          if (metrics) {
+            // Update completion details
+            const completionDetails =
+              document.getElementById("completionDetails");
+            if (completionDetails) {
+              completionDetails.textContent = `${window.revenueCalculator.formatNumber(
+                metrics.mtdRevenue
+              )} / ${window.revenueCalculator.formatNumber(
+                metrics.monthlyTarget
+              )} VNĐ`;
+            }
+          }
+        }
+      });
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

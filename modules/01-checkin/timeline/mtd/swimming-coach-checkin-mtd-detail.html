@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Swimming Coach Check-in MTD - Actiwell Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="checkin-mtd-detail.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Check-in MTD
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-primary">
+            <i class="fas fa-swimmer me-2"></i>Chi tiết Swimming Coach Check-in
+            MTD
+          </h2>
+          <p class="text-muted">
+            Thống kê chi tiết về hoạt động Swimming Coach từ đầu tháng đến nay
+          </p>
+        </div>
+      </div>
+
+      <!-- Metric Cards -->
+      <div class="row mb-4">
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm bg-primary-subtle">
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-calendar-minus text-primary fs-4 me-2"></i>
+                <h6 class="mb-0 text-primary">Check-in tháng này</h6>
+              </div>
+              <h4 class="text-primary mb-0">2,100</h4>
+              <small class="text-muted">lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm bg-info-subtle">
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-user-friends text-info fs-4 me-2"></i>
+                <h6 class="mb-0 text-info">Lớp 1:1</h6>
+              </div>
+              <h4 class="text-info mb-0">900</h4>
+              <small class="text-muted">lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm bg-success-subtle">
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-users text-success fs-4 me-2"></i>
+                <h6 class="mb-0 text-success">Lớp 1:2</h6>
+              </div>
+              <h4 class="text-success mb-0">700</h4>
+              <small class="text-muted">lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm bg-warning-subtle">
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-layer-group text-warning fs-4 me-2"></i>
+                <h6 class="mb-0 text-warning">Lớp nhóm</h6>
+              </div>
+              <h4 class="text-warning mb-0">500</h4>
+              <small class="text-muted">lượt</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ theo loại lớp tháng
+                này
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 350px">
+                <canvas id="classTypeChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Xu hướng theo giờ tháng này
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 350px">
+                <canvas id="hourlyTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed List Table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Danh sách check-in Swimming
+                Coach tháng này
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Filter Section -->
+              <div class="row mb-3">
+                <div class="col">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label class="form-label">Loại lớp</label>
+                  <select class="form-select" id="classTypeFilter">
+                    <option value="all">Tất cả loại lớp</option>
+                    <option value="1-1">Lớp 1:1</option>
+                    <option value="1-2">Lớp 1:2</option>
+                    <option value="group">Lớp nhóm</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label class="form-label">Dịch vụ</label>
+                  <select class="form-select" id="serviceFilter">
+                    <option value="all">Tất cả dịch vụ</option>
+                    <option value="boi-ech">Bơi ếch</option>
+                    <option value="boi-sai">Bơi sải</option>
+                    <option value="boi-ngua">Bơi ngửa</option>
+                    <option value="boi-buom">Bơi bướm</option>
+                    <option value="nang-cao">Nâng cao</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label class="form-label">Huấn luyện viên</label>
+                  <select class="form-select" id="instructorFilter">
+                    <option value="all">Tất cả HLV</option>
+                    <option value="nguyen-van-a">Nguyễn Văn A</option>
+                    <option value="tran-thi-b">Trần Thị B</option>
+                    <option value="le-van-c">Lê Văn C</option>
+                    <option value="pham-thi-d">Phạm Thị D</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label class="form-label">Nhân viên chăm sóc</label>
+                  <select class="form-select" id="staffFilter">
+                    <option value="all">Tất cả NVCS</option>
+                    <option value="nguyen-thi-e">Nguyễn Thị E</option>
+                    <option value="tran-van-f">Trần Văn F</option>
+                    <option value="le-thi-g">Lê Thị G</option>
+                    <option value="pham-van-h">Phạm Văn H</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label class="form-label">Tìm kiếm</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="searchInput"
+                    placeholder="Tìm theo tên hội viên..."
+                  />
+                </div>
+                <div class="col d-flex align-items-end">
+                  <button class="btn btn-primary me-2" onclick="applyFilters()">
+                    <i class="fas fa-filter me-1"></i>Lọc
+                  </button>
+                  <button
+                    class="btn btn-outline-secondary"
+                    onclick="resetFilters()"
+                  >
+                    <i class="fas fa-undo me-1"></i>Reset
+                  </button>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Hội viên</th>
+                      <th>Cơ sở</th>
+                      <th>Loại lớp</th>
+                      <th>Dịch vụ</th>
+                      <th>Huấn luyện viên</th>
+                      <th>Nhân viên chăm sóc</th>
+                      <th>Giờ check-in</th>
+                    </tr>
+                  </thead>
+                  <tbody id="checkinTableBody">
+                    <!-- Data will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination">
+                  <!-- Pagination will be generated here -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+
+    <script>
+      // Generate sample data for Swimming Coach MTD check-ins (2,100 records total)
+      function generateSwimmingCoachMTDData() {
+        const data = [];
+        const locations = [
+          { name: "Tôn Thất Thuyết", key: "ton-that-thuyet" },
+          { name: "Huỳnh Thúc Kháng", key: "huynh-thuc-khang" },
+          { name: "Giảng Võ", key: "giang-vo" },
+          { name: "Hào Nam", key: "hao-nam" },
+          { name: "Nguyễn Tuân", key: "nguyen-tuan" },
+        ];
+        const classTypes = [
+          { name: "Lớp 1:1", key: "1-1" },
+          { name: "Lớp 1:2", key: "1-2" },
+          { name: "Lớp nhóm", key: "group" },
+        ];
+        const serviceTypes = [
+          { name: "Bơi ếch", key: "boi-ech" },
+          { name: "Bơi sải", key: "boi-sai" },
+          { name: "Bơi ngửa", key: "boi-ngua" },
+          { name: "Bơi bướm", key: "boi-buom" },
+          { name: "Nâng cao", key: "nang-cao" },
+        ];
+        const instructors = [
+          "Nguyễn Văn A",
+          "Trần Văn B",
+          "Lê Thị C",
+          "Phạm Văn D",
+          "Hoàng Thị E",
+          "Võ Văn F",
+          "Ngô Thị G",
+          "Lý Văn H",
+          "Đỗ Thị I",
+          "Bùi Văn J",
+        ];
+        const staffMembers = [
+          "Nguyễn Thị E",
+          "Trần Văn F",
+          "Lê Thị G",
+          "Phạm Văn H",
+          "Hoàng Thị I",
+          "Võ Văn J",
+          "Ngô Thị K",
+          "Lý Văn L",
+          "Đỗ Thị M",
+          "Bùi Văn N",
+        ];
+        const hours = [
+          "06",
+          "07",
+          "08",
+          "09",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+        ];
+        const minutes = [
+          "00",
+          "05",
+          "10",
+          "15",
+          "20",
+          "25",
+          "30",
+          "35",
+          "40",
+          "45",
+          "50",
+          "55",
+        ];
+        const days = Array.from({ length: 30 }, (_, i) =>
+          String(i + 1).padStart(2, "0")
+        );
+
+        for (let i = 1; i <= 2100; i++) {
+          const location =
+            locations[Math.floor(rng.next() * locations.length)];
+          const classType =
+            classTypes[Math.floor(rng.next() * classTypes.length)];
+          const serviceType =
+            serviceTypes[Math.floor(rng.next() * serviceTypes.length)];
+          const instructor =
+            instructors[Math.floor(rng.next() * instructors.length)];
+          const staff =
+            staffMembers[Math.floor(rng.next() * staffMembers.length)];
+          const hour = hours[Math.floor(rng.next() * hours.length)];
+          const minute = minutes[Math.floor(rng.next() * minutes.length)];
+          const day = days[Math.floor(rng.next() * days.length)];
+
+          data.push({
+            id: `swimming_mtd_${i}`,
+            memberId: `HV${String(i).padStart(4, "0")}`,
+            memberName: `Hội viên SC ${String(i).padStart(4, "0")}`,
+            location: location.name,
+            locationKey: location.key,
+            classType: classType.name,
+            classTypeKey: classType.key,
+            serviceType: serviceType.name,
+            serviceTypeKey: serviceType.key,
+            instructor: instructor,
+            instructorKey: instructor.toLowerCase().replace(/\s+/g, "-"),
+            staffInCharge: staff,
+            staffKey: staff.toLowerCase().replace(/\s+/g, "-"),
+            checkinTime: `${hour}:${minute}`,
+            createdAt: `2024-09-${day}T${hour}:${minute}:00Z`,
+          });
+        }
+
+        return data;
+      }
+
+      // Generate the data
+      const swimmingCoachMTDData = generateSwimmingCoachMTDData();
+
+      // Pagination variables
+      let currentPage = 1;
+      const recordsPerPage = 20;
+      let filteredData = [...swimmingCoachMTDData];
+
+      // Filter functions
+      function applyFilters() {
+        const location = document.getElementById("locationFilter").value;
+        const classType = document.getElementById("classTypeFilter").value;
+        const service = document.getElementById("serviceFilter").value;
+        const instructor = document.getElementById("instructorFilter").value;
+        const staff = document.getElementById("staffFilter").value;
+        const search = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+
+        filteredData = swimmingCoachMTDData.filter((item) => {
+          // Location filter
+          if (location !== "all" && item.locationKey !== location) return false;
+
+          // Class type filter
+          if (classType !== "all" && item.classTypeKey !== classType)
+            return false;
+
+          // Service filter
+          if (service !== "all" && item.serviceTypeKey !== service)
+            return false;
+
+          // Instructor filter
+          if (instructor !== "all" && item.instructorKey !== instructor)
+            return false;
+
+          // Staff filter
+          if (staff !== "all" && item.staffKey !== staff) return false;
+
+          // Search filter
+          if (search && !item.memberName.toLowerCase().includes(search))
+            return false;
+
+          return true;
+        });
+
+        currentPage = 1;
+        loadCheckinData();
+      }
+
+      function resetFilters() {
+        document.getElementById("locationFilter").value = "all";
+        document.getElementById("classTypeFilter").value = "all";
+        document.getElementById("serviceFilter").value = "all";
+        document.getElementById("instructorFilter").value = "all";
+        document.getElementById("staffFilter").value = "all";
+        document.getElementById("searchInput").value = "";
+
+        filteredData = [...swimmingCoachMTDData];
+        currentPage = 1;
+        loadCheckinData();
+      }
+
+      function loadCheckinData(data = filteredData) {
+        const tbody = document.getElementById("checkinTableBody");
+        tbody.innerHTML = "";
+
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const endIndex = startIndex + recordsPerPage;
+        const pageData = data.slice(startIndex, endIndex);
+
+        pageData.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${startIndex + index + 1}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${item.memberName.charAt(0)}
+                </div>
+                <div>
+                  <div class="fw-bold">${item.memberName}</div>
+                  <small class="text-muted">${item.memberId}</small>
+                </div>
+              </div>
+            </td>
+            <td>${item.location}</td>
+            <td>
+              <span class="badge bg-${getClassTypeBadgeClass(
+                item.classTypeKey
+              )}">
+                ${item.classType}
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-${getServiceBadgeClass(
+                item.serviceTypeKey
+              )}">
+                ${item.serviceType}
+              </span>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${item.instructor.charAt(0)}
+                </div>
+                <span>${item.instructor}</span>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${item.staffInCharge.charAt(0)}
+                </div>
+                <span>${item.staffInCharge}</span>
+              </div>
+            </td>
+            <td>${item.checkinTime}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        generatePagination(data.length);
+      }
+
+      function getClassTypeBadgeClass(classType) {
+        const classes = {
+          "1-1": "info",
+          "1-2": "success",
+          group: "warning",
+        };
+        return classes[classType] || "secondary";
+      }
+
+      function getServiceBadgeClass(service) {
+        const classes = {
+          "boi-ech": "primary",
+          "boi-sai": "info",
+          "boi-ngua": "success",
+          "boi-buom": "warning",
+          "nang-cao": "danger",
+        };
+        return classes[service] || "secondary";
+      }
+
+      // Generate pagination
+      function generatePagination(totalRecords) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+        if (totalPages <= 1) return;
+
+        // Previous button
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+        prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage - 1
+        })">Trước</a>`;
+        pagination.appendChild(prevLi);
+
+        // Smart pagination with ellipsis
+        const maxVisiblePages = 7; // Show max 7 page numbers
+        let startPage, endPage;
+
+        if (totalPages <= maxVisiblePages) {
+          // Show all pages if total is small
+          startPage = 1;
+          endPage = totalPages;
+        } else {
+          // Calculate start and end pages
+          const halfVisible = Math.floor(maxVisiblePages / 2);
+
+          if (currentPage <= halfVisible) {
+            startPage = 1;
+            endPage = maxVisiblePages;
+          } else if (currentPage + halfVisible >= totalPages) {
+            startPage = totalPages - maxVisiblePages + 1;
+            endPage = totalPages;
+          } else {
+            startPage = currentPage - halfVisible;
+            endPage = currentPage + halfVisible;
+          }
+        }
+
+        // First page
+        if (startPage > 1) {
+          const firstLi = document.createElement("li");
+          firstLi.className = "page-item";
+          firstLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(1)">1</a>`;
+          pagination.appendChild(firstLi);
+
+          // Add ellipsis if needed
+          if (startPage > 2) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+        }
+
+        // Page numbers
+        for (let i = startPage; i <= endPage; i++) {
+          const li = document.createElement("li");
+          li.className = `page-item ${i === currentPage ? "active" : ""}`;
+          li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+          pagination.appendChild(li);
+        }
+
+        // Last page
+        if (endPage < totalPages) {
+          // Add ellipsis if needed
+          if (endPage < totalPages - 1) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+
+          const lastLi = document.createElement("li");
+          lastLi.className = "page-item";
+          lastLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a>`;
+          pagination.appendChild(lastLi);
+        }
+
+        // Next button
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${
+          currentPage === totalPages ? "disabled" : ""
+        }`;
+        nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage + 1
+        })">Tiếp</a>`;
+        pagination.appendChild(nextLi);
+      }
+
+      // Change page
+      function changePage(page) {
+        if (page < 1 || page > Math.ceil(filteredData.length / recordsPerPage))
+          return;
+        currentPage = page;
+        loadCheckinData();
+      }
+
+      // Chart creation
+      function createCharts() {
+        // Class Type Chart
+        const classTypeCtx = document.getElementById("classTypeChart");
+        if (classTypeCtx) {
+          new Chart(classTypeCtx, {
+            type: "doughnut",
+            data: {
+              labels: ["Lớp 1:1", "Lớp 1:2", "Lớp nhóm"],
+              datasets: [
+                {
+                  data: [900, 700, 500],
+                  backgroundColor: ["#17a2b8", "#28a745", "#ffc107"],
+                  borderWidth: 2,
+                  borderColor: "#fff",
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: "right",
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      const total = context.dataset.data.reduce(
+                        (a, b) => a + b,
+                        0
+                      );
+                      const percentage = (
+                        (context.parsed / total) *
+                        100
+                      ).toFixed(1);
+                      return `${context.label}: ${context.parsed} (${percentage}%)`;
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // Hourly Trend Chart
+        const hourlyCtx = document.getElementById("hourlyTrendChart");
+        if (hourlyCtx) {
+          new Chart(hourlyCtx, {
+            type: "bar",
+            data: {
+              labels: [
+                "5h30-8h",
+                "8h-10h",
+                "10h-12h",
+                "12h-14h",
+                "14h-16h",
+                "16h-18h",
+                "18h-20h",
+                "20h-22h",
+              ],
+              datasets: [
+                {
+                  label: "Số lượt check-in",
+                  data: [25, 38, 42, 28, 35, 58, 75, 68],
+                  backgroundColor: "#007bff",
+                  borderColor: "#0056b3",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            },
+          });
+        }
+      }
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Swimming Coach MTD page loaded");
+        loadCheckinData();
+        createCharts();
+      });
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+  
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+</body>
+</html>

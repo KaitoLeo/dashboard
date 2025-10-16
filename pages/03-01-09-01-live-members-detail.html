@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Members - Đang tập - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <style>
+      .metric-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      .clickable-row:hover {
+        background-color: #f8f9fa !important;
+      }
+
+      .live-indicator {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .status-online {
+        color: #28a745;
+      }
+
+      .status-offline {
+        color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-heartbeat me-2"></i>Actiwell Reports
+        </a>
+        <a class="nav-link text-light" href="../index.html">
+          <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h1 class="card-title mb-2">
+                <i class="fas fa-running me-2 text-success"></i>
+                Live Members - Đang tập
+              </h1>
+              <p class="text-muted mb-0">
+                Danh sách hội viên đang tập tại thời điểm hiện tại
+                <span class="badge bg-success ms-2 live-indicator">
+                  <i class="fas fa-circle me-1"></i>Live
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+          <div class="card bg-success text-white h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-users fa-2x mb-2"></i>
+              <h3 class="mb-1" id="totalLiveMembers">89</h3>
+              <p class="mb-0">Tổng đang tập</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card bg-primary text-white h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-building fa-2x mb-2"></i>
+              <h3 class="mb-1" id="totalClubs">5</h3>
+              <p class="mb-0">Số cơ sở</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card bg-info text-white h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-clock fa-2x mb-2"></i>
+              <h3 class="mb-1" id="avgDuration">45</h3>
+              <p class="mb-0">Thời gian TB (phút)</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="card bg-warning text-white h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x mb-2"></i>
+              <h3 class="mb-1" id="peakHour">19:00</h3>
+              <p class="mb-0">Giờ cao điểm</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Members List -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Danh sách Hội viên đang tập
+                  </h5>
+                </div>
+                <div class="col-auto">
+                  <span class="badge bg-success" id="recordCount">89</span>
+                  <span class="badge bg-light text-dark ms-2" id="lastUpdate">
+                    Cập nhật: <span id="updateTime">--:--</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Filters -->
+              <div class="row mb-3">
+                <div class="col-md-3 mb-2">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="searchInput"
+                    placeholder="Tìm kiếm hội viên..."
+                    onkeyup="searchData()"
+                  />
+                </div>
+                <div class="col-md-2 mb-2">
+                  <select
+                    class="form-select"
+                    id="clubFilter"
+                    onchange="searchData()"
+                  >
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="Tôn Thất Thuyết">Tôn Thất Thuyết</option>
+                    <option value="Huỳnh Thúc Kháng">Huỳnh Thúc Kháng</option>
+                    <option value="Giảng Võ">Giảng Võ</option>
+                    <option value="Hào Nam">Hào Nam</option>
+                    <option value="Nguyễn Tuân">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <select
+                    class="form-select"
+                    id="departmentFilter"
+                    onchange="searchData()"
+                  >
+                    <option value="all">Tất cả bộ phận</option>
+                    <option value="Membership">Membership</option>
+                    <option value="PT Fitness">PT Fitness</option>
+                    <option value="Pilates">Pilates</option>
+                    <option value="Swimming Coach">Swimming Coach</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <select
+                    class="form-select"
+                    id="durationFilter"
+                    onchange="searchData()"
+                  >
+                    <option value="all">Tất cả thời gian</option>
+                    <option value="short">Dưới 30 phút</option>
+                    <option value="medium">30-60 phút</option>
+                    <option value="long">Trên 60 phút</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <button
+                    class="btn btn-outline-secondary w-100"
+                    onclick="resetFilters()"
+                  >
+                    <i class="fas fa-undo me-1"></i>Reset
+                  </button>
+                </div>
+                <div class="col-md-1 mb-2">
+                  <button class="btn btn-success w-100" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Hội viên</th>
+                      <th>Cơ sở</th>
+                      <th>Bộ phận</th>
+                      <th>Thời gian bắt đầu</th>
+                      <th>Thời gian tập</th>
+                      <th>Trạng thái</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="liveMembersTableBody">
+                    <!-- Data will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination">
+                  <!-- Pagination will be generated here -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/shared/data-generator.js"></script>
+    <script src="../assets/js/shared/dynamic-updater.js"></script>
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // Dynamic data generation
+      let liveMembersData = [];
+      let filteredData = [];
+      let currentPage = 1;
+      const itemsPerPage = 10;
+
+      // Initialize page with dynamic data
+      function initializePage() {
+        // Generate dynamic live members data
+        liveMembersData = generateLiveMembersData(89);
+        filteredData = [...liveMembersData];
+
+        // Update metric cards
+        updateMetricCards();
+
+        // Load table data
+        loadLiveMembersData();
+
+        // Start real-time updates
+        startRealTimeUpdates();
+      }
+
+      // Generate live members data using DataGenerator
+      function generateLiveMembersData(count) {
+        return DataGenerator.generateLiveMembersData(count, {
+          locations: DataGenerator.locations,
+          departments: DataGenerator.departments,
+          includeOffline: true,
+        });
+      }
+
+      // Update metric cards dynamically
+      function updateMetricCards() {
+        const totalLiveMembers = liveMembersData.length;
+        const uniqueClubs = new Set(
+          liveMembersData.map((item) => item.location)
+        ).size;
+
+        // Calculate average duration
+        const avgDuration =
+          liveMembersData.reduce((sum, item) => sum + item.duration, 0) /
+          liveMembersData.length;
+
+        // Calculate peak hour
+        const hourCounts = {};
+        liveMembersData.forEach((item) => {
+          const hour = item.startTime.split(":")[0];
+          hourCounts[hour] = (hourCounts[hour] || 0) + 1;
+        });
+        const peakHour = Object.keys(hourCounts).reduce((a, b) =>
+          hourCounts[a] > hourCounts[b] ? a : b
+        );
+
+        // Update DOM elements
+        document.getElementById("totalLiveMembers").textContent =
+          totalLiveMembers;
+        document.getElementById("totalClubs").textContent = uniqueClubs;
+        document.getElementById("avgDuration").textContent =
+          Math.round(avgDuration);
+        document.getElementById("peakHour").textContent = peakHour + ":00";
+      }
+
+      // Load live members data into table
+      function loadLiveMembersData() {
+        const tbody = document.getElementById("liveMembersTableBody");
+        tbody.innerHTML = "";
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageData = filteredData.slice(startIndex, endIndex);
+
+        pageData.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.className = "clickable-row";
+          row.innerHTML = `
+            <td>${startIndex + index + 1}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${item.memberName.charAt(0)}
+                </div>
+                <div>
+                  <div class="fw-bold">${item.memberName}</div>
+                  <small class="text-muted">ID: ${item.memberId}</small>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="badge bg-info">${item.location}</span>
+            </td>
+            <td>
+              <span class="badge bg-primary">${item.department}</span>
+            </td>
+            <td>${item.startTime}</td>
+            <td>${item.duration} phút</td>
+            <td>
+              <span class="badge ${
+                item.status === "online" ? "bg-success" : "bg-danger"
+              }">
+                <i class="fas fa-circle me-1 ${
+                  item.status === "online" ? "status-online" : "status-offline"
+                }"></i>
+                ${item.status === "online" ? "Đang tập" : "Tạm nghỉ"}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" onclick="viewMemberDetails(${
+                item.id
+              })">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-success" onclick="callMember('${
+                item.phone
+              }')">
+                <i class="fas fa-phone"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Update pagination
+        updatePagination();
+        updateRecordCount();
+      }
+
+      // Update pagination
+      function updatePagination() {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+        if (totalPages <= 1) return;
+
+        // Previous button
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+        prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage - 1
+        })">Trước</a>`;
+        pagination.appendChild(prevLi);
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+          const li = document.createElement("li");
+          li.className = `page-item ${i === currentPage ? "active" : ""}`;
+          li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+          pagination.appendChild(li);
+        }
+
+        // Next button
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${
+          currentPage === totalPages ? "disabled" : ""
+        }`;
+        nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage + 1
+        })">Tiếp</a>`;
+        pagination.appendChild(nextLi);
+      }
+
+      // Change page
+      function changePage(page) {
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+        if (page < 1 || page > totalPages) return;
+
+        currentPage = page;
+        loadLiveMembersData();
+      }
+
+      // Search and filter data
+      function searchData() {
+        const searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const clubFilter = document.getElementById("clubFilter").value;
+        const departmentFilter =
+          document.getElementById("departmentFilter").value;
+        const durationFilter = document.getElementById("durationFilter").value;
+
+        filteredData = liveMembersData.filter((item) => {
+          const matchesSearch =
+            item.memberName.toLowerCase().includes(searchTerm) ||
+            item.memberId.toLowerCase().includes(searchTerm) ||
+            item.phone.includes(searchTerm);
+
+          const matchesClub =
+            clubFilter === "all" || item.location === clubFilter;
+          const matchesDepartment =
+            departmentFilter === "all" || item.department === departmentFilter;
+
+          let matchesDuration = true;
+          if (durationFilter !== "all") {
+            if (durationFilter === "short") {
+              matchesDuration = item.duration < 30;
+            } else if (durationFilter === "medium") {
+              matchesDuration = item.duration >= 30 && item.duration <= 60;
+            } else if (durationFilter === "long") {
+              matchesDuration = item.duration > 60;
+            }
+          }
+
+          return (
+            matchesSearch && matchesClub && matchesDepartment && matchesDuration
+          );
+        });
+
+        currentPage = 1;
+        loadLiveMembersData();
+      }
+
+      // Reset filters
+      function resetFilters() {
+        document.getElementById("searchInput").value = "";
+        document.getElementById("clubFilter").value = "all";
+        document.getElementById("departmentFilter").value = "all";
+        document.getElementById("durationFilter").value = "all";
+
+        filteredData = [...liveMembersData];
+        currentPage = 1;
+        loadLiveMembersData();
+      }
+
+      // Refresh data
+      function refreshData() {
+        // Regenerate data to simulate real-time updates
+        liveMembersData = generateLiveMembersData(89);
+        filteredData = [...liveMembersData];
+        currentPage = 1;
+        loadLiveMembersData();
+        updateMetricCards();
+        updateLastUpdateTime();
+      }
+
+      // Update record count
+      function updateRecordCount() {
+        document.getElementById("recordCount").textContent =
+          filteredData.length;
+      }
+
+      // Update last update time
+      function updateLastUpdateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString("vi-VN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        document.getElementById("updateTime").textContent = timeString;
+      }
+
+      // View member details
+      function viewMemberDetails(id) {
+        const member = liveMembersData.find((item) => item.id === id);
+        if (member) {
+          alert(
+            `Chi tiết hội viên:\nTên: ${member.memberName}\nID: ${
+              member.memberId
+            }\nSĐT: ${member.phone}\nCơ sở: ${member.location}\nBộ phận: ${
+              member.department
+            }\nBắt đầu: ${member.startTime}\nThời gian tập: ${
+              member.duration
+            } phút\nTrạng thái: ${
+              member.status === "online" ? "Đang tập" : "Tạm nghỉ"
+            }`
+          );
+        }
+      }
+
+      // Call member
+      function callMember(phone) {
+        if (confirm(`Bạn có muốn gọi cho ${phone}?`)) {
+          window.open(`tel:${phone}`);
+        }
+      }
+
+      // Start real-time updates
+      function startRealTimeUpdates() {
+        // Update every 30 seconds to simulate real-time data
+        setInterval(() => {
+          // Randomly update some members' status
+          liveMembersData.forEach((item) => {
+            if (rng.next() < 0.1) {
+              // 10% chance to change status
+              item.status = item.status === "online" ? "offline" : "online";
+            }
+            if (rng.next() < 0.05) {
+              // 5% chance to update duration
+              item.duration += Math.floor(rng.next() * 5) + 1;
+            }
+          });
+
+          // Refresh display
+          loadLiveMembersData();
+          updateLastUpdateTime();
+        }, 30000);
+
+        // Initial update time
+        updateLastUpdateTime();
+      }
+
+      // Initialize page when DOM is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        initializePage();
+      });
+    </script>
+
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat(
+            (this.next() * (max - min) + min).toFixed(decimals)
+          );
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

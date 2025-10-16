@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo doanh số theo hình thức thanh toán - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-credit-card me-2"></i>
+                Báo cáo doanh số theo hình thức thanh toán
+              </h2>
+              <p class="text-muted">
+                Phân tích chi tiết doanh số theo các phương thức thanh toán
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div
+            class="card bg-success text-white"
+            style="cursor: pointer"
+            onclick="showPaymentDetails('cash', 'Tiền mặt')"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
+              <h5 class="card-title">Tiền mặt</h5>
+              <h2 class="mb-0">800,000,000</h2>
+              <small>43.2%</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div
+            class="card bg-info text-white"
+            style="cursor: pointer"
+            onclick="showPaymentDetails('bank', 'Chuyển khoản')"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-university fa-2x mb-2"></i>
+              <h5 class="card-title">Chuyển khoản</h5>
+              <h2 class="mb-0">700,000,000</h2>
+              <small>37.8%</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div
+            class="card bg-warning text-white"
+            style="cursor: pointer"
+            onclick="showPaymentDetails('card', 'MPOS/Card')"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-mobile-alt fa-2x mb-2"></i>
+              <h5 class="card-title">MPOS/Card</h5>
+              <h2 class="mb-0">350,000,000</h2>
+              <small>18.9%</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-pie fa-2x mb-2"></i>
+              <h5 class="card-title">Tổng doanh số</h5>
+              <h2 class="mb-0">1,850,000,000</h2>
+              <small>100%</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods Analysis -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Phân bố doanh số theo hình thức thanh toán
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="paymentMethodChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Doanh số theo CLB và hình thức thanh toán
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="clubPaymentChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Analysis Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-table me-2"></i>
+                Chi tiết doanh số theo hình thức thanh toán
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Hình thức thanh toán</th>
+                      <th>Doanh số (VNĐ)</th>
+                      <th>Tỉ lệ (%)</th>
+                      <th>Số giao dịch</th>
+                      <th>TB/GD (VNĐ)</th>
+                      <th>Phí giao dịch (VNĐ)</th>
+                      <th>Doanh thu thực (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      style="cursor: pointer"
+                      onclick="showPaymentDetails('cash', 'Tiền mặt')"
+                    >
+                      <td><strong>Tiền mặt</strong></td>
+                      <td>800,000,000</td>
+                      <td><span class="badge bg-success">43.2%</span></td>
+                      <td>1,200</td>
+                      <td>666,667</td>
+                      <td>0</td>
+                      <td>800,000,000</td>
+                    </tr>
+                    <tr
+                      style="cursor: pointer"
+                      onclick="showPaymentDetails('bank', 'Chuyển khoản')"
+                    >
+                      <td><strong>Chuyển khoản</strong></td>
+                      <td>700,000,000</td>
+                      <td><span class="badge bg-info">37.8%</span></td>
+                      <td>850</td>
+                      <td>823,529</td>
+                      <td>3,500,000</td>
+                      <td>696,500,000</td>
+                    </tr>
+                    <tr
+                      style="cursor: pointer"
+                      onclick="showPaymentDetails('card', 'MPOS/Card')"
+                    >
+                      <td><strong>MPOS/Card</strong></td>
+                      <td>350,000,000</td>
+                      <td><span class="badge bg-warning">18.9%</span></td>
+                      <td>420</td>
+                      <td>833,333</td>
+                      <td>10,500,000</td>
+                      <td>339,500,000</td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <th>TỔNG CỘNG</th>
+                      <th>1,850,000,000</th>
+                      <th>100%</th>
+                      <th>2,470</th>
+                      <th>749,392</th>
+                      <th>14,000,000</th>
+                      <th>1,836,000,000</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Trends -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Xu hướng thanh toán 12 tháng gần đây
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="paymentTrendChart" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis and Recommendations -->
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-area me-2"></i>
+                Phân tích hiệu quả
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <h6>Hình thức phổ biến nhất:</h6>
+                <p class="text-success">Tiền mặt - 43.2% (800M VNĐ)</p>
+              </div>
+              <div class="mb-3">
+                <h6>Hình thức có giá trị TB cao nhất:</h6>
+                <p class="text-info">MPOS/Card - 833,333 VNĐ/giao dịch</p>
+              </div>
+              <div class="mb-3">
+                <h6>Hình thức có phí thấp nhất:</h6>
+                <p class="text-success">Tiền mặt - 0 VNĐ phí</p>
+              </div>
+              <div class="mb-3">
+                <h6>Doanh thu thực sau phí:</h6>
+                <p class="text-primary">1,836,000,000 VNĐ (99.2%)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-lightbulb me-2"></i>
+                Khuyến nghị cải thiện
+              </h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Khuyến khích thanh toán chuyển khoản để giảm rủi ro
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tăng cường sử dụng MPOS cho giao dịch lớn
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Đàm phán phí giao dịch thấp hơn với ngân hàng
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Triển khai ví điện tử để tăng tiện lợi
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Theo dõi xu hướng thanh toán để điều chỉnh chiến lược
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Payment Method Chart
+      const paymentCtx = document.getElementById("paymentMethodChart");
+      if (paymentCtx) {
+        new Chart(paymentCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Tiền mặt", "Chuyển khoản", "MPOS/Card"],
+            datasets: [
+              {
+                data: [43.2, 37.8, 18.9],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(23, 162, 184, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(23, 162, 184, 1)",
+                  "rgba(255, 193, 7, 1)",
+                ],
+                borderWidth: 3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Tỉ trọng doanh số theo hình thức thanh toán (%)",
+              },
+              legend: {
+                position: "bottom",
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || "";
+                    const value = context.parsed;
+                    return `${label}: ${value}%`;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // Club Payment Chart
+      const clubCtx = document.getElementById("clubPaymentChart");
+      if (clubCtx) {
+        new Chart(clubCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Tôn Thất Thuyết",
+              "Huỳnh Thúc Kháng",
+              "Giảng Võ",
+              "Hào Nam",
+              "Nguyễn Tuân",
+            ],
+            datasets: [
+              {
+                label: "Tiền mặt",
+                data: [120, 140, 110, 100, 80],
+                backgroundColor: "rgba(40, 167, 69, 0.8)",
+              },
+              {
+                label: "Chuyển khoản",
+                data: [100, 120, 90, 85, 70],
+                backgroundColor: "rgba(23, 162, 184, 0.8)",
+              },
+              {
+                label: "MPOS/Card",
+                data: [50, 60, 45, 40, 35],
+                backgroundColor: "rgba(255, 193, 7, 0.8)",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Doanh số theo CLB và hình thức thanh toán (Triệu VNĐ)",
+              },
+              legend: {
+                position: "top",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                stacked: false,
+                ticks: {
+                  callback: function (value) {
+                    return value + "M";
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // Payment Trend Chart
+      const trendCtx = document.getElementById("paymentTrendChart");
+      if (trendCtx) {
+        new Chart(trendCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "T1",
+              "T2",
+              "T3",
+              "T4",
+              "T5",
+              "T6",
+              "T7",
+              "T8",
+              "T9",
+              "T10",
+              "T11",
+              "T12",
+            ],
+            datasets: [
+              {
+                label: "Tiền mặt",
+                data: [65, 70, 68, 75, 80, 72, 78, 82, 76, 85, 83, 88],
+                borderColor: "rgba(40, 167, 69, 1)",
+                backgroundColor: "rgba(40, 167, 69, 0.1)",
+                tension: 0.3,
+              },
+              {
+                label: "Chuyển khoản",
+                data: [55, 60, 58, 65, 70, 62, 68, 72, 66, 75, 73, 78],
+                borderColor: "rgba(23, 162, 184, 1)",
+                backgroundColor: "rgba(23, 162, 184, 0.1)",
+                tension: 0.3,
+              },
+              {
+                label: "MPOS/Card",
+                data: [25, 28, 26, 30, 32, 28, 30, 32, 28, 35, 33, 38],
+                borderColor: "rgba(255, 193, 7, 1)",
+                backgroundColor: "rgba(255, 193, 7, 0.1)",
+                tension: 0.3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Xu hướng thanh toán 12 tháng (Triệu VNĐ)",
+              },
+              legend: {
+                position: "top",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function (value) {
+                    return value + "M";
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+    </script>
+
+    <!-- Dynamic Order Details Section -->
+    <div class="row mb-4" id="orderDetailsSection" style="display: none">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-receipt me-2"></i>Chi tiết đơn hàng -
+              <span id="selectedPaymentMethod"></span>
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover table-sm">
+                <thead class="table-dark">
+                  <tr>
+                    <th>STT</th>
+                    <th>Mã đơn hàng</th>
+                    <th>Khách hàng</th>
+                    <th>Trung tâm</th>
+                    <th>Nhân viên</th>
+                    <th>Dịch vụ</th>
+                    <th>Số tiền</th>
+                    <th>Ngày thanh toán</th>
+                    <th>Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody id="orderDetailsTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Sample order data for each payment method
+      const orderDetails = {
+        cash: [
+          {
+            id: "ORD001",
+            customer: "Nguyễn Văn A",
+            center: "Tôn Thất Thuyết",
+            staff: "Nguyễn Thị Lan",
+            service: "Gói tập 3 tháng",
+            amount: 2500000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD002",
+            customer: "Trần Thị B",
+            center: "Huỳnh Thúc Kháng",
+            staff: "Lê Văn Minh",
+            service: "PT 10 buổi",
+            amount: 5000000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD003",
+            customer: "Lê Văn C",
+            center: "Giảng Võ",
+            staff: "Phạm Thị Hoa",
+            service: "Gói tập 6 tháng",
+            amount: 4500000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD004",
+            customer: "Phạm Thị D",
+            center: "Hào Nam",
+            staff: "Trần Văn Đức",
+            service: "Gói tập 1 năm",
+            amount: 8000000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD005",
+            customer: "Hoàng Văn E",
+            center: "Nguyễn Tuân",
+            staff: "Vũ Thị Mai",
+            service: "PT 20 buổi",
+            amount: 10000000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+        ],
+        bank: [
+          {
+            id: "ORD006",
+            customer: "Vũ Thị F",
+            center: "Tôn Thất Thuyết",
+            staff: "Nguyễn Thị Lan",
+            service: "Gói tập 3 tháng",
+            amount: 2500000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD007",
+            customer: "Đặng Văn G",
+            center: "Huỳnh Thúc Kháng",
+            staff: "Lê Văn Minh",
+            service: "PT 15 buổi",
+            amount: 7500000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD008",
+            customer: "Bùi Thị H",
+            center: "Giảng Võ",
+            staff: "Phạm Thị Hoa",
+            service: "Gói tập 6 tháng",
+            amount: 4500000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD009",
+            customer: "Phan Văn I",
+            center: "Hào Nam",
+            staff: "Trần Văn Đức",
+            service: "Gói tập 1 năm",
+            amount: 8000000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD010",
+            customer: "Ngô Thị K",
+            center: "Nguyễn Tuân",
+            staff: "Vũ Thị Mai",
+            service: "PT 25 buổi",
+            amount: 12500000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+        ],
+        card: [
+          {
+            id: "ORD011",
+            customer: "Lê Thị L",
+            center: "Tôn Thất Thuyết",
+            staff: "Nguyễn Thị Lan",
+            service: "Gói tập 3 tháng",
+            amount: 2500000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD012",
+            customer: "Nguyễn Văn M",
+            center: "Huỳnh Thúc Kháng",
+            staff: "Lê Văn Minh",
+            service: "PT 12 buổi",
+            amount: 6000000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD013",
+            customer: "Trần Thị N",
+            center: "Giảng Võ",
+            staff: "Phạm Thị Hoa",
+            service: "Gói tập 6 tháng",
+            amount: 4500000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+          {
+            id: "ORD014",
+            customer: "Phạm Văn O",
+            center: "Hào Nam",
+            staff: "Trần Văn Đức",
+            service: "Gói tập 1 năm",
+            amount: 8000000,
+            date: getRandomRecentDate(),
+            status: "Hoàn thành",
+          },
+        ],
+      };
+
+      // Generate random recent date within last 30 days
+      function getRandomRecentDate() {
+        const today = new Date();
+        const randomDays = Math.floor(rng.next() * 30) + 1; // 1-30 days ago
+        const randomDate = new Date(today);
+        randomDate.setDate(today.getDate() - randomDays);
+        return randomDate.toLocaleDateString("vi-VN");
+      }
+
+      // Show payment method details
+      function showPaymentDetails(paymentType, paymentName) {
+        document.getElementById("selectedPaymentMethod").textContent =
+          paymentName;
+        document.getElementById("orderDetailsSection").style.display = "block";
+
+        // Populate order details table
+        const tableBody = document.getElementById("orderDetailsTableBody");
+        tableBody.innerHTML = "";
+
+        if (orderDetails[paymentType]) {
+          orderDetails[paymentType].forEach((order, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${index + 1}</td>
+              <td><strong>${order.id}</strong></td>
+              <td>${order.customer}</td>
+              <td><span class="badge bg-primary">${order.center}</span></td>
+              <td><span class="badge bg-info">${order.staff}</span></td>
+              <td>${order.service}</td>
+              <td>${formatNumber(order.amount)} VNĐ</td>
+              <td>${order.date}</td>
+              <td><span class="badge bg-success">${order.status}</span></td>
+            `;
+            tableBody.appendChild(row);
+          });
+        }
+
+        // Scroll to details section
+        document
+          .getElementById("orderDetailsSection")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      // Format number with commas
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+</body>
+</html>

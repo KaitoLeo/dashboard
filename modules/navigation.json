@@ -1,0 +1,80 @@
+{
+  "modules": {
+    "01-checkin": {
+      "name": "Check-in Management",
+      "description": "Quản lý check-in theo thời gian và chi nhánh",
+      "locations": {
+        "all-branches": "Tất cả chi nhánh",
+        "specific-branch": "Chi nhánh cụ thể"
+      },
+      "timeline": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua",
+        "mtd": "Tháng này",
+        "frequency": "Phân tích tần suất"
+      }
+    },
+    "02-contract": {
+      "name": "Contract Management",
+      "description": "Quản lý hợp đồng và báo cáo",
+      "timeline": {
+        "reports": "Báo cáo hợp đồng",
+        "member": "Thành viên",
+        "trainer": "Huấn luyện viên",
+        "activation": "Kích hoạt",
+        "burn-rate": "Tỷ lệ cháy",
+        "completion": "Hoàn thành"
+      }
+    },
+    "03-revenue": {
+      "name": "Revenue Management",
+      "description": "Quản lý doanh thu theo địa điểm và thời gian",
+      "locations": {
+        "service": "Dịch vụ",
+        "club": "Câu lạc bộ",
+        "staff": "Nhân viên",
+        "payment": "Thanh toán",
+        "target": "Mục tiêu",
+        "operation": "Vận hành",
+        "facility": "Cơ sở vật chất",
+        "fitness": "Thể hình",
+        "membership": "Thành viên"
+      },
+      "timeline": {
+        "daily": "Hàng ngày",
+        "mtd": "Tháng này",
+        "reports": "Báo cáo",
+        "analytics": "Phân tích"
+      }
+    },
+    "04-crm": {
+      "name": "Customer Relationship Management",
+      "description": "Quản lý khách hàng và mối quan hệ",
+      "timeline": {
+        "reports": "Báo cáo CRM",
+        "detail": "Chi tiết",
+        "customers": "Khách hàng",
+        "csr": "Dịch vụ khách hàng",
+        "movement": "Chuyển động thành viên",
+        "birthday": "Sinh nhật"
+      }
+    },
+    "05-booking": {
+      "name": "Booking Management",
+      "description": "Quản lý đặt chỗ",
+      "timeline": {
+        "management": "Quản lý đặt chỗ"
+      }
+    },
+    "06-reports": {
+      "name": "Reports & Audit",
+      "description": "Báo cáo và kiểm toán",
+      "timeline": {
+        "receipt": "Biên lai",
+        "audit": "Kiểm toán"
+      }
+    }
+  }
+}
+
+

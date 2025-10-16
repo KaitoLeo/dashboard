@@ -1,0 +1,96 @@
+## Tổng hợp nghiệp vụ và yêu cầu
+
+### 1) Danh mục chức năng
+
+- **Khối Operation**
+  - District
+  - OM
+    - Lễ tân
+      - CRM
+        - Thông tin từ CRM
+        - Thông tin từ khách walk-in/...
+      - Hội viên
+        - Check-in
+          - MBS
+          - Tập với HLV
+            - 1:1
+            - Lớp nhóm
+          - Lịch lớp Yoga - GX
+        - Kích hoạt gói Membership
+        - Kích hoạt gói HLV
+      - Audit
+        - Lịch dạy của HLV
+        - Vệ sinh
+      - Biên nhận
+        - Xem và in biên nhận
+        - Ký xác nhận số tiền của biên nhận
+      - Hợp đồng
+        - Xem và in hợp đồng
+      - CSR (Phiếu yêu cầu dịch vụ)
+        - Xem và in CSR
+    - Nghiệp vụ riêng
+      - CSR (Phiếu yêu cầu dịch vụ)
+        - Duyệt CSR cùng các quản lý
+  - Khối Membership
+    - District
+      - SM
+        - SALE
+          - CRM
+            - Nhập thông tin
+            - Nhận data từ nguồn MKT
+            - Quy tắc phân chia data theo số lượng ngày tiếp cận
+            - Hành trình khách hàng
+          - Hội viên
+            - Xem thông tin/hợp đồng
+            - Cập nhật thông tin/hợp đồng để lưu vết
+          - Biên nhận
+            - Lập biên nhận MBS
+          - Hợp đồng
+            - Lập hợp đồng MBS
+          - CSR (Phiếu yêu cầu dịch vụ)
+            - Lập CSR
+              - Bảo lưu
+              - Chuyển nhượng
+              - Tặng tháng giới thiệu
+              - Gia hạn
+                - Nối ngày sử dụng
+                - Không nối ngày sử dụng
+              - Nâng cấp
+        - Nghiệp vụ riêng
+          - CRM
+            - Nhập data để phân chia cho sale
+            - Xem CRM của tất cả sale
+            - Chuyển data của sale này sang sale khác (ghi rõ lý do và hình ảnh chứng minh)
+          - Hợp đồng
+            - Ký xác nhận hợp đồng
+          - CSR (Phiếu yêu cầu dịch vụ)
+            - Duyệt CSR cùng OM
+      - Nghiệp vụ riêng
+        - Hợp đồng
+          - DUYỆT HỢP ĐỒNG NGOẠI LỆ (CẦN BẢNG LIỆT KÊ CÁC TRƯỜNG HỢP NGOẠI LỆ)
+  - Khối Fitness
+    - District
+    - FM
+    - PT
+      - CRM
+        - Nhập thông tin
+        - Nhận data từ nguồn hội viên đăng ký MBS
+        - Hành trình khách hàng
+      - Hội viên tập PT
+        - Xem thông tin/hợp đồng
+        - Cập nhật thông tin/hợp đồng để lưu vết
+      - Audit
+        - Lịch dạy của HLV
+      - Biên nhận
+        - Lập biên nhận HĐ PT
+      - Hợp đồng
+        - Lập hợp đồng PT
+      - CSR (Phiếu yêu cầu dịch vụ)
+        - Lập CSR
+          - Bảo lưu
+          - Chuyển nhượng
+          - Gia hạn
+            - Do hết ngày sử dụng
+          - Nâng cấp
+
+---

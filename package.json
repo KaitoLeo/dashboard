@@ -1,0 +1,35 @@
+{
+  "name": "actiwell-dashboard-mockui",
+  "version": "1.0.0",
+  "description": "Actiwell Dashboard MockUI - HTML thuần tĩnh cho GitLab Pages",
+  "main": "index.html",
+  "scripts": {
+    "dev": "echo 'Starting development server...' && python -m http.server 8000 || python3 -m http.server 8000 || npx serve .",
+    "build": "echo 'Preparing static files for GitLab Pages...' && mkdir -p public && cp -r assets public/ && cp -r pages public/ && cp -r data public/ && cp index.html public/ && cp test-charts.html public/ && cp *.md public/ && echo 'Static files ready!'",
+    "test": "echo 'Testing file structure...' && test -f index.html && test -d assets && test -d pages && test -d data && echo 'All required files present!'",
+    "deploy": "npm run build && echo 'Ready for GitLab Pages deployment!'",
+    "update-srs": "node update-srs.js",
+    "scan-formulas": "node update-srs.js --scan-only",
+    "validate-srs": "node update-srs.js --validate"
+  },
+  "keywords": [
+    "actiwell",
+    "dashboard",
+    "mockui",
+    "html",
+    "static",
+    "gitlab-pages"
+  ],
+  "author": "Actiwell Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/actiwell/actiwell-dashboard-mockui.git"
+  },
+  "homepage": "https://actiwell.gitlab.io/actiwell-dashboard-mockui/",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

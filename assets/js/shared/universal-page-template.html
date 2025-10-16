@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universal Page Template - Actiwell Reports</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link href="../assets/css/style.css" rel="stylesheet" />
+
+    <!-- Chart.js UMD for file:// protocol -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-heartbeat me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+      <!-- Page Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h1 class="card-title mb-2">
+                <i class="fas fa-chart-line me-2 text-primary"></i>
+                <!-- PAGE TITLE GOES HERE -->
+                Page Title
+              </h1>
+              <p class="text-muted mb-0" id="pageDescription">
+                <!-- PAGE DESCRIPTION GOES HERE -->
+                Page description
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metric Cards Section -->
+      <div class="row mb-4">
+        <!-- Metric cards go here -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-bar fa-2x mb-2"></i>
+              <h6>Metric 1</h6>
+              <h4 id="metric1">0</h4>
+              <small>units</small>
+            </div>
+          </div>
+        </div>
+        <!-- Add more metric cards as needed -->
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Chart 1</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 300px">
+                <canvas id="chart1"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Add more charts as needed -->
+      </div>
+
+      <!-- Data Table Section -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Data Table</h5>
+            </div>
+            <div class="card-body">
+              <!-- Filters -->
+              <div class="row mb-3">
+                <div class="col-md-3">
+                  <label class="form-label">Time Filter:</label>
+                  <select class="form-select" id="timeFilter">
+                    <option value="today">Hôm nay</option>
+                    <option value="yesterday">Hôm qua</option>
+                    <option value="this-week">Tuần này</option>
+                    <option value="mtd">MTD</option>
+                    <option value="this-month">Tháng này</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Location:</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Service:</label>
+                  <select class="form-select" id="serviceFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="membership">Membership</option>
+                    <option value="pt-fitness">PT Fitness</option>
+                    <option value="pilates">Pilates</option>
+                    <option value="swimming-coach">Swimming Coach</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Actions:</label>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-primary" onclick="applyFilters()">
+                      <i class="fas fa-search me-1"></i>Lọc
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetFilters()">
+                      <i class="fas fa-undo me-1"></i>Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="table-responsive">
+                <table class="table table-striped table-hover" id="dataTable">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Column 1</th>
+                      <th>Column 2</th>
+                      <th>Column 3</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dataTableBody">
+                    <!-- Data rows will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div
+                class="d-flex justify-content-between align-items-center mt-3"
+              >
+                <div class="d-flex align-items-center">
+                  <label class="form-label me-2 mb-0">Hiển thị:</label>
+                  <select
+                    class="form-select form-select-sm"
+                    id="pageSize"
+                    style="width: auto"
+                  >
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                  <span class="ms-2 text-muted" id="paginationInfo">
+                    Hiển thị 1-10 của 0 kết quả
+                  </span>
+                </div>
+                <nav aria-label="Page navigation">
+                  <ul class="pagination pagination-sm mb-0" id="pagination">
+                    <!-- Pagination buttons will be generated here -->
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Shared Data Layer - SSOT -->
+    <script src="../data/sample-data.js"></script>
+    <script src="../assets/js/shared/data-source.js"></script>
+    <script src="../assets/js/shared/state.js"></script>
+    <script src="../assets/js/shared/compute-kpi.js"></script>
+    <script src="../assets/js/shared/reconcile.js"></script>
+    <script src="../assets/js/shared/labels.js"></script>
+    <script src="../assets/js/shared/service-order.js"></script>
+    <script src="../assets/js/shared/init-shared.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+
+    <!-- Page-specific Scripts -->
+    <script>
+      // ========================================
+      // UNIVERSAL PAGE TEMPLATE - CUSTOMIZE THIS SECTION
+      // ========================================
+
+      // Page configuration
+      const PAGE_CONFIG = {
+        title: "Page Title",
+        description: "Page description",
+        dataSource: "sample-data", // or "api" or "custom"
+        hasCharts: true,
+        hasTable: true,
+        hasFilters: true,
+      };
+
+      // Sample data (replace with your actual data source)
+      let pageData = [];
+      let filteredData = [];
+      let currentPage = 1;
+      let pageSize = 10;
+      let totalPages = 1;
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🚀 Initializing Universal Page...");
+
+        // Update page title and description
+        updatePageInfo();
+
+        // Load initial data
+        loadPageData();
+
+        // Setup event listeners
+        setupEventListeners();
+
+        // Initialize charts if needed
+        if (PAGE_CONFIG.hasCharts) {
+          initializeCharts();
+        }
+
+        // Load table data if needed
+        if (PAGE_CONFIG.hasTable) {
+          loadTableData();
+        }
+
+        console.log("✅ Universal Page initialized successfully");
+      });
+
+      // Update page info
+      function updatePageInfo() {
+        document.querySelector("h1 .card-title").textContent =
+          PAGE_CONFIG.title;
+        document.getElementById("pageDescription").textContent =
+          PAGE_CONFIG.description;
+      }
+
+      // Load page data
+      function loadPageData() {
+        // Replace this with your actual data loading logic
+        pageData = generateSampleData();
+        filteredData = [...pageData];
+        console.log("📊 Page data loaded:", pageData.length, "items");
+      }
+
+      // Generate sample data (replace with your actual data)
+      function generateSampleData() {
+        const data = [];
+        for (let i = 1; i <= 50; i++) {
+          data.push({
+            id: i,
+            name: `Item ${i}`,
+            value: Math.floor(Math.random() * 1000),
+            date: new Date(
+              Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000
+            ),
+            status: ["active", "inactive", "pending"][
+              Math.floor(Math.random() * 3)
+            ],
+          });
+        }
+        return data;
+      }
+
+      // Setup event listeners
+      function setupEventListeners() {
+        // Filter change listeners
+        document
+          .getElementById("timeFilter")
+          .addEventListener("change", applyFilters);
+        document
+          .getElementById("locationFilter")
+          .addEventListener("change", applyFilters);
+        document
+          .getElementById("serviceFilter")
+          .addEventListener("change", applyFilters);
+        document
+          .getElementById("pageSize")
+          .addEventListener("change", changePageSize);
+      }
+
+      // Apply filters
+      function applyFilters() {
+        const timeFilter = document.getElementById("timeFilter").value;
+        const locationFilter = document.getElementById("locationFilter").value;
+        const serviceFilter = document.getElementById("serviceFilter").value;
+
+        filteredData = pageData.filter((item) => {
+          // Add your filtering logic here
+          return true; // Placeholder
+        });
+
+        currentPage = 1;
+        loadTableData();
+        console.log("🔍 Filters applied:", {
+          timeFilter,
+          locationFilter,
+          serviceFilter,
+        });
+      }
+
+      // Reset filters
+      function resetFilters() {
+        document.getElementById("timeFilter").value = "today";
+        document.getElementById("locationFilter").value = "all";
+        document.getElementById("serviceFilter").value = "all";
+
+        filteredData = [...pageData];
+        currentPage = 1;
+        loadTableData();
+        console.log("🔄 Filters reset");
+      }
+
+      // Load table data
+      function loadTableData() {
+        const tbody = document.getElementById("dataTableBody");
+        if (!tbody) return;
+
+        tbody.innerHTML = "";
+
+        // Calculate pagination
+        totalPages = Math.ceil(filteredData.length / pageSize);
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const pageData = filteredData.slice(startIndex, endIndex);
+
+        // Render table rows
+        pageData.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.value}</td>
+                    <td>${item.date.toLocaleDateString("vi-VN")}</td>
+                    <td>
+                        <span class="badge bg-${
+                          item.status === "active" ? "success" : "secondary"
+                        }">
+                            ${item.status}
+                        </span>
+                    </td>
+                `;
+          tbody.appendChild(row);
+        });
+
+        // Update pagination
+        updatePagination(filteredData.length);
+      }
+
+      // Update pagination
+      function updatePagination(totalItems) {
+        const paginationInfo = document.getElementById("paginationInfo");
+        const pagination = document.getElementById("pagination");
+
+        if (paginationInfo) {
+          const startItem =
+            totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+          const endItem = Math.min(currentPage * pageSize, totalItems);
+          paginationInfo.textContent = `Hiển thị ${startItem}-${endItem} của ${totalItems} kết quả`;
+        }
+
+        if (pagination) {
+          pagination.innerHTML = "";
+
+          // Previous button
+          const prevLi = document.createElement("li");
+          prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+          prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+            currentPage - 1
+          })">Previous</a>`;
+          pagination.appendChild(prevLi);
+
+          // Page numbers
+          for (let i = 1; i <= totalPages; i++) {
+            const pageLi = document.createElement("li");
+            pageLi.className = `page-item ${i === currentPage ? "active" : ""}`;
+            pageLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+            pagination.appendChild(pageLi);
+          }
+
+          // Next button
+          const nextLi = document.createElement("li");
+          nextLi.className = `page-item ${
+            currentPage === totalPages ? "disabled" : ""
+          }`;
+          nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+            currentPage + 1
+          })">Next</a>`;
+          pagination.appendChild(nextLi);
+        }
+      }
+
+      // Change page
+      function changePage(page) {
+        if (page < 1 || page > totalPages || page === currentPage) return;
+        currentPage = page;
+        loadTableData();
+      }
+
+      // Change page size
+      function changePageSize() {
+        pageSize = parseInt(document.getElementById("pageSize").value);
+        currentPage = 1;
+        loadTableData();
+      }
+
+      // Initialize charts
+      function initializeCharts() {
+        if (typeof Chart === "undefined") {
+          console.warn("Chart.js not available");
+          return;
+        }
+
+        const ctx = document.getElementById("chart1");
+        if (ctx) {
+          new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+              datasets: [
+                {
+                  label: "Sample Data",
+                  data: [12, 19, 3, 5, 2, 3],
+                  borderColor: "rgb(75, 192, 192)",
+                  tension: 0.1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+            },
+          });
+        }
+      }
+
+      // Update metrics
+      function updateMetrics() {
+        document.getElementById("metric1").textContent = filteredData.length;
+      }
+
+      // ========================================
+      // END OF CUSTOMIZABLE SECTION
+      // ========================================
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Check-in MTD - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-info">
+            <i class="fas fa-calendar-alt me-2"></i>Check-in MTD
+          </h2>
+          <p class="text-muted">
+            Thống kê chi tiết các lượt check-in từ đầu tháng đến nay
+          </p>
+        </div>
+      </div>
+
+      <!-- Metric Cards -->
+      <div class="row mb-4">
+        <!-- 1. Total Check-in MTD Card -->
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm bg-success-subtle">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-chart-line text-success fs-4 me-2"></i>
+                <h6 class="mb-0 text-success">Tổng Check-in MTD</h6>
+              </div>
+              <h4 class="text-success mb-0" id="totalCheckinMTD">5,080</h4>
+              <small class="text-muted">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Membership Check-in Card -->
+        <div class="col mb-3">
+          <div
+            class="card border-0 shadow-sm clickable bg-pink-subtle"
+            onclick="openMembershipMTDDetail()"
+            style="cursor: pointer"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-users text-pink fs-4 me-2"></i>
+                <h6 class="mb-0 text-pink">Membership Check-in</h6>
+              </div>
+              <h4 class="text-pink mb-0">2,100</h4>
+              <small class="text-muted">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. PT Fitness Check-in Card -->
+        <div class="col mb-3">
+          <div
+            class="card border-0 shadow-sm clickable bg-primary-subtle"
+            onclick="openPTMTDDetail()"
+            style="cursor: pointer"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-dumbbell text-primary fs-4 me-2"></i>
+                <h6 class="mb-0 text-primary">PT Fitness Check-in</h6>
+              </div>
+              <h4 class="text-primary mb-0">1,250</h4>
+              <small class="text-muted">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Pilates Check-in Card -->
+        <div class="col mb-3">
+          <div
+            class="card border-0 shadow-sm clickable bg-warning-subtle"
+            onclick="openPilatesMTDDetail()"
+            style="cursor: pointer"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-leaf text-warning fs-4 me-2"></i>
+                <h6 class="mb-0 text-warning">Pilates Check-in</h6>
+              </div>
+              <h4 class="text-warning mb-0">980</h4>
+              <small class="text-muted">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Swimming Coach Check-in Card -->
+        <div class="col mb-3">
+          <div
+            class="card border-0 shadow-sm clickable bg-success-subtle"
+            onclick="openSwimmingCoachMTDDetail()"
+            style="cursor: pointer"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-swimmer text-success fs-4 me-2"></i>
+                <h6 class="mb-0 text-success">Swimming Coach Check-in</h6>
+              </div>
+              <h4 class="text-success mb-0">750</h4>
+              <small class="text-muted">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Check-in sai giờ Card -->
+        <div class="col mb-3">
+          <div
+            class="card border-0 shadow-sm clickable bg-danger-subtle"
+            onclick="openLateCheckinMTDDetail()"
+            style="cursor: pointer"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i
+                  class="fas fa-exclamation-triangle text-danger fs-4 me-2"
+                ></i>
+                <h6 class="mb-0 text-danger">Check-in sai giờ</h6>
+              </div>
+              <h4 class="text-danger mb-0">1,247</h4>
+              <small class="text-muted">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bố Check-in theo bộ
+                phận Tháng này
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 300px">
+                <canvas id="checkinTypeChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bố Check-in theo cơ sở
+                Tháng này
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 300px">
+                <canvas id="checkinLocationChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Giờ cao điểm check-in table moved here -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Giờ cao điểm check-in
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Khung giờ</th>
+                      <th class="text-center">Số lượt</th>
+                      <th class="text-center">Tỷ lệ</th>
+                      <th class="text-center">Loại chính</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>5h30p-8h sáng</td>
+                      <td class="text-center">450</td>
+                      <td class="text-center">7.7%</td>
+                      <td class="text-center">PT Fitness</td>
+                    </tr>
+                    <tr>
+                      <td>8h-10h sáng</td>
+                      <td class="text-center">680</td>
+                      <td class="text-center">11.6%</td>
+                      <td class="text-center">Membership</td>
+                    </tr>
+                    <tr>
+                      <td>10h-12h</td>
+                      <td class="text-center">520</td>
+                      <td class="text-center">8.8%</td>
+                      <td class="text-center">Pilates</td>
+                    </tr>
+                    <tr>
+                      <td>12h-14h</td>
+                      <td class="text-center">380</td>
+                      <td class="text-center">6.5%</td>
+                      <td class="text-center">Membership</td>
+                    </tr>
+                    <tr>
+                      <td>14h-16h</td>
+                      <td class="text-center">420</td>
+                      <td class="text-center">7.1%</td>
+                      <td class="text-center">Pilates</td>
+                    </tr>
+                    <tr>
+                      <td>16h-18h</td>
+                      <td class="text-center">890</td>
+                      <td class="text-center">15.1%</td>
+                      <td class="text-center">PT Fitness</td>
+                    </tr>
+                    <tr>
+                      <td>18h-20h</td>
+                      <td class="text-center">1,250</td>
+                      <td class="text-center">21.3%</td>
+                      <td class="text-center">Membership</td>
+                    </tr>
+                    <tr>
+                      <td>20h-22h</td>
+                      <td class="text-center">1,210</td>
+                      <td class="text-center">20.6%</td>
+                      <td class="text-center">PT Fitness</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Phân tích Check-in theo cơ sở
+                Tháng này
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Cơ sở</th>
+                      <th class="text-center">Membership</th>
+                      <th class="text-center">PT Fitness</th>
+                      <th class="text-center">Pilates</th>
+                      <th class="text-center">Swimming Coach</th>
+                      <th class="text-center">Tổng lượt</th>
+                      <th class="text-center">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody id="checkinAnalysisTableBody">
+                    <!-- Data will be loaded dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed List Table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Danh sách check-in chi tiết
+                Tháng này
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Filter Section -->
+              <div class="row mb-3">
+                <div class="col-md-2">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Bộ phận</label>
+                  <select class="form-select" id="departmentFilter">
+                    <option value="all">Tất cả bộ phận</option>
+                    <option value="pt-fitness">PT Fitness</option>
+                    <option value="pilates">Pilates</option>
+                    <option value="swimming-coach">Swimming Coach</option>
+                    <option value="membership">Membership</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Từ ngày</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDateFilter"
+                    value="2024-09-01"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Đến ngày</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDateFilter"
+                    value="2024-09-30"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Tìm kiếm</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="searchInput"
+                    placeholder="Tìm theo tên hội viên..."
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">&nbsp;</label>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-primary" onclick="applyFilters()">
+                      <i class="fas fa-filter me-1"></i>Lọc
+                    </button>
+                    <button
+                      class="btn btn-outline-secondary"
+                      onclick="resetFilters()"
+                    >
+                      <i class="fas fa-undo me-1"></i>Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Hội viên</th>
+                      <th>Cơ sở</th>
+                      <th>Bộ phận</th>
+                      <th>Nhân viên chăm sóc</th>
+                      <th>Ngày check-in</th>
+                      <th>Giờ check-in</th>
+                    </tr>
+                  </thead>
+                  <tbody id="checkinTableBody">
+                    <!-- Data will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination">
+                  <!-- Pagination will be generated here -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script src="../assets/js/data-consistency.js"></script>
+
+    <!-- Metrics Engine -->
+    <script src="../assets/js/metrics-engine/types.js"></script>
+    <script src="../assets/js/metrics-engine/selectors.js"></script>
+    <script src="../assets/js/metrics-engine/compute.js"></script>
+    <script src="../assets/js/metrics-engine/cache.js"></script>
+    <script src="../assets/js/metrics-engine/index.js"></script>
+    <script>
+      // Update data from consistent source
+      function updateDataFromConsistentSource() {
+        if (window.ConsistentData) {
+          const mtdData = window.ConsistentData.getData("mtd", "all");
+          const checkinData = window.ConsistentData.getCheckinData(
+            "mtd",
+            "all"
+          );
+
+          // Update total check-in MTD
+          const totalElement = document.getElementById("totalCheckinMTD");
+          if (totalElement) {
+            totalElement.textContent = checkinData.total.toLocaleString();
+          }
+
+          // Update individual metric cards
+          const ptFitnessElement = document.querySelector(
+            ".col:nth-child(2) .card h4"
+          );
+          if (ptFitnessElement) {
+            ptFitnessElement.textContent =
+              mtdData.ptFitnessCheckin.toLocaleString();
+          }
+
+          const pilatesElement = document.querySelector(
+            ".col:nth-child(3) .card h4"
+          );
+          if (pilatesElement) {
+            pilatesElement.textContent =
+              mtdData.pilatesCheckin.toLocaleString();
+          }
+
+          const swimmingElement = document.querySelector(
+            ".col:nth-child(4) .card h4"
+          );
+          if (swimmingElement) {
+            swimmingElement.textContent =
+              mtdData.swimmingCoachCheckin.toLocaleString();
+          }
+
+          const membershipElement = document.querySelector(
+            ".col:nth-child(5) .card h4"
+          );
+          if (membershipElement) {
+            membershipElement.textContent =
+              mtdData.membershipCheckin.toLocaleString();
+          }
+
+          const lateElement = document.querySelector(
+            ".col:nth-child(6) .card h4"
+          );
+          if (lateElement) {
+            lateElement.textContent = mtdData.lateCheckin.toLocaleString();
+          }
+
+          // Update analysis table
+          updateAnalysisTable();
+        }
+      }
+
+      // Update analysis table with consistent data
+      function updateAnalysisTable() {
+        if (window.ConsistentData) {
+          const mtdData = window.ConsistentData.getData("mtd", "all");
+
+          // Data distribution for each location (synchronized with metric cards)
+          const locationData = [
+            {
+              name: "Tôn Thất Thuyết",
+              membership: 250,
+              ptFitness: 196,
+              pilates: 150,
+              swimming: 420,
+            },
+            {
+              name: "Huỳnh Thúc Kháng",
+              membership: 300,
+              ptFitness: 235,
+              pilates: 180,
+              swimming: 500,
+            },
+            {
+              name: "Giảng Võ",
+              membership: 200,
+              ptFitness: 157,
+              pilates: 120,
+              swimming: 350,
+            },
+            {
+              name: "Hào Nam",
+              membership: 275,
+              ptFitness: 216,
+              pilates: 165,
+              swimming: 450,
+            },
+            {
+              name: "Nguyễn Tuân",
+              membership: 225,
+              ptFitness: 176,
+              pilates: 135,
+              swimming: 380,
+            },
+          ];
+
+          const tbody = document.getElementById("checkinAnalysisTableBody");
+          if (tbody) {
+            tbody.innerHTML = "";
+
+            locationData.forEach((location, index) => {
+              const total =
+                location.membership +
+                location.ptFitness +
+                location.pilates +
+                location.swimming;
+
+              // Determine status based on total
+              let status, statusClass, totalClass;
+              if (total >= 90) {
+                status = "Xuất sắc";
+                statusClass = "bg-success";
+                totalClass = "text-success";
+              } else if (total >= 70) {
+                status = "Tốt";
+                statusClass = "bg-success";
+                totalClass = "text-primary";
+              } else if (total >= 60) {
+                status = "Trung bình";
+                statusClass = "bg-warning";
+                totalClass = "text-warning";
+              } else {
+                status = "Cần cải thiện";
+                statusClass = "bg-danger";
+                totalClass = "text-danger";
+              }
+
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${index + 1}</td>
+                <td><strong>${location.name}</strong></td>
+                <td class="text-center">
+                  <span class="badge bg-primary rounded-pill">${
+                    location.membership
+                  }</span>
+                </td>
+                <td class="text-center">
+                  <span class="badge bg-warning rounded-pill">${
+                    location.ptFitness
+                  }</span>
+                </td>
+                <td class="text-center">
+                  <span class="badge bg-danger rounded-pill">${
+                    location.pilates
+                  }</span>
+                </td>
+                <td class="text-center">
+                  <span class="badge bg-info rounded-pill">${
+                    location.swimming
+                  }</span>
+                </td>
+                <td class="text-center">
+                  <strong class="${totalClass}">${total}</strong>
+                </td>
+                <td class="text-center">
+                  <span class="badge ${statusClass}">${status}</span>
+                </td>
+              `;
+              tbody.appendChild(row);
+            });
+
+            // Add total row
+            const totalMembership = locationData.reduce(
+              (sum, loc) => sum + loc.membership,
+              0
+            );
+            const totalPTFitness = locationData.reduce(
+              (sum, loc) => sum + loc.ptFitness,
+              0
+            );
+            const totalPilates = locationData.reduce(
+              (sum, loc) => sum + loc.pilates,
+              0
+            );
+            const totalSwimming = locationData.reduce(
+              (sum, loc) => sum + loc.swimming,
+              0
+            );
+            const grandTotal =
+              totalMembership + totalPTFitness + totalPilates + totalSwimming;
+
+            const totalRow = document.createElement("tr");
+            totalRow.className = "table-dark";
+            totalRow.innerHTML = `
+              <td></td>
+              <td><strong class="text-white">TỔNG CỘNG</strong></td>
+              <td class="text-center">
+                <span class="badge bg-primary rounded-pill"><strong>${totalMembership}</strong></span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-warning rounded-pill"><strong>${totalPTFitness}</strong></span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-danger rounded-pill"><strong>${totalPilates}</strong></span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-info rounded-pill"><strong>${totalSwimming}</strong></span>
+              </td>
+              <td class="text-center">
+                <strong class="text-white">${grandTotal}</strong>
+              </td>
+              <td class="text-center">
+                <strong class="text-white">-</strong>
+              </td>
+            `;
+            tbody.appendChild(totalRow);
+          }
+        }
+      }
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        updateDataFromConsistentSource();
+        updateAnalysisTable();
+        loadCheckinData(filteredData);
+      });
+
+      // Generate comprehensive MTD check-in data
+      function generateCheckinMTDData() {
+        const data = [];
+        let id = 1;
+
+        // Data distribution based on consistent metrics
+        const departmentData = [
+          { name: "Membership", count: 2100, key: "membership" },
+          { name: "PT Fitness", count: 1250, key: "pt-fitness" },
+          { name: "Pilates", count: 980, key: "pilates" },
+          { name: "Swimming Coach", count: 750, key: "swimming-coach" },
+        ];
+
+        const locations = [
+          { name: "Tôn Thất Thuyết", key: "ton-that-thuyet" },
+          { name: "Huỳnh Thúc Kháng", key: "huynh-thuc-khang" },
+          { name: "Giảng Võ", key: "giang-vo" },
+          { name: "Hào Nam", key: "hao-nam" },
+          { name: "Nguyễn Tuân", key: "nguyen-tuan" },
+        ];
+
+        const firstNames = [
+          "Nguyễn",
+          "Trần",
+          "Lê",
+          "Phạm",
+          "Hoàng",
+          "Vũ",
+          "Võ",
+          "Đặng",
+          "Bùi",
+          "Đỗ",
+          "Hồ",
+          "Ngô",
+          "Dương",
+          "Lý",
+          "Tôn",
+          "Chu",
+          "Dương",
+          "Lưu",
+          "Tôn",
+          "Chu",
+        ];
+        const lastNames = [
+          "Văn",
+          "Thị",
+          "Minh",
+          "Hương",
+          "Lan",
+          "Mai",
+          "Đức",
+          "Sơn",
+          "Hùng",
+          "Dung",
+          "Hoa",
+          "Tâm",
+          "Nga",
+          "Hạnh",
+          "Quang",
+          "Thắng",
+          "Hải",
+          "Nam",
+          "Bình",
+          "Tùng",
+        ];
+
+        const serviceTypes = {
+          Membership: ["Gym", "Yoga", "Group X", "Pool"],
+          "PT Fitness": ["PT Gym", "PT kickfit", "PT boxing", "PT functional"],
+          Pilates: [
+            "Pilates",
+            "Pilates Reformer",
+            "Pilates Mat",
+            "Pilates Tower",
+          ],
+          "Swimming Coach": [
+            "Bơi ếch",
+            "Bơi sải",
+            "Bơi ngửa",
+            "Bơi bướm",
+            "Bơi tự do",
+          ],
+        };
+
+        const classTypes = {
+          Membership: ["", "", "", ""], // No class type for membership
+          "PT Fitness": ["Lớp 1:1", "Lớp 1:2", "Lớp nhóm"],
+          Pilates: ["Lớp 1:1", "Lớp 1:2", "Lớp nhóm"],
+          "Swimming Coach": ["Lớp 1:1", "Lớp 1:2", "Lớp nhóm"],
+        };
+
+        const instructors = [
+          "Nguyễn Văn A",
+          "Trần Thị B",
+          "Lê Văn C",
+          "Phạm Thị D",
+          "Hoàng Văn E",
+          "Vũ Thị F",
+          "Võ Văn G",
+          "Đặng Thị H",
+          "Bùi Văn I",
+          "Đỗ Thị K",
+        ];
+        const staffMembers = [
+          "Nguyễn Thị Lan",
+          "Lê Văn C",
+          "Nguyễn Thị E",
+          "Lê Thị G",
+          "Trần Văn I",
+          "Phạm Thị J",
+          "Hoàng Văn K",
+          "Vũ Thị L",
+          "Võ Văn M",
+          "Đặng Thị N",
+        ];
+
+        departmentData.forEach((dept) => {
+          for (let i = 0; i < dept.count; i++) {
+            const location =
+              locations[Math.floor(rng.next() * locations.length)];
+            const firstName =
+              firstNames[Math.floor(rng.next() * firstNames.length)];
+            const lastName =
+              lastNames[Math.floor(rng.next() * lastNames.length)];
+            const serviceType =
+              serviceTypes[dept.name][
+                Math.floor(rng.next() * serviceTypes[dept.name].length)
+              ];
+            const classType =
+              classTypes[dept.name][
+                Math.floor(rng.next() * classTypes[dept.name].length)
+              ];
+            const instructor =
+              dept.name === "Membership"
+                ? ""
+                : instructors[Math.floor(rng.next() * instructors.length)];
+            const staffInCharge =
+              staffMembers[Math.floor(rng.next() * staffMembers.length)];
+
+            // Generate random time between 5:00 and 22:00
+            const hour = Math.floor(rng.next() * 18) + 5; // 5-22
+            const minute = Math.floor(rng.next() * 60);
+            const checkinTime = `${hour.toString().padStart(2, "0")}:${minute
+              .toString()
+              .padStart(2, "0")}`;
+
+            // Generate random date in September 2024
+            const day = Math.floor(rng.next() * 30) + 1;
+            const checkinDate = `2024-09-${day.toString().padStart(2, "0")}`;
+            const createdAt = `${checkinDate}T${checkinTime}:00Z`;
+
+            data.push({
+              id: `mtd_${id++}`,
+              memberId: `HV${String(id).padStart(3, "0")}`,
+              memberName: `${firstName} ${lastName} ${String.fromCharCode(
+                65 + (i % 26)
+              )}`,
+              location: location.name,
+              locationKey: location.key,
+              department: dept.name,
+              departmentKey: dept.key,
+              staffInCharge: staffInCharge,
+              checkinTime: checkinTime,
+              checkinDate: checkinDate,
+              serviceType: serviceType,
+              classType: classType,
+              instructor: instructor,
+              createdAt: createdAt,
+            });
+          }
+        });
+
+        return data;
+      }
+
+      // Initialize data
+      const checkinMTDData = generateCheckinMTDData();
+
+      // Pagination variables
+      let currentPage = 1;
+      const recordsPerPage = 20;
+      let filteredData = checkinMTDData;
+
+      // Navigation functions
+      function openPTMTDDetail() {
+        window.location.href = "pt-fitness-checkin-mtd-detail.html";
+      }
+
+      function openPilatesMTDDetail() {
+        window.location.href = "pilates-checkin-mtd-detail.html";
+      }
+
+      function openSwimmingCoachMTDDetail() {
+        window.location.href = "swimming-coach-checkin-mtd-detail.html";
+      }
+
+      function openMembershipMTDDetail() {
+        window.location.href = "membership-checkin-mtd-detail.html";
+      }
+
+      function openLateCheckinMTDDetail() {
+        window.location.href = "late-checkin-mtd-detail.html";
+      }
+
+      // Filter functions
+      function applyFilters() {
+        const location = document.getElementById("locationFilter").value;
+        const department = document.getElementById("departmentFilter").value;
+        const search = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const startDate = document.getElementById("startDateFilter").value;
+        const endDate = document.getElementById("endDateFilter").value;
+
+        filteredData = checkinMTDData.filter((item) => {
+          // Location filter
+          if (location !== "all" && item.locationKey !== location) return false;
+
+          // Department filter
+          if (department !== "all" && item.departmentKey !== department)
+            return false;
+
+          // Search filter
+          if (search && !item.memberName.toLowerCase().includes(search))
+            return false;
+
+          // Date range filter
+          if (startDate && endDate) {
+            if (item.checkinDate < startDate || item.checkinDate > endDate)
+              return false;
+          }
+
+          return true;
+        });
+
+        currentPage = 1; // Reset to first page when filtering
+        loadCheckinData(filteredData);
+      }
+
+      function resetFilters() {
+        document.getElementById("locationFilter").value = "all";
+        document.getElementById("departmentFilter").value = "all";
+        document.getElementById("searchInput").value = "";
+        document.getElementById("startDateFilter").value = "2024-09-01";
+        document.getElementById("endDateFilter").value = "2024-09-30";
+
+        filteredData = checkinMTDData;
+        currentPage = 1; // Reset to first page when resetting filters
+        loadCheckinData(filteredData);
+      }
+
+      function loadCheckinData(data) {
+        const tbody = document.getElementById("checkinTableBody");
+        tbody.innerHTML = "";
+
+        // Calculate pagination
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const endIndex = startIndex + recordsPerPage;
+        const paginatedData = data.slice(startIndex, endIndex);
+
+        paginatedData.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${startIndex + index + 1}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${item.memberName.charAt(0)}
+                </div>
+                <div>
+                  <div class="fw-bold">${item.memberName}</div>
+                  <small class="text-muted">${item.memberId}</small>
+                </div>
+              </div>
+            </td>
+            <td>${item.location}</td>
+            <td>
+              <span class="badge bg-${getDepartmentBadgeClass(
+                item.department
+              )}">
+                ${item.department}
+              </span>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${item.staffInCharge.charAt(0)}
+                </div>
+                <span>${item.staffInCharge}</span>
+              </div>
+            </td>
+            <td>
+              <span class="text-primary fw-bold">${item.checkinDate}</span>
+            </td>
+            <td>${item.checkinTime}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Generate pagination
+        generatePagination(data.length);
+      }
+
+      function getDepartmentBadgeClass(department) {
+        const classes = {
+          "PT Fitness": "primary",
+          Pilates: "warning",
+          "Swimming Coach": "success",
+          Membership: "info",
+        };
+        return classes[department] || "secondary";
+      }
+
+      // Smart pagination with ellipses
+      function generatePagination(totalRecords) {
+        const totalPages = Math.ceil(totalRecords / recordsPerPage);
+        const pagination = document.getElementById("pagination");
+
+        if (!pagination) return;
+
+        pagination.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        const maxVisiblePages = 7;
+        let startPage = Math.max(
+          1,
+          currentPage - Math.floor(maxVisiblePages / 2)
+        );
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        // Adjust start page if we're near the end
+        if (endPage - startPage + 1 < maxVisiblePages) {
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        // Previous button
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+        prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage - 1
+        })">Trước</a>`;
+        pagination.appendChild(prevLi);
+
+        // First page
+        if (startPage > 1) {
+          const firstLi = document.createElement("li");
+          firstLi.className = "page-item";
+          firstLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(1)">1</a>`;
+          pagination.appendChild(firstLi);
+
+          if (startPage > 2) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+        }
+
+        // Page numbers
+        for (let i = startPage; i <= endPage; i++) {
+          const li = document.createElement("li");
+          li.className = `page-item ${i === currentPage ? "active" : ""}`;
+          li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+          pagination.appendChild(li);
+        }
+
+        // Last page
+        if (endPage < totalPages) {
+          if (endPage < totalPages - 1) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+
+          const lastLi = document.createElement("li");
+          lastLi.className = "page-item";
+          lastLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a>`;
+          pagination.appendChild(lastLi);
+        }
+
+        // Next button
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${
+          currentPage === totalPages ? "disabled" : ""
+        }`;
+        nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage + 1
+        })">Sau</a>`;
+        pagination.appendChild(nextLi);
+      }
+
+      function changePage(page) {
+        const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+        if (page < 1 || page > totalPages) return;
+
+        currentPage = page;
+        loadCheckinData(filteredData);
+      }
+
+      // Chart creation
+      function createCharts() {
+        // Check-in Type Chart
+        const typeCtx = document.getElementById("checkinTypeChart");
+        if (typeCtx) {
+          new Chart(typeCtx, {
+            type: "doughnut",
+            data: {
+              labels: ["PT Fitness", "Pilates", "Swimming Coach", "Membership"],
+              datasets: [
+                {
+                  data: [1250, 980, 750, 2100],
+                  backgroundColor: ["#007bff", "#ffc107", "#28a745", "#e83e8c"],
+                  borderWidth: 2,
+                  borderColor: "#fff",
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Phân bố Check-in theo bộ phận Tháng này",
+                },
+                legend: {
+                  position: "right",
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      const total = context.dataset.data.reduce(
+                        (a, b) => a + b,
+                        0
+                      );
+                      const percentage = (
+                        (context.parsed / total) *
+                        100
+                      ).toFixed(1);
+                      return `${context.label}: ${context.parsed} lượt (${percentage}%)`;
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // Check-in Location Chart
+        const locationCtx = document.getElementById("checkinLocationChart");
+        if (locationCtx) {
+          new Chart(locationCtx, {
+            type: "doughnut",
+            data: {
+              labels: [
+                "Tôn Thất Thuyết",
+                "Huỳnh Thúc Kháng",
+                "Giảng Võ",
+                "Hào Nam",
+                "Nguyễn Tuân",
+              ],
+              datasets: [
+                {
+                  data: [1016, 1215, 827, 1106, 916],
+                  backgroundColor: [
+                    "#0d6efd",
+                    "#28a745",
+                    "#ffc107",
+                    "#17a2b8",
+                    "#6f42c1",
+                  ],
+                  borderWidth: 2,
+                  borderColor: "#fff",
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Phân bố Check-in theo cơ sở Tháng này",
+                },
+                legend: {
+                  position: "right",
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      const total = context.dataset.data.reduce(
+                        (a, b) => a + b,
+                        0
+                      );
+                      const percentage = (
+                        (context.parsed / total) *
+                        100
+                      ).toFixed(1);
+                      return `${context.label}: ${context.parsed} lượt (${percentage}%)`;
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+      }
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Check-in MTD page loaded");
+        loadCheckinData(checkinMTDData);
+        createCharts();
+        updateAnalysisTable();
+      });
+    </script>
+  
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo doanh số theo CLB - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+
+    <!-- Revenue Calculation Modules -->
+    <script src="../assets/js/revenue/revenue-calculations.js"></script>
+    <script src="../assets/js/revenue/revenue-mock-data.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title mb-0">
+                <i class="fas fa-building me-2"></i>
+                Báo cáo doanh số theo CLB
+              </h4>
+              <small class="text-muted">Tháng 12/2024</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tổng doanh thu</h5>
+              <h2 class="mb-0">1,850,000,000</h2>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tổng mục tiêu</h5>
+              <h2 class="mb-0">2,500,000,000</h2>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tỉ lệ hoàn thành</h5>
+              <h2 class="mb-0">62%</h2>
+              <small>Mục tiêu</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">CLB hoạt động</h5>
+              <h2 class="mb-0">5</h2>
+              <small>Trung tâm</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-lg-8 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Biểu đồ doanh thu theo CLB</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="clubRevenueChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Tỉ trọng doanh thu</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="clubShareChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Chi tiết doanh số theo CLB</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>STT</th>
+                      <th>Tên CLB</th>
+                      <th>Mục tiêu (VNĐ)</th>
+                      <th>Doanh thu MTD (VNĐ)</th>
+                      <th>Doanh thu ngày (VNĐ)</th>
+                      <th>Tỉ lệ hoàn thành (%)</th>
+                      <th>Tỉ trọng (%)</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td>500,000,000</td>
+                      <td>375,000,000</td>
+                      <td>18,500,000</td>
+                      <td><span class="badge bg-success">75%</span></td>
+                      <td>20.3%</td>
+                      <td>
+                        <span class="badge bg-success">Đạt mục tiêu</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td>600,000,000</td>
+                      <td>450,000,000</td>
+                      <td>22,000,000</td>
+                      <td><span class="badge bg-success">75%</span></td>
+                      <td>24.3%</td>
+                      <td>
+                        <span class="badge bg-success">Đạt mục tiêu</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td>550,000,000</td>
+                      <td>412,500,000</td>
+                      <td>20,500,000</td>
+                      <td><span class="badge bg-success">75%</span></td>
+                      <td>22.3%</td>
+                      <td>
+                        <span class="badge bg-success">Đạt mục tiêu</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td><strong>Hào Nam</strong></td>
+                      <td>450,000,000</td>
+                      <td>337,500,000</td>
+                      <td>16,500,000</td>
+                      <td><span class="badge bg-success">75%</span></td>
+                      <td>18.2%</td>
+                      <td>
+                        <span class="badge bg-success">Đạt mục tiêu</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td>400,000,000</td>
+                      <td>275,000,000</td>
+                      <td>14,000,000</td>
+                      <td><span class="badge bg-warning">69%</span></td>
+                      <td>14.9%</td>
+                      <td><span class="badge bg-warning">Chưa đạt</span></td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <th colspan="2">TỔNG CỘNG</th>
+                      <th>2,500,000,000</th>
+                      <th>1,850,000,000</th>
+                      <th>91,500,000</th>
+                      <th>62%</th>
+                      <th>100%</th>
+                      <th>-</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Analysis -->
+      <div class="row mt-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Phân tích hiệu suất</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <h6>CLB dẫn đầu:</h6>
+                <p class="text-success">Huỳnh Thúc Kháng - 450M VNĐ (24.3%)</p>
+              </div>
+              <div class="mb-3">
+                <h6>CLB cần hỗ trợ:</h6>
+                <p class="text-warning">
+                  Nguyễn Tuân - 275M VNĐ (69% mục tiêu)
+                </p>
+              </div>
+              <div class="mb-3">
+                <h6>Trung bình doanh thu/CLB:</h6>
+                <p class="text-info">370M VNĐ</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Khuyến nghị hành động</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tăng cường marketing cho CLB Nguyễn Tuân
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Nhân rộng mô hình thành công từ Huỳnh Thúc Kháng
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Phân tích chi tiết nguyên nhân chưa đạt mục tiêu
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Điều chỉnh mục tiêu cho phù hợp với thực tế
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Load settings and update data
+      function loadSettingsAndUpdateData() {
+        try {
+          const savedSettings = localStorage.getItem("actiwellSettings");
+          if (savedSettings) {
+            const settings = JSON.parse(savedSettings);
+            console.log("Settings loaded:", settings);
+
+            // Update summary cards
+            const monthlyTarget = settings.global.monthlyTarget || 3000000000;
+            const mtdRevenue = 1850000000; // Fixed MTD revenue
+
+            // Update total target
+            document.querySelector(".card.bg-success h2").textContent =
+              formatNumber(monthlyTarget);
+
+            // Update completion rate
+            const completionRate = Math.round(
+              (mtdRevenue / monthlyTarget) * 100
+            );
+            document.querySelector(".card.bg-info h2").textContent =
+              completionRate + "%";
+
+            // Update total revenue
+            document.querySelector(".card.bg-primary h2").textContent =
+              formatNumber(mtdRevenue);
+
+            // Update table data
+            updateClubTable(monthlyTarget, mtdRevenue);
+
+            console.log("Revenue club data updated successfully");
+          } else {
+            console.log("No settings found, using default values");
+          }
+        } catch (error) {
+          console.error("Error loading settings:", error);
+        }
+      }
+
+      // Format number with commas
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      // Update club table with dynamic data
+      function updateClubTable(monthlyTarget, mtdRevenue) {
+        // Calculate proportional targets for each club
+        const clubTargets = [
+          Math.round(monthlyTarget * 0.2), // Tôn Thất Thuyết - 20%
+          Math.round(monthlyTarget * 0.24), // Huỳnh Thúc Kháng - 24%
+          Math.round(monthlyTarget * 0.22), // Giảng Võ - 22%
+          Math.round(monthlyTarget * 0.18), // Hào Nam - 18%
+          Math.round(monthlyTarget * 0.16), // Nguyễn Tuân - 16%
+        ];
+
+        // Fixed actual revenue data
+        const actualRevenues = [
+          375000000, 450000000, 412500000, 337500000, 275000000,
+        ];
+
+        // Update table rows
+        const tableRows = document.querySelectorAll("tbody tr");
+        tableRows.forEach((row, index) => {
+          if (index < 5) {
+            // Only update first 5 rows
+            const cells = row.querySelectorAll("td");
+            if (cells.length >= 7) {
+              // Update target (3rd column)
+              cells[2].textContent = formatNumber(clubTargets[index]);
+
+              // Calculate and update completion rate (6th column)
+              const completionRate = Math.round(
+                (actualRevenues[index] / clubTargets[index]) * 100
+              );
+              const badge = cells[5].querySelector(".badge");
+              if (badge) {
+                badge.textContent = completionRate + "%";
+                badge.className =
+                  completionRate >= 70
+                    ? "badge bg-success"
+                    : completionRate >= 50
+                    ? "badge bg-warning"
+                    : "badge bg-danger";
+              }
+
+              // Update status (8th column)
+              const statusBadge = cells[7].querySelector(".badge");
+              if (statusBadge) {
+                if (completionRate >= 70) {
+                  statusBadge.textContent = "Đạt mục tiêu";
+                  statusBadge.className = "badge bg-success";
+                } else if (completionRate >= 50) {
+                  statusBadge.textContent = "Cần cải thiện";
+                  statusBadge.className = "badge bg-warning";
+                } else {
+                  statusBadge.textContent = "Chưa đạt";
+                  statusBadge.className = "badge bg-danger";
+                }
+              }
+            }
+          }
+        });
+
+        // Update footer total
+        const footerRow = document.querySelector("tfoot tr");
+        if (footerRow) {
+          const footerCells = footerRow.querySelectorAll("th");
+          if (footerCells.length >= 6) {
+            footerCells[2].textContent = formatNumber(monthlyTarget);
+            footerCells[3].textContent = formatNumber(mtdRevenue);
+            const totalCompletionRate = Math.round(
+              (mtdRevenue / monthlyTarget) * 100
+            );
+            footerCells[5].textContent = totalCompletionRate + "%";
+          }
+        }
+      }
+
+      // Initialize charts when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        loadSettingsAndUpdateData();
+
+        // Wait for revenue modules to load
+        if (
+          typeof window.revenueCalc !== "undefined" &&
+          typeof window.currentMonthRevenue !== "undefined"
+        ) {
+          initializeClubChartsDynamic();
+        } else {
+          console.warn("⚠️ Revenue modules not loaded, using static data");
+          initializeClubCharts();
+        }
+      });
+
+      /**
+       * Initialize club charts with dynamic data
+       */
+      function initializeClubChartsDynamic() {
+        console.log(
+          "💰 Initializing Revenue by Club with dynamic calculations..."
+        );
+
+        try {
+          const currentRevenue = window.currentMonthRevenue;
+          const locations = [
+            "Tôn Thất Thuyết",
+            "Huỳnh Thúc Kháng",
+            "Giảng Võ",
+            "Hào Nam",
+            "Nguyễn Tuân",
+          ];
+
+          // Calculate revenue by location
+          const revenueByLocation =
+            window.revenueCalc.calculateRevenueByLocation(
+              currentRevenue,
+              locations
+            );
+          const locationPercentages =
+            window.revenueCalc.calculatePercentageDistribution(
+              revenueByLocation
+            );
+
+          console.log("✅ Revenue by Club calculated:");
+          locations.forEach((location) => {
+            console.log(
+              `   ${location}: ${window.revenueCalc.formatCurrency(
+                revenueByLocation[location]
+              )} VNĐ (${locationPercentages[location].toFixed(1)}%)`
+            );
+          });
+
+          // Create charts with dynamic data
+          createClubCharts(locations, revenueByLocation, locationPercentages);
+        } catch (error) {
+          console.error("❌ Error calculating club revenue:", error);
+          initializeClubCharts(); // Fallback to static
+        }
+      }
+
+      /**
+       * Create charts with dynamic data
+       */
+      function createClubCharts(locations, revenueByLocation, percentages) {
+        // Get settings for target comparison
+        let monthlyTarget = 3000000000; // Default
+        try {
+          const savedSettings = localStorage.getItem("actiwellSettings");
+          if (savedSettings) {
+            const settings = JSON.parse(savedSettings);
+            monthlyTarget = settings.global.monthlyTarget || 3000000000;
+          }
+        } catch (error) {
+          console.error("Error loading settings for charts:", error);
+        }
+
+        // Calculate proportional targets for each club
+        const clubTargets = [
+          Math.round(monthlyTarget * 0.2), // Tôn Thất Thuyết - 20%
+          Math.round(monthlyTarget * 0.24), // Huỳnh Thúc Kháng - 24%
+          Math.round(monthlyTarget * 0.22), // Giảng Võ - 22%
+          Math.round(monthlyTarget * 0.18), // Hào Nam - 18%
+          Math.round(monthlyTarget * 0.16), // Nguyễn Tuân - 16%
+        ];
+
+        // Club Revenue Bar Chart
+        const ctx1 = document.getElementById("clubRevenueChart");
+        if (ctx1) {
+          new Chart(ctx1, {
+            type: "bar",
+            data: {
+              labels: locations,
+              datasets: [
+                {
+                  label: "Doanh thu thực tế (VNĐ)",
+                  data: locations.map((loc) => revenueByLocation[loc]),
+                  backgroundColor: [
+                    "rgba(40, 167, 69, 0.8)",
+                    "rgba(0, 123, 255, 0.8)",
+                    "rgba(23, 162, 184, 0.8)",
+                    "rgba(255, 193, 7, 0.8)",
+                    "rgba(220, 53, 69, 0.8)",
+                  ],
+                  borderColor: [
+                    "rgba(40, 167, 69, 1)",
+                    "rgba(0, 123, 255, 1)",
+                    "rgba(23, 162, 184, 1)",
+                    "rgba(255, 193, 7, 1)",
+                    "rgba(220, 53, 69, 1)",
+                  ],
+                  borderWidth: 2,
+                },
+                {
+                  label: "Mục tiêu (VNĐ)",
+                  data: clubTargets,
+                  backgroundColor: "rgba(108, 117, 125, 0.3)",
+                  borderColor: "rgba(108, 117, 125, 1)",
+                  borderWidth: 2,
+                  type: "line",
+                  fill: false,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "So sánh doanh thu thực tế vs mục tiêu",
+                },
+                legend: {
+                  position: "top",
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function (value) {
+                      return (value / 1000000).toFixed(0) + "M";
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // Club Share Pie Chart
+        const ctx2 = document.getElementById("clubShareChart");
+        if (ctx2) {
+          new Chart(ctx2, {
+            type: "doughnut",
+            data: {
+              labels: locations,
+              datasets: [
+                {
+                  data: locations.map((loc) => percentages[loc]),
+                  backgroundColor: [
+                    "rgba(40, 167, 69, 0.8)",
+                    "rgba(0, 123, 255, 0.8)",
+                    "rgba(23, 162, 184, 0.8)",
+                    "rgba(255, 193, 7, 0.8)",
+                    "rgba(220, 53, 69, 0.8)",
+                  ],
+                  borderColor: [
+                    "rgba(40, 167, 69, 1)",
+                    "rgba(0, 123, 255, 1)",
+                    "rgba(23, 162, 184, 1)",
+                    "rgba(255, 193, 7, 1)",
+                    "rgba(220, 53, 69, 1)",
+                  ],
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Tỉ trọng doanh thu theo CLB (%)",
+                },
+                legend: {
+                  position: "bottom",
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return context.label + ": " + context.parsed + "%";
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+      }
+
+      /**
+       * Fallback: Initialize charts with static data
+       */
+      function initializeClubCharts() {
+        console.warn("⚠️ Using static data for club revenue charts");
+
+        const locations = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+        const staticRevenue = {
+          "Tôn Thất Thuyết": 375000000,
+          "Huỳnh Thúc Kháng": 450000000,
+          "Giảng Võ": 412500000,
+          "Hào Nam": 337500000,
+          "Nguyễn Tuân": 275000000,
+        };
+        const staticPercentages = {
+          "Tôn Thất Thuyết": 20.3,
+          "Huỳnh Thúc Kháng": 24.3,
+          "Giảng Võ": 22.3,
+          "Hào Nam": 18.2,
+          "Nguyễn Tuân": 14.9,
+        };
+
+        createClubCharts(locations, staticRevenue, staticPercentages);
+      }
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

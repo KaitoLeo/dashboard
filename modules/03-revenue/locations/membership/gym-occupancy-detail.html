@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gym Occupancy Analysis - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-primary">
+            <i class="fas fa-dumbbell me-2"></i>Gym Occupancy Analysis
+          </h2>
+          <p class="text-muted">
+            Phân tích tỷ lệ sử dụng phòng gym và các chỉ số quan trọng
+          </p>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-percentage fa-2x mb-2"></i>
+              <h6>Tỷ lệ sử dụng</h6>
+              <h3>82.3%</h3>
+              <small>trung bình hôm nay</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-users fa-2x mb-2"></i>
+              <h6>Lượt check-in</h6>
+              <h3>1,245</h3>
+              <small>lượt hôm nay</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-building fa-2x mb-2"></i>
+              <h6>Dung lượng tối đa</h6>
+              <h3>1,512</h3>
+              <small>lượt/ngày</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x mb-2"></i>
+              <h6>Tăng trưởng</h6>
+              <h3>+12.5%</h3>
+              <small>so với tuần trước</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bố sử dụng theo giờ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="hourlyUsageChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng sử dụng 7 ngày
+                qua
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="weeklyTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Analysis by Location -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Chi tiết sử dụng phòng gym theo
+                cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>STT</th>
+                      <th>Cơ sở</th>
+                      <th>Dung lượng</th>
+                      <th>Check-in hôm nay</th>
+                      <th>Tỷ lệ sử dụng</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td><span class="badge bg-primary">300</span></td>
+                      <td><span class="badge bg-success">247</span></td>
+                      <td><span class="badge bg-info">82.3%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td><span class="badge bg-primary">280</span></td>
+                      <td><span class="badge bg-success">231</span></td>
+                      <td><span class="badge bg-info">82.5%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td><span class="badge bg-primary">320</span></td>
+                      <td><span class="badge bg-success">264</span></td>
+                      <td><span class="badge bg-info">82.5%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td><strong>Hào Nam</strong></td>
+                      <td><span class="badge bg-primary">310</span></td>
+                      <td><span class="badge bg-success">255</span></td>
+                      <td><span class="badge bg-info">82.3%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td><span class="badge bg-primary">302</span></td>
+                      <td><span class="badge bg-success">248</span></td>
+                      <td><span class="badge bg-info">82.1%</span></td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2"><strong>TỔNG CỘNG</strong></td>
+                      <td><strong class="text-primary">1,512</strong></td>
+                      <td><strong class="text-success">1,245</strong></td>
+                      <td><strong class="text-info">82.3%</strong></td>
+                      <td><strong class="text-success">Tốt</strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Update time and date
+      function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString("vi-VN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+        const dateString = now.toLocaleDateString("vi-VN");
+        document.getElementById("currentTime").textContent = timeString;
+        document.getElementById("currentDate").textContent = dateString;
+      }
+
+      // Update time every second
+      setInterval(updateTime, 1000);
+      updateTime();
+
+      // Hourly Usage Chart
+      const hourlyCtx = document
+        .getElementById("hourlyUsageChart")
+        .getContext("2d");
+      new Chart(hourlyCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "6h-7h",
+            "7h-8h",
+            "8h-9h",
+            "9h-10h",
+            "10h-11h",
+            "11h-12h",
+            "12h-13h",
+            "13h-14h",
+            "14h-15h",
+            "15h-16h",
+            "16h-17h",
+            "17h-18h",
+            "18h-19h",
+            "19h-20h",
+            "20h-21h",
+            "21h-22h",
+          ],
+          datasets: [
+            {
+              label: "Số lượt check-in",
+              data: [
+                45, 78, 95, 88, 76, 65, 55, 48, 52, 68, 85, 98, 125, 145, 138,
+                112,
+              ],
+              backgroundColor: "rgba(54, 162, 235, 0.6)",
+              borderColor: "rgba(54, 162, 235, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Weekly Trend Chart
+      const weeklyCtx = document
+        .getElementById("weeklyTrendChart")
+        .getContext("2d");
+      new Chart(weeklyCtx, {
+        type: "line",
+        data: {
+          labels: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+          datasets: [
+            {
+              label: "Tỷ lệ sử dụng (%)",
+              data: [78.5, 82.1, 85.3, 83.7, 86.2, 89.1, 82.3],
+              borderColor: "rgba(75, 192, 192, 1)",
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              tension: 0.4,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+            },
+          },
+        },
+      });
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Target Analytics Demo - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .sql-query {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 15px;
+        margin: 10px 0;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+        white-space: pre-wrap;
+      }
+      .metric-card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #2c3e50;
+      }
+      .metric-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        margin-top: 5px;
+      }
+      .table-responsive {
+        margin-top: 20px;
+      }
+      .loading {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+      }
+      .error {
+        color: #dc3545;
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 4px;
+        padding: 10px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="mb-4">
+            <i class="fas fa-chart-line me-2"></i>
+            Sales Target Analytics Demo
+          </h1>
+          <p class="text-muted mb-4">
+            Demo các API tính mục tiêu còn lại và cần đạt/ngày theo cơ sở
+          </p>
+        </div>
+      </div>
+
+      <!-- API 1: Mục tiêu còn lại theo cơ sở -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-target me-2"></i>
+                API 1: Mục tiêu còn lại theo cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="sql-query">
+                GET /api/sales-targets/remaining SQL Query: WITH first_day AS
+                (SELECT date_trunc('month', CURRENT_DATE)::date AS d) SELECT
+                st.location_id, l.name as location_name, st.target_amount -
+                COALESCE( SUM( CASE WHEN so.payment_status = 1 AND so.deleted_at
+                IS NULL THEN so.total_amount ELSE 0 END ), 0 ) AS
+                remaining_target FROM sales_targets st LEFT JOIN sale_orders so
+                ON st.location_id = so.location_id AND so.created_at::date >=
+                (SELECT d FROM first_day) AND so.created_at::date <=
+                CURRENT_DATE LEFT JOIN locations l ON l.id = st.location_id
+                WHERE st.month = EXTRACT(MONTH FROM CURRENT_DATE) AND st.year =
+                EXTRACT(YEAR FROM CURRENT_DATE) GROUP BY st.location_id, l.name,
+                st.target_amount ORDER BY remaining_target DESC;
+              </div>
+              <div class="loading" id="remainingLoading">
+                <i class="fas fa-spinner fa-spin me-2"></i>Đang tải dữ liệu...
+              </div>
+              <div class="error d-none" id="remainingError"></div>
+              <div class="table-responsive d-none" id="remainingTable">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Location ID</th>
+                      <th>Tên cơ sở</th>
+                      <th>Mục tiêu (VNĐ)</th>
+                      <th>MTD Revenue (VNĐ)</th>
+                      <th>Mục tiêu còn lại (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="remainingTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API 2: Cần đạt/ngày theo cơ sở -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-calendar-day me-2"></i>
+                API 2: Cần đạt/ngày theo cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="sql-query">
+                GET /api/sales-targets/daily SQL Query: WITH bounds AS ( SELECT
+                date_trunc('month', CURRENT_DATE)::date AS first_day,
+                (date_trunc('month', CURRENT_DATE) + INTERVAL '1 month - 1
+                day')::date AS last_day ) SELECT st.location_id, l.name as
+                location_name, ( st.target_amount - COALESCE( SUM( CASE WHEN
+                so.payment_status = 1 AND so.deleted_at IS NULL THEN
+                so.total_amount ELSE 0 END ), 0 ) ) / NULLIF( (SELECT last_day
+                FROM bounds) - CURRENT_DATE + 1, 0) AS daily_target_required
+                FROM sales_targets st LEFT JOIN sale_orders so ON st.location_id
+                = so.location_id AND so.created_at::date >= (SELECT first_day
+                FROM bounds) AND so.created_at::date <= CURRENT_DATE LEFT JOIN
+                locations l ON l.id = st.location_id WHERE st.month =
+                EXTRACT(MONTH FROM CURRENT_DATE) AND st.year = EXTRACT(YEAR FROM
+                CURRENT_DATE) GROUP BY st.location_id, l.name, st.target_amount
+                ORDER BY daily_target_required DESC;
+              </div>
+              <div class="loading" id="dailyLoading">
+                <i class="fas fa-spinner fa-spin me-2"></i>Đang tải dữ liệu...
+              </div>
+              <div class="error d-none" id="dailyError"></div>
+              <div class="table-responsive d-none" id="dailyTable">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Location ID</th>
+                      <th>Tên cơ sở</th>
+                      <th>Mục tiêu (VNĐ)</th>
+                      <th>MTD Revenue (VNĐ)</th>
+                      <th>Cần đạt/ngày (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dailyTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API 3: Tổng hợp mục tiêu -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                API 3: Tổng hợp mục tiêu (Remaining + Daily)
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="sql-query">
+                GET /api/sales-targets/summary Kết hợp cả 2 API trên để trả về
+                dữ liệu đầy đủ
+              </div>
+              <div class="loading" id="summaryLoading">
+                <i class="fas fa-spinner fa-spin me-2"></i>Đang tải dữ liệu...
+              </div>
+              <div class="error d-none" id="summaryError"></div>
+              <div class="table-responsive d-none" id="summaryTable">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Location ID</th>
+                      <th>Tên cơ sở</th>
+                      <th>Mục tiêu (VNĐ)</th>
+                      <th>MTD Revenue (VNĐ)</th>
+                      <th>Mục tiêu còn lại (VNĐ)</th>
+                      <th>Cần đạt/ngày (VNĐ)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="summaryTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API 4: Tỉ lệ hoàn thành -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-percentage me-2"></i>
+                API 4: Tỉ lệ hoàn thành theo cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="sql-query">
+                GET /api/sales-targets/completion-rates Tính tỉ lệ hoàn thành =
+                (MTD Revenue / Target Amount) * 100
+              </div>
+              <div class="loading" id="completionLoading">
+                <i class="fas fa-spinner fa-spin me-2"></i>Đang tải dữ liệu...
+              </div>
+              <div class="error d-none" id="completionError"></div>
+              <div class="table-responsive d-none" id="completionTable">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Location ID</th>
+                      <th>Tên cơ sở</th>
+                      <th>Mục tiêu (VNĐ)</th>
+                      <th>MTD Revenue (VNĐ)</th>
+                      <th>Mục tiêu còn lại (VNĐ)</th>
+                      <th>Tỉ lệ hoàn thành (%)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="completionTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tổng kết -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Tổng kết
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row" id="summaryCards">
+                <div class="col-md-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="totalTarget">-</div>
+                    <div class="metric-label">Tổng mục tiêu</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="totalMTD">-</div>
+                    <div class="metric-label">Tổng MTD Revenue</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="totalRemaining">-</div>
+                    <div class="metric-label">Tổng mục tiêu còn lại</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="metric-card">
+                    <div class="metric-value" id="totalDaily">-</div>
+                    <div class="metric-label">Tổng cần đạt/ngày</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../assets/js/sales-target-analytics.js"></script>
+    <script>
+      const salesTargetAnalytics = new SalesTargetAnalytics();
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadAllData();
+      });
+
+      async function loadAllData() {
+        await Promise.all([
+          loadRemainingTargets(),
+          loadDailyTargets(),
+          loadTargetsSummary(),
+          loadCompletionRates(),
+        ]);
+      }
+
+      async function loadRemainingTargets() {
+        try {
+          const data =
+            await salesTargetAnalytics.getRemainingTargetsByLocation();
+          displayRemainingTargets(data);
+        } catch (error) {
+          showError("remainingError", error.message);
+        }
+      }
+
+      async function loadDailyTargets() {
+        try {
+          const data = await salesTargetAnalytics.getDailyTargetsByLocation();
+          displayDailyTargets(data);
+        } catch (error) {
+          showError("dailyError", error.message);
+        }
+      }
+
+      async function loadTargetsSummary() {
+        try {
+          const data = await salesTargetAnalytics.getTargetsSummary();
+          displayTargetsSummary(data);
+          updateSummaryCards(data);
+        } catch (error) {
+          showError("summaryError", error.message);
+        }
+      }
+
+      async function loadCompletionRates() {
+        try {
+          const data =
+            await salesTargetAnalytics.getCompletionRatesByLocation();
+          displayCompletionRates(data);
+        } catch (error) {
+          showError("completionError", error.message);
+        }
+      }
+
+      function displayRemainingTargets(data) {
+        const tbody = document.getElementById("remainingTableBody");
+        tbody.innerHTML = data
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item.location_id}</td>
+                    <td>${item.location_name}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.target_amount
+                    )}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.mtd_revenue
+                    )}</td>
+                    <td><strong>${salesTargetAnalytics.formatNumber(
+                      item.remaining_target
+                    )}</strong></td>
+                </tr>
+            `
+          )
+          .join("");
+
+        document.getElementById("remainingLoading").classList.add("d-none");
+        document.getElementById("remainingTable").classList.remove("d-none");
+      }
+
+      function displayDailyTargets(data) {
+        const tbody = document.getElementById("dailyTableBody");
+        tbody.innerHTML = data
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item.location_id}</td>
+                    <td>${item.location_name}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.target_amount
+                    )}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.mtd_revenue
+                    )}</td>
+                    <td><strong>${salesTargetAnalytics.formatNumber(
+                      Math.round(item.daily_target_required)
+                    )}</strong></td>
+                </tr>
+            `
+          )
+          .join("");
+
+        document.getElementById("dailyLoading").classList.add("d-none");
+        document.getElementById("dailyTable").classList.remove("d-none");
+      }
+
+      function displayTargetsSummary(data) {
+        const tbody = document.getElementById("summaryTableBody");
+        tbody.innerHTML = data
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item.location_id}</td>
+                    <td>${item.location_name}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.target_amount
+                    )}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.mtd_revenue
+                    )}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.remaining_target
+                    )}</td>
+                    <td><strong>${salesTargetAnalytics.formatNumber(
+                      Math.round(item.daily_target_required)
+                    )}</strong></td>
+                </tr>
+            `
+          )
+          .join("");
+
+        document.getElementById("summaryLoading").classList.add("d-none");
+        document.getElementById("summaryTable").classList.remove("d-none");
+      }
+
+      function displayCompletionRates(data) {
+        const tbody = document.getElementById("completionTableBody");
+        tbody.innerHTML = data
+          .map(
+            (item) => `
+                <tr>
+                    <td>${item.location_id}</td>
+                    <td>${item.location_name}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.target_amount
+                    )}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.mtd_revenue
+                    )}</td>
+                    <td>${salesTargetAnalytics.formatNumber(
+                      item.remaining_target
+                    )}</td>
+                    <td><strong>${item.completion_rate}%</strong></td>
+                </tr>
+            `
+          )
+          .join("");
+
+        document.getElementById("completionLoading").classList.add("d-none");
+        document.getElementById("completionTable").classList.remove("d-none");
+      }
+
+      function updateSummaryCards(data) {
+        const totalTarget = data.reduce(
+          (sum, item) => sum + item.target_amount,
+          0
+        );
+        const totalMTD = data.reduce((sum, item) => sum + item.mtd_revenue, 0);
+        const totalRemaining = data.reduce(
+          (sum, item) => sum + item.remaining_target,
+          0
+        );
+        const totalDaily = data.reduce(
+          (sum, item) => sum + item.daily_target_required,
+          0
+        );
+
+        document.getElementById("totalTarget").textContent =
+          salesTargetAnalytics.formatNumber(totalTarget);
+        document.getElementById("totalMTD").textContent =
+          salesTargetAnalytics.formatNumber(totalMTD);
+        document.getElementById("totalRemaining").textContent =
+          salesTargetAnalytics.formatNumber(totalRemaining);
+        document.getElementById("totalDaily").textContent =
+          salesTargetAnalytics.formatNumber(Math.round(totalDaily));
+      }
+
+      function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        errorElement.textContent = message;
+        errorElement.classList.remove("d-none");
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

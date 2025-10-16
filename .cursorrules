@@ -1,0 +1,23 @@
+# .cursorrules — enforce project-wide rules
+
+You MUST read and follow the checklist in ./TODO.md before doing ANY change.
+Treat any violation of TODO.md as a blocker and stop with a clear error message.
+When you reply, FIRST list which TODO.md items you verified (by number) and how you enforced them.
+
+If a change affects time logic (“Hôm nay”, “Hôm qua”, “Tháng này”, “Năm nay”…):
+- Capitalize the first letter for all Vietnamese time labels in UI (e.g., “Hôm nay”).
+- Ensure metrics, tables, charts, and detail pages show the SAME number for the same time key (single source of truth).
+
+If a change touches service ordering, ALWAYS sort and render in this fixed order everywhere:
+1) Membership  2) PT Fitness  3) Pilates  4) Swimming Coach
+Preserve the positions; if data is missing, render N/A but do not reorder others.
+
+When I ask to change a logic in one place, synchronize ONLY the related logic across all affected pages/components.
+Do NOT refactor unrelated code or change unrelated styling.
+
+Always explain in your PR/answer:
+- Where the “source of truth” for the numbers is.
+- Which components/pages are synchronized.
+- Proof (quick test plan) that card ↔ table ↔ chart numbers match for the same time key.
+
+Refuse the task if the request conflicts with TODO.md, and tell me which rule it conflicts with.

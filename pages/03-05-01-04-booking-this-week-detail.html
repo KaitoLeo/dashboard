@@ -1,0 +1,2561 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Booking theo Tuần - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .metric-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+      }
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .chart-container {
+        position: relative;
+        height: 300px;
+      }
+      .status-badge {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+      }
+      .day-card {
+        border-left: 4px solid #ffc107;
+      }
+      .day-card.today {
+        border-left-color: #28a745;
+        background-color: #f8f9fa;
+      }
+      .day-card.weekend {
+        border-left-color: #dc3545;
+      }
+      .day-card {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .day-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  
+    <!-- Booking Calculation Modules -->
+    <script src="../assets/js/booking/booking-calculations.js"></script>
+    <script src="../assets/js/booking/booking-mock-data.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/api/api-services.js"></script>
+    <script src="../assets/js/api/data-adapter.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-calendar-week me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a
+            class="nav-link"
+            href="#"
+            onclick="Navigation.navigateTo('../index.html'); return false;"
+          >
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-warning">
+            <i class="fas fa-calendar-week me-2"></i>Chi tiết Booking theo Tuần
+          </h2>
+          <p class="text-muted">
+            Thống kê chi tiết các lượt booking trong tuần (Thứ 2 - Chủ nhật)
+          </p>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-week fa-2x mb-2"></i>
+              <h6>Tổng booking tuần</h6>
+              <h3 id="totalWeeklyBooking">0</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-check-circle fa-2x mb-2"></i>
+              <h6>Đã hoàn thành</h6>
+              <h3 id="totalCompleted">0</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-day fa-2x mb-2"></i>
+              <h6>Trung bình/ngày</h6>
+              <h3 id="averagePerDay">0</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-trophy fa-2x mb-2"></i>
+              <h6>Ngày cao nhất</h6>
+              <h3 id="highestDayCount">0</h3>
+              <small id="highestDayName">-</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Week Selection & Daily Breakdown -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <div class="row align-items-center">
+                <div class="col-md-6">
+              <h5 class="mb-0">
+                <i class="fas fa-calendar-alt me-2"></i>Phân tích theo ngày
+                trong tuần
+              </h5>
+                </div>
+                <div class="col-md-6">
+                  <div class="row g-2">
+                    <div class="col-md-6">
+                      <select
+                        class="form-select form-select-sm"
+                        id="weekSelector"
+                      >
+                        <option value="">Chọn tuần...</option>
+                        <!-- Week options will be populated by JavaScript -->
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button
+                          type="button"
+                          class="btn btn-outline-primary"
+                          id="prevWeekBtn"
+                        >
+                          <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-primary"
+                          id="nextWeekBtn"
+                        >
+                          <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-success"
+                          id="currentWeekBtn"
+                        >
+                          <i class="fas fa-home"></i> Tuần này
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Week Info -->
+              <div class="row mb-3">
+                <div class="col-12">
+                  <div
+                    class="alert alert-info d-flex align-items-center"
+                    id="weekInfoAlert"
+                  >
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span id="weekInfoText">Đang tải thông tin tuần...</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Daily Cards -->
+              <div class="row" id="dailyCardsContainer">
+                <!-- Daily cards will be populated by JavaScript -->
+              </div>
+
+              <!-- Week Navigation -->
+              <div class="row mt-3">
+                <div class="col-12">
+                  <nav aria-label="Week navigation">
+                    <ul
+                      class="pagination justify-content-center"
+                      id="weekPagination"
+                    >
+                      <!-- Week pagination will be generated by JavaScript -->
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng booking theo ngày
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="dailyTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ theo dịch vụ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="serviceDistributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peak Hours Analysis -->
+      <div class="row mb-4">
+        <div class="col-lg-8 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Phân tích giờ cao điểm
+                trong tuần
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="peakHoursChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-trophy me-2"></i>Top giờ cao điểm
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group list-group-flush">
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <span
+                    ><i class="fas fa-medal text-warning me-2"></i>17:00 -
+                    18:00</span
+                  >
+                  <span class="badge bg-primary rounded-pill">45 lượt</span>
+                </div>
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <span
+                    ><i class="fas fa-medal text-secondary me-2"></i>18:00 -
+                    19:00</span
+                  >
+                  <span class="badge bg-primary rounded-pill">38 lượt</span>
+                </div>
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <span
+                    ><i class="fas fa-medal text-warning me-2"></i>07:00 -
+                    08:00</span
+                  >
+                  <span class="badge bg-primary rounded-pill">32 lượt</span>
+                </div>
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <span
+                    ><i class="fas fa-medal text-secondary me-2"></i>19:00 -
+                    20:00</span
+                  >
+                  <span class="badge bg-primary rounded-pill">28 lượt</span>
+                </div>
+                <div
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <span
+                    ><i class="fas fa-medal text-warning me-2"></i>06:30 -
+                    07:30</span
+                  >
+                  <span class="badge bg-primary rounded-pill">25 lượt</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Performance -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-map-marker-alt me-2"></i>Hiệu suất theo trung
+                tâm
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Trung tâm</th>
+                      <th>Tổng booking</th>
+                      <th>Hoàn thành</th>
+                      <th>Tỷ lệ thành công</th>
+                      <th>Đánh giá TB</th>
+                      <th>Xu hướng</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td><span class="badge bg-primary">42</span></td>
+                      <td><span class="badge bg-success">39</span></td>
+                      <td><span class="text-success">92.9%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.8</td>
+                      <td><i class="fas fa-arrow-up text-success"></i> +12%</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td><span class="badge bg-primary">38</span></td>
+                      <td><span class="badge bg-success">35</span></td>
+                      <td><span class="text-success">92.1%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.6</td>
+                      <td><i class="fas fa-arrow-up text-success"></i> +8%</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td><span class="badge bg-primary">32</span></td>
+                      <td><span class="badge bg-success">29</span></td>
+                      <td><span class="text-warning">90.6%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.5</td>
+                      <td><i class="fas fa-arrow-down text-danger"></i> -3%</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hào Nam</strong></td>
+                      <td><span class="badge bg-primary">28</span></td>
+                      <td><span class="badge bg-success">26</span></td>
+                      <td><span class="text-success">92.9%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.7</td>
+                      <td><i class="fas fa-arrow-up text-success"></i> +15%</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td><span class="badge bg-primary">16</span></td>
+                      <td><span class="badge bg-success">13</span></td>
+                      <td><span class="text-danger">81.3%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.2</td>
+                      <td><i class="fas fa-arrow-down text-danger"></i> -5%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly Performance Metrics -->
+      <div class="row mb-4">
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-percentage fa-2x text-success mb-2"></i>
+              <h6>Tỷ lệ hoàn thành</h6>
+              <h4 class="text-success">91.0%</h4>
+              <small class="text-muted">142/156 booking</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-star fa-2x text-warning mb-2"></i>
+              <h6>Đánh giá TB</h6>
+              <h4 class="text-warning">4.6/5</h4>
+              <small class="text-muted">từ hội viên</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-users fa-2x text-info mb-2"></i>
+              <h6>Hội viên mới</h6>
+              <h4 class="text-info">18</h4>
+              <small class="text-muted">lần đầu booking</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x text-primary mb-2"></i>
+              <h6>Tăng trưởng</h6>
+              <h4 class="text-primary">+12%</h4>
+              <small class="text-muted">so với Tuần trước</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Detail Modal -->
+    <div
+      class="modal fade"
+      id="dailyDetailModal"
+      tabindex="-1"
+      aria-labelledby="dailyDetailModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="dailyDetailModalLabel">
+              <i class="fas fa-calendar-day me-2"></i>Chi tiết booking theo ngày
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Summary Cards -->
+            <div class="row mb-4">
+              <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card bg-primary text-white">
+                  <div class="card-body text-center">
+                    <i class="fas fa-calendar-day fa-2x mb-2"></i>
+                    <h6>Tổng booking</h6>
+                    <h3 id="modalTotalBooking">0</h3>
+                    <small>lượt</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card bg-success text-white">
+                  <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <h6>Đã hoàn thành</h6>
+                    <h3 id="modalCompleted">0</h3>
+                    <small>lượt</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card bg-warning text-white">
+                  <div class="card-body text-center">
+                    <i class="fas fa-clock fa-2x mb-2"></i>
+                    <h6>Đang chờ</h6>
+                    <h3 id="modalPending">0</h3>
+                    <small>lượt</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card bg-danger text-white">
+                  <div class="card-body text-center">
+                    <i class="fas fa-times-circle fa-2x mb-2"></i>
+                    <h6>Đã hủy</h6>
+                    <h3 id="modalCancelled">0</h3>
+                    <small>lượt</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-md-6">
+                    <h6 class="mb-0">
+                      <i class="fas fa-filter me-2"></i>Bộ lọc
+                    </h6>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="row g-2">
+                      <div class="col-md-4">
+                        <select
+                          class="form-select form-select-sm"
+                          id="modalStatusFilter"
+                        >
+                          <option value="">Tất cả trạng thái</option>
+                          <option value="completed">Hoàn thành</option>
+                          <option value="pending">Đang chờ</option>
+                          <option value="cancelled">Đã hủy</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4">
+                        <select
+                          class="form-select form-select-sm"
+                          id="modalServiceFilter"
+                        >
+                          <option value="">Tất cả dịch vụ</option>
+                          <option value="Gym">Gym</option>
+                          <option value="Pilates">Pilates</option>
+                          <option value="Swimming Coach">Swimming Coach</option>
+                          <option value="PT">PT</option>
+                          <option value="Fitness">Fitness</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4">
+                        <select
+                          class="form-select form-select-sm"
+                          id="modalLocationFilter"
+                        >
+                          <option value="">Tất cả trung tâm</option>
+                          <option value="Tôn Thất Thuyết">
+                            Tôn Thất Thuyết
+                          </option>
+                          <option value="Huỳnh Thúc Kháng">
+                            Huỳnh Thúc Kháng
+                          </option>
+                          <option value="Giảng Võ">Giảng Võ</option>
+                          <option value="Hào Nam">Hào Nam</option>
+                          <option value="Nguyễn Tuân">Nguyễn Tuân</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <span class="text-muted" id="modalResultCount"
+                    >Hiển thị 0 kết quả</span
+                  >
+                  <div class="btn-group btn-group-sm" role="group">
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      id="modalExportBtn"
+                    >
+                      <i class="fas fa-download me-1"></i>Xuất Excel
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary"
+                      id="modalClearFilters"
+                    >
+                      <i class="fas fa-times me-1"></i>Xóa bộ lọc
+                    </button>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <table
+                    class="table table-striped table-hover"
+                    id="modalBookingTable"
+                  >
+                    <thead class="table-dark">
+                      <tr>
+                        <th>STT</th>
+                        <th>Thời gian</th>
+                        <th>Hội viên</th>
+                        <th>Dịch vụ</th>
+                        <th>Trung tâm</th>
+                        <th>Trạng thái</th>
+                        <th>Ghi chú</th>
+                      </tr>
+                    </thead>
+                    <tbody id="modalBookingTableBody">
+                      <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Modal booking pagination">
+                  <ul
+                    class="pagination justify-content-center"
+                    id="modalPagination"
+                  >
+                    <!-- Pagination will be generated by JavaScript -->
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared data layer (đặt trước scripts của trang) -->
+    <script src="../assets/js/shared/constants.js" defer></script>
+    <script src="../assets/js/shared/time-utils.js" defer></script>
+    <script src="../assets/js/shared/state.js" defer></script>
+    <script src="../assets/js/shared/persist.js" defer></script>
+    <script src="../assets/js/shared/compute.js" defer></script>
+    <script src="../assets/js/shared/sync.js" defer></script>
+    <script src="../assets/js/shared/navigation.js" defer></script>
+
+    <!-- Time label utilities (TODO.md compliance) -->
+    <script src="../assets/js/common/time-label-vi.js" defer></script>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Global variables for week management
+      let currentWeekStart = null;
+      let allWeeksData = {};
+      let currentWeekIndex = 0;
+
+      // Initialize page with data layer
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Booking This Week Detail page loaded");
+
+        // Initialize data layer
+        DataSync.initDataLayer();
+
+        // Get current state and computed data
+        const state = SharedState.getState();
+        const computedData = Compute.computeAll(state);
+
+        // Initialize week management
+        initializeWeekManagement();
+
+        // Render page with computed data
+        renderPage(computedData, state);
+
+        // Setup state change listener
+        DataSync.onStateChange((newState) => {
+          const newComputedData = Compute.computeAll(newState);
+          renderPage(newComputedData, newState);
+        });
+      });
+
+      // Render page with computed data
+      function renderPage(data, state) {
+        console.log("Rendering page with data:", data);
+
+        // Update summary cards with sample data
+        updateSummaryCards({});
+
+        // Create daily cards with sample data
+        createDailyCards([], state);
+
+        // Charts will be created when week is loaded
+        // createCharts({ booking: { data: [], stats: {} } });
+
+        // Initialize modal filters
+        initializeModalFilters();
+
+        // Initialize week controls
+        initializeWeekControls();
+
+        // Update page title (always shows weekly data)
+        updatePageTitle(state);
+      }
+
+      // Update page title with time range
+      function updatePageTitle(state) {
+        const titleElement = document.querySelector("h2.text-warning");
+        if (titleElement) {
+          // This page always shows weekly data, regardless of timeKey
+          // Use proper time label formatting according to TODO.md standards
+          titleElement.innerHTML = `<i class="fas fa-calendar-week me-2"></i>Chi tiết Booking theo Tuần`;
+        }
+      }
+
+      // Initialize week management system
+      function initializeWeekManagement() {
+        console.log("Initializing week management...");
+
+        // Set current week start (Monday of current week)
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Sunday = 0, Monday = 1
+        currentWeekStart = new Date(today);
+        currentWeekStart.setDate(today.getDate() + daysToMonday);
+        currentWeekStart.setHours(0, 0, 0, 0);
+
+        // Generate all weeks from beginning of year
+        generateAllWeeksData();
+
+        // Set current week index
+        currentWeekIndex = Object.keys(allWeeksData).length - 1;
+
+        console.log(
+          "Week management initialized. Current week:",
+          currentWeekStart
+        );
+      }
+
+      // Generate data for all weeks from beginning of year
+      function generateAllWeeksData() {
+        const currentYear = new Date().getFullYear();
+        const yearStart = new Date(currentYear, 0, 1); // January 1st
+
+        // Find first Monday of the year
+        const firstMonday = new Date(yearStart);
+        const firstMondayDay = firstMonday.getDay();
+        const daysToFirstMonday = firstMondayDay === 0 ? 1 : 8 - firstMondayDay;
+        firstMonday.setDate(yearStart.getDate() + daysToFirstMonday);
+
+        allWeeksData = {};
+        let weekIndex = 0;
+        let weekStart = new Date(firstMonday);
+
+        // Generate weeks until current week
+        while (weekStart <= currentWeekStart) {
+          const weekKey = formatWeekKey(weekStart);
+          const weekData = generateWeekData(weekStart, weekIndex);
+          allWeeksData[weekKey] = weekData;
+
+          // Move to next week
+          weekStart.setDate(weekStart.getDate() + 7);
+          weekIndex++;
+        }
+
+        console.log(
+          `Generated ${Object.keys(allWeeksData).length} weeks of data`
+        );
+      }
+
+      // Generate data for a specific week
+      function generateWeekData(weekStart, weekIndex) {
+        const dayNames = [
+          "Thứ 2",
+          "Thứ 3",
+          "Thứ 4",
+          "Thứ 5",
+          "Thứ 6",
+          "Thứ 7",
+          "CN",
+        ];
+        const weekData = {};
+
+        // Generate data for each day of the week
+        for (let i = 0; i < 7; i++) {
+          const dayDate = new Date(weekStart);
+          dayDate.setDate(weekStart.getDate() + i);
+          const dayName = dayNames[i];
+
+          // Generate realistic booking data for this day
+          const totalBookings = generateDayBookingCount(dayDate, weekIndex);
+          const bookings = generateBookingData(totalBookings, dayName);
+
+          const completed = bookings.filter(
+            (b) => b.status === "completed"
+          ).length;
+          const pending = bookings.filter((b) => b.status === "pending").length;
+          const cancelled = bookings.filter(
+            (b) => b.status === "cancelled"
+          ).length;
+
+          weekData[dayName] = {
+            total: totalBookings,
+            completed: completed,
+            pending: pending,
+            cancelled: cancelled,
+            bookings: bookings,
+            date: dayDate,
+          };
+        }
+
+        return weekData;
+      }
+
+      // Generate realistic booking count for a specific day
+      function generateDayBookingCount(date, weekIndex) {
+        const dayOfWeek = date.getDay();
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6; // Sunday or Saturday
+        const isCurrentWeek = weekIndex === currentWeekIndex;
+
+        // Base count varies by day of week and recency
+        let baseCount = isWeekend ? 8 : 20; // Weekends have fewer bookings
+
+        // Add some variation based on week recency (more recent weeks have more data)
+        const recencyFactor = Math.max(
+          0.3,
+          1 - (currentWeekIndex - weekIndex) * 0.1
+        );
+        baseCount = Math.round(baseCount * recencyFactor);
+
+        // Add some random variation
+        const variation = Math.floor(Math.random() * 8) - 4; // -4 to +4
+        baseCount = Math.max(5, baseCount + variation);
+
+        // Current week might have partial data
+        if (isCurrentWeek) {
+          const today = new Date();
+          const daysDiff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+          if (daysDiff < 0) {
+            baseCount = 0; // Future days have no data
+          } else if (daysDiff === 0) {
+            baseCount = Math.floor(baseCount * 0.7); // Today might have partial data
+          }
+        }
+
+        return baseCount;
+      }
+
+      // Format week key for storage
+      function formatWeekKey(weekStart) {
+        const year = weekStart.getFullYear();
+        const month = String(weekStart.getMonth() + 1).padStart(2, "0");
+        const day = String(weekStart.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      // Format week display name
+      function formatWeekDisplayName(weekStart) {
+        const year = weekStart.getFullYear();
+        const month = weekStart.getMonth() + 1;
+        const day = weekStart.getDate();
+        const endDate = new Date(weekStart);
+        endDate.setDate(weekStart.getDate() + 6);
+        const endDay = endDate.getDate();
+        const endMonth = endDate.getMonth() + 1;
+
+        if (month === endMonth) {
+          return `Tuần ${day}/${month} - ${endDay}/${month}/${year}`;
+        } else {
+          return `Tuần ${day}/${month} - ${endDay}/${endMonth}/${year}`;
+        }
+      }
+
+      // Initialize week controls
+      function initializeWeekControls() {
+        console.log("Initializing week controls...");
+
+        // Populate week selector
+        populateWeekSelector();
+
+        // Setup event listeners
+        setupWeekControlListeners();
+
+        // Load current week
+        loadWeek(currentWeekIndex);
+      }
+
+      // Populate week selector dropdown
+      function populateWeekSelector() {
+        const selector = document.getElementById("weekSelector");
+        if (!selector) return;
+
+        selector.innerHTML = '<option value="">Chọn tuần...</option>';
+
+        const weekKeys = Object.keys(allWeeksData).sort();
+        weekKeys.forEach((weekKey, index) => {
+          const weekStart = new Date(weekKey);
+          const option = document.createElement("option");
+          option.value = index;
+          option.textContent = formatWeekDisplayName(weekStart);
+          if (index === currentWeekIndex) {
+            option.selected = true;
+          }
+          selector.appendChild(option);
+        });
+      }
+
+      // Setup event listeners for week controls
+      function setupWeekControlListeners() {
+        // Week selector
+        const weekSelector = document.getElementById("weekSelector");
+        if (weekSelector) {
+          weekSelector.addEventListener("change", function () {
+            const selectedIndex = parseInt(this.value);
+            if (!isNaN(selectedIndex)) {
+              loadWeek(selectedIndex);
+            }
+          });
+        }
+
+        // Previous week button
+        const prevBtn = document.getElementById("prevWeekBtn");
+        if (prevBtn) {
+          prevBtn.addEventListener("click", function () {
+            if (currentWeekIndex > 0) {
+              loadWeek(currentWeekIndex - 1);
+            }
+          });
+        }
+
+        // Next week button
+        const nextBtn = document.getElementById("nextWeekBtn");
+        if (nextBtn) {
+          nextBtn.addEventListener("click", function () {
+            const maxIndex = Object.keys(allWeeksData).length - 1;
+            if (currentWeekIndex < maxIndex) {
+              loadWeek(currentWeekIndex + 1);
+            }
+          });
+        }
+
+        // Current week button
+        const currentBtn = document.getElementById("currentWeekBtn");
+        if (currentBtn) {
+          currentBtn.addEventListener("click", function () {
+            const maxIndex = Object.keys(allWeeksData).length - 1;
+            loadWeek(maxIndex);
+          });
+        }
+      }
+
+      // Load specific week data
+      function loadWeek(weekIndex) {
+        console.log(`Loading week ${weekIndex}...`);
+
+        const weekKeys = Object.keys(allWeeksData).sort();
+        if (weekIndex < 0 || weekIndex >= weekKeys.length) {
+          console.error("Invalid week index:", weekIndex);
+          return;
+        }
+
+        currentWeekIndex = weekIndex;
+        const weekKey = weekKeys[weekIndex];
+        const weekData = allWeeksData[weekKey];
+        const weekStart = new Date(weekKey);
+
+        // Update week info
+        updateWeekInfo(weekStart, weekData);
+
+        // Update daily cards
+        createDailyCardsForWeek(weekData);
+
+        // Update week selector
+        const weekSelector = document.getElementById("weekSelector");
+        if (weekSelector) {
+          weekSelector.value = weekIndex;
+        }
+
+        // Update pagination
+        updateWeekPagination();
+
+        // Update charts with week data
+        updateChartsForWeek(weekData, weekStart);
+
+        console.log(`Week ${weekIndex} loaded successfully`);
+      }
+
+      // Update week info display
+      function updateWeekInfo(weekStart, weekData) {
+        const weekInfoText = document.getElementById("weekInfoText");
+        if (!weekInfoText) return;
+
+        const weekDisplayName = formatWeekDisplayName(weekStart);
+        const isCurrentWeek =
+          weekStart.getTime() === currentWeekStart.getTime();
+
+        // Calculate week totals
+        let totalBookings = 0;
+        let totalCompleted = 0;
+        let totalPending = 0;
+        let totalCancelled = 0;
+
+        Object.values(weekData).forEach((dayData) => {
+          totalBookings += dayData.total;
+          totalCompleted += dayData.completed;
+          totalPending += dayData.pending;
+          totalCancelled += dayData.cancelled;
+        });
+
+        const statusText = isCurrentWeek ? " (Tuần hiện tại)" : "";
+        weekInfoText.textContent = `${weekDisplayName}${statusText} - Tổng: ${totalBookings} lượt | Hoàn thành: ${totalCompleted} | Đang chờ: ${totalPending} | Đã hủy: ${totalCancelled}`;
+      }
+
+      // Format date for display (e.g., "13/10")
+      function formatDateForDisplay(date) {
+        if (!date) return "";
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        return `${day}/${month}`;
+      }
+
+      // Create daily cards for specific week
+      function createDailyCardsForWeek(weekData) {
+        const container = document.getElementById("dailyCardsContainer");
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        const dayOrder = [
+          "Thứ 2",
+          "Thứ 3",
+          "Thứ 4",
+          "Thứ 5",
+          "Thứ 6",
+          "Thứ 7",
+          "CN",
+        ];
+
+        dayOrder.forEach((dayName) => {
+          const dayData = weekData[dayName] || {
+            total: 0,
+            completed: 0,
+            pending: 0,
+            cancelled: 0,
+            bookings: [],
+            date: null,
+          };
+
+          const hasData = dayData.total > 0;
+          const isCurrentDay =
+            dayData.date && isSameDay(dayData.date, new Date());
+          const isWeekend = dayName === "Thứ 7" || dayName === "CN";
+
+          let cardClass = "card day-card";
+          let textClass = "text-muted";
+          let countClass = "text-primary";
+          let countValue = dayData.total;
+
+          if (isCurrentDay) {
+            cardClass += " today";
+            textClass = "text-success";
+            countClass = "text-success";
+          } else if (isWeekend) {
+            cardClass += " weekend";
+            if (hasData) {
+              textClass = "text-danger";
+              countClass = "text-danger";
+            }
+          }
+
+          if (!hasData) {
+            countValue = "-";
+            countClass = "text-muted";
+          }
+
+          const dateDisplay = formatDateForDisplay(dayData.date);
+          const cardHtml = `
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+              <div class="${cardClass}" ${
+            hasData
+              ? `onclick="showDailyDetail('${dayName}', ${
+                  dayData.total
+                }, '${JSON.stringify(dayData.bookings).replace(
+                  /"/g,
+                  "&quot;"
+                )}')"`
+              : ""
+          } data-day="${dayName}" data-count="${dayData.total}">
+                <div class="card-body text-center">
+                  <h6 class="${textClass}">${dayName}</h6>
+                  ${
+                    dateDisplay
+                      ? `<small class="text-muted mb-1">${dateDisplay}</small>`
+                      : ""
+                  }
+                  <h4 class="${countClass}">${countValue}</h4>
+                  <small class="text-muted">${
+                    hasData ? "lượt" : "chưa có dữ liệu"
+                  }</small>
+                </div>
+              </div>
+            </div>
+          `;
+
+          container.innerHTML += cardHtml;
+        });
+      }
+
+      // Check if two dates are the same day
+      function isSameDay(date1, date2) {
+        return (
+          date1.getDate() === date2.getDate() &&
+          date1.getMonth() === date2.getMonth() &&
+          date1.getFullYear() === date2.getFullYear()
+        );
+      }
+
+      // Update week pagination
+      function updateWeekPagination() {
+        const pagination = document.getElementById("weekPagination");
+        if (!pagination) return;
+
+        const totalWeeks = Object.keys(allWeeksData).length;
+        const currentPage = currentWeekIndex + 1;
+        const totalPages = totalWeeks;
+
+        let paginationHtml = "";
+
+        // Previous button
+        paginationHtml += `
+          <li class="page-item ${currentWeekIndex === 0 ? "disabled" : ""}">
+            <a class="page-link" href="#" onclick="loadWeek(${
+              currentWeekIndex - 1
+            }); return false;">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+          </li>
+        `;
+
+        // Page numbers (show 5 pages around current)
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, currentPage + 2);
+
+        for (let i = startPage; i <= endPage; i++) {
+          const pageIndex = i - 1;
+          const isActive = pageIndex === currentWeekIndex;
+          paginationHtml += `
+            <li class="page-item ${isActive ? "active" : ""}">
+              <a class="page-link" href="#" onclick="loadWeek(${pageIndex}); return false;">
+                ${i}
+              </a>
+            </li>
+          `;
+        }
+
+        // Next button
+        paginationHtml += `
+          <li class="page-item ${
+            currentWeekIndex === totalWeeks - 1 ? "disabled" : ""
+          }">
+            <a class="page-link" href="#" onclick="loadWeek(${
+              currentWeekIndex + 1
+            }); return false;">
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          </li>
+        `;
+
+        pagination.innerHTML = paginationHtml;
+      }
+
+      // Update charts for specific week
+      function updateChartsForWeek(weekData, weekStart) {
+        console.log("Updating charts for week:", weekStart);
+
+        // Update daily trend chart
+        updateDailyTrendChart(weekData, weekStart);
+
+        // Update service distribution chart
+        updateServiceDistributionChart(weekData);
+
+        // Update peak hours chart
+        updatePeakHoursChart(weekData);
+
+        // Update top peak hours list
+        updateTopPeakHours(weekData);
+
+        // Update location performance table
+        updateLocationPerformanceTable(weekData);
+
+        // Update metric cards
+        updateMetricCardsForWeek(weekData);
+      }
+
+      // Update daily trend chart
+      function updateDailyTrendChart(weekData, weekStart) {
+        const dailyCtx = document.getElementById("dailyTrendChart");
+        if (!dailyCtx || typeof Chart === "undefined") return;
+
+        // Destroy existing chart if it exists
+        if (window.dailyTrendChartInstance) {
+          window.dailyTrendChartInstance.destroy();
+        }
+
+        const dayOrder = [
+          "Thứ 2",
+          "Thứ 3",
+          "Thứ 4",
+          "Thứ 5",
+          "Thứ 6",
+          "Thứ 7",
+          "CN",
+        ];
+        const chartData = dayOrder.map((day) =>
+          weekData[day] ? weekData[day].total : 0
+        );
+
+        // Create new chart
+        window.dailyTrendChartInstance = new Chart(dailyCtx, {
+          type: "line",
+          data: {
+            labels: dayOrder,
+            datasets: [
+              {
+                label: "Số booking",
+                data: chartData,
+                borderColor: "#ffc107",
+                backgroundColor: "rgba(255, 193, 7, 0.1)",
+                tension: 0.4,
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 5,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+
+        console.log("Daily trend chart updated");
+      }
+
+      // Update service distribution chart
+      function updateServiceDistributionChart(weekData) {
+        const serviceCtx = document.getElementById("serviceDistributionChart");
+        if (!serviceCtx || typeof Chart === "undefined") return;
+
+        // Destroy existing chart if it exists
+        if (window.serviceDistributionChartInstance) {
+          window.serviceDistributionChartInstance.destroy();
+        }
+
+        // Calculate service distribution from week data
+        const serviceStats = {};
+        Object.values(weekData).forEach((dayData) => {
+          dayData.bookings.forEach((booking) => {
+            if (!serviceStats[booking.service]) {
+              serviceStats[booking.service] = 0;
+            }
+            serviceStats[booking.service]++;
+          });
+        });
+
+        // Convert to arrays for chart
+        const serviceLabels = Object.keys(serviceStats);
+        const serviceValues = Object.values(serviceStats);
+
+        // Create new chart
+        window.serviceDistributionChartInstance = new Chart(serviceCtx, {
+          type: "doughnut",
+          data: {
+            labels: serviceLabels,
+            datasets: [
+              {
+                data: serviceValues,
+                backgroundColor: [
+                  "#ffc107",
+                  "#28a745",
+                  "#17a2b8",
+                  "#dc3545",
+                  "#6f42c1",
+                  "#fd7e14",
+                  "#20c997",
+                  "#e83e8c",
+                ],
+                borderWidth: 2,
+                borderColor: "#fff",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const total = context.dataset.data.reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+                    const percentage =
+                      total > 0
+                        ? ((context.parsed / total) * 100).toFixed(1)
+                        : 0;
+                    return (
+                      context.label +
+                      ": " +
+                      context.parsed +
+                      " (" +
+                      percentage +
+                      "%)"
+                    );
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        console.log("Service distribution chart updated");
+      }
+
+      // Update peak hours chart
+      function updatePeakHoursChart(weekData) {
+        const peakCtx = document.getElementById("peakHoursChart");
+        if (!peakCtx || typeof Chart === "undefined") return;
+
+        // Destroy existing chart if it exists
+        if (window.peakHoursChartInstance) {
+          window.peakHoursChartInstance.destroy();
+        }
+
+        // Calculate hourly distribution from week data
+        const hourlyStats = {};
+        Object.values(weekData).forEach((dayData) => {
+          dayData.bookings.forEach((booking) => {
+            const hour = booking.time.split(":")[0];
+            if (!hourlyStats[hour]) {
+              hourlyStats[hour] = 0;
+            }
+            hourlyStats[hour]++;
+          });
+        });
+
+        // Generate hourly data (6h to 20h)
+        const hourLabels = [];
+        const hourValues = [];
+
+        for (let hour = 6; hour <= 20; hour++) {
+          hourLabels.push(`${hour}h`);
+          hourValues.push(hourlyStats[hour] || 0);
+        }
+
+        // Create new chart
+        window.peakHoursChartInstance = new Chart(peakCtx, {
+          type: "bar",
+          data: {
+            labels: hourLabels,
+            datasets: [
+              {
+                label: "Số booking",
+                data: hourValues,
+                backgroundColor: "rgba(255, 193, 7, 0.8)",
+                borderColor: "#ffc107",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 2,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+
+        console.log("Peak hours chart updated");
+      }
+
+      // Update top peak hours list
+      function updateTopPeakHours(weekData) {
+        // Calculate hourly distribution
+        const hourlyStats = {};
+        Object.values(weekData).forEach((dayData) => {
+          dayData.bookings.forEach((booking) => {
+            const hour = booking.time.split(":")[0];
+            if (!hourlyStats[hour]) {
+              hourlyStats[hour] = 0;
+            }
+            hourlyStats[hour]++;
+          });
+        });
+
+        // Sort by booking count and get top 5
+        const sortedHours = Object.entries(hourlyStats)
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 5);
+
+        // Update the top peak hours list
+        const peakHoursList = document.querySelector(
+          ".list-group.list-group-flush"
+        );
+        if (peakHoursList) {
+          peakHoursList.innerHTML = "";
+
+          sortedHours.forEach(([hour, count], index) => {
+            const nextHour = parseInt(hour) + 1;
+            const timeRange = `${hour}:00 - ${nextHour}:00`;
+
+            const medalClass = index < 2 ? "text-warning" : "text-secondary";
+            const listItem = `
+              <div class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                  <i class="fas fa-medal ${medalClass} me-2"></i>${timeRange}
+                </span>
+                <span class="badge bg-primary rounded-pill">${count} lượt</span>
+              </div>
+            `;
+            peakHoursList.innerHTML += listItem;
+          });
+        }
+
+        console.log("Top peak hours updated");
+      }
+
+      // Update location performance table
+      function updateLocationPerformanceTable(weekData) {
+        console.log("Updating location performance table...");
+
+        // Calculate location statistics from week data
+        const locationStats = {};
+
+        Object.values(weekData).forEach((dayData) => {
+          dayData.bookings.forEach((booking) => {
+            const location = booking.location;
+            if (!locationStats[location]) {
+              locationStats[location] = {
+                total: 0,
+                completed: 0,
+                pending: 0,
+                cancelled: 0,
+                bookings: [],
+              };
+            }
+
+            locationStats[location].total++;
+            locationStats[location][booking.status]++;
+            locationStats[location].bookings.push(booking);
+          });
+        });
+
+        // Update the table body
+        const tableBody = document.querySelector("table.table-striped tbody");
+        if (!tableBody) return;
+
+        tableBody.innerHTML = "";
+
+        // Sort locations by total bookings (descending)
+        const sortedLocations = Object.entries(locationStats).sort(
+          ([, a], [, b]) => b.total - a.total
+        );
+
+        sortedLocations.forEach(([location, stats]) => {
+          const successRate =
+            stats.total > 0
+              ? ((stats.completed / stats.total) * 100).toFixed(1)
+              : 0;
+          const avgRating = (4.2 + Math.random() * 0.8).toFixed(1); // Random rating between 4.2-5.0
+          const trend = Math.random() > 0.5 ? "up" : "down";
+          const trendValue = (Math.random() * 20).toFixed(0);
+          const trendIcon =
+            trend === "up"
+              ? "fas fa-arrow-up text-success"
+              : "fas fa-arrow-down text-danger";
+          const trendClass = trend === "up" ? "text-success" : "text-danger";
+
+          const row = `
+            <tr>
+              <td><strong>${location}</strong></td>
+              <td><span class="badge bg-primary">${stats.total}</span></td>
+              <td><span class="badge bg-success">${stats.completed}</span></td>
+              <td><span class="${
+                successRate >= 90
+                  ? "text-success"
+                  : successRate >= 80
+                  ? "text-warning"
+                  : "text-danger"
+              }">${successRate}%</span></td>
+              <td><i class="fas fa-star text-warning"></i> ${avgRating}</td>
+              <td><i class="${trendIcon}"></i> <span class="${trendClass}">${
+            trend === "up" ? "+" : "-"
+          }${trendValue}%</span></td>
+            </tr>
+          `;
+
+          tableBody.innerHTML += row;
+        });
+
+        console.log("Location performance table updated");
+      }
+
+      // Update metric cards for specific week
+      function updateMetricCardsForWeek(weekData) {
+        console.log("Updating metric cards for week data:", weekData);
+
+        // Calculate totals from week data
+        let totalBookings = 0;
+        let completedBookings = 0;
+        let dailyCounts = [];
+        let highestDayCount = 0;
+        let highestDayName = "";
+
+        const dayOrder = [
+          "Thứ 2",
+          "Thứ 3",
+          "Thứ 4",
+          "Thứ 5",
+          "Thứ 6",
+          "Thứ 7",
+          "CN",
+        ];
+
+        dayOrder.forEach((dayName) => {
+          const dayData = weekData[dayName];
+          if (dayData) {
+            totalBookings += dayData.total;
+            completedBookings += dayData.completed;
+            dailyCounts.push(dayData.total);
+
+            if (dayData.total > highestDayCount) {
+              highestDayCount = dayData.total;
+              highestDayName = dayName;
+            }
+          }
+        });
+
+        // Calculate average per day
+        const averagePerDay =
+          dailyCounts.length > 0
+            ? (totalBookings / dailyCounts.length).toFixed(1)
+            : 0;
+
+        // Update the metric cards
+        const totalElement = document.getElementById("totalWeeklyBooking");
+        const completedElement = document.getElementById("totalCompleted");
+        const averageElement = document.getElementById("averagePerDay");
+        const highestCountElement = document.getElementById("highestDayCount");
+        const highestNameElement = document.getElementById("highestDayName");
+
+        if (totalElement) {
+          totalElement.textContent = totalBookings;
+          console.log("Updated total bookings:", totalBookings);
+        }
+
+        if (completedElement) {
+          completedElement.textContent = completedBookings;
+          console.log("Updated completed bookings:", completedBookings);
+        }
+
+        if (averageElement) {
+          averageElement.textContent = averagePerDay;
+          console.log("Updated average per day:", averagePerDay);
+        }
+
+        if (highestCountElement) {
+          highestCountElement.textContent = highestDayCount;
+          console.log("Updated highest day count:", highestDayCount);
+        }
+
+        if (highestNameElement) {
+          highestNameElement.textContent = highestDayName;
+          console.log("Updated highest day name:", highestDayName);
+        }
+
+        console.log("Metric cards updated successfully");
+      }
+
+      // Generate sample weekly data
+      function generateWeeklySampleData() {
+        const dayNames = [
+          "Thứ 2",
+          "Thứ 3",
+          "Thứ 4",
+          "Thứ 5",
+          "Thứ 6",
+          "Thứ 7",
+          "CN",
+        ];
+        const services = [
+          "PT Fitness",
+          "Pilates",
+          "Swimming Coach",
+          "Membership",
+        ];
+        const locations = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+        ];
+        const statuses = ["completed", "pending", "cancelled"];
+        const times = [
+          "06:30",
+          "07:00",
+          "08:15",
+          "09:30",
+          "10:00",
+          "14:00",
+          "15:30",
+          "17:00",
+          "18:00",
+          "19:00",
+          "20:00",
+        ];
+
+        const weeklyData = {};
+
+        // Sample data for each day
+        const dayData = {
+          "Thứ 2": { total: 15, completed: 12, pending: 2, cancelled: 1 },
+          "Thứ 3": { total: 20, completed: 18, pending: 1, cancelled: 1 },
+          "Thứ 4": { total: 18, completed: 16, pending: 1, cancelled: 1 },
+          "Thứ 5": { total: 22, completed: 20, pending: 1, cancelled: 1 },
+          "Thứ 6": { total: 25, completed: 23, pending: 1, cancelled: 1 },
+          "Thứ 7": { total: 12, completed: 10, pending: 1, cancelled: 1 },
+          CN: { total: 8, completed: 7, pending: 0, cancelled: 1 },
+        };
+
+        dayNames.forEach((dayName) => {
+          const data = dayData[dayName];
+          const bookings = [];
+
+          // Generate bookings for this day
+          for (let i = 0; i < data.total; i++) {
+            const service = services[Math.floor(rng.next() * services.length)];
+            const location =
+              locations[Math.floor(rng.next() * locations.length)];
+            const time = times[Math.floor(rng.next() * times.length)];
+            let status;
+
+            if (i < data.completed) status = "completed";
+            else if (i < data.completed + data.pending) status = "pending";
+            else status = "cancelled";
+
+            bookings.push({
+              id: i + 1,
+              time: time,
+              member: `Hội viên ${String.fromCharCode(65 + i)}`,
+              service: service,
+              location: location,
+              status: status,
+              note: `Booking ${dayName} - ${service}`,
+              date: new Date().toISOString().split("T")[0], // Today's date for demo
+            });
+          }
+
+          weeklyData[dayName] = {
+            total: data.total,
+            completed: data.completed,
+            pending: data.pending,
+            cancelled: data.cancelled,
+            bookings: bookings,
+          };
+        });
+
+        return weeklyData;
+      }
+
+      // Note: Weekly booking data is now generated dynamically from computed data
+
+      function updateSummaryCards(stats) {
+        // Generate sample data for weekly summary
+        const sampleData = generateWeeklySampleData();
+
+        // Calculate totals from sample data
+        let totalBooking = 0;
+        let totalCompleted = 0;
+        let totalPending = 0;
+        let totalCancelled = 0;
+        let maxCount = 0;
+        let maxDay = "N/A";
+
+        Object.keys(sampleData).forEach((dayName) => {
+          const dayData = sampleData[dayName];
+          totalBooking += dayData.total;
+          totalCompleted += dayData.completed;
+          totalPending += dayData.pending;
+          totalCancelled += dayData.cancelled;
+
+          if (dayData.total > maxCount) {
+            maxCount = dayData.total;
+            maxDay = dayName;
+          }
+        });
+
+        // Ensure consistency with main page (156 total)
+        if (totalBooking !== 156) {
+          // Scale the data to match main page
+          const scaleFactor = 156 / totalBooking;
+          totalBooking = 156;
+          totalCompleted = Math.round(totalCompleted * scaleFactor);
+          totalPending = Math.round(totalPending * scaleFactor);
+          totalCancelled = Math.round(totalCancelled * scaleFactor);
+        }
+
+        // Calculate average per day (7 days in a week)
+        const averagePerDay = (totalBooking / 7).toFixed(1);
+
+        // Update DOM elements
+        document.getElementById("totalWeeklyBooking").textContent =
+          totalBooking;
+        document.getElementById("totalCompleted").textContent = totalCompleted;
+        document.getElementById("averagePerDay").textContent = averagePerDay;
+        document.getElementById("highestDayCount").textContent = maxCount;
+        document.getElementById("highestDayName").textContent = maxDay;
+      }
+
+      function createDailyCards(bookingData, state) {
+        const container = document.getElementById("dailyCardsContainer");
+        container.innerHTML = "";
+
+        // Group booking data by day of week
+        const bookingsByDay = {};
+        const dayNames = {
+          0: "CN",
+          1: "Thứ 2",
+          2: "Thứ 3",
+          3: "Thứ 4",
+          4: "Thứ 5",
+          5: "Thứ 6",
+          6: "Thứ 7",
+        };
+
+        // Initialize all days with default data
+        Object.values(dayNames).forEach((dayName) => {
+          bookingsByDay[dayName] = {
+            total: 0,
+            completed: 0,
+            pending: 0,
+            cancelled: 0,
+            bookings: [],
+          };
+        });
+
+        // Process booking data to group by day
+        if (bookingData && bookingData.length > 0) {
+          bookingData.forEach((booking) => {
+            const date = new Date(booking.date);
+            const dayOfWeek = date.getDay();
+            const dayKey = dayNames[dayOfWeek];
+
+            if (bookingsByDay[dayKey]) {
+              bookingsByDay[dayKey].total++;
+              bookingsByDay[dayKey][booking.status]++;
+              bookingsByDay[dayKey].bookings.push(booking);
+            }
+          });
+        }
+
+        // Generate sample data for days with no data (for demo purposes)
+        const sampleData = generateWeeklySampleData();
+        Object.keys(sampleData).forEach((dayName) => {
+          if (
+            bookingsByDay[dayName].total === 0 &&
+            sampleData[dayName].total > 0
+          ) {
+            bookingsByDay[dayName] = sampleData[dayName];
+          }
+        });
+
+        // Ensure all days have bookings array
+        Object.keys(bookingsByDay).forEach((dayName) => {
+          if (!bookingsByDay[dayName].bookings) {
+            bookingsByDay[dayName].bookings = [];
+          }
+          // If no bookings but has total count, generate sample data
+          if (
+            bookingsByDay[dayName].total > 0 &&
+            bookingsByDay[dayName].bookings.length === 0
+          ) {
+            bookingsByDay[dayName].bookings = generateBookingData(
+              bookingsByDay[dayName].total,
+              dayName
+            );
+          }
+        });
+
+        // Get current day
+        const today = new Date();
+        const currentDayOfWeek = today.getDay();
+        const currentDayName = dayNames[currentDayOfWeek];
+
+        // Create cards for each day of the week
+        const dayOrder = [
+          "Thứ 2",
+          "Thứ 3",
+          "Thứ 4",
+          "Thứ 5",
+          "Thứ 6",
+          "Thứ 7",
+          "CN",
+        ];
+
+        dayOrder.forEach((dayName) => {
+          const dayData = bookingsByDay[dayName] || {
+            total: 0,
+            completed: 0,
+            pending: 0,
+            cancelled: 0,
+            bookings: [],
+          };
+          const hasData = dayData.total > 0;
+          const isCurrent = dayName === currentDayName;
+          const isWeekend = dayName === "Thứ 7" || dayName === "CN";
+
+          let cardClass = "card day-card";
+          let textClass = "text-muted";
+          let countClass = "text-primary";
+          let countValue = dayData.total;
+
+          if (isCurrent) {
+            cardClass += " today";
+            textClass = "text-success";
+            countClass = "text-success";
+          } else if (isWeekend) {
+            cardClass += " weekend";
+            if (hasData) {
+              textClass = "text-danger";
+              countClass = "text-danger";
+            }
+          }
+
+          if (!hasData) {
+            countValue = "-";
+            countClass = "text-muted";
+          }
+
+          const dateDisplay = formatDateForDisplay(dayData.date);
+          const cardHtml = `
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-3">
+              <div class="${cardClass}" ${
+            hasData
+              ? `onclick="showDailyDetail('${dayName}', ${
+                  dayData.total
+                }, '${JSON.stringify(dayData.bookings).replace(
+                  /"/g,
+                  "&quot;"
+                )}')"`
+              : ""
+          } data-day="${dayName}" data-count="${dayData.total}">
+                <div class="card-body text-center">
+                  <h6 class="${textClass}">${dayName}</h6>
+                  ${
+                    dateDisplay
+                      ? `<small class="text-muted mb-1">${dateDisplay}</small>`
+                      : ""
+                  }
+                  <h4 class="${countClass}">${countValue}</h4>
+                  <small class="text-muted">${
+                    hasData ? "lượt" : "chưa có dữ liệu"
+                  }</small>
+                </div>
+              </div>
+            </div>
+          `;
+
+          container.innerHTML += cardHtml;
+        });
+      }
+
+      function generateDaySampleData(dayName, totalCount) {
+        console.log(
+          "Generating sample data for",
+          dayName,
+          "with count",
+          totalCount
+        );
+
+        // Generate bookings for this day
+        const bookings = generateBookingData(totalCount, dayName);
+
+        // Calculate status counts from actual bookings
+        const completed = bookings.filter(
+          (b) => b.status === "completed"
+        ).length;
+        const pending = bookings.filter((b) => b.status === "pending").length;
+        const cancelled = bookings.filter(
+          (b) => b.status === "cancelled"
+        ).length;
+
+        // Use actual counts from bookings, not the input totalCount
+        const actualTotal = bookings.length;
+
+        const result = {
+          total: actualTotal,
+          completed: completed,
+          pending: pending,
+          cancelled: cancelled,
+          bookings: bookings,
+        };
+
+        console.log("Generated day sample data:", result);
+        console.log(
+          `Status breakdown: ${completed} completed, ${pending} pending, ${cancelled} cancelled`
+        );
+        return result;
+      }
+
+      function generateBookingData(count, day) {
+        const services = ["Gym", "Pilates", "Swimming Coach", "PT", "Fitness"];
+        const locations = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+        const times = [
+          "06:30",
+          "07:00",
+          "08:15",
+          "09:30",
+          "10:00",
+          "14:00",
+          "15:30",
+          "17:00",
+          "18:00",
+        ];
+        const notes = [
+          "Check-in đúng giờ",
+          "Lớp nhóm",
+          "Buổi cá nhân",
+          "Chờ trainer",
+          "Khách không đến",
+          "Lớp group",
+          "Chờ phòng",
+          "Personal training",
+          "Học bơi",
+          "Cardio",
+          "Weight training",
+          "Yoga",
+          "Zumba",
+          "Functional training",
+          "Bơi lội",
+          "Aerobics",
+          "Crossfit",
+        ];
+
+        const bookings = [];
+
+        // Generate realistic status distribution (70% completed, 20% pending, 10% cancelled)
+        const completedCount = Math.floor(count * 0.7);
+        const pendingCount = Math.floor(count * 0.2);
+        const cancelledCount = count - completedCount - pendingCount;
+
+        console.log(
+          `Generating ${count} bookings: ${completedCount} completed, ${pendingCount} pending, ${cancelledCount} cancelled`
+        );
+
+        // Ensure we have at least some completed bookings for demo purposes
+        const finalCompletedCount = Math.max(
+          completedCount,
+          Math.floor(count * 0.6)
+        );
+        const finalPendingCount = Math.max(
+          pendingCount,
+          Math.floor(count * 0.15)
+        );
+        const finalCancelledCount =
+          count - finalCompletedCount - finalPendingCount;
+
+        for (let i = 0; i < count; i++) {
+          const service = services[Math.floor(rng.next() * services.length)];
+          const location = locations[Math.floor(rng.next() * locations.length)];
+          const time = times[Math.floor(rng.next() * times.length)];
+          const note = notes[Math.floor(rng.next() * notes.length)];
+
+          let status;
+          if (i < finalCompletedCount) {
+            status = "completed";
+          } else if (i < finalCompletedCount + finalPendingCount) {
+            status = "pending";
+          } else {
+            status = "cancelled";
+          }
+
+          bookings.push({
+            id: i + 1,
+            time: time,
+            member: `Hội viên ${String.fromCharCode(65 + i)}`,
+            service: service,
+            location: location,
+            status: status,
+            note: note,
+          });
+        }
+
+        console.log("Generated bookings:", bookings.length);
+        return bookings;
+      }
+
+      function showDailyDetail(dayName, totalCount, bookingsData) {
+        console.log("showDailyDetail called with:", {
+          dayName,
+          totalCount,
+          bookingsData,
+        });
+
+        // Parse the bookings data if it's a string
+        let dayData;
+        if (typeof bookingsData === "string") {
+          try {
+            // Unescape the HTML entities first
+            const unescapedData = bookingsData.replace(/&quot;/g, '"');
+            dayData = JSON.parse(unescapedData);
+          } catch (e) {
+            console.error("Error parsing bookings data:", e);
+            console.log("Raw bookingsData:", bookingsData);
+            dayData = {
+              total: 0,
+              completed: 0,
+              pending: 0,
+              cancelled: 0,
+              bookings: [],
+            };
+          }
+        } else {
+          dayData = bookingsData;
+        }
+
+        console.log("Parsed dayData:", dayData);
+
+        // Check if there's data for this day
+        if (!dayData || dayData.total === 0) {
+          // Generate sample data for this day if no data exists
+          console.log("No data found, generating sample data for", dayName);
+          dayData = generateDaySampleData(dayName, totalCount);
+        }
+
+        // If still no bookings array, create one
+        if (!dayData.bookings || dayData.bookings.length === 0) {
+          console.log("No bookings array, generating sample bookings");
+          dayData.bookings = generateBookingData(totalCount, dayName);
+
+          // Recalculate status counts from generated bookings
+          dayData.completed = dayData.bookings.filter(
+            (b) => b.status === "completed"
+          ).length;
+          dayData.pending = dayData.bookings.filter(
+            (b) => b.status === "pending"
+          ).length;
+          dayData.cancelled = dayData.bookings.filter(
+            (b) => b.status === "cancelled"
+          ).length;
+          dayData.total = dayData.bookings.length;
+        }
+
+        console.log("Final dayData:", dayData);
+
+        // Update modal title
+        document.getElementById(
+          "dailyDetailModalLabel"
+        ).innerHTML = `<i class="fas fa-calendar-day me-2"></i>Chi tiết booking ${dayName}`;
+
+        // Update summary cards
+        console.log("Updating modal summary cards with:", {
+          total: dayData.total,
+          completed: dayData.completed,
+          pending: dayData.pending,
+          cancelled: dayData.cancelled,
+        });
+
+        const totalElement = document.getElementById("modalTotalBooking");
+        const completedElement = document.getElementById("modalCompleted");
+        const pendingElement = document.getElementById("modalPending");
+        const cancelledElement = document.getElementById("modalCancelled");
+
+        // Ensure we have valid numbers
+        const total = parseInt(dayData.total) || 0;
+        const completed = parseInt(dayData.completed) || 0;
+        const pending = parseInt(dayData.pending) || 0;
+        const cancelled = parseInt(dayData.cancelled) || 0;
+
+        if (totalElement) {
+          totalElement.textContent = total;
+          console.log("Updated totalElement:", total);
+        }
+        if (completedElement) {
+          completedElement.textContent = completed;
+          console.log("Updated completedElement:", completed);
+        }
+        if (pendingElement) {
+          pendingElement.textContent = pending;
+          console.log("Updated pendingElement:", pending);
+        }
+        if (cancelledElement) {
+          cancelledElement.textContent = cancelled;
+          console.log("Updated cancelledElement:", cancelled);
+        }
+
+        console.log("Modal summary cards updated successfully");
+
+        // Store current day data for filtering
+        window.currentDayData = dayData.bookings;
+        window.currentDay = dayName;
+
+        // Reset filters and display data
+        document.getElementById("modalStatusFilter").value = "";
+        document.getElementById("modalServiceFilter").value = "";
+        document.getElementById("modalLocationFilter").value = "";
+
+        filterModalTable();
+
+        // Show modal
+        try {
+          const modalElement = document.getElementById("dailyDetailModal");
+          if (modalElement) {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            console.log("Modal shown successfully");
+          } else {
+            console.error("Modal element not found");
+          }
+        } catch (error) {
+          console.error("Error showing modal:", error);
+        }
+      }
+
+      function initializeModalFilters() {
+        const statusFilter = document.getElementById("modalStatusFilter");
+        const serviceFilter = document.getElementById("modalServiceFilter");
+        const locationFilter = document.getElementById("modalLocationFilter");
+        const clearFiltersBtn = document.getElementById("modalClearFilters");
+        const exportBtn = document.getElementById("modalExportBtn");
+
+        statusFilter.addEventListener("change", filterModalTable);
+        serviceFilter.addEventListener("change", filterModalTable);
+        locationFilter.addEventListener("change", filterModalTable);
+        clearFiltersBtn.addEventListener("click", clearModalFilters);
+        exportBtn.addEventListener("click", exportModalData);
+      }
+
+      function filterModalTable() {
+        if (!window.currentDayData) return;
+
+        const statusValue = document.getElementById("modalStatusFilter").value;
+        const serviceValue =
+          document.getElementById("modalServiceFilter").value;
+        const locationValue = document.getElementById(
+          "modalLocationFilter"
+        ).value;
+
+        // Filter data
+        const filteredData = window.currentDayData.filter((booking) => {
+          let showRow = true;
+
+          if (statusValue && booking.status !== statusValue) {
+            showRow = false;
+          }
+          if (serviceValue && booking.service !== serviceValue) {
+            showRow = false;
+          }
+          if (locationValue && booking.location !== locationValue) {
+            showRow = false;
+          }
+
+          return showRow;
+        });
+
+        displayModalTable(filteredData);
+        updateModalPagination(filteredData);
+      }
+
+      function displayModalTable(data) {
+        console.log("displayModalTable called with data:", data);
+        const tbody = document.getElementById("modalBookingTableBody");
+
+        if (!tbody) {
+          console.error("Modal table body not found");
+          return;
+        }
+
+        tbody.innerHTML = "";
+
+        if (data && data.length > 0) {
+          data.forEach((booking, index) => {
+            const statusBadge = getStatusBadge(booking.status);
+            const row = `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${booking.time}</td>
+                <td>${booking.member}</td>
+                <td>${booking.service}</td>
+                <td>${booking.location}</td>
+                <td>${statusBadge}</td>
+                <td>${booking.note}</td>
+              </tr>
+            `;
+            tbody.innerHTML += row;
+          });
+        }
+
+        // Update result count
+        const startIndex = data && data.length > 0 ? 1 : 0;
+        const endIndex = data ? data.length : 0;
+        const resultCountElement = document.getElementById("modalResultCount");
+        if (resultCountElement) {
+          resultCountElement.textContent =
+            data && data.length > 0
+              ? `Hiển thị ${startIndex}-${endIndex} trong ${data.length} kết quả`
+              : "Hiển thị 0 kết quả";
+        }
+
+        console.log(`Displayed ${endIndex} bookings in modal table`);
+      }
+
+      function getStatusBadge(status) {
+        const badges = {
+          completed:
+            '<span class="badge bg-success status-badge">Hoàn thành</span>',
+          pending:
+            '<span class="badge bg-warning status-badge">Đang chờ</span>',
+          cancelled: '<span class="badge bg-danger status-badge">Đã hủy</span>',
+        };
+        return badges[status] || "";
+      }
+
+      function updateModalPagination(data) {
+        // For now, show all data without pagination in modal
+        // Can be enhanced later if needed
+      }
+
+      function clearModalFilters() {
+        document.getElementById("modalStatusFilter").value = "";
+        document.getElementById("modalServiceFilter").value = "";
+        document.getElementById("modalLocationFilter").value = "";
+        filterModalTable();
+      }
+
+      function exportModalData() {
+        if (!window.currentDayData) return;
+
+        const statusValue = document.getElementById("modalStatusFilter").value;
+        const serviceValue =
+          document.getElementById("modalServiceFilter").value;
+        const locationValue = document.getElementById(
+          "modalLocationFilter"
+        ).value;
+
+        // Filter data for export
+        const filteredData = window.currentDayData.filter((booking) => {
+          let showRow = true;
+
+          if (statusValue && booking.status !== statusValue) {
+            showRow = false;
+          }
+          if (serviceValue && booking.service !== serviceValue) {
+            showRow = false;
+          }
+          if (locationValue && booking.location !== locationValue) {
+            showRow = false;
+          }
+
+          return showRow;
+        });
+
+        // Create CSV
+        let csvContent =
+          "STT,Thời gian,Hội viên,Dịch vụ,Trung tâm,Trạng thái,Ghi chú\n";
+        filteredData.forEach((booking, index) => {
+          const rowData = [
+            index + 1,
+            booking.time,
+            booking.member,
+            booking.service,
+            booking.location,
+            booking.status === "completed"
+              ? "Hoàn thành"
+              : booking.status === "pending"
+              ? "Đang chờ"
+              : "Đã hủy",
+            booking.note,
+          ];
+          csvContent += rowData.join(",") + "\n";
+        });
+
+        const blob = new Blob([csvContent], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute(
+          "download",
+          `booking-${window.currentDay}-${
+            new Date().toISOString().split("T")[0]
+          }.csv`
+        );
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function createCharts(data) {
+        try {
+          console.log("Creating charts...");
+
+          // Daily Trend Chart
+          const dailyCtx = document.getElementById("dailyTrendChart");
+          if (dailyCtx && typeof Chart !== "undefined") {
+            // Use sample data for chart
+            const sampleData = generateWeeklySampleData();
+            const chartLabels = [
+              "Thứ 2",
+              "Thứ 3",
+              "Thứ 4",
+              "Thứ 5",
+              "Thứ 6",
+              "Thứ 7",
+              "CN",
+            ];
+            const chartData = chartLabels.map((day) =>
+              sampleData[day] ? sampleData[day].total : 0
+            );
+
+            new Chart(dailyCtx, {
+              type: "line",
+              data: {
+                labels: chartLabels,
+                datasets: [
+                  {
+                    label: "Số booking",
+                    data: chartData,
+                    borderColor: "#ffc107",
+                    backgroundColor: "rgba(255, 193, 7, 0.1)",
+                    tension: 0.4,
+                    fill: true,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 5,
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          }
+
+          // Service Distribution Chart
+          const serviceCtx = document.getElementById(
+            "serviceDistributionChart"
+          );
+          if (serviceCtx && typeof Chart !== "undefined") {
+            // Use sample service data
+            const serviceLabels = [
+              "PT Fitness",
+              "Pilates",
+              "Swimming Coach",
+              "Membership",
+            ];
+            const serviceValues = [45, 35, 25, 20]; // Sample distribution
+
+            new Chart(serviceCtx, {
+              type: "doughnut",
+              data: {
+                labels: serviceLabels,
+                datasets: [
+                  {
+                    data: serviceValues,
+                    backgroundColor: [
+                      "#ffc107",
+                      "#28a745",
+                      "#17a2b8",
+                      "#dc3545",
+                      "#6f42c1",
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        const total = context.dataset.data.reduce(
+                          (a, b) => a + b,
+                          0
+                        );
+                        const percentage =
+                          total > 0
+                            ? ((context.parsed / total) * 100).toFixed(1)
+                            : 0;
+                        return (
+                          context.label +
+                          ": " +
+                          context.parsed +
+                          " (" +
+                          percentage +
+                          "%)"
+                        );
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+
+          // Peak Hours Chart
+          const peakCtx = document.getElementById("peakHoursChart");
+          if (peakCtx && typeof Chart !== "undefined") {
+            // Use sample hourly data
+            const hourLabels = [];
+            const hourValues = [];
+
+            // Sample hourly distribution (6h to 20h)
+            const sampleHourlyData = [
+              2, 5, 8, 12, 15, 18, 22, 25, 28, 30, 32, 35, 38, 40, 35, 30,
+            ];
+
+            for (let hour = 6; hour <= 20; hour++) {
+              hourLabels.push(`${hour}h`);
+              hourValues.push(sampleHourlyData[hour - 6] || 0);
+            }
+
+            new Chart(peakCtx, {
+              type: "bar",
+              data: {
+                labels: hourLabels,
+                datasets: [
+                  {
+                    label: "Số booking",
+                    data: hourValues,
+                    backgroundColor: "rgba(255, 193, 7, 0.8)",
+                    borderColor: "#ffc107",
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 2,
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          }
+
+          console.log("Charts created successfully");
+        } catch (error) {
+          console.error("Error creating charts:", error);
+        }
+      }
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat(
+            (this.next() * (max - min) + min).toFixed(decimals)
+          );
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+
+    <!-- Debug Script removed - file was cleaned up -->
+  </body>
+</html>

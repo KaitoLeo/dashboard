@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Mục tiêu Doanh thu - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Revenue Calculation Modules -->
+    <script src="../assets/js/revenue/revenue-calculations.js"></script>
+    <script src="../assets/js/revenue/revenue-mock-data.js"></script>
+
+    <style>
+      .metric-card {
+        transition: transform 0.2s;
+      }
+      .metric-card:hover {
+        transform: translateY(-2px);
+      }
+      .progress-bar {
+        transition: width 0.3s ease;
+      }
+      .chart-container {
+        position: relative;
+        height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row bg-primary text-white py-3 mb-4">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h4 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Chi tiết Mục tiêu Doanh
+                thu
+              </h4>
+              <small id="js-status">Đang tải dữ liệu...</small>
+            </div>
+            <div>
+              <button
+                class="btn btn-light btn-sm me-2"
+                onclick="window.history.back()"
+              >
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+              </button>
+              <button class="btn btn-outline-light btn-sm">
+                <i class="fas fa-download me-1"></i>Xuất báo cáo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card border-primary">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title text-primary">Tổng mục tiêu</h6>
+                  <h3 class="mb-0" id="total-target">3,000,000,000</h3>
+                  <small class="text-muted">VNĐ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-bullseye fa-2x text-primary"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card border-success">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title text-success">Doanh thu MTD</h6>
+                  <h3 class="mb-0" id="mtd-revenue">1,850,000,000</h3>
+                  <small class="text-muted">VNĐ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-chart-line fa-2x text-success"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card border-warning">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title text-warning">Tỷ lệ hoàn thành</h6>
+                  <h3 class="mb-0" id="completion-rate">62%</h3>
+                  <small class="text-muted">Mục tiêu</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-percentage fa-2x text-warning"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card border-warning">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title text-warning">
+                    So sánh với tháng trước
+                  </h6>
+                  <h3 class="mb-0" id="month-comparison">+15,2%</h3>
+                  <small class="text-muted">cùng kỳ</small>
+                </div>
+                <div class="align-self-center">
+                  <i class="fas fa-chart-line fa-2x text-warning"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Target vs Actual Comparison -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-balance-scale me-2"></i>So sánh Mục tiêu vs
+                Thực tế
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Doanh thu theo bộ phận</th>
+                      <th class="text-end">Mục tiêu (VNĐ)</th>
+                      <th class="text-end">MTD (VNĐ)</th>
+                      <th class="text-center">Tỷ lệ (%)</th>
+                      <th class="text-center">
+                        Tỷ lệ đạt kế hoạch dự kiến (%)
+                      </th>
+                      <th class="text-end">Còn thiếu (VNĐ)</th>
+                      <th class="text-center">Mục tiêu/ngày</th>
+                      <th class="text-center">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tổng doanh thu</strong></td>
+                      <td class="text-end" id="total-target-value">
+                        3,000,000,000
+                      </td>
+                      <td class="text-end" id="total-actual-value">
+                        1,850,000,000
+                      </td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            style="width: 61.7%"
+                            id="total-progress"
+                          >
+                            61,7%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-info"
+                            role="progressbar"
+                            style="width: 0%"
+                            id="total-projection"
+                          >
+                            0%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end" id="total-remaining-value">
+                        580,000,000
+                      </td>
+                      <td class="text-end" id="total-daily-target">
+                        96,666,667 VNĐ
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-danger">Cần cải thiện</span>
+                      </td>
+                    </tr>
+                    <tr
+                      style="cursor: pointer"
+                      onclick="navigateToDepartment('Membership')"
+                    >
+                      <td>Membership</td>
+                      <td class="text-end" id="membership-target">
+                        1,500,000,000
+                      </td>
+                      <td class="text-end" id="membership-actual">
+                        925,000,000
+                      </td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-primary"
+                            role="progressbar"
+                            style="width: 61.7%"
+                          >
+                            61,7%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-info"
+                            role="progressbar"
+                            style="width: 41.1%"
+                          >
+                            41,1%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end" id="membership-remaining">
+                        575,000,000
+                      </td>
+                      <td class="text-end">18,548,387 VNĐ</td>
+                      <td class="text-center">
+                        <span class="badge bg-info">Khá</span>
+                      </td>
+                    </tr>
+                    <tr
+                      style="cursor: pointer"
+                      onclick="navigateToDepartment('Fitness')"
+                    >
+                      <td>PT Fitness</td>
+                      <td class="text-end" id="fitness-target">
+                        1,200,000,000
+                      </td>
+                      <td class="text-end" id="fitness-actual">740,000,000</td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-info"
+                            role="progressbar"
+                            style="width: 61.7%"
+                          >
+                            61,7%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-info"
+                            role="progressbar"
+                            style="width: 42%"
+                          >
+                            42,0%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end" id="fitness-remaining">
+                        460,000,000
+                      </td>
+                      <td class="text-end">14,838,710 VNĐ</td>
+                      <td class="text-center">
+                        <span class="badge bg-info">Khá</span>
+                      </td>
+                    </tr>
+                    <tr
+                      style="cursor: pointer"
+                      onclick="navigateToDepartment('Swimming Coach')"
+                    >
+                      <td>Swimming Coach</td>
+                      <td class="text-end" id="pool-target">180,000,000</td>
+                      <td class="text-end" id="pool-actual">110,000,000</td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-secondary"
+                            role="progressbar"
+                            style="width: 61, 1%"
+                          >
+                            61,1%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-info"
+                            role="progressbar"
+                            style="width: 40, 7%"
+                          >
+                            40,7%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end" id="pool-remaining">70,000,000</td>
+                      <td class="text-end">2,258,065 VNĐ</td>
+                      <td class="text-center">
+                        <span class="badge bg-info">Khá</span>
+                      </td>
+                    </tr>
+                    <tr
+                      style="cursor: pointer"
+                      onclick="navigateToDepartment('Pilates')"
+                    >
+                      <td>Pilates</td>
+                      <td class="text-end" id="pilates-target">120,000,000</td>
+                      <td class="text-end" id="pilates-actual">75,000,000</td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            style="width: 62, 5%"
+                          >
+                            62,5%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-info"
+                            role="progressbar"
+                            style="width: 41, 7%"
+                          >
+                            41,7%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end" id="pilates-remaining">
+                        45,000,000
+                      </td>
+                      <td class="text-end">1,451,613 VNĐ</td>
+                      <td class="text-center">
+                        <span class="badge bg-info">Khá</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ Mục tiêu theo bộ
+                phận
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="targetDistributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ MTD theo bộ phận
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="progressChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Target by Club -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-building me-2"></i>Mục tiêu theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="clubTargetsTable">
+                  <thead>
+                    <tr>
+                      <th>CLB</th>
+                      <th class="text-end">Mục tiêu (VNĐ)</th>
+                      <th class="text-end">MTD (VNĐ)</th>
+                      <th class="text-center">Tỷ lệ (%)</th>
+                      <th class="text-center">
+                        Tỷ lệ đạt kế hoạch dự kiến (%)
+                      </th>
+                      <th class="text-end">Còn thiếu (VNĐ)</th>
+                      <th class="text-center">Mục tiêu/ngày</th>
+                      <th class="text-center">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Dynamic content will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include dynamic revenue calculator -->
+    <script src="../assets/js/dynamic-revenue.js"></script>
+
+    <script>
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Revenue Target Detail page loaded");
+        initializePage();
+      });
+
+      function initializePage() {
+        try {
+          console.log("Initializing revenue target detail page...");
+          loadSettingsAndUpdateData();
+          createCharts();
+          updateClubTargetsTable();
+          document.getElementById("js-status").textContent =
+            "Dữ liệu đã tải thành công";
+        } catch (error) {
+          console.error("Error initializing page:", error);
+          document.getElementById("js-status").textContent =
+            "Lỗi khi tải dữ liệu: " + error.message;
+        }
+      }
+
+      function loadSettingsAndUpdateData() {
+        try {
+          console.log("📊 Loading settings and calculating dynamic metrics...");
+
+          // Check if modules are loaded
+          if (
+            typeof window.revenueCalc === "undefined" ||
+            typeof window.currentMonthRevenue === "undefined"
+          ) {
+            console.error(
+              "❌ Revenue modules not loaded! Using fallback values."
+            );
+            loadFallbackData();
+            return;
+          }
+
+          // Load settings from localStorage
+          const savedSettings = localStorage.getItem("actiwellSettings");
+          let settings = {};
+
+          if (savedSettings) {
+            settings = JSON.parse(savedSettings);
+            console.log("Settings loaded:", settings);
+          } else {
+            // Default settings
+            settings = {
+              global: {
+                monthlyTarget: 3000000000,
+                yearlyTarget: 30000000000,
+                growthTarget: 15,
+                retentionTarget: 85,
+              },
+            };
+            console.log("Using default settings:", settings);
+          }
+
+          // Get current revenue data
+          const currentRevenue = window.currentMonthRevenue;
+          const lastRevenue = window.lastMonthRevenue;
+          const today = new Date();
+
+          // Calculate MTD revenue dynamically
+          const mtdRevenue = window.revenueCalc.calculateMTDRevenue(
+            currentRevenue,
+            today
+          );
+
+          // Get date info
+          const lastDayOfMonth = new Date(
+            today.getFullYear(),
+            today.getMonth() + 1,
+            0
+          ).getDate();
+          const daysPassed = today.getDate();
+          const remainingDays =
+            window.revenueCalc.calculateDaysRemaining(today);
+
+          // Calculate metrics
+          const monthlyTarget = settings.global.monthlyTarget;
+          const completionRate = Math.round((mtdRevenue / monthlyTarget) * 100);
+          const remainingTarget = monthlyTarget - mtdRevenue;
+
+          console.log(
+            `✅ MTD Revenue calculated: ${window.revenueCalc.formatCurrency(
+              mtdRevenue
+            )} VNĐ`
+          );
+
+          // Calculate total projection: (Expected monthly revenue / Target) * 100
+          const expectedMonthlyRevenue =
+            (mtdRevenue / daysPassed) * lastDayOfMonth;
+          const totalProjection = Math.round(
+            (expectedMonthlyRevenue / monthlyTarget) * 100
+          );
+
+          // Calculate month-over-month comparison (same period)
+          // Example: Compare 24/09/2024 with 24/08/2024
+          const currentDay = today.getDate();
+          const lastMonthDate = new Date(
+            today.getFullYear(),
+            today.getMonth() - 1,
+            currentDay
+          );
+
+          // Simulate last month's revenue for the same period
+          // Assuming 15% growth rate for demonstration
+          const lastMonthRevenue = Math.round(mtdRevenue / 1.15);
+          const monthComparison =
+            ((mtdRevenue - lastMonthRevenue) / lastMonthRevenue) * 100;
+          const comparisonSign = monthComparison >= 0 ? "+" : "";
+          const comparisonText =
+            comparisonSign + monthComparison.toFixed(1) + "%";
+
+          // Update DOM elements
+          updateElement("total-target", formatNumber(monthlyTarget));
+          updateElement("mtd-revenue", formatNumber(mtdRevenue));
+          updateElement("completion-rate", completionRate + "%");
+          updateElement("month-comparison", comparisonText);
+
+          // Update comparison table
+          updateElement("total-target-value", formatNumber(monthlyTarget));
+          updateElement("total-actual-value", formatNumber(mtdRevenue));
+          updateElement("total-remaining-value", formatNumber(remainingTarget));
+          updateElement("total-progress", completionRate + "%");
+          updateElement("total-projection", totalProjection + "%");
+
+          // Update progress bars
+          document.querySelectorAll(".progress-bar").forEach((bar) => {
+            if (bar.id === "total-progress") {
+              bar.style.width = completionRate + "%";
+            } else if (bar.id === "total-projection") {
+              bar.style.width = totalProjection + "%";
+            }
+          });
+
+          // Calculate and update department metrics
+          updateDepartmentMetrics(mtdRevenue, daysPassed, lastDayOfMonth);
+
+          console.log("Data updated successfully");
+        } catch (error) {
+          console.error("Error loading settings:", error);
+        }
+      }
+
+      function updateDepartmentMetrics(
+        totalMtdRevenue,
+        daysPassed,
+        totalDaysInMonth
+      ) {
+        // Calculate department data dynamically
+        const currentRevenue = window.currentMonthRevenue || [];
+        const services = [
+          "Membership",
+          "PT Fitness",
+          "Pilates",
+          "Swimming Coach",
+        ];
+        const revenueByService = window.revenueCalc
+          ? window.revenueCalc.calculateRevenueByService(
+              currentRevenue,
+              services
+            )
+          : {
+              Membership: 925000000,
+              "PT Fitness": 740000000,
+              Pilates: 75000000,
+              "Swimming Coach": 110000000,
+            };
+
+        // Department data with dynamic actual values
+        const departments = [
+          {
+            id: "membership",
+            target: 1500000000,
+            actual: Math.round(revenueByService["Membership"] || 925000000),
+          },
+          {
+            id: "fitness",
+            target: 1200000000,
+            actual: Math.round(revenueByService["PT Fitness"] || 740000000),
+          },
+          {
+            id: "pool",
+            target: 180000000,
+            actual: Math.round(revenueByService["Swimming Coach"] || 110000000),
+          },
+          {
+            id: "pilates",
+            target: 120000000,
+            actual: Math.round(revenueByService["Pilates"] || 75000000),
+          },
+        ];
+
+        console.log("📊 Department metrics calculated:", departments);
+
+        departments.forEach((dept) => {
+          const percentage =
+            Math.round((dept.actual / dept.target) * 1000) / 10;
+          const expectedMonthlyRevenue =
+            (dept.actual / daysPassed) * totalDaysInMonth;
+          const projection = Math.round(
+            (expectedMonthlyRevenue / dept.target) * 100
+          );
+          const remaining = dept.target - dept.actual;
+          const dailyTarget = Math.round(
+            remaining / (totalDaysInMonth - daysPassed)
+          );
+
+          // Update target values
+          updateElement(`${dept.id}-target`, formatNumber(dept.target));
+          updateElement(`${dept.id}-actual`, formatNumber(dept.actual));
+          updateElement(`${dept.id}-remaining`, formatNumber(remaining));
+
+          // Update progress bars for this department
+          const progressBars = document.querySelectorAll(
+            `tr[onclick*="${
+              dept.id === "pool"
+                ? "Swimming Coach"
+                : dept.id === "fitness"
+                ? "Fitness"
+                : dept.id.charAt(0).toUpperCase() + dept.id.slice(1)
+            }"] .progress-bar`
+          );
+          if (progressBars.length >= 2) {
+            // First progress bar (percentage)
+            progressBars[0].style.width = percentage + "%";
+            progressBars[0].textContent = percentage + "%";
+
+            // Second progress bar (projection)
+            progressBars[1].style.width = projection + "%";
+            progressBars[1].textContent = projection + "%";
+          }
+        });
+      }
+
+      function updateElement(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+          element.textContent = value;
+        } else {
+          console.warn(`Element with id '${id}' not found`);
+        }
+      }
+
+      /**
+       * Fallback function when revenue modules are not loaded
+       */
+      function loadFallbackData() {
+        console.warn("⚠️ Using fallback data (static values)");
+
+        // Use hardcoded values as fallback
+        const settings = {
+          global: {
+            monthlyTarget: 3000000000,
+            yearlyTarget: 30000000000,
+            growthTarget: 15,
+            retentionTarget: 85,
+          },
+        };
+
+        const today = new Date();
+        const lastDayOfMonth = new Date(
+          today.getFullYear(),
+          today.getMonth() + 1,
+          0
+        ).getDate();
+        const daysPassed = today.getDate();
+        const remainingDays = lastDayOfMonth - daysPassed + 1;
+
+        const monthlyTarget = settings.global.monthlyTarget;
+        const mtdRevenue = 1850000000; // Static fallback
+        const completionRate = Math.round((mtdRevenue / monthlyTarget) * 100);
+        const remainingTarget = monthlyTarget - mtdRevenue;
+
+        const expectedMonthlyRevenue =
+          (mtdRevenue / daysPassed) * lastDayOfMonth;
+        const totalProjection = Math.round(
+          (expectedMonthlyRevenue / monthlyTarget) * 100
+        );
+
+        // Update UI with fallback values
+        updateElement("total-target", formatNumber(monthlyTarget));
+        updateElement("mtd-revenue", formatNumber(mtdRevenue));
+        updateElement("completion-rate", completionRate);
+        updateElement("remaining-target", formatNumber(remainingTarget));
+
+        console.warn(
+          "⚠️ Fallback data loaded. Revenue modules may not be available."
+        );
+      }
+
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function navigateToDepartment(department) {
+        const departmentMap = {
+          Membership:
+            "../modules/03-revenue/locations/membership/membership-revenue-detail.html",
+          Fitness:
+            "../modules/03-revenue/locations/fitness/pt-fitness-revenue-detail.html",
+          PT: "../modules/03-revenue/locations/fitness/pt-fitness-revenue-detail.html",
+          "Swimming Coach":
+            "../modules/03-revenue/locations/membership/swimming-coach-revenue-detail.html",
+          Pilates:
+            "../modules/03-revenue/locations/membership/pilates-revenue-detail.html",
+        };
+
+        const page = departmentMap[department];
+        if (page) {
+          window.location.href = page;
+        } else {
+          console.error("Department page not found for:", department);
+        }
+      }
+
+      function createCharts() {
+        try {
+          console.log("Creating charts...");
+
+          // Target Distribution Chart
+          const targetCtx = document.getElementById("targetDistributionChart");
+          if (targetCtx && typeof Chart !== "undefined") {
+            new Chart(targetCtx, {
+              type: "doughnut",
+              data: {
+                labels: [
+                  "Membership",
+                  "PT Fitness",
+                  "Swimming Coach",
+                  "Pilates",
+                ],
+                datasets: [
+                  {
+                    data: [1500000000, 1200000000, 180000000, 120000000],
+                    backgroundColor: [
+                      "#007bff",
+                      "#17a2b8",
+                      "#6c757d",
+                      "#28a745",
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        const total = context.dataset.data.reduce(
+                          (a, b) => a + b,
+                          0
+                        );
+                        const percentage = (
+                          (context.parsed / total) *
+                          100
+                        ).toFixed(1);
+                        return context.label + ": " + percentage + "%";
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+
+          // Progress Chart
+          const progressCtx = document.getElementById("progressChart");
+          if (progressCtx && typeof Chart !== "undefined") {
+            new Chart(progressCtx, {
+              type: "doughnut",
+              data: {
+                labels: [
+                  "Membership",
+                  "PT Fitness",
+                  "Swimming Coach",
+                  "Pilates",
+                ],
+                datasets: [
+                  {
+                    data: [925000000, 740000000, 110000000, 75000000],
+                    backgroundColor: [
+                      "#007bff",
+                      "#17a2b8",
+                      "#6c757d",
+                      "#28a745",
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        const total = context.dataset.data.reduce(
+                          (a, b) => a + b,
+                          0
+                        );
+                        const percentage = (
+                          (context.parsed / total) *
+                          100
+                        ).toFixed(1);
+                        return context.label + ": " + percentage + "%";
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+
+          console.log("Charts created successfully");
+        } catch (error) {
+          console.error("Error creating charts:", error);
+        }
+      }
+
+      function updateClubTargetsTable() {
+        try {
+          console.log("Updating club targets table...");
+
+          const tableBody = document.querySelector("#clubTargetsTable tbody");
+          if (!tableBody) {
+            console.warn("Club targets table body not found");
+            return;
+          }
+
+          // Default club data
+          const clubs = [
+            { name: "Tôn Thất Thuyết", target: 500000000, actual: 375000000 },
+            { name: "Huỳnh Thúc Kháng", target: 450000000, actual: 320000000 },
+            { name: "Giảng Võ", target: 400000000, actual: 275000000 },
+            { name: "Hào Nam", target: 350000000, actual: 250000000 },
+            { name: "Nguyễn Tuân", target: 300000000, actual: 200000000 },
+          ];
+
+          tableBody.innerHTML = "";
+
+          clubs.forEach((club) => {
+            const remaining = club.target - club.actual;
+            const percentage =
+              Math.round((club.actual / club.target) * 1000) / 10; // Làm tròn đến 1 chữ số thập phân
+            const status =
+              percentage >= 100
+                ? "bg-success"
+                : percentage >= 80
+                ? "bg-primary"
+                : percentage >= 60
+                ? "bg-info"
+                : percentage >= 40
+                ? "bg-warning"
+                : percentage >= 20
+                ? "bg-secondary"
+                : "bg-danger";
+            const statusText =
+              percentage >= 100
+                ? "Hoàn thành"
+                : percentage >= 80
+                ? "Tốt"
+                : percentage >= 60
+                ? "Khá"
+                : percentage >= 40
+                ? "Trung bình"
+                : percentage >= 20
+                ? "Yếu"
+                : "Cần cải thiện";
+
+            const row = document.createElement("tr");
+            row.style.cursor = "pointer";
+            row.onclick = () => {
+              window.location.href = `../modules/03-revenue/locations/club/club-detail.html?club=${encodeURIComponent(
+                club.name
+              )}`;
+            };
+            // Calculate projection: (Expected monthly revenue / Target) * 100
+            const today = new Date();
+            const daysPassed = today.getDate();
+            const totalDaysInMonth = new Date(
+              today.getFullYear(),
+              today.getMonth() + 1,
+              0
+            ).getDate();
+
+            // Expected monthly revenue = (MTD / days passed) * total days in month
+            const expectedMonthlyRevenue =
+              (club.actual / daysPassed) * totalDaysInMonth;
+            const projection = Math.round(
+              (expectedMonthlyRevenue / club.target) * 100
+            );
+
+            // Calculate daily target: (Target - MTD) / Days left
+            const daysLeft = totalDaysInMonth - daysPassed;
+            const dailyTargetAmount = Math.round(
+              (club.target - club.actual) / daysLeft
+            );
+
+            row.innerHTML = `
+                        <td><strong>${club.name}</strong></td>
+                        <td class="text-end">${formatNumber(club.target)}</td>
+                        <td class="text-end">${formatNumber(club.actual)}</td>
+                        <td class="text-center">
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar ${status}" role="progressbar" style="width: ${percentage}%">${percentage}%</div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: ${projection}%">${projection}%</div>
+                            </div>
+                        </td>
+                        <td class="text-end">${formatNumber(remaining)}</td>
+                        <td class="text-end">${formatNumber(
+                          dailyTargetAmount
+                        )} VNĐ</td>
+                        <td class="text-center">
+                            <span class="badge ${status}">${statusText}</span>
+                        </td>
+                    `;
+            tableBody.appendChild(row);
+          });
+
+          console.log("Club targets table updated successfully");
+        } catch (error) {
+          console.error("Error updating club targets table:", error);
+        }
+      }
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

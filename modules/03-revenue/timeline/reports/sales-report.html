@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Doanh thu - Actiwell CMS</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-chase">
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout Wrapper -->
+    <div id="layout-wrapper">
+        <!-- Header -->
+        <header id="page-topbar">
+            <div class="navbar-header">
+                <div class="d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-sm font-size-16 header-item" id="vertical-menu-btn">
+                        <img src="../assets/images/logo.png" alt="Logo" style="width: 2rem;">
+                    </button>
+                    <h3 class="header-title">Báo cáo</h3>
+                    <h3 class="header-subtitle"> / Doanh thu</h3>
+                </div>
+                <div class="d-flex flex-row">
+                    <!-- Profile Menu -->
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="rounded-circle header-profile-user" src="https://via.placeholder.com/36x36" alt="Header Avatar">
+                            <span class="d-none d-xl-inline-block ms-1 fw-medium">Admin</span>
+                            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-account-circle text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-wallet text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">My Wallet</span></a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-cog-outline text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-lock text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">Logout</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <div class="vertical-menu">
+            <div class="navbar-brand-box">
+                <a href="../index.html" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="../assets/images/logo.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="../assets/images/logo-dark.png" alt="" height="17">
+                    </span>
+                </a>
+                <a href="../index.html" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="../assets/images/logo-light.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="../assets/images/logo-light.png" alt="" height="19">
+                    </span>
+                </a>
+            </div>
+            <div data-simplebar class="h-100">
+                <div id="sidebar-menu">
+                    <ul class="metismenu list-unstyled" id="side-menu">
+                        <li class="menu-title">Menu</li>
+                        
+                        <li>
+                            <a href="../index.html" class="waves-effect">
+                                <i class="bx bx-home-circle"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-user"></i>
+                                <span>Khách hàng</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="customers.html">Danh sách khách hàng</a></li>
+                                <li><a href="customer-groups.html">Nhóm khách hàng</a></li>
+                                <li><a href="customer-reviews.html">Đánh giá khách hàng</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-user-circle"></i>
+                                <span>Nhân viên</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="staff.html">Danh sách nhân viên</a></li>
+                                <li><a href="staff-schedule.html">Lịch làm việc</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-calendar"></i>
+                                <span>Lịch đặt</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="booking.html">Quản lý đặt lịch</a></li>
+                                <li><a href="calendar.html">Lịch tổng quan</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-package"></i>
+                                <span>Gói dịch vụ</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="packages.html">Danh sách gói</a></li>
+                                <li><a href="services.html">Dịch vụ</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="mm-active">
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-chart"></i>
+                                <span>Báo cáo</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li class="mm-active"><a href="sales-report.html">Báo cáo doanh thu</a></li>
+                                <li><a href="customer-report.html">Báo cáo khách hàng</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-cog"></i>
+                                <span>Cài đặt</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="settings.html">Cài đặt chung</a></li>
+                                <li><a href="policy.html">Chính sách</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+            </div>
+            <div class="sidebar-background"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <!-- Page Title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                <h4 class="mb-sm-0 font-size-18">Báo cáo doanh thu</h4>
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="../index.html">Dashboard</a></li>
+                                        <li class="breadcrumb-item active">Báo cáo doanh thu</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter Controls -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Khoảng thời gian</label>
+                                            <select class="form-select" id="timeRange">
+                                                <option value="7">7 ngày qua</option>
+                                                <option value="30">30 ngày qua</option>
+                                                <option value="90">3 tháng qua</option>
+                                                <option value="365" selected>1 năm qua</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Từ ngày</label>
+                                            <input type="date" class="form-control" id="startDate" value="2024-01-01">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Đến ngày</label>
+                                            <input type="date" class="form-control" id="endDate" value="2024-12-31">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">&nbsp;</label>
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-primary" onclick="updateReport()">
+                                                    <i class="bx bx-refresh"></i> Cập nhật
+                                                </button>
+                                                <button class="btn btn-outline-success" onclick="exportReport()">
+                                                    <i class="bx bx-export"></i> Xuất báo cáo
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-1 overflow-hidden">
+                                            <p class="text-truncate font-size-14 mb-2">Tổng doanh thu</p>
+                                            <h4 class="mb-0" id="totalRevenue">0</h4>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-sm rounded-circle bg-primary-subtle">
+                                                <span class="avatar-title rounded-circle bg-primary text-white font-size-18">
+                                                    <i class="bx bx-dollar"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-1 overflow-hidden">
+                                            <p class="text-truncate font-size-14 mb-2">Doanh thu trung bình</p>
+                                            <h4 class="mb-0" id="avgRevenue">0</h4>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-sm rounded-circle bg-success-subtle">
+                                                <span class="avatar-title rounded-circle bg-success text-white font-size-18">
+                                                    <i class="bx bx-trending-up"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-1 overflow-hidden">
+                                            <p class="text-truncate font-size-14 mb-2">Tổng khách hàng</p>
+                                            <h4 class="mb-0" id="totalCustomers">0</h4>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-sm rounded-circle bg-info-subtle">
+                                                <span class="avatar-title rounded-circle bg-info text-white font-size-18">
+                                                    <i class="bx bx-user"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div class="flex-1 overflow-hidden">
+                                            <p class="text-truncate font-size-14 mb-2">Tăng trưởng</p>
+                                            <h4 class="mb-0" id="growthRate">0%</h4>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-sm rounded-circle bg-warning-subtle">
+                                                <span class="avatar-title rounded-circle bg-warning text-white font-size-18">
+                                                    <i class="bx bx-trending-up"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="row">
+                        <div class="col-xl-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Biểu đồ doanh thu theo tháng</h4>
+                                    <canvas id="revenueChart" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Doanh thu theo dịch vụ</h4>
+                                    <canvas id="serviceChart" height="300"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Table -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">Chi tiết doanh thu theo tháng</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-nowrap align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tháng</th>
+                                                    <th>Doanh thu</th>
+                                                    <th>Số khách hàng</th>
+                                                    <th>Doanh thu/Khách</th>
+                                                    <th>Tăng trưởng</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="revenueTableBody">
+                                                <!-- Data will be loaded here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../data/sample-data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script>
+        let revenueChart, serviceChart;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReportData();
+            initCharts();
+        });
+
+        function loadReportData() {
+            const monthlyData = SampleData.monthlyRevenue;
+            const serviceData = SampleData.serviceStats;
+            
+            // Calculate totals
+            const totalRevenue = monthlyData.reduce((sum, item) => sum + item.revenue, 0);
+            const avgRevenue = Math.round(totalRevenue / monthlyData.length);
+            const totalCustomers = monthlyData.reduce((sum, item) => sum + item.customers, 0);
+            const growthRate = calculateGrowthRate(monthlyData);
+
+            // Update summary cards
+            document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+            document.getElementById('avgRevenue').textContent = formatCurrency(avgRevenue);
+            document.getElementById('totalCustomers').textContent = totalCustomers.toLocaleString();
+            document.getElementById('growthRate').textContent = growthRate + '%';
+
+            // Load revenue table
+            loadRevenueTable(monthlyData);
+        }
+
+        function loadRevenueTable(data) {
+            const tbody = document.getElementById('revenueTableBody');
+            tbody.innerHTML = data.map((item, index) => {
+                const prevRevenue = index > 0 ? data[index - 1].revenue : item.revenue;
+                const growth = index > 0 ? ((item.revenue - prevRevenue) / prevRevenue * 100).toFixed(1) : 0;
+                const revenuePerCustomer = Math.round(item.revenue / item.customers);
+
+                return `
+                    <tr>
+                        <td>${item.month}</td>
+                        <td>${formatCurrency(item.revenue)}</td>
+                        <td>${item.customers}</td>
+                        <td>${formatCurrency(revenuePerCustomer)}</td>
+                        <td>
+                            <span class="badge ${growth >= 0 ? 'bg-success' : 'bg-danger'}">
+                                ${growth >= 0 ? '+' : ''}${growth}%
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function initCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            const monthlyData = SampleData.monthlyRevenue;
+            
+            revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: monthlyData.map(item => item.month),
+                    datasets: [{
+                        label: 'Doanh thu (VND)',
+                        data: monthlyData.map(item => item.revenue),
+                        borderColor: '#556ee6',
+                        backgroundColor: 'rgba(85, 110, 230, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Service Chart
+            const serviceCtx = document.getElementById('serviceChart').getContext('2d');
+            const serviceData = SampleData.serviceStats;
+            
+            serviceChart = new Chart(serviceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: serviceData.map(item => item.name),
+                    datasets: [{
+                        data: serviceData.map(item => item.percentage),
+                        backgroundColor: serviceData.map(item => item.color),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const total = context.dataset.data.reduce(
+                    (a, b) => a + b,
+                    0
+                  );
+                  const percentage = (
+                    (context.parsed / total) *
+                    100
+                  ).toFixed(1);
+                  return context.label + ": " + percentage + "%";
+                },
+              },
+            }
+                    }
+                }
+            });
+        }
+
+        function calculateGrowthRate(data) {
+            if (data.length < 2) return 0;
+            const firstMonth = data[0].revenue;
+            const lastMonth = data[data.length - 1].revenue;
+            return ((lastMonth - firstMonth) / firstMonth * 100).toFixed(1);
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        function updateReport() {
+            // Simulate loading
+            showNotification('Đang cập nhật báo cáo...', 'info');
+            setTimeout(() => {
+                loadReportData();
+                if (revenueChart) revenueChart.update();
+                if (serviceChart) serviceChart.update();
+                showNotification('Báo cáo đã được cập nhật!', 'success');
+            }, 1000);
+        }
+
+        function exportReport() {
+            showNotification('Đang xuất báo cáo...', 'info');
+            setTimeout(() => {
+                showNotification('Báo cáo đã được xuất thành công!', 'success');
+            }, 2000);
+        }
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

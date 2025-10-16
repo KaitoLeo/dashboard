@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Lịch đặt - Actiwell CMS</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.4/css/boxicons.min.css">
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-chase">
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+                <div class="chase-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Layout Wrapper -->
+    <div id="layout-wrapper">
+        <!-- Header -->
+        <header id="page-topbar">
+            <div class="navbar-header">
+                <div class="d-flex justify-content-center align-items-center">
+                    <button type="button" class="btn btn-sm font-size-16 header-item" id="vertical-menu-btn">
+                        <img src="../assets/images/logo.png" alt="Logo" style="width: 2rem;">
+                    </button>
+                    <h3 class="header-title">Lịch đặt</h3>
+                    <h3 class="header-subtitle"> / Quản lý đặt lịch</h3>
+                </div>
+                <div class="d-flex flex-row">
+                    <!-- Profile Menu -->
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="rounded-circle header-profile-user" src="https://via.placeholder.com/36x36" alt="Header Avatar">
+                            <span class="d-none d-xl-inline-block ms-1 fw-medium">Admin</span>
+                            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-account-circle text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">Profile</span></a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-wallet text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">My Wallet</span></a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-cog-outline text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">Settings</span></a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-lock text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">Lock screen</span></a>
+                            <a class="dropdown-item" href="#"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i> <span class="align-middle">Logout</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <div class="vertical-menu">
+            <div class="navbar-brand-box">
+                <a href="../index.html" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="../assets/images/logo.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="../assets/images/logo-dark.png" alt="" height="17">
+                    </span>
+                </a>
+                <a href="../index.html" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="../assets/images/logo-light.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="../assets/images/logo-light.png" alt="" height="19">
+                    </span>
+                </a>
+            </div>
+            <div data-simplebar class="h-100">
+                <div id="sidebar-menu">
+                    <ul class="metismenu list-unstyled" id="side-menu">
+                        <li class="menu-title">Menu</li>
+                        
+                        <li>
+                            <a href="../index.html" class="waves-effect">
+                                <i class="bx bx-home-circle"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-user"></i>
+                                <span>Khách hàng</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="customers.html">Danh sách khách hàng</a></li>
+                                <li><a href="customer-groups.html">Nhóm khách hàng</a></li>
+                                <li><a href="customer-reviews.html">Đánh giá khách hàng</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-user-circle"></i>
+                                <span>Nhân viên</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="staff.html">Danh sách nhân viên</a></li>
+                                <li><a href="staff-schedule.html">Lịch làm việc</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="mm-active">
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-calendar"></i>
+                                <span>Lịch đặt</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li class="mm-active"><a href="booking.html">Quản lý đặt lịch</a></li>
+                                <li><a href="calendar.html">Lịch tổng quan</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-package"></i>
+                                <span>Gói dịch vụ</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="packages.html">Danh sách gói</a></li>
+                                <li><a href="services.html">Dịch vụ</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-chart"></i>
+                                <span>Báo cáo</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="sales-report.html">Báo cáo doanh thu</a></li>
+                                <li><a href="customer-report.html">Báo cáo khách hàng</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-cog"></i>
+                                <span>Cài đặt</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="settings.html">Cài đặt chung</a></li>
+                                <li><a href="policy.html">Chính sách</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+            </div>
+            <div class="sidebar-background"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <!-- Page Title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                <h4 class="mb-sm-0 font-size-18">Quản lý đặt lịch</h4>
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="../index.html">Dashboard</a></li>
+                                        <li class="breadcrumb-item active">Lịch đặt</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter and Actions -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary" onclick="openBookingModal()">
+                                    <i class="bx bx-plus"></i> Đặt lịch mới
+                                </button>
+                                <button class="btn btn-outline-secondary">
+                                    <i class="bx bx-export"></i> Xuất lịch
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <div class="search-box">
+                                    <input type="text" class="form-control" placeholder="Tìm kiếm lịch đặt..." id="searchBooking">
+                                    <i class="bx bx-search search-icon"></i>
+                                </div>
+                                <select class="form-select" id="statusFilter" style="width: auto;">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="scheduled">Đã đặt lịch</option>
+                                    <option value="in-progress">Đang diễn ra</option>
+                                    <option value="completed">Hoàn thành</option>
+                                    <option value="cancelled">Đã hủy</option>
+                                </select>
+                                <input type="date" class="form-control" id="dateFilter" style="width: auto;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointments List -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-nowrap align-middle mb-0" id="appointmentsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Khách hàng</th>
+                                                    <th>Dịch vụ</th>
+                                                    <th>Nhân viên</th>
+                                                    <th>Ngày & Giờ</th>
+                                                    <th>Thời lượng</th>
+                                                    <th>Giá</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Thao tác</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="appointmentsTableBody">
+                                                <!-- Data will be loaded here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">Đặt lịch mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="bookingForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Khách hàng</label>
+                                    <select class="form-select" id="customerSelect" required>
+                                        <option value="">Chọn khách hàng</option>
+                                        <!-- Options will be loaded from data -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Dịch vụ</label>
+                                    <select class="form-select" id="serviceSelect" required>
+                                        <option value="">Chọn dịch vụ</option>
+                                        <!-- Options will be loaded from data -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Nhân viên</label>
+                                    <select class="form-select" id="staffSelect" required>
+                                        <option value="">Chọn nhân viên</option>
+                                        <!-- Options will be loaded from data -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Ngày</label>
+                                    <input type="date" class="form-control" id="appointmentDate" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Giờ bắt đầu</label>
+                                    <input type="time" class="form-control" id="appointmentTime" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Ghi chú</label>
+                                    <textarea class="form-control" id="appointmentNotes" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" onclick="saveBooking()">Lưu lịch đặt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../data/sample-data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/script.js"></script>
+    <script>
+        let bookingModal;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAppointmentsData();
+            loadModalData();
+            initEventListeners();
+        });
+
+        function loadAppointmentsData() {
+            const appointments = SampleData.appointments;
+            const tbody = document.getElementById('appointmentsTableBody');
+            
+            tbody.innerHTML = appointments.map(appointment => `
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-xs me-2">
+                                <span class="avatar-title rounded-circle bg-primary text-white">
+                                    ${appointment.customerName.charAt(0)}
+                                </span>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">${appointment.customerName}</h6>
+                                <p class="text-muted mb-0">ID: #${appointment.customerId.toString().padStart(4, '0')}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${appointment.service}</td>
+                    <td>${appointment.staffName}</td>
+                    <td>
+                        <div>
+                            <p class="mb-0">${formatDate(appointment.date)}</p>
+                            <p class="text-muted mb-0">${appointment.time}</p>
+                        </div>
+                    </td>
+                    <td>${appointment.duration} phút</td>
+                    <td>${formatCurrency(appointment.price)}</td>
+                    <td>
+                        <span class="badge ${getStatusBadgeClass(appointment.status)}">
+                            ${getStatusText(appointment.status)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewAppointment(${appointment.id})">
+                                <i class="bx bx-show"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning" onclick="editAppointment(${appointment.id})">
+                                <i class="bx bx-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="cancelAppointment(${appointment.id})">
+                                <i class="bx bx-x"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadModalData() {
+            // Load customers
+            const customerSelect = document.getElementById('customerSelect');
+            customerSelect.innerHTML = '<option value="">Chọn khách hàng</option>' +
+                SampleData.customers.map(customer => 
+                    `<option value="${customer.id}">${customer.name}</option>`
+                ).join('');
+
+            // Load services
+            const serviceSelect = document.getElementById('serviceSelect');
+            serviceSelect.innerHTML = '<option value="">Chọn dịch vụ</option>' +
+                SampleData.services.map(service => 
+                    `<option value="${service.id}" data-price="${service.price}" data-duration="${service.duration}">${service.name}</option>`
+                ).join('');
+
+            // Load staff
+            const staffSelect = document.getElementById('staffSelect');
+            staffSelect.innerHTML = '<option value="">Chọn nhân viên</option>' +
+                SampleData.staff.map(staff => 
+                    `<option value="${staff.id}">${staff.name} - ${staff.position}</option>`
+                ).join('');
+        }
+
+        function initEventListeners() {
+            // Initialize modal
+            bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+
+            // Filter events
+            document.getElementById('statusFilter').addEventListener('change', filterAppointments);
+            document.getElementById('dateFilter').addEventListener('change', filterAppointments);
+            document.getElementById('searchBooking').addEventListener('input', filterAppointments);
+
+            // Service change event
+            document.getElementById('serviceSelect').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.value) {
+                    const price = selectedOption.getAttribute('data-price');
+                    const duration = selectedOption.getAttribute('data-duration');
+                    // You can update price display here if needed
+                }
+            });
+        }
+
+        function openBookingModal() {
+            bookingModal.show();
+        }
+
+        function saveBooking() {
+            const form = document.getElementById('bookingForm');
+            const formData = new FormData(form);
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            // Simulate saving
+            showNotification('Đang lưu lịch đặt...', 'info');
+            setTimeout(() => {
+                bookingModal.hide();
+                form.reset();
+                showNotification('Lịch đặt đã được lưu thành công!', 'success');
+                // Reload data
+                loadAppointmentsData();
+            }, 1000);
+        }
+
+        function filterAppointments() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            const searchTerm = document.getElementById('searchBooking').value.toLowerCase();
+
+            const rows = document.querySelectorAll('#appointmentsTableBody tr');
+            
+            rows.forEach(row => {
+                const status = row.querySelector('.badge').textContent.trim();
+                const customerName = row.querySelector('h6').textContent.toLowerCase();
+                const date = row.querySelector('p.mb-0').textContent;
+                
+                let showRow = true;
+
+                if (statusFilter && !status.includes(getStatusText(statusFilter))) {
+                    showRow = false;
+                }
+
+                if (dateFilter && date !== formatDate(dateFilter)) {
+                    showRow = false;
+                }
+
+                if (searchTerm && !customerName.includes(searchTerm)) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            });
+        }
+
+        function viewAppointment(id) {
+            alert(`Xem chi tiết lịch đặt ID: ${id}`);
+        }
+
+        function editAppointment(id) {
+            alert(`Chỉnh sửa lịch đặt ID: ${id}`);
+        }
+
+        function cancelAppointment(id) {
+            if (confirm('Bạn có chắc chắn muốn hủy lịch đặt này?')) {
+                showNotification('Đã hủy lịch đặt!', 'success');
+                // Reload data
+                loadAppointmentsData();
+            }
+        }
+
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'scheduled': return 'bg-primary';
+                case 'in-progress': return 'bg-warning';
+                case 'completed': return 'bg-success';
+                case 'cancelled': return 'bg-danger';
+                default: return 'bg-secondary';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'scheduled': return 'Đã đặt lịch';
+                case 'in-progress': return 'Đang diễn ra';
+                case 'completed': return 'Hoàn thành';
+                case 'cancelled': return 'Đã hủy';
+                default: return 'Không xác định';
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('vi-VN');
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

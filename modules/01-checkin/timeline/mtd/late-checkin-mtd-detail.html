@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thống kê Check-in Sai Giờ MTD - Actiwell Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h2 class="text-primary mb-1">
+                <i class="fas fa-exclamation-triangle me-2"></i>Thống kê
+                Check-in Sai Giờ MTD
+              </h2>
+              <p class="text-muted mb-0">
+                Thống kê toàn bộ hội viên check-in sai giờ trong Tháng này
+              </p>
+            </div>
+            <div>
+              <button class="btn btn-outline-secondary me-2" onclick="goBack()">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+              </button>
+              <button class="btn btn-primary">
+                <i class="fas fa-download me-1"></i>Xuất báo cáo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-4 col-md-6 mb-3">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-exclamation-triangle fa-2x text-white mb-2"></i>
+              <h6 class="text-white">Tổng check-in sai giờ</h6>
+              <h4 class="text-white">1,247</h4>
+              <small class="text-white-50">lượt Tháng này</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-percentage fa-2x text-white mb-2"></i>
+              <h6 class="text-white">Tỷ lệ sai giờ</h6>
+              <h4 class="text-white">21.2%</h4>
+              <small class="text-white-50">so với tổng check-in</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-trending-down fa-2x text-white mb-2"></i>
+              <h6 class="text-white">Giảm so với tháng trước</h6>
+              <h4 class="text-white">-8.5%</h4>
+              <small class="text-white-50">cải thiện</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ theo bộ phận Tháng
+                này
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="departmentDistributionChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ theo cơ sở Tháng
+                này
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="locationDistributionChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Table Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Phân tích Check-in Sai Giờ theo
+                cơ sở trong tháng
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Cơ sở</th>
+                      <th class="text-center">Membership</th>
+                      <th class="text-center">PT Fitness</th>
+                      <th class="text-center">Pilates</th>
+                      <th class="text-center">Swimming Coach</th>
+                      <th class="text-center">Tổng lượt</th>
+                      <th class="text-center">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lateCheckinAnalysisTableBody">
+                    <!-- Data will be loaded here by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full Width Trend Chart -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Check-in sai giờ MTD theo
+                ngày
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="lateCheckinTrendChart" height="400"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Chi tiết Check-in Sai Giờ MTD
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Filter Section -->
+              <div class="row mb-3">
+                <div class="col-md-2 mb-2">
+                  <label class="form-label">Bộ phận</label>
+                  <select class="form-select" id="departmentFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="Membership">Membership</option>
+                    <option value="PT Fitness">PT Fitness</option>
+                    <option value="Swimming Coach">Swimming Coach</option>
+                    <option value="Pilates">Pilates</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="Tôn Thất Thuyết">Tôn Thất Thuyết</option>
+                    <option value="Huỳnh Thúc Kháng">Huỳnh Thúc Kháng</option>
+                    <option value="Giảng Võ">Giảng Võ</option>
+                    <option value="Hào Nam">Hào Nam</option>
+                    <option value="Nguyễn Tuân">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <label class="form-label">Loại sai giờ</label>
+                  <select class="form-select" id="lateTypeFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="late">Muộn</option>
+                    <option value="early">Sớm</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <label class="form-label">Từ ngày</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDateFilter"
+                    value="2024-01-01"
+                  />
+                </div>
+                <div class="col-md-2 mb-2">
+                  <label class="form-label">Đến ngày</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDateFilter"
+                    value="2024-01-31"
+                  />
+                </div>
+                <div class="col-md-2 mb-2 d-flex align-items-end">
+                  <button class="btn btn-primary w-100" id="applyFilterBtn">
+                    <i class="fas fa-search me-1"></i>Áp dụng
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>STT</th>
+                      <th>Hội viên</th>
+                      <th>Bộ phận</th>
+                      <th>Cơ sở</th>
+                      <th>Nhân viên phụ trách</th>
+                      <th>Ngày check-in</th>
+                      <th>Giờ dự kiến</th>
+                      <th>Giờ thực tế</th>
+                      <th>Thời gian chênh lệch</th>
+                      <th>Loại sai giờ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lateCheckinTableBody">
+                    <!-- Data will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination">
+                  <!-- Pagination will be generated here -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // Sample data for MTD late check-ins (1,247 records)
+      const lateCheckinMTDData = [
+        // Membership Department - Tôn Thất Thuyết
+        {
+          id: 1,
+          memberName: "Nguyễn Văn A",
+          department: "Membership",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Nguyễn Thị Lan",
+          checkinDate: "2024-01-15",
+          expectedTime: "18:00",
+          actualTime: "18:25",
+          timeDifference: 25,
+          lateType: "late",
+        },
+        {
+          id: 2,
+          memberName: "Trần Thị B",
+          department: "Membership",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Trần Văn Minh",
+          checkinDate: "2024-01-14",
+          expectedTime: "19:00",
+          actualTime: "19:15",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 3,
+          memberName: "Lê Văn C",
+          department: "Membership",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Lê Thị Hương",
+          checkinDate: "2024-01-13",
+          expectedTime: "17:30",
+          actualTime: "17:45",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 4,
+          memberName: "Phạm Thị D",
+          department: "Membership",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Lê Thị Hương",
+          checkinDate: "2024-01-12",
+          expectedTime: "20:00",
+          actualTime: "19:40",
+          timeDifference: -20,
+          lateType: "early",
+        },
+        {
+          id: 5,
+          memberName: "Hoàng Văn E",
+          department: "Membership",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Lê Thị Hương",
+          checkinDate: "2024-01-11",
+          expectedTime: "18:30",
+          actualTime: "19:00",
+          timeDifference: 30,
+          lateType: "late",
+        },
+
+        // Fitness Department - Huỳnh Thúc Kháng
+        {
+          id: 6,
+          memberName: "Vũ Thị F",
+          department: "Fitness",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-15",
+          expectedTime: "18:00",
+          actualTime: "18:20",
+          timeDifference: 20,
+          lateType: "late",
+        },
+        {
+          id: 7,
+          memberName: "Đặng Văn G",
+          department: "Fitness",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-14",
+          expectedTime: "19:00",
+          actualTime: "18:45",
+          timeDifference: -15,
+          lateType: "early",
+        },
+        {
+          id: 8,
+          memberName: "Bùi Thị H",
+          department: "Fitness",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-13",
+          expectedTime: "17:30",
+          actualTime: "17:50",
+          timeDifference: 20,
+          lateType: "late",
+        },
+        {
+          id: 9,
+          memberName: "Phan Văn I",
+          department: "Fitness",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-12",
+          expectedTime: "20:00",
+          actualTime: "20:10",
+          timeDifference: 10,
+          lateType: "late",
+        },
+        {
+          id: 10,
+          memberName: "Ngô Thị K",
+          department: "Fitness",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-11",
+          expectedTime: "18:30",
+          actualTime: "18:45",
+          timeDifference: 15,
+          lateType: "late",
+        },
+
+        // Swimming Coach - Giảng Võ
+        {
+          id: 11,
+          memberName: "Lý Văn L",
+          department: "Swimming Coach",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-15",
+          expectedTime: "18:00",
+          actualTime: "18:30",
+          timeDifference: 30,
+          lateType: "late",
+        },
+        {
+          id: 12,
+          memberName: "Đinh Thị M",
+          department: "Swimming Coach",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-14",
+          expectedTime: "19:00",
+          actualTime: "18:50",
+          timeDifference: -10,
+          lateType: "early",
+        },
+        {
+          id: 13,
+          memberName: "Hồ Văn N",
+          department: "Swimming Coach",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-13",
+          expectedTime: "17:30",
+          actualTime: "17:45",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 14,
+          memberName: "Trương Thị O",
+          department: "Swimming Coach",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-12",
+          expectedTime: "20:00",
+          actualTime: "20:15",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 15,
+          memberName: "Lưu Văn P",
+          department: "Swimming Coach",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-11",
+          expectedTime: "18:30",
+          actualTime: "18:50",
+          timeDifference: 20,
+          lateType: "late",
+        },
+
+        // Pilates - Hào Nam
+        {
+          id: 16,
+          memberName: "Võ Thị Q",
+          department: "Pilates",
+          location: "Hào Nam",
+          staffInCharge: "Võ Văn Sơn",
+          checkinDate: "2024-01-15",
+          expectedTime: "18:00",
+          actualTime: "18:15",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 17,
+          memberName: "Tôn Văn R",
+          department: "Pilates",
+          location: "Hào Nam",
+          staffInCharge: "Võ Văn Sơn",
+          checkinDate: "2024-01-14",
+          expectedTime: "19:00",
+          actualTime: "18:40",
+          timeDifference: -20,
+          lateType: "early",
+        },
+        {
+          id: 18,
+          memberName: "Chu Thị S",
+          department: "Pilates",
+          location: "Hào Nam",
+          staffInCharge: "Võ Văn Sơn",
+          checkinDate: "2024-01-13",
+          expectedTime: "17:30",
+          actualTime: "17:50",
+          timeDifference: 20,
+          lateType: "late",
+        },
+        {
+          id: 19,
+          memberName: "Dương Văn T",
+          department: "Pilates",
+          location: "Hào Nam",
+          staffInCharge: "Võ Văn Sơn",
+          checkinDate: "2024-01-12",
+          expectedTime: "20:00",
+          actualTime: "20:05",
+          timeDifference: 5,
+          lateType: "late",
+        },
+        {
+          id: 20,
+          memberName: "Lâm Thị U",
+          department: "Pilates",
+          location: "Hào Nam",
+          staffInCharge: "Võ Văn Sơn",
+          checkinDate: "2024-01-11",
+          expectedTime: "18:30",
+          actualTime: "18:45",
+          timeDifference: 15,
+          lateType: "late",
+        },
+
+        // Membership Department - Nguyễn Tuân
+        {
+          id: 21,
+          memberName: "Nguyễn Văn V",
+          department: "Membership",
+          location: "Nguyễn Tuân",
+          staffInCharge: "Ngô Thị Linh",
+          checkinDate: "2024-01-10",
+          expectedTime: "18:00",
+          actualTime: "18:25",
+          timeDifference: 25,
+          lateType: "late",
+        },
+        {
+          id: 22,
+          memberName: "Trần Thị W",
+          department: "Membership",
+          location: "Nguyễn Tuân",
+          staffInCharge: "Ngô Thị Linh",
+          checkinDate: "2024-01-09",
+          expectedTime: "19:00",
+          actualTime: "19:20",
+          timeDifference: 20,
+          lateType: "late",
+        },
+        {
+          id: 23,
+          memberName: "Lê Văn X",
+          department: "Membership",
+          location: "Nguyễn Tuân",
+          staffInCharge: "Ngô Thị Linh",
+          checkinDate: "2024-01-08",
+          expectedTime: "17:30",
+          actualTime: "17:40",
+          timeDifference: 10,
+          lateType: "late",
+        },
+        {
+          id: 24,
+          memberName: "Phạm Thị Y",
+          department: "Membership",
+          location: "Nguyễn Tuân",
+          staffInCharge: "Ngô Thị Linh",
+          checkinDate: "2024-01-07",
+          expectedTime: "20:00",
+          actualTime: "19:35",
+          timeDifference: -25,
+          lateType: "early",
+        },
+        {
+          id: 25,
+          memberName: "Hoàng Văn Z",
+          department: "Membership",
+          location: "Nguyễn Tuân",
+          staffInCharge: "Ngô Thị Linh",
+          checkinDate: "2024-01-06",
+          expectedTime: "18:30",
+          actualTime: "19:00",
+          timeDifference: 30,
+          lateType: "late",
+        },
+
+        // Fitness Department - Tôn Thất Thuyết
+        {
+          id: 26,
+          memberName: "Vũ Thị AA",
+          department: "Fitness",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Lê Thị Hương",
+          checkinDate: "2024-01-10",
+          expectedTime: "18:00",
+          actualTime: "18:15",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 27,
+          memberName: "Đặng Văn BB",
+          department: "Fitness",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Lê Thị Hương",
+          checkinDate: "2024-01-09",
+          expectedTime: "19:00",
+          actualTime: "18:50",
+          timeDifference: -10,
+          lateType: "early",
+        },
+        {
+          id: 28,
+          memberName: "Bùi Thị CC",
+          department: "Fitness",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Lê Thị Hương",
+          checkinDate: "2024-01-08",
+          expectedTime: "17:30",
+          actualTime: "17:45",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 29,
+          memberName: "Phan Văn DD",
+          department: "Fitness",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Lê Thị Hương",
+          checkinDate: "2024-01-07",
+          expectedTime: "20:00",
+          actualTime: "20:10",
+          timeDifference: 10,
+          lateType: "late",
+        },
+        {
+          id: 30,
+          memberName: "Ngô Thị EE",
+          department: "Fitness",
+          location: "Tôn Thất Thuyết",
+          staffInCharge: "Lê Thị Hương",
+          checkinDate: "2024-01-06",
+          expectedTime: "18:30",
+          actualTime: "18:50",
+          timeDifference: 20,
+          lateType: "late",
+        },
+
+        // Swimming Coach - Huỳnh Thúc Kháng
+        {
+          id: 31,
+          memberName: "Lý Văn FF",
+          department: "Swimming Coach",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-10",
+          expectedTime: "18:00",
+          actualTime: "18:30",
+          timeDifference: 30,
+          lateType: "late",
+        },
+        {
+          id: 32,
+          memberName: "Đinh Thị GG",
+          department: "Swimming Coach",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-09",
+          expectedTime: "19:00",
+          actualTime: "18:45",
+          timeDifference: -15,
+          lateType: "early",
+        },
+        {
+          id: 33,
+          memberName: "Hồ Văn HH",
+          department: "Swimming Coach",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-08",
+          expectedTime: "17:30",
+          actualTime: "17:50",
+          timeDifference: 20,
+          lateType: "late",
+        },
+        {
+          id: 34,
+          memberName: "Trương Thị II",
+          department: "Swimming Coach",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-07",
+          expectedTime: "20:00",
+          actualTime: "20:15",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 35,
+          memberName: "Lưu Văn JJ",
+          department: "Swimming Coach",
+          location: "Huỳnh Thúc Kháng",
+          staffInCharge: "Phạm Văn Đức",
+          checkinDate: "2024-01-06",
+          expectedTime: "18:30",
+          actualTime: "19:00",
+          timeDifference: 30,
+          lateType: "late",
+        },
+
+        // Pilates - Giảng Võ
+        {
+          id: 36,
+          memberName: "Võ Thị KK",
+          department: "Pilates",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-10",
+          expectedTime: "18:00",
+          actualTime: "18:20",
+          timeDifference: 20,
+          lateType: "late",
+        },
+        {
+          id: 37,
+          memberName: "Tôn Văn LL",
+          department: "Pilates",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-09",
+          expectedTime: "19:00",
+          actualTime: "18:40",
+          timeDifference: -20,
+          lateType: "early",
+        },
+        {
+          id: 38,
+          memberName: "Chu Thị MM",
+          department: "Pilates",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-08",
+          expectedTime: "17:30",
+          actualTime: "17:45",
+          timeDifference: 15,
+          lateType: "late",
+        },
+        {
+          id: 39,
+          memberName: "Dương Văn NN",
+          department: "Pilates",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-07",
+          expectedTime: "20:00",
+          actualTime: "20:05",
+          timeDifference: 5,
+          lateType: "late",
+        },
+        {
+          id: 40,
+          memberName: "Lâm Thị OO",
+          department: "Pilates",
+          location: "Giảng Võ",
+          staffInCharge: "Hoàng Thị Mai",
+          checkinDate: "2024-01-06",
+          expectedTime: "18:30",
+          actualTime: "18:50",
+          timeDifference: 20,
+          lateType: "late",
+        },
+
+        // Thêm nhiều dữ liệu hơn để đạt 1,247 records
+        // (Để tiết kiệm không gian, tôi sẽ tạo function generate thêm dữ liệu)
+      ];
+
+      // Generate more data to reach 1,247 records
+      function generateMoreData() {
+        const departments = [
+          "Membership",
+          "Fitness",
+          "Swimming Coach",
+          "Pilates",
+        ];
+        const locations = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+        const firstNames = [
+          "Nguyễn",
+          "Trần",
+          "Lê",
+          "Phạm",
+          "Hoàng",
+          "Vũ",
+          "Đặng",
+          "Bùi",
+          "Phan",
+          "Ngô",
+          "Lý",
+          "Đinh",
+          "Hồ",
+          "Trương",
+          "Lưu",
+          "Võ",
+          "Tôn",
+          "Chu",
+          "Dương",
+          "Lâm",
+        ];
+        const lastNames = [
+          "Văn",
+          "Thị",
+          "Minh",
+          "Hương",
+          "Nam",
+          "Linh",
+          "Anh",
+          "Tuấn",
+          "Hoa",
+          "Đức",
+          "Lan",
+          "Quang",
+          "Mai",
+          "Sơn",
+          "Hà",
+          "Long",
+          "Nga",
+          "Tùng",
+          "Thu",
+          "Bình",
+        ];
+
+        let id = lateCheckinMTDData.length + 1;
+
+        for (let i = 0; i < 1200; i++) {
+          const department =
+            departments[Math.floor(rng.next() * departments.length)];
+          const location =
+            locations[Math.floor(rng.next() * locations.length)];
+          const firstName =
+            firstNames[Math.floor(rng.next() * firstNames.length)];
+          const lastName =
+            lastNames[Math.floor(rng.next() * lastNames.length)];
+          const day = Math.floor(rng.next() * 15) + 1;
+          const hour = Math.floor(rng.next() * 8) + 17; // 17-24
+          const minute = Math.floor(rng.next() * 60);
+          // Generate time difference: -60 to -1 (early) or +1 to +60 (late), never 0 (on time)
+          let timeDifference;
+          if (rng.next() < 0.5) {
+            // Early: -60 to -1 minutes
+            timeDifference = -(Math.floor(rng.next() * 60) + 1);
+          } else {
+            // Late: +1 to +60 minutes
+            timeDifference = Math.floor(rng.next() * 60) + 1;
+          }
+          const lateType = timeDifference > 0 ? "late" : "early";
+
+          const expectedTime = `${hour.toString().padStart(2, "0")}:${minute
+            .toString()
+            .padStart(2, "0")}`;
+
+          // Calculate actual time based on time difference
+          const totalMinutes = hour * 60 + minute + timeDifference;
+          const actualHour = Math.floor(totalMinutes / 60);
+          const actualMinute = totalMinutes % 60;
+
+          // Ensure time is within valid range (0-23 hours, 0-59 minutes)
+          const finalHour = Math.max(0, Math.min(23, actualHour));
+          const finalMinute = Math.max(0, Math.min(59, actualMinute));
+
+          const actualTime = `${finalHour
+            .toString()
+            .padStart(2, "0")}:${finalMinute.toString().padStart(2, "0")}`;
+
+          lateCheckinMTDData.push({
+            id: id++,
+            memberName: `${firstName} ${lastName} ${String.fromCharCode(
+              65 + (i % 26)
+            )}`,
+            department: department,
+            location: location,
+            checkinDate: `2024-01-${day.toString().padStart(2, "0")}`,
+            expectedTime: expectedTime,
+            actualTime: actualTime,
+            timeDifference: timeDifference,
+            lateType: lateType,
+          });
+        }
+      }
+
+      // Global variables
+      let currentPage = 1;
+      let recordsPerPage = 50;
+      let filteredData = [];
+
+      // Load data when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM loaded, initializing...");
+
+        generateMoreData();
+        console.log("Generated data count:", lateCheckinMTDData.length);
+
+        loadLateCheckinData();
+        createLateCheckinAnalysisTable();
+        createCharts();
+
+        // Add event listeners for filters
+        const locationFilter = document.getElementById("locationFilter");
+        const departmentFilter = document.getElementById("departmentFilter");
+        const lateTypeFilter = document.getElementById("lateTypeFilter");
+        const startDateFilter = document.getElementById("startDateFilter");
+        const endDateFilter = document.getElementById("endDateFilter");
+
+        // Only add event listener for apply button - no auto-filter on change
+        const applyFilterBtn = document.getElementById("applyFilterBtn");
+        if (applyFilterBtn) {
+          applyFilterBtn.addEventListener("click", applyMTDFilters);
+        }
+
+        console.log("Page initialized successfully");
+      });
+
+      function applyMTDFilters() {
+        console.log("Apply MTD filters called");
+        currentPage = 1; // Reset to first page when applying filters
+        loadLateCheckinData();
+      }
+
+      function loadLateCheckinData() {
+        const tbody = document.getElementById("lateCheckinTableBody");
+        tbody.innerHTML = "";
+
+        // Apply filters
+        const locationFilterEl = document.getElementById("locationFilter");
+        const departmentFilterEl = document.getElementById("departmentFilter");
+        const lateTypeFilterEl = document.getElementById("lateTypeFilter");
+        const startDateFilterEl = document.getElementById("startDateFilter");
+        const endDateFilterEl = document.getElementById("endDateFilter");
+
+        if (
+          !locationFilterEl ||
+          !departmentFilterEl ||
+          !lateTypeFilterEl ||
+          !startDateFilterEl ||
+          !endDateFilterEl
+        ) {
+          console.error("Filter elements not found!");
+          return;
+        }
+
+        const locationFilter = locationFilterEl.value;
+        const departmentFilter = departmentFilterEl.value;
+        const lateTypeFilter = lateTypeFilterEl.value;
+        const startDateFilter = startDateFilterEl.value;
+        const endDateFilter = endDateFilterEl.value;
+
+        console.log("Original data count:", lateCheckinMTDData.length);
+        console.log("Filter values:", {
+          locationFilter,
+          departmentFilter,
+          lateTypeFilter,
+          startDateFilter,
+          endDateFilter,
+        });
+
+        filteredData = lateCheckinMTDData.filter((item) => {
+          // Location filter
+          const locationMatch =
+            locationFilter === "all" || item.location === locationFilter;
+
+          // Department filter
+          const departmentMatch =
+            departmentFilter === "all" || item.department === departmentFilter;
+
+          // Late type filter
+          const lateTypeMatch =
+            lateTypeFilter === "all" || item.lateType === lateTypeFilter;
+
+          // Date range filter
+          let dateMatch = true;
+          if (startDateFilter && endDateFilter) {
+            const itemDate = new Date(item.checkinDate);
+            const startDate = new Date(startDateFilter);
+            const endDate = new Date(endDateFilter);
+            dateMatch = itemDate >= startDate && itemDate <= endDate;
+          }
+
+          const result =
+            locationMatch && departmentMatch && lateTypeMatch && dateMatch;
+
+          // Debug log for first few items
+          if (lateCheckinMTDData.indexOf(item) < 3) {
+            console.log(`Item ${item.id}:`, {
+              location: item.location,
+              department: item.department,
+              lateType: item.lateType,
+              checkinDate: item.checkinDate,
+              locationMatch,
+              departmentMatch,
+              lateTypeMatch,
+              dateMatch,
+              result,
+            });
+          }
+
+          return result;
+        });
+
+        console.log("Filtered data count:", filteredData.length);
+
+        // Calculate pagination
+        const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const endIndex = startIndex + recordsPerPage;
+        const pageData = filteredData.slice(startIndex, endIndex);
+
+        // Render table data
+        pageData.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${startIndex + index + 1}</td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                        ${item.memberName.charAt(0)}
+                    </div>
+                    <div>
+                        <div class="fw-bold">${item.memberName}</div>
+                        <small class="text-muted">ID: ${item.id}</small>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="badge ${getDepartmentBadgeClass(
+                  item.department
+                )}">${item.department}</span>
+            </td>
+            <td>${item.location}</td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <div class="avatar-sm bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px; font-size: 10px;">
+                        ${
+                          item.staffInCharge
+                            ? item.staffInCharge.split(" ").pop().charAt(0)
+                            : "N/A"
+                        }
+                    </div>
+                    <div>
+                        <div class="fw-bold small">${
+                          item.staffInCharge || "N/A"
+                        }</div>
+                    </div>
+                </div>
+            </td>
+            <td>${item.checkinDate}</td>
+            <td>${item.expectedTime}</td>
+            <td>
+                <span class="text-primary fw-bold">${item.actualTime}</span>
+            </td>
+            <td>
+                <span class="badge ${getTimeDifferenceBadgeClass(
+                  item.timeDifference
+                )}">
+                    ${formatTimeDifference(item.timeDifference)}
+                </span>
+            </td>
+            <td>
+                <span class="badge ${
+                  item.lateType === "late" ? "bg-danger" : "bg-warning"
+                }">${item.lateType === "late" ? "Muộn" : "Sớm"}</span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Generate pagination
+        generatePagination(filteredData.length);
+      }
+
+      function getDepartmentBadgeClass(department) {
+        switch (department) {
+          case "PT Fitness":
+            return "bg-warning";
+          case "Membership":
+            return "bg-primary";
+          case "Swimming Coach":
+            return "bg-info";
+          case "Pilates":
+            return "bg-pink";
+          default:
+            return "bg-secondary";
+        }
+      }
+
+      function getTimeDifferenceBadgeClass(difference) {
+        if (difference > 0) {
+          return "badge bg-danger";
+        } else {
+          return "badge bg-warning";
+        }
+      }
+
+      function formatTimeDifference(difference) {
+        const absDiff = Math.abs(difference);
+        if (difference > 0) {
+          return `+${absDiff} phút`;
+        } else {
+          return `-${absDiff} phút`;
+        }
+      }
+
+      // Create analysis table for late check-ins by location
+      function createLateCheckinAnalysisTable() {
+        const tbody = document.getElementById("lateCheckinAnalysisTableBody");
+        if (!tbody) return;
+
+        // Sample data for late check-ins by location and department (total: 1247)
+        const locationData = [
+          {
+            name: "Tôn Thất Thuyết",
+            membership: 320,
+            ptFitness: 180,
+            pilates: 95,
+            swimming: 85,
+          },
+          {
+            name: "Huỳnh Thúc Kháng",
+            membership: 285,
+            ptFitness: 165,
+            pilates: 88,
+            swimming: 72,
+          },
+          {
+            name: "Giảng Võ",
+            membership: 245,
+            ptFitness: 140,
+            pilates: 75,
+            swimming: 60,
+          },
+          {
+            name: "Hào Nam",
+            membership: 220,
+            ptFitness: 125,
+            pilates: 68,
+            swimming: 55,
+          },
+          {
+            name: "Nguyễn Tuân",
+            membership: 195,
+            ptFitness: 110,
+            pilates: 58,
+            swimming: 48,
+          },
+        ];
+
+        tbody.innerHTML = "";
+
+        // Add data rows
+        locationData.forEach((location, index) => {
+          const total =
+            location.membership +
+            location.ptFitness +
+            location.pilates +
+            location.swimming;
+
+          // Determine status based on total (adjusted for higher numbers)
+          let status, statusClass, totalClass;
+          if (total >= 600) {
+            status = "Xuất sắc";
+            statusClass = "bg-success";
+            totalClass = "text-success";
+          } else if (total >= 500) {
+            status = "Tốt";
+            statusClass = "bg-success";
+            totalClass = "text-primary";
+          } else if (total >= 400) {
+            status = "Trung bình";
+            statusClass = "bg-warning";
+            totalClass = "text-warning";
+          } else {
+            status = "Cần cải thiện";
+            statusClass = "bg-danger";
+            totalClass = "text-danger";
+          }
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td><strong>${location.name}</strong></td>
+            <td class="text-center">
+              <span class="badge bg-primary rounded-pill">${
+                location.membership
+              }</span>
+            </td>
+            <td class="text-center">
+              <span class="badge bg-warning rounded-pill">${
+                location.ptFitness
+              }</span>
+            </td>
+            <td class="text-center">
+              <span class="badge bg-info rounded-pill">${
+                location.pilates
+              }</span>
+            </td>
+              <td class="text-center">
+                <span class="badge bg-success rounded-pill">${
+                  location.swimming
+                }</span>
+              </td>
+            <td class="text-center">
+              <strong class="${totalClass}">${total}</strong>
+            </td>
+            <td class="text-center">
+              <span class="badge ${statusClass}">${status}</span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Add total row
+        const totalMembership = locationData.reduce(
+          (sum, loc) => sum + loc.membership,
+          0
+        );
+        const totalPTFitness = locationData.reduce(
+          (sum, loc) => sum + loc.ptFitness,
+          0
+        );
+        const totalPilates = locationData.reduce(
+          (sum, loc) => sum + loc.pilates,
+          0
+        );
+        const totalSwimming = locationData.reduce(
+          (sum, loc) => sum + loc.swimming,
+          0
+        );
+        const grandTotal =
+          totalMembership + totalPTFitness + totalPilates + totalSwimming;
+
+        const totalRow = document.createElement("tr");
+        totalRow.className = "table-dark";
+        totalRow.innerHTML = `
+          <td></td>
+          <td><strong class="text-white">TỔNG CỘNG</strong></td>
+          <td class="text-center">
+            <span class="badge bg-primary rounded-pill"><strong>${totalMembership}</strong></span>
+          </td>
+          <td class="text-center">
+            <span class="badge bg-warning rounded-pill"><strong>${totalPTFitness}</strong></span>
+          </td>
+          <td class="text-center">
+            <span class="badge bg-info rounded-pill"><strong>${totalPilates}</strong></span>
+          </td>
+            <td class="text-center">
+              <span class="badge bg-success rounded-pill"><strong>${totalSwimming}</strong></span>
+            </td>
+          <td class="text-center">
+            <strong class="text-white">${grandTotal}</strong>
+          </td>
+          <td class="text-center">
+            <strong class="text-white">-</strong>
+          </td>
+        `;
+        tbody.appendChild(totalRow);
+      }
+
+      function createCharts() {
+        // Trend Chart - 30 days data
+        const trendCtx = document
+          .getElementById("lateCheckinTrendChart")
+          .getContext("2d");
+        new Chart(trendCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "1/1",
+              "2/1",
+              "3/1",
+              "4/1",
+              "5/1",
+              "6/1",
+              "7/1",
+              "8/1",
+              "9/1",
+              "10/1",
+              "11/1",
+              "12/1",
+              "13/1",
+              "14/1",
+              "15/1",
+              "16/1",
+              "17/1",
+              "18/1",
+              "19/1",
+              "20/1",
+              "21/1",
+              "22/1",
+              "23/1",
+              "24/1",
+              "25/1",
+              "26/1",
+              "27/1",
+              "28/1",
+              "29/1",
+              "30/1",
+            ],
+            datasets: [
+              {
+                label: "Check-in sai giờ",
+                data: [
+                  45, 52, 38, 61, 55, 48, 42, 58, 49, 53, 47, 44, 51, 39, 46,
+                  43, 57, 41, 49, 52, 38, 45, 47, 44, 56, 42, 48, 39, 51, 47,
+                ],
+                borderColor: "#dc3545",
+                backgroundColor: "rgba(220, 53, 69, 0.1)",
+                tension: 0.4,
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              intersect: false,
+              mode: "index",
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Số lượt check-in sai giờ",
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: "Ngày trong tháng",
+                },
+                ticks: {
+                  maxTicksLimit: 30,
+                  autoSkip: false,
+                  maxRotation: 45,
+                  minRotation: 0,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+              },
+              tooltip: {
+                mode: "index",
+                intersect: false,
+                callbacks: {
+                  label: function (context) {
+                    return (
+                      context.dataset.label + ": " + context.parsed.y + " lượt"
+                    );
+                  },
+                },
+              },
+            },
+            elements: {
+              point: {
+                radius: 3,
+                hoverRadius: 6,
+              },
+            },
+          },
+        });
+
+        // Department Distribution Chart with percentage
+        const departmentCtx = document
+          .getElementById("departmentDistributionChart")
+          .getContext("2d");
+        new Chart(departmentCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Membership", "PT Fitness", "Swimming Coach", "Pilates"],
+            datasets: [
+              {
+                data: [45, 30, 15, 10],
+                backgroundColor: ["#0d6efd", "#ffc107", "#198754", "#e83e8c"],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Phân bổ theo bộ phận Tháng này",
+              },
+              legend: {
+                position: "right",
+                labels: {
+                  usePointStyle: true,
+                  padding: 20,
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const total = context.dataset.data.reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+                    const percentage = ((context.parsed / total) * 100).toFixed(
+                      1
+                    );
+                    return (
+                      context.label +
+                      ": " +
+                      context.parsed +
+                      " lượt (" +
+                      percentage +
+                      "%)"
+                    );
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // Location Distribution Chart with percentage
+        const locationCtx = document
+          .getElementById("locationDistributionChart")
+          .getContext("2d");
+        new Chart(locationCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Tôn Thất Thuyết",
+              "Huỳnh Thúc Kháng",
+              "Giảng Võ",
+              "Hào Nam",
+              "Nguyễn Tuân",
+            ],
+            datasets: [
+              {
+                data: [25, 22, 20, 18, 15],
+                backgroundColor: [
+                  "#dc3545",
+                  "#fd7e14",
+                  "#20c997",
+                  "#6f42c1",
+                  "#0dcaf0",
+                ],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Phân bổ theo cơ sở Tháng này",
+              },
+              legend: {
+                position: "right",
+                labels: {
+                  usePointStyle: true,
+                  padding: 20,
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const total = context.dataset.data.reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+                    const percentage = ((context.parsed / total) * 100).toFixed(
+                      1
+                    );
+                    return (
+                      context.label +
+                      ": " +
+                      context.parsed +
+                      " lượt (" +
+                      percentage +
+                      "%)"
+                    );
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // Generate pagination
+      function generatePagination(totalRecords) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+        if (totalPages <= 1) return;
+
+        // Previous button
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+        prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage - 1
+        })">Trước</a>`;
+        pagination.appendChild(prevLi);
+
+        // Smart pagination with ellipsis
+        const maxVisiblePages = 7; // Show max 7 page numbers
+        let startPage, endPage;
+
+        if (totalPages <= maxVisiblePages) {
+          // Show all pages if total is small
+          startPage = 1;
+          endPage = totalPages;
+        } else {
+          // Calculate start and end pages
+          const halfVisible = Math.floor(maxVisiblePages / 2);
+
+          if (currentPage <= halfVisible) {
+            startPage = 1;
+            endPage = maxVisiblePages;
+          } else if (currentPage + halfVisible >= totalPages) {
+            startPage = totalPages - maxVisiblePages + 1;
+            endPage = totalPages;
+          } else {
+            startPage = currentPage - halfVisible;
+            endPage = currentPage + halfVisible;
+          }
+        }
+
+        // First page
+        if (startPage > 1) {
+          const firstLi = document.createElement("li");
+          firstLi.className = "page-item";
+          firstLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(1)">1</a>`;
+          pagination.appendChild(firstLi);
+
+          // Add ellipsis if needed
+          if (startPage > 2) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+        }
+
+        // Page numbers
+        for (let i = startPage; i <= endPage; i++) {
+          const li = document.createElement("li");
+          li.className = `page-item ${i === currentPage ? "active" : ""}`;
+          li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+          pagination.appendChild(li);
+        }
+
+        // Last page
+        if (endPage < totalPages) {
+          // Add ellipsis if needed
+          if (endPage < totalPages - 1) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+
+          const lastLi = document.createElement("li");
+          lastLi.className = "page-item";
+          lastLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a>`;
+          pagination.appendChild(lastLi);
+        }
+
+        // Next button
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${
+          currentPage === totalPages ? "disabled" : ""
+        }`;
+        nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage + 1
+        })">Tiếp</a>`;
+        pagination.appendChild(nextLi);
+      }
+
+      // Change page
+      function changePage(page) {
+        if (page < 1 || page > Math.ceil(filteredData.length / recordsPerPage))
+          return;
+        currentPage = page;
+        loadLateCheckinData();
+      }
+
+      function goBack() {
+        window.location.href = "checkin-mtd-detail.html";
+      }
+    </script>
+    <!-- Filter Integration Script -->
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/filter-handler.js"></script>
+  
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+</body>
+</html>

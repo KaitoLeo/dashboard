@@ -1,0 +1,2831 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Actiwell Report System - MockUI (Updated 2025-01-23)</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h2 class="mb-0">
+              <i class="fas fa-heartbeat me-2"></i>
+              Actiwell Reports Dashboard
+            </h2>
+            <!-- Breadcrumb Container -->
+            <div id="breadcrumb-container" class="mt-2"></div>
+          </div>
+          <div class="col-md-6 text-end">
+            <div class="d-flex align-items-center justify-content-end gap-3">
+              <!-- Real-time clock -->
+              <div class="text-end">
+                <div class="text-white small">
+                  <i class="fas fa-clock me-1"></i>
+                  <span id="currentTime"></span>
+                </div>
+                <div class="text-white-50 small">
+                  <span id="currentDate"></span>
+                </div>
+              </div>
+              <!-- Settings Link -->
+              <a
+                href="pages/99-01-01-settings.html"
+                class="btn btn-outline-light"
+              >
+                <i class="fas fa-cog me-1"></i>Settings
+              </a>
+
+              <div class="dropdown">
+                <button
+                  class="btn btn-outline-light dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                >
+                  <i class="fas fa-filter me-1"></i>Bộ lọc
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><h6 class="dropdown-header">Chọn trung tâm</h6></li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-location="all"
+                      >Tất cả trung tâm</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-location="ton-that-thuyet"
+                      >Tôn Thất Thuyết</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-location="huynh-thuc-khang"
+                      >Huỳnh Thúc Kháng</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-location="giang-vo"
+                      >Giảng Võ</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-location="hao-nam"
+                      >Hào Nam</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-location="nguyen-tuan"
+                      >Nguyễn Tuân</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li><h6 class="dropdown-header">Chọn bộ phận</h6></li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-department="all"
+                      >Tất cả bộ phận</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-department="membership"
+                      >Membership</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-department="fitness"
+                      >Fitness</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-department="pool"
+                      >Swimming Coach</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" data-department="pilates"
+                      >Pilates</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-department="operation"
+                      >Operation</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Date Range Filter -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-3">
+                  <label class="form-label">Từ ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDate"
+                    value="2025-09-01"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Đến ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDate"
+                    value="2025-09-25"
+                  />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Tháng/Quý/Năm:</label>
+                  <select class="form-select" id="timeRange">
+                    <option value="month">Theo tháng</option>
+                    <option value="quarter">Theo quý</option>
+                    <option value="year">Theo năm</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-search me-1"></i>Áp dụng
+                  </button>
+                  <button class="btn btn-success ms-2" onclick="exportReport()">
+                    <i class="fas fa-download me-1"></i>Xuất báo cáo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Sections -->
+      <div id="content-sections">
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="content-section">
+          <!-- Revenue Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h4 class="text-primary mb-3 section-header">
+                <i class="fas fa-chart-line me-2"></i>Báo cáo doanh thu
+              </h4>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-primary text-white clickable-card"
+                onclick="openRevenueTargetDetail()"
+                style="cursor: pointer"
+                data-metric="revenue"
+                data-type="target"
+              >
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="card-title">Mục tiêu doanh số</h6>
+                      <h3 class="mb-0" id="targetValue">3,000,000,000</h3>
+                      <small>VNĐ</small>
+                    </div>
+                    <div class="align-self-center">
+                      <i class="fas fa-bullseye fa-2x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-success text-white clickable-card"
+                onclick="openRevenueMTDDetail()"
+                style="cursor: pointer"
+                data-metric="revenue"
+                data-type="mtd"
+              >
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="card-title">Doanh thu MTD</h6>
+                      <h3 class="mb-0" id="mtdValue">1,850,000,000</h3>
+                      <small>VNĐ</small>
+                    </div>
+                    <div class="align-self-center">
+                      <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-info text-white clickable-card"
+                onclick="openDailyRevenueDetail()"
+                style="cursor: pointer"
+                data-metric="revenue"
+                data-type="today"
+              >
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="card-title">Doanh thu ngày</h6>
+                      <h3 class="mb-0" id="dailyValue">80,434,783</h3>
+                      <small>VNĐ (Today)</small>
+                    </div>
+                    <div class="align-self-center">
+                      <i class="fas fa-calendar-day fa-2x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-warning text-white clickable-card"
+                onclick="openCompletionRateDetail()"
+                style="cursor: pointer"
+                data-metric="revenue"
+                data-type="completionRate"
+              >
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="card-title">Tỉ lệ hoàn thành</h6>
+                      <h3 class="mb-0" id="completionValue">62%</h3>
+                      <small>Mục tiêu</small>
+                    </div>
+                    <div class="align-self-center">
+                      <i class="fas fa-percentage fa-2x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Revenue KPIs -->
+          <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div
+                class="card bg-secondary text-white clickable-card"
+                onclick="openYesterdayRevenueDetail()"
+                style="cursor: pointer"
+                data-metric="revenue"
+                data-type="yesterday"
+              >
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="card-title">Doanh thu hôm qua</h6>
+                      <h3 class="mb-0" id="yesterdayRevenue">78,000,000</h3>
+                      <small>VNĐ (Yesterday)</small>
+                    </div>
+                    <div class="align-self-center">
+                      <i class="fas fa-calendar-minus fa-2x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div
+                class="card bg-danger text-white"
+                data-metric="revenue"
+                data-type="remaining"
+              >
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="card-title">Mục tiêu còn lại</h6>
+                      <h3 class="mb-0" id="remainingValue">1,150,000,000</h3>
+                      <small>VNĐ</small>
+                    </div>
+                    <div class="align-self-center">
+                      <i class="fas fa-target fa-2x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div
+                class="card bg-dark text-white"
+                data-metric="revenue"
+                data-type="avgDaily"
+              >
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="card-title">Cần đạt/ngày</h6>
+                      <h3 class="mb-0" id="dailyTargetValue">164,285,714</h3>
+                      <small>VNĐ/ngày</small>
+                    </div>
+                    <div class="align-self-center">
+                      <i class="fas fa-calculator fa-2x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+              <div class="card bg-light text-dark">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h6 class="card-title">Dự kiến hoàn thành</h6>
+                      <h3 class="mb-0" id="completionDate">25/12/2024</h3>
+                      <small>ngày</small>
+                    </div>
+                    <div class="align-self-center">
+                      <i class="fas fa-calendar-check fa-2x"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Báo cáo vận hành Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h4 class="text-success mb-3 section-header">
+                <i class="fas fa-cogs me-2"></i>Báo cáo vận hành
+              </h4>
+            </div>
+
+            <!-- 4 Metric Cards nhỏ - Ẩn trên trang chính -->
+            <div class="col-lg-3 col-md-6 mb-3 d-none">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openCheckinFrequencyDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="today"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                  <h6>Hội viên check-in hôm nay</h6>
+                  <h4 class="text-primary">245</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3 d-none">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openCheckinFrequencyDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="yesterday"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-calendar-minus fa-2x text-primary mb-2"></i>
+                  <h6>Check-in hôm qua</h6>
+                  <h4 class="text-primary">238</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3 d-none">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openCheckinMTDDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="mtd"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-chart-line fa-2x text-success mb-2"></i>
+                  <h6>Check-in MTD</h6>
+                  <h4 class="text-success">5,880</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3 d-none">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openCheckinFrequencyDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="onTime"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                  <h6>Check-in đúng giờ</h6>
+                  <h4 class="text-info">198</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Check-in thủ công -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <div
+                class="card bg-danger text-white clickable-card"
+                onclick="openManualCheckinDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="manual"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-hand-paper fa-2x mb-2"></i>
+                  <h6>Check-in thủ công</h6>
+                  <h4>47</h4>
+                  <small>lượt</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hội viên check-in -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <div
+                class="card bg-primary text-white clickable-card"
+                onclick="openCheckinOverview()"
+                style="cursor: pointer"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-users fa-2x mb-2"></i>
+                  <h6>Hội viên check-in</h6>
+                  <h4>245</h4>
+                  <small>lượt</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live - Đang tập -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <div
+                class="card bg-success text-white clickable-card"
+                onclick="openLiveMembersDetail()"
+                style="cursor: pointer"
+                data-metric="live"
+                data-type="members"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-running fa-2x mb-2"></i>
+                  <h6>Live</h6>
+                  <h4 id="liveMembersCount">89</h4>
+                  <small>đang tập</small>
+                  <div class="mt-1">
+                    <span class="badge bg-light text-success" id="liveStatus">
+                      <i class="fas fa-circle me-1"></i>Live
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Thống kê Khách tham quan -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <div
+                class="card clickable-card"
+                onclick="openVisitorStatsDetail()"
+                style="
+                  cursor: pointer;
+                  background: linear-gradient(
+                    135deg,
+                    #667eea 0%,
+                    #764ba2 100%
+                  ) !important;
+                  color: white !important;
+                  border: none;
+                  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+                "
+                data-metric="customers"
+                data-type="visitor-stats"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-chart-bar fa-2x mb-2 text-white"></i>
+                  <h6 class="text-white">Thống kê Khách tham quan</h6>
+                  <h4 class="text-white">25</h4>
+                  <small class="text-white-50">Tổng quan</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Khách tập thử -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openTrialGuestsDetail()"
+                style="cursor: pointer"
+                data-metric="customers"
+                data-type="trial"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-user-plus fa-2x text-success mb-2"></i>
+                  <h6>Khách tập thử</h6>
+                  <h4 class="text-success">12</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hội viên hết hạn -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <div
+                class="card bg-primary text-white clickable-card"
+                onclick="openMemberMovementDetail()"
+                style="cursor: pointer"
+                data-metric="customers"
+                data-type="expired"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-calendar-times fa-2x mb-2"></i>
+                  <h6>Dòng chảy hội viên</h6>
+                  <h4>1,250</h4>
+                  <small>Member Movement Analysis</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hội viên sinh nhật -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <div
+                class="card bg-warning text-white clickable-card"
+                onclick="openBirthdayMembersDetail()"
+                style="cursor: pointer"
+                data-metric="customers"
+                data-type="birthday"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-birthday-cake fa-2x mb-2"></i>
+                  <h6>Hội viên sinh nhật</h6>
+                  <h4>5</h4>
+                  <small>sinh nhật tháng này</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kích hoạt hợp đồng -->
+            <div class="col-lg-2 col-md-6 mb-3">
+              <div
+                class="card bg-info text-white clickable-card"
+                onclick="openContractActivationDetail()"
+                style="cursor: pointer"
+                data-metric="contracts"
+                data-type="activation"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-file-contract fa-2x mb-2"></i>
+                  <h6>Kích hoạt hợp đồng</h6>
+                  <h4>28</h4>
+                  <small>lượt tháng này</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Check-in Frequency Analysis - Ẩn trên trang chính -->
+          <div class="row mb-4 d-none">
+            <div class="col-12">
+              <h5 class="text-info mb-3">
+                <i class="fas fa-chart-bar me-2"></i>Check-in Frequency Analysis
+              </h5>
+            </div>
+            <!-- Check-in per Member per Week -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openCheckinFrequencyDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="avgDuration"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-calendar-week fa-2x text-primary mb-2"></i>
+                  <h6>Check-in/Tuần</h6>
+                  <h4 class="text-primary">3.2</h4>
+                  <small class="text-muted">lượt/khách/tuần</small>
+                </div>
+              </div>
+            </div>
+            <!-- Check-in per Active Member -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openCheckinFrequencyDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="peakHour"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-users fa-2x text-success mb-2"></i>
+                  <h6>Check-in/Active Member</h6>
+                  <h4 class="text-success">4.1</h4>
+                  <small class="text-muted">lượt/khách/tháng</small>
+                </div>
+              </div>
+            </div>
+            <!-- PT Session Check-ins -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openPTDetail()"
+                style="cursor: pointer"
+                data-metric="pt"
+                data-type="today"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-dumbbell fa-2x text-warning mb-2"></i>
+                  <h6>PT Check-ins</h6>
+                  <h4 class="text-warning">45</h4>
+                  <small class="text-muted">lượt hôm nay</small>
+                </div>
+              </div>
+            </div>
+            <!-- Membership Check-ins -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openCheckinFrequencyDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="membership"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-id-card fa-2x text-info mb-2"></i>
+                  <h6>Membership Check-ins</h6>
+                  <h4 class="text-info">200</h4>
+                  <small class="text-muted">lượt hôm nay</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Check-in KPIs - Ẩn trên trang chính -->
+          <div class="row mb-4 d-none">
+            <div class="col-12">
+              <h5 class="text-secondary mb-3">
+                <i class="fas fa-chart-line me-2"></i>Additional Check-in
+                Metrics
+              </h5>
+            </div>
+            <!-- Check-in thủ công -->
+            <div class="col-lg-4 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openManualCheckinDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="manual"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-hand-paper fa-2x text-warning mb-2"></i>
+                  <h6>Check-in thủ công</h6>
+                  <h4 class="text-warning">47</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+            <!-- Khách tập thử -->
+            <div class="col-lg-4 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openTrialGuestsDetail()"
+                style="cursor: pointer"
+                data-metric="customers"
+                data-type="trial"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-user-plus fa-2x text-success mb-2"></i>
+                  <h6>Khách tập thử</h6>
+                  <h4 class="text-success">12</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+            <!-- Tổng check-in -->
+            <div class="col-lg-4 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openCheckinFrequencyDetail()"
+                style="cursor: pointer"
+                data-metric="checkin"
+                data-type="today"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-chart-bar fa-2x text-primary mb-2"></i>
+                  <h6>Tổng check-in</h6>
+                  <h4 class="text-primary">245</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member Movement Section -->
+          <div class="row mb-4 d-none">
+            <div class="col-12">
+              <h4 class="text-secondary mb-3 section-header">
+                <i class="fas fa-users me-2"></i>Member Movement & Hợp đồng
+              </h4>
+            </div>
+            <!-- Opening Balance -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-primary text-white clickable-card"
+                onclick="openMemberMovementDetail()"
+                style="cursor: pointer"
+                data-metric="customers"
+                data-type="openingBalance"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-play-circle fa-2x mb-2"></i>
+                  <h6>Opening Balance</h6>
+                  <h4>1,250</h4>
+                  <small>hội viên active đầu kỳ</small>
+                </div>
+              </div>
+            </div>
+            <!-- New Joiners -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-success text-white clickable-card"
+                onclick="openMemberMovementDetail()"
+                style="cursor: pointer"
+                data-metric="customers"
+                data-type="newMembers"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-user-plus fa-2x mb-2"></i>
+                  <h6>New Joiners</h6>
+                  <h4>60</h4>
+                  <small>khách hàng mới</small>
+                </div>
+              </div>
+            </div>
+            <!-- Renewals -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-info text-white clickable-card"
+                onclick="openMemberMovementDetail()"
+                style="cursor: pointer"
+                data-metric="customers"
+                data-type="renewals"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-sync-alt fa-2x mb-2"></i>
+                  <h6>Renewals</h6>
+                  <h4>80</h4>
+                  <small>hội viên gia hạn</small>
+                </div>
+              </div>
+            </div>
+            <!-- Closing Balance -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-warning text-white clickable-card"
+                onclick="openMemberMovementDetail()"
+                style="cursor: pointer"
+                data-metric="customers"
+                data-type="closingBalance"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-stop-circle fa-2x mb-2"></i>
+                  <h6>Closing Balance</h6>
+                  <h4>1,310</h4>
+                  <small>hội viên active cuối kỳ</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Booking Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h4 class="text-info mb-3 section-header">
+                <i class="fas fa-calendar-check me-2"></i>Booking Management
+              </h4>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openBookingTodayDetail()"
+                style="cursor: pointer"
+                data-metric="booking"
+                data-type="today"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-calendar-day fa-2x text-success mb-2"></i>
+                  <h6>Booking Hôm nay</h6>
+                  <h4 class="text-success">28</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openBookingYesterdayDetail()"
+                style="cursor: pointer"
+                data-metric="booking"
+                data-type="yesterday"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-calendar-minus fa-2x text-info mb-2"></i>
+                  <h6>Booking Hôm qua</h6>
+                  <h4 class="text-info">19</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openBookingThisWeekDetail()"
+                style="cursor: pointer"
+                data-metric="booking"
+                data-type="thisWeek"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-calendar-week fa-2x text-warning mb-2"></i>
+                  <h6>Booking theo Tuần</h6>
+                  <h4 class="text-warning">156</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openBookingMTDDetail()"
+                style="cursor: pointer"
+                data-metric="booking"
+                data-type="mtd"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-chart-line fa-2x text-primary mb-2"></i>
+                  <h6>Booking MTD</h6>
+                  <h4 class="text-primary">756</h4>
+                  <small class="text-muted">lượt</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Facility Utilization & Burn Rate Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h4 class="text-warning mb-3 section-header">
+                <i class="fas fa-building me-2"></i>Facility Utilization & Burn
+                Rate
+              </h4>
+            </div>
+            <!-- Overall Occupancy Rate -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-warning text-white clickable-card"
+                onclick="openFacilityUtilizationDetail()"
+                style="cursor: pointer"
+                data-metric="facilities"
+                data-type="avgOccupancy"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-percentage fa-2x mb-2"></i>
+                  <h6>Tỉ lệ lấp đầy</h6>
+                  <h4>78.5%</h4>
+                  <small>tổng check-in/dung lượng</small>
+                </div>
+              </div>
+            </div>
+            <!-- Gym Occupancy -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openGymOccupancyDetail()"
+                style="cursor: pointer"
+                data-metric="facilities"
+                data-type="gymOccupancy"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-dumbbell fa-2x text-primary mb-2"></i>
+                  <h6>Gym Occupancy</h6>
+                  <h4 class="text-primary">82.3%</h4>
+                  <small class="text-muted">phòng gym</small>
+                </div>
+              </div>
+            </div>
+            <!-- Swimming Coach Occupancy -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openSwimmingCoachOccupancyDetail()"
+                style="cursor: pointer"
+                data-metric="facilities"
+                data-type="poolOccupancy"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-swimming-pool fa-2x text-info mb-2"></i>
+                  <h6>Swimming Coach Occupancy</h6>
+                  <h4 class="text-info">65.8%</h4>
+                  <small class="text-muted">bể bơi</small>
+                </div>
+              </div>
+            </div>
+            <!-- Pilates Occupancy -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="openPilatesOccupancyDetail()"
+                style="cursor: pointer"
+                data-metric="facilities"
+                data-type="pilatesOccupancy"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-spa fa-2x text-success mb-2"></i>
+                  <h6>Pilates Occupancy</h6>
+                  <h4 class="text-success">71.2%</h4>
+                  <small class="text-muted">phòng pilates</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Burn Rate Analysis -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h5 class="text-danger mb-3">
+                <i class="fas fa-fire me-2"></i>Burn Rate Analysis
+              </h5>
+            </div>
+            <!-- Burn Rate Analysis Card -->
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-danger text-white clickable-card"
+                onclick="openBurnRateDetail()"
+                style="cursor: pointer"
+                data-metric="burnRate"
+                data-type="analysis"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-fire fa-2x mb-2"></i>
+                  <h6>Burn Rate Analysis</h6>
+                  <h4 id="avgBurnRate">4.2</h4>
+                  <small>lượt/khách/tháng</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Báo cáo chi tiết Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h4 class="text-dark mb-3 section-header">
+                <i class="fas fa-chart-bar me-2"></i>Báo cáo chi tiết
+              </h4>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-success text-white clickable-card"
+                onclick="navigateTo('legacy:pages/03-03-02-01-revenue-service-detail.html')"
+                style="cursor: pointer"
+                data-metric="reports"
+                data-type="revenueService"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-concierge-bell fa-2x mb-2"></i>
+                  <h6>Doanh thu theo dịch vụ</h6>
+                  <small>Chi tiết</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-info text-white clickable-card"
+                onclick="navigateTo('legacy:pages/03-03-04-01-revenue-staff-detail.html')"
+                style="cursor: pointer"
+                data-metric="reports"
+                data-type="revenueStaff"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-user-tie fa-2x mb-2"></i>
+                  <h6>Doanh thu theo nhân viên</h6>
+                  <small>Chi tiết</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-warning text-white clickable-card"
+                onclick="navigateTo('legacy:pages/03-03-05-01-revenue-payment-detail.html')"
+                style="cursor: pointer"
+                data-metric="reports"
+                data-type="revenuePayment"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-credit-card fa-2x mb-2"></i>
+                  <h6>Hình thức thanh toán</h6>
+                  <small>Chi tiết</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quản lý dịch vụ Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h4 class="text-info mb-3 section-header">
+                <i class="fas fa-clipboard-list me-2"></i>Quản lý dịch vụ
+              </h4>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="navigateTo('legacy:pages/03-04-03-01-csr-reports.html')"
+                style="cursor: pointer"
+                data-metric="services"
+                data-type="csr"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-file-alt fa-2x text-primary mb-2"></i>
+                  <h6>CSR (Phiếu yêu cầu)</h6>
+                  <small class="text-muted">Báo cáo</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="navigateTo('legacy:pages/03-06-02-01-audit-reports.html')"
+                style="cursor: pointer"
+                data-metric="services"
+                data-type="audit"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-search fa-2x text-success mb-2"></i>
+                  <h6>Audit (Kiểm tra)</h6>
+                  <small class="text-muted">Báo cáo</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="navigateTo('legacy:pages/03-06-01-01-receipt-reports.html')"
+                style="cursor: pointer"
+                data-metric="services"
+                data-type="receipt"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-receipt fa-2x text-info mb-2"></i>
+                  <h6>Biên nhận</h6>
+                  <small class="text-muted">Báo cáo</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="navigateTo('legacy:pages/03-04-01-02-crm-detail.html')"
+                style="cursor: pointer"
+                data-metric="services"
+                data-type="crm"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-users fa-2x text-warning mb-2"></i>
+                  <h6>Báo cáo CRM</h6>
+                  <small class="text-muted">Chi tiết</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auto Report Section -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h4 class="text-danger mb-3 section-header">
+                <i class="fas fa-robot me-2"></i>Tự động hóa
+              </h4>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div
+                class="card bg-light clickable-card"
+                onclick="navigateTo('legacy:pages/03-03-09-02-auto-daily-report.html')"
+                style="cursor: pointer"
+                data-metric="automation"
+                data-type="autoDailyReport"
+              >
+                <div class="card-body text-center">
+                  <i class="fas fa-robot fa-2x text-danger mb-2"></i>
+                  <h6>Auto Daily Report</h6>
+                  <small class="text-muted">Tự động</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="row">
+            <div class="col-lg-8 mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Biểu đồ doanh thu theo tháng</h5>
+                </div>
+                <div class="card-body">
+                  <canvas id="revenueChart" height="300"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Tỉ trọng bộ phận</h5>
+                </div>
+                <div class="card-body">
+                  <canvas id="departmentChart" height="300"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Operation KPIs -->
+          <div class="row">
+            <div class="col-lg-6 mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Chỉ số vận hành</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-4">
+                      <div
+                        class="text-center clickable-card"
+                        onclick="openCheckinFrequencyDetail()"
+                        style="cursor: pointer"
+                      >
+                        <h4 class="text-primary">245</h4>
+                        <small>Lượt check-in hôm nay</small>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div
+                        class="text-center clickable-card"
+                        onclick="openCheckinMTDDetail()"
+                        style="cursor: pointer"
+                      >
+                        <h4 class="text-success">1,850</h4>
+                        <small>Lượt check-in MTD</small>
+                      </div>
+                    </div>
+                    <div class="col-4">
+                      <div
+                        class="text-center clickable-card"
+                        onclick="openTrialGuestsDetail()"
+                        style="cursor: pointer"
+                      >
+                        <h4 class="text-warning">12</h4>
+                        <small>Khách tập thử</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Chỉ số PT</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <div
+                        class="text-center clickable-card"
+                        onclick="openPTDetail()"
+                        style="cursor: pointer"
+                      >
+                        <h4 class="text-primary">45</h4>
+                        <small>Buổi tập PT hôm nay</small>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div
+                        class="text-center clickable-card"
+                        onclick="openPTDetail()"
+                        style="cursor: pointer"
+                      >
+                        <h4 class="text-success">1,250</h4>
+                        <small>Buổi tập PT MTD</small>
+                      </div>
+                    </div>
+                    <div class="col-6 mt-3">
+                      <div
+                        class="text-center clickable-card"
+                        onclick="openPTDetail()"
+                        style="cursor: pointer"
+                      >
+                        <h4 class="text-info">28</h4>
+                        <small>Buổi tập Fit hôm nay</small>
+                      </div>
+                    </div>
+                    <div class="col-6 mt-3">
+                      <div
+                        class="text-center clickable-card"
+                        onclick="openPTDetail()"
+                        style="cursor: pointer"
+                      >
+                        <h4 class="text-warning">780</h4>
+                        <small>Buổi tập Fit MTD</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Other sections will be loaded dynamically -->
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js UMD build for file:// protocol support -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <!-- Data Layer - SSOT (Single Source of Truth) -->
+    <script src="data/sample-data.js"></script>
+    <script src="assets/js/shared/data-source.js"></script>
+    <script src="assets/js/shared/state.js"></script>
+    <script src="assets/js/shared/compute-kpi.js"></script>
+    <script src="assets/js/shared/reconcile.js"></script>
+    <script src="assets/js/shared/labels.js"></script>
+    <script src="assets/js/shared/service-order.js"></script>
+    <script src="assets/js/shared/init-shared.js"></script>
+
+    <!-- Navigation Enhancement -->
+    <script src="assets/js/shared/navigation-wrapper.js"></script>
+
+    <!-- Legacy AWS integration (if needed) -->
+    <script src="aws-lambda-integration.js"></script>
+
+    <!-- Common Helpers (for backward compatibility) -->
+    <script src="assets/js/common/time-label-vi.js"></script>
+    <script src="assets/js/common/service-order.js"></script>
+
+    <!-- Navigation Helper -->
+    <script>
+      window.navigateTo = function (target) {
+        try {
+          if (!target) return;
+          var url = String(target).replace(/^legacy:/, "");
+          if (/^pages\/.+\.html$/i.test(url)) {
+            window.location.href = url + (window.location.search || "");
+          } else {
+            console.warn("[navigateTo] Unsupported target:", target);
+          }
+        } catch (e) {
+          console.error("[navigateTo] fail:", e);
+        }
+      };
+    </script>
+
+    <script src="assets/js/data-consistency.js"></script>
+    <script src="assets/js/charts.js"></script>
+
+    <!-- Router System -->
+    <script src="assets/js/router/url-mapping.js"></script>
+    <script src="assets/js/helpers/url-builder.js"></script>
+    <script src="assets/js/components/HeaderBreadcrumbs.js"></script>
+    <script src="assets/js/helpers/breadcrumb-integration.js"></script>
+    <script src="assets/js/navigation-init.js"></script>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/realtime-clock.js"></script>
+    <script src="assets/js/revenue-data-sync.js"></script>
+
+    <!-- Metrics Engine -->
+    <script src="assets/js/metrics-engine/types.js"></script>
+    <script src="assets/js/metrics-engine/selectors.js"></script>
+    <script src="assets/js/metrics-engine/compute.js"></script>
+    <script src="assets/js/metrics-engine/cache.js"></script>
+    <script src="assets/js/metrics-engine/index.js"></script>
+    <script src="assets/js/metrics-engine/sync.js"></script>
+    <script src="assets/js/metrics-engine/test.js"></script>
+    <script src="assets/js/metrics-engine/init.js"></script>
+
+    <!-- Direct Chart Initialization -->
+    <script>
+      // Wait for everything to load and then create charts
+      function initCharts() {
+        // console.log("=== CHART INITIALIZATION START ===");
+        // console.log("Chart.js available:", typeof Chart !== "undefined");
+        // console.log("Window loaded:", document.readyState);
+
+        // Check if canvas elements exist
+        const revenueCanvas = document.getElementById("revenueChart");
+        const departmentCanvas = document.getElementById("departmentChart");
+
+        // console.log("Revenue canvas found:", !!revenueCanvas);
+        // console.log("Department canvas found:", !!departmentCanvas);
+
+        if (!revenueCanvas || !departmentCanvas) {
+          console.error("Canvas elements not found!");
+          return;
+        }
+
+        if (typeof Chart === "undefined") {
+          // console.error("Chart.js not loaded!");
+          return;
+        }
+
+        try {
+          // Create Revenue Chart
+          // console.log("Creating revenue chart...");
+          const revenueCtx = revenueCanvas.getContext("2d");
+          window.revenueChart = new Chart(revenueCtx, {
+            type: "line",
+            data: {
+              labels: [
+                "T1",
+                "T2",
+                "T3",
+                "T4",
+                "T5",
+                "T6",
+                "T7",
+                "T8",
+                "T9",
+                "T10",
+                "T11",
+                "T12",
+              ],
+              datasets: [
+                {
+                  label: "Doanh thu (triệu VNĐ)",
+                  data: [
+                    185, 210, 195, 235, 255, 220, 240, 265, 215, 285, 275, 320,
+                  ],
+                  borderColor: "#28a745",
+                  backgroundColor: "rgba(40, 167, 69, 0.1)",
+                  tension: 0.4,
+                  fill: true,
+                  pointBackgroundColor: "#28a745",
+                  pointBorderColor: "#ffffff",
+                  pointBorderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: {
+                intersect: false,
+                mode: "index",
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    color: "rgba(0,0,0,0.1)",
+                  },
+                },
+                x: {
+                  grid: {
+                    color: "rgba(0,0,0,0.1)",
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  display: true,
+                  position: "top",
+                },
+              },
+            },
+          });
+          // console.log("Revenue chart created successfully!");
+
+          // Create Department Chart
+          // console.log("Creating department chart...");
+          const departmentCtx = departmentCanvas.getContext("2d");
+          window.departmentChart = new Chart(departmentCtx, {
+            type: "doughnut",
+            data: {
+              labels: [
+                "Membership",
+                "Fitness",
+                "Swimming Coach",
+                "Pilates",
+                "PT",
+              ],
+              datasets: [
+                {
+                  data: [45.2, 28.5, 12.3, 8.7, 5.3],
+                  backgroundColor: [
+                    "#36a2eb",
+                    "#4bc0c0",
+                    "#ffce56",
+                    "#9966ff",
+                    "#ff6384",
+                  ],
+                  borderColor: "#ffffff",
+                  borderWidth: 3,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "60%",
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: {
+                    padding: 20,
+                    usePointStyle: true,
+                  },
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return context.label + ": " + context.parsed + "%";
+                    },
+                  },
+                },
+              },
+            },
+          });
+          // console.log("Department chart created successfully!");
+          // console.log("=== CHART INITIALIZATION COMPLETE ===");
+        } catch (error) {
+          console.error("Error creating charts:", error);
+        }
+      }
+
+      // Multiple initialization attempts
+      document.addEventListener("DOMContentLoaded", function () {
+        // console.log("DOM Content Loaded");
+        setTimeout(initCharts, 1000);
+      });
+
+      window.addEventListener("load", function () {
+        // console.log("Window Loaded");
+        setTimeout(initCharts, 500);
+      });
+
+      // Fallback - try after 3 seconds
+      setTimeout(function () {
+        // console.log("Fallback initialization");
+        initCharts();
+      }, 3000);
+    </script>
+
+    <!-- Advanced Calculations Engine -->
+    <script src="assets/js/metrics-engine/advanced-calculations.js"></script>
+
+    <!-- Comprehensive Calculations Engine -->
+    <script src="assets/js/metrics-engine/comprehensive-calculations.js"></script>
+
+    <!-- Real-time Updater -->
+    <script src="assets/js/metrics-engine/real-time-updater.js"></script>
+
+    <!-- Performance Monitor -->
+    <script src="assets/js/metrics-engine/performance-monitor.js"></script>
+
+    <!-- Dynamic Revenue Calculation Script -->
+    <script>
+      // Load settings and update revenue metrics dynamically
+      function loadRevenueSettings() {
+        try {
+          const savedSettings = localStorage.getItem("actiwellSettings");
+          let settings = {};
+
+          if (savedSettings) {
+            settings = JSON.parse(savedSettings);
+          } else {
+            // Default settings if none found
+            settings = {
+              global: {
+                monthlyTarget: 3000000000, // 3 tỷ VNĐ
+                yearlyTarget: 30000000000,
+                growthTarget: 15,
+                retentionTarget: 85,
+              },
+            };
+          }
+
+          // Get current date info
+          const today = new Date();
+          const currentMonth = today.getMonth();
+          const currentYear = today.getFullYear();
+          const lastDayOfMonth = new Date(
+            currentYear,
+            currentMonth + 1,
+            0
+          ).getDate();
+          const daysPassed = today.getDate();
+          const remainingDays = lastDayOfMonth - daysPassed + 1;
+
+          // Calculate metrics based on settings
+          const monthlyTarget = settings.global.monthlyTarget;
+          const mtdRevenue = 1850000000; // Fixed MTD revenue
+          const dailyRevenue = 75000000; // Fixed today's revenue (75 triệu)
+          const completionRate = Math.round((mtdRevenue / monthlyTarget) * 100);
+          const remainingTarget = monthlyTarget - mtdRevenue;
+          const dailyTargetNeeded = Math.round(remainingTarget / remainingDays);
+
+          // Calculate estimated completion date
+          const estimatedCompletionDate = new Date(today);
+          estimatedCompletionDate.setDate(today.getDate() + remainingDays);
+
+          // Update DOM elements
+          updateElement("targetValue", formatNumber(monthlyTarget));
+          updateElement("mtdValue", formatNumber(mtdRevenue));
+          updateElement("dailyValue", formatNumber(dailyRevenue));
+          updateElement("completionValue", completionRate + "%");
+          updateElement("remainingValue", formatNumber(remainingTarget));
+          updateElement("dailyTargetValue", formatNumber(dailyTargetNeeded));
+          updateElement(
+            "completionDate",
+            estimatedCompletionDate.toLocaleDateString("vi-VN")
+          );
+
+          console.log("Revenue metrics updated:", {
+            monthlyTarget: formatNumber(monthlyTarget),
+            mtdRevenue: formatNumber(mtdRevenue),
+            dailyRevenue: formatNumber(dailyRevenue),
+            completionRate: completionRate + "%",
+            remainingTarget: formatNumber(remainingTarget),
+            dailyTargetNeeded: formatNumber(dailyTargetNeeded),
+          });
+        } catch (error) {
+          console.error("Error loading revenue settings:", error);
+        }
+      }
+
+      function updateElement(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+          element.textContent = value;
+        }
+      }
+
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      function openCheckinOverview() {
+        navigateTo("legacy:pages/03-01-01-01-checkin-overview.html");
+      }
+
+      function openBirthdayMembersDetail() {
+        navigateTo("legacy:pages/03-04-05-01-birthday-members-detail.html");
+      }
+
+      function openContractActivationDetail() {
+        navigateTo("legacy:pages/03-02-04-01-contract-activation-detail.html");
+      }
+
+      function openCheckinFrequencyDetail() {
+        navigateTo("legacy:pages/03-01-01-05-checkin-frequency-detail.html");
+      }
+
+      function openCheckinMTDDetail() {
+        navigateTo("legacy:pages/03-01-01-04-checkin-mtd-detail.html");
+      }
+
+      function openVisitorsDetail() {
+        navigateTo("legacy:pages/03-01-08-03-visitors-detail.html");
+      }
+
+      function openVisitorStatsDetail() {
+        navigateTo("legacy:pages/03-01-08-05-visitor-stats-detail.html");
+      }
+
+      function openTrialGuestsDetail() {
+        navigateTo("legacy:pages/03-01-08-04-trial-guests-detail.html");
+      }
+
+      function openLiveMembersDetail() {
+        navigateTo("legacy:pages/03-01-09-01-live-members-detail.html");
+      }
+
+      function openManualCheckinDetail() {
+        navigateTo("legacy:pages/03-01-08-01-manual-checkin-detail.html");
+      }
+
+      // PT Detail functions
+      function openPTDetail() {
+        navigateTo("legacy:pages/03-01-03-01-pt-checkin-detail.html");
+      }
+
+      // Revenue functions
+      function openRevenueTargetDetail() {
+        navigateTo("legacy:pages/03-03-06-01-revenue-target-detail.html");
+      }
+
+      function openRevenueMTDDetail() {
+        navigateTo("legacy:pages/03-03-01-04-revenue-mtd-detail.html");
+      }
+
+      function openDailyRevenueDetail() {
+        navigateTo("legacy:pages/03-03-01-04-daily-revenue-today-detail.html");
+      }
+
+      function openYesterdayRevenueDetail() {
+        navigateTo(
+          "legacy:pages/03-03-01-05-daily-revenue-yesterday-detail.html"
+        );
+      }
+
+      function openCompletionRateDetail() {
+        navigateTo("legacy:pages/03-02-06-01-completion-rate-detail.html");
+      }
+
+      // Member Movement functions
+      function openMemberMovementDetail() {
+        navigateTo("legacy:pages/03-04-04-01-member-movement-detail.html");
+      }
+
+      // Facility functions
+      function openFacilityUtilizationDetail() {
+        navigateTo("legacy:pages/03-03-08-01-facility-utilization-detail.html");
+      }
+
+      function openGymOccupancyDetail() {
+        navigateTo("legacy:pages/03-03-11-04-gym-occupancy-detail.html");
+      }
+
+      function openSwimmingCoachOccupancyDetail() {
+        navigateTo("legacy:pages/03-03-11-03-swimming-occupancy-detail.html");
+      }
+
+      function openPilatesOccupancyDetail() {
+        navigateTo("legacy:pages/03-03-11-02-pilates-occupancy-detail.html");
+      }
+
+      // Burn Rate functions
+      function openBurnRateDetail() {
+        navigateTo("legacy:pages/03-02-05-01-burn-rate-detail.html");
+      }
+
+      // Calculate and update burn rate
+      function updateBurnRate() {
+        if (window.ConsistentData) {
+          try {
+            // Lấy dữ liệu check-in MTD từ tất cả dịch vụ
+            const mtdData = window.ConsistentData.getData("mtd", "all");
+            const totalCheckins =
+              mtdData.membershipCheckin +
+              mtdData.ptFitnessCheckin +
+              mtdData.pilatesCheckin +
+              mtdData.swimmingCoachCheckin;
+
+            // Lấy tổng số hội viên đang hoạt động
+            const totalActiveMembers = 1250; // Tổng hội viên đang hoạt động
+
+            // Tính burn rate: Tổng lượt check-in / Tổng hội viên / Số ngày trong tháng
+            const currentDate = new Date();
+            const daysInMonth = new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth() + 1,
+              0
+            ).getDate();
+            const daysPassed = currentDate.getDate();
+
+            // Burn rate = (Tổng check-in / Tổng hội viên) * (30 ngày / Số ngày đã qua)
+            const burnRate =
+              (totalCheckins / totalActiveMembers) * (30 / daysPassed);
+
+            // Cập nhật hiển thị
+            const burnRateElement = document.getElementById("avgBurnRate");
+            if (burnRateElement) {
+              burnRateElement.textContent = burnRate.toFixed(1);
+            }
+
+            // Calculate Advanced Metrics
+            if (window.advancedCalculations) {
+              calculateAdvancedMetricsForDashboard();
+            }
+
+            // Calculate Comprehensive Metrics
+            if (window.comprehensiveCalculations) {
+              calculateComprehensiveMetricsForDashboard();
+            }
+
+            // Start Real-time Updates
+            if (window.realTimeUpdater) {
+              window.realTimeUpdater.start();
+            }
+
+            console.log(
+              `Burn Rate calculated: ${burnRate.toFixed(
+                1
+              )} (${totalCheckins} check-ins / ${totalActiveMembers} members * ${(
+                30 / daysPassed
+              ).toFixed(2)} factor)`
+            );
+          } catch (error) {
+            console.error("Error calculating burn rate:", error);
+            // Fallback to static value if calculation fails
+            const burnRateElement = document.getElementById("avgBurnRate");
+            if (burnRateElement) {
+              burnRateElement.textContent = "4.2";
+            }
+          }
+        } else {
+          // Fallback calculation using static data
+          const totalCheckins = 5080; // Từ metric card Check-in MTD
+          const totalActiveMembers = 1250;
+          const currentDate = new Date();
+          const daysPassed = currentDate.getDate();
+          const burnRate =
+            (totalCheckins / totalActiveMembers) * (30 / daysPassed);
+
+          const burnRateElement = document.getElementById("avgBurnRate");
+          if (burnRateElement) {
+            burnRateElement.textContent = burnRate.toFixed(1);
+          }
+        }
+      }
+
+      // Booking functions
+      function openBookingTodayDetail() {
+        navigateTo("legacy:pages/03-05-01-02-booking-today-detail.html");
+      }
+
+      function openBookingYesterdayDetail() {
+        navigateTo("legacy:pages/03-05-01-03-booking-yesterday-detail.html");
+      }
+
+      function openBookingThisWeekDetail() {
+        navigateTo("legacy:pages/03-05-01-04-booking-this-week-detail.html");
+      }
+
+      function openBookingMTDDetail() {
+        navigateTo("legacy:pages/03-05-01-05-booking-mtd-detail.html");
+      }
+
+      // Filter functions
+      function applyFilters() {
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const timeRange = document.getElementById("timeRange").value;
+
+        console.log("Applying filters:", {
+          startDate: startDate,
+          endDate: endDate,
+          timeRange: timeRange,
+        });
+
+        // Show loading state
+        const applyBtn = document.querySelector(
+          'button[onclick="applyFilters()"]'
+        );
+        const originalText = applyBtn.innerHTML;
+        applyBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-1"></i>Đang áp dụng...';
+        applyBtn.disabled = true;
+
+        // Simulate filter processing
+        setTimeout(() => {
+          // Update metrics based on date range
+          updateMetricsForDateRange(startDate, endDate, timeRange);
+
+          // Save filter state
+          saveFilterState();
+
+          // Show success message
+          showNotification("Bộ lọc đã được áp dụng thành công!", "success");
+
+          // Restore button
+          applyBtn.innerHTML = originalText;
+          applyBtn.disabled = false;
+        }, 1000);
+      }
+
+      function updateMetricsForDateRange(startDate, endDate, timeRange) {
+        // Calculate date range
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const daysDiff = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+        // Adjust metrics based on time range
+        let multiplier = 1;
+        if (timeRange === "quarter") {
+          multiplier = 3; // 3 months
+        } else if (timeRange === "year") {
+          multiplier = 12; // 12 months
+        }
+
+        // Update revenue metrics
+        const baseTarget = 3000000000; // 3 tỷ VNĐ
+        const adjustedTarget = baseTarget * multiplier;
+        const adjustedMTD = 1850000000 * multiplier;
+        const adjustedDaily = 75000000 * multiplier;
+
+        // Update completion rate
+        const completionRate = Math.round((adjustedMTD / adjustedTarget) * 100);
+        const remainingTarget = adjustedTarget - adjustedMTD;
+        const dailyTargetNeeded = Math.round(
+          remainingTarget / (daysDiff * multiplier)
+        );
+
+        // Update DOM
+        updateElement("targetValue", formatNumber(adjustedTarget));
+        updateElement("mtdValue", formatNumber(adjustedMTD));
+        updateElement("dailyValue", formatNumber(adjustedDaily));
+        updateElement("completionValue", completionRate + "%");
+        updateElement("remainingValue", formatNumber(remainingTarget));
+        updateElement("dailyTargetValue", formatNumber(dailyTargetNeeded));
+
+        console.log("Metrics updated for date range:", {
+          startDate: startDate,
+          endDate: endDate,
+          timeRange: timeRange,
+          daysDiff: daysDiff,
+          multiplier: multiplier,
+          adjustedTarget: formatNumber(adjustedTarget),
+          adjustedMTD: formatNumber(adjustedMTD),
+        });
+      }
+
+      // Calculate Comprehensive Metrics for Dashboard
+      function calculateComprehensiveMetricsForDashboard() {
+        try {
+          // Dữ liệu mẫu cho comprehensive metrics
+          const comprehensiveData = {
+            visitor: {
+              totalVisitors: 1000,
+              convertedVisitors: 152,
+              returningVisitors: 685,
+              sourceVisitors: 500,
+              sourceConversions: 112,
+              sourceRevenue: 500000000,
+              sourceCost: 175000000,
+            },
+            sales: {
+              saleTiep: 281,
+              ptTiep: 221,
+              inbodyMeasurements: 127,
+              sales: [
+                { leadDate: "2024-01-01", saleDate: "2024-01-15" },
+                { leadDate: "2024-01-05", saleDate: "2024-01-18" },
+                { leadDate: "2024-01-10", saleDate: "2024-01-22" },
+              ],
+              numberOfSales: 50,
+              averageDealSize: 5000000,
+              salesCycleLength: 12,
+            },
+            facility: {
+              usedSpace: 750,
+              totalSpace: 1000,
+              usageTime: 600,
+              availableTime: 800,
+              usedLockers: 150,
+              totalLockers: 220,
+              peakHourRevenue: 225000000,
+              totalRevenue: 500000000,
+              offPeakUsage: 200,
+              offPeakCapacity: 565,
+            },
+            member: {
+              checkins: 2500,
+              bookings: 800,
+              ptSessions: 300,
+              totalInteractions: 3600,
+              daysActive: 30,
+              channelSpend: 50000000,
+              newMembers: 60,
+              avgMonthlyRevenue: 1500000,
+              avgMembershipDuration: 12,
+              memberData: {
+                daysSinceLastActivity: 5,
+                paymentDelays: 0,
+                engagementLevel: 0.8,
+              },
+            },
+            financial: {
+              totalRevenue: 500000000,
+              totalSquareFootage: 1000,
+              top20Revenue: 325000000,
+              currentGrowthRate: 15,
+              previousGrowthRate: 12,
+              sourceSpend: 75000000,
+              newMembers: 60,
+              operationalCosts: 178500000,
+              serviceRevenue: 300000000,
+              serviceCosts: 173100000,
+            },
+            performance: {
+              revenueGenerated: 500000000,
+              staffHours: 2000,
+              totalRevenue: 500000000,
+              totalStaffHours: 2000,
+              productiveHours: 1770,
+              totalHours: 2000,
+              ratings: [4, 5, 4, 5, 4, 3, 5, 4, 4, 5],
+              completedServices: 923,
+              totalServices: 1000,
+              satisfactionScore: 4.2,
+              completionRate: 92.3,
+              efficiencyScore: 88.5,
+            },
+            digital: {
+              websiteVisitors: 10000,
+              websiteConversions: 320,
+              likes: 1500,
+              comments: 300,
+              shares: 200,
+              followers: 5000,
+              digitalRevenue: 200000000,
+              digitalCost: 52000000,
+              totalSessions: 14000,
+              activeUsers: 5000,
+              featureUsage: 9420,
+              totalSessions: 14000,
+              totalUsers: 5000,
+              returningUsers: 3945,
+            },
+            predictive: {
+              historicalAverage: 1000,
+              seasonalFactor: 1.1,
+              growthRate: 15,
+              currentRevenue: 500000000,
+              growthRate: 15,
+              timePeriod: 1,
+              currentCapacity: 1500,
+              utilizationRate: 80,
+              growthFactor: 1.2,
+              memberData: {
+                daysSinceLastActivity: 7,
+                paymentDelays: 1,
+                engagementLevel: 0.6,
+                satisfactionScore: 4,
+              },
+              revenueVolatility: 62500000,
+              averageRevenue: 500000000,
+              riskFactors: 8,
+              totalFactors: 92,
+            },
+          };
+
+          // Tính toán tất cả comprehensive metrics
+          const comprehensiveResults =
+            window.comprehensiveCalculations.calculateAllComprehensiveMetrics(
+              comprehensiveData
+            );
+
+          // Lưu kết quả vào global scope
+          window.ComprehensiveMetrics = comprehensiveResults;
+
+          // Cập nhật UI với comprehensive metrics (nếu có elements tương ứng)
+          updateComprehensiveMetricsInDashboard(comprehensiveResults);
+
+          console.log(
+            "Comprehensive metrics calculated for dashboard:",
+            comprehensiveResults
+          );
+        } catch (error) {
+          console.error(
+            "Error calculating comprehensive metrics for dashboard:",
+            error
+          );
+        }
+      }
+
+      // Update Comprehensive Metrics in Dashboard
+      function updateComprehensiveMetricsInDashboard(metrics) {
+        // Cập nhật các metric cards nếu có trong dashboard
+        updateComprehensiveMetricElement(
+          "visitorConversionRate",
+          metrics.visitor.visitorConversionRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "visitorRetentionRate",
+          metrics.visitor.visitorRetentionRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "sourceEffectivenessRate",
+          metrics.visitor.sourceEffectivenessRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "sourceROI",
+          metrics.visitor.sourceROI,
+          "%"
+        );
+
+        updateComprehensiveMetricElement(
+          "saleTiepRate",
+          metrics.sales.saleTiepRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "inbodyMeasurementRate",
+          metrics.sales.inbodyMeasurementRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "ptConversionRate",
+          metrics.sales.ptConversionRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "inbodyConversionRate",
+          metrics.sales.inbodyConversionRate,
+          "%"
+        );
+
+        updateComprehensiveMetricElement(
+          "floorSpaceUtilization",
+          metrics.facility.floorSpaceUtilization,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "equipmentUtilizationRate",
+          metrics.facility.equipmentUtilizationRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "lockerUtilization",
+          metrics.facility.lockerUtilization,
+          "%"
+        );
+
+        updateComprehensiveMetricElement(
+          "memberActivityScore",
+          metrics.member.memberActivityScore,
+          "điểm"
+        );
+        updateComprehensiveMetricElement(
+          "memberEngagementLevel",
+          metrics.member.memberEngagementLevel,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "memberAcquisitionCostByChannel",
+          metrics.member.memberAcquisitionCostByChannel,
+          "VNĐ"
+        );
+
+        updateComprehensiveMetricElement(
+          "revenuePerSquareFoot",
+          metrics.financial.revenuePerSquareFoot,
+          "VNĐ/m²"
+        );
+        updateComprehensiveMetricElement(
+          "revenueConcentrationIndex",
+          metrics.financial.revenueConcentrationIndex,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "operationalCostRatio",
+          metrics.financial.operationalCostRatio,
+          "%"
+        );
+
+        updateComprehensiveMetricElement(
+          "staffProductivityIndex",
+          metrics.performance.staffProductivityIndex,
+          ""
+        );
+        updateComprehensiveMetricElement(
+          "staffRevenuePerHour",
+          metrics.performance.staffRevenuePerHour,
+          "VNĐ/giờ"
+        );
+        updateComprehensiveMetricElement(
+          "serviceSatisfactionScore",
+          metrics.performance.serviceSatisfactionScore,
+          "/5.0"
+        );
+
+        updateComprehensiveMetricElement(
+          "websiteConversionRate",
+          metrics.digital.websiteConversionRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "socialMediaEngagementRate",
+          metrics.digital.socialMediaEngagementRate,
+          "%"
+        );
+        updateComprehensiveMetricElement(
+          "digitalMarketingROI",
+          metrics.digital.digitalMarketingROI,
+          "%"
+        );
+
+        updateComprehensiveMetricElement(
+          "demandForecasting",
+          metrics.predictive.demandForecasting,
+          "lượt"
+        );
+        updateComprehensiveMetricElement(
+          "revenueForecasting",
+          metrics.predictive.revenueForecasting,
+          "VNĐ"
+        );
+        updateComprehensiveMetricElement(
+          "churnRiskScore",
+          metrics.predictive.churnRiskScore,
+          ""
+        );
+      }
+
+      // Helper function để cập nhật comprehensive metric element
+      function updateComprehensiveMetricElement(elementId, value, unit) {
+        const element = document.getElementById(elementId);
+        if (element && value !== undefined) {
+          if (unit === "VNĐ" || unit === "VNĐ/giờ" || unit === "VNĐ/m²") {
+            element.textContent =
+              window.comprehensiveCalculations.formatCurrency(value) +
+              (unit.includes("/") ? "/" + unit.split("/")[1] : "");
+          } else if (unit === "%") {
+            element.textContent =
+              window.comprehensiveCalculations.formatPercentage(value);
+          } else if (unit === "/5.0") {
+            element.textContent = (value / 20).toFixed(1) + unit;
+          } else {
+            element.textContent =
+              window.comprehensiveCalculations.formatNumber(value) +
+              (unit ? " " + unit : "");
+          }
+        }
+      }
+
+      // Calculate Advanced Metrics for Dashboard
+      function calculateAdvancedMetricsForDashboard() {
+        try {
+          // Dữ liệu từ dashboard hiện tại
+          const dashboardData = {
+            // Class Utilization Data
+            bookings: 156, // Booking tuần này
+            capacity: 200, // Tổng capacity
+
+            // Member Movement Data
+            memberMovement: {
+              openingBalance: 1250,
+              closingBalance: 1310,
+              newJoiners: 60,
+              cancellations: 40,
+              expired: 30,
+              freezes: 10,
+            },
+
+            // Booking Stats
+            bookingStats: {
+              totalBookings: 756, // Booking MTD
+              noShowBookings: 38, // 5% no-show
+            },
+
+            // Revenue & Members
+            revenue: 1850000000, // MTD Revenue
+            activeMembers: 1250,
+
+            // Peak Hour Stats
+            peakHourStats: {
+              peakHourBookings: 45,
+              peakHourCapacity: 60,
+            },
+
+            // Member Stats
+            memberStats: {
+              avgMonthlyRevenue: 1500000, // 1.5 triệu VNĐ/tháng
+              avgMembershipDuration: 12, // 12 tháng
+            },
+
+            // Revenue Comparison
+            revenueComparison: {
+              currentRevenue: 1850000000,
+              previousRevenue: 1650000000,
+            },
+
+            // Staff Stats
+            staffStats: {
+              scheduledHours: 320,
+              availableHours: 400,
+            },
+
+            // Engagement Stats
+            engagementStats: {
+              checkins: 5080, // Check-in MTD
+              bookings: 756,
+              ptSessions: 200,
+            },
+
+            // MTD Revenue & Days
+            mtdRevenue: 1850000000,
+            daysPassed: 15,
+
+            // Marketing Stats
+            marketingStats: {
+              marketingSpend: 50000000, // 50 triệu VNĐ
+              newMembers: 60,
+            },
+
+            // Retention Stats
+            retentionStats: {
+              membersAtStart: 1250,
+              membersAtEnd: 1310,
+              newMembers: 60,
+            },
+
+            // Facility Area
+            facilityArea: 500, // 500 m²
+
+            // Peak Hour Revenue Stats
+            peakHourRevenueStats: {
+              peakHourRevenue: 500000000, // 500 triệu VNĐ
+              peakHours: 4,
+              totalHours: 12,
+            },
+          };
+
+          // Tính toán tất cả metrics nâng cao
+          const advancedResults =
+            window.advancedCalculations.calculateAllMetrics(dashboardData);
+
+          // Lưu kết quả vào global scope
+          window.AdvancedMetrics = advancedResults;
+
+          // Cập nhật UI với metrics mới (nếu có elements tương ứng)
+          updateAdvancedMetricsInDashboard(advancedResults);
+
+          console.log(
+            "Advanced metrics calculated for dashboard:",
+            advancedResults
+          );
+        } catch (error) {
+          console.error(
+            "Error calculating advanced metrics for dashboard:",
+            error
+          );
+        }
+      }
+
+      // Update Advanced Metrics in Dashboard
+      function updateAdvancedMetricsInDashboard(metrics) {
+        // Cập nhật các metric cards nếu có trong dashboard
+        updateMetricElement("classUtilization", metrics.classUtilization, "%");
+        updateMetricElement("dynamicChurnRate", metrics.dynamicChurnRate, "%");
+        updateMetricElement("noShowRate", metrics.noShowRate, "%");
+        updateMetricElement(
+          "revenuePerMember",
+          metrics.revenuePerMember,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "peakHourUtilization",
+          metrics.peakHourUtilization,
+          "%"
+        );
+        updateMetricElement(
+          "memberLifetimeValue",
+          metrics.memberLifetimeValue,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "revenueGrowthRate",
+          metrics.revenueGrowthRate,
+          "%"
+        );
+        updateMetricElement("staffUtilization", metrics.staffUtilization, "%");
+        updateMetricElement(
+          "avgBookingLeadTime",
+          metrics.avgBookingLeadTime,
+          "giờ"
+        );
+        updateMetricElement("engagementScore", metrics.engagementScore, "điểm");
+        updateMetricElement(
+          "forecastedMonthlyRevenue",
+          metrics.forecastedMonthlyRevenue,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "customerAcquisitionCost",
+          metrics.customerAcquisitionCost,
+          "VNĐ"
+        );
+        updateMetricElement("retentionRate", metrics.retentionRate, "%");
+        updateMetricElement(
+          "revenuePerSquareMeter",
+          metrics.revenuePerSquareMeter,
+          "VNĐ/m²"
+        );
+        updateMetricElement(
+          "peakHourRevenueEfficiency",
+          metrics.peakHourRevenueEfficiency,
+          "%"
+        );
+      }
+
+      // Helper function để cập nhật metric element
+      function updateMetricElement(elementId, value, unit) {
+        const element = document.getElementById(elementId);
+        if (element && value !== undefined) {
+          if (unit === "VNĐ") {
+            element.textContent =
+              window.advancedCalculations.formatCurrency(value);
+          } else if (unit === "%") {
+            element.textContent =
+              window.advancedCalculations.formatPercentage(value);
+          } else {
+            element.textContent =
+              window.advancedCalculations.formatNumber(value) + " " + unit;
+          }
+        }
+      }
+
+      function exportReport() {
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const timeRange = document.getElementById("timeRange").value;
+
+        console.log("Exporting report:", {
+          startDate: startDate,
+          endDate: endDate,
+          timeRange: timeRange,
+        });
+
+        // Show loading state
+        const exportBtn = document.querySelector(
+          'button[onclick="exportReport()"]'
+        );
+        const originalText = exportBtn.innerHTML;
+        exportBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-1"></i>Đang xuất...';
+        exportBtn.disabled = true;
+
+        // Simulate export processing
+        setTimeout(() => {
+          // Create CSV data
+          const csvData = generateCSVData(startDate, endDate, timeRange);
+
+          // Download CSV
+          downloadCSV(
+            csvData,
+            `actiwell-report-${startDate}-to-${endDate}.csv`
+          );
+
+          // Show success message
+          showNotification("Báo cáo đã được xuất thành công!", "success");
+
+          // Restore button
+          exportBtn.innerHTML = originalText;
+          exportBtn.disabled = false;
+        }, 2000);
+      }
+
+      function generateCSVData(startDate, endDate, timeRange) {
+        const headers = ["Metric", "Value", "Period", "Start Date", "End Date"];
+
+        const data = [
+          ["Tổng mục tiêu", "3,000,000,000 VNĐ", timeRange, startDate, endDate],
+          ["Doanh thu MTD", "1,850,000,000 VNĐ", timeRange, startDate, endDate],
+          [
+            "Doanh thu hôm nay",
+            "75,000,000 VNĐ",
+            timeRange,
+            startDate,
+            endDate,
+          ],
+          ["Tỷ lệ hoàn thành", "61.7%", timeRange, startDate, endDate],
+          ["Còn lại", "1,150,000,000 VNĐ", timeRange, startDate, endDate],
+          ["Mục tiêu/ngày", "47,916,667 VNĐ", timeRange, startDate, endDate],
+        ];
+
+        return [headers, ...data].map((row) => row.join(",")).join("\n");
+      }
+
+      function downloadCSV(csvData, filename) {
+        const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      function showNotification(message, type = "info") {
+        // Create notification element
+        const notification = document.createElement("div");
+        notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        notification.style.cssText =
+          "top: 20px; right: 20px; z-index: 9999; min-width: 300px;";
+        notification.innerHTML = `
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        // Add to page
+        document.body.appendChild(notification);
+
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.remove();
+          }
+        }, 3000);
+      }
+
+      // Initialize filters on page load
+      function initializeFilters() {
+        // Load saved filter state
+        const savedFilters = localStorage.getItem("actiwellFilters");
+        if (savedFilters) {
+          try {
+            const filters = JSON.parse(savedFilters);
+            document.getElementById("startDate").value =
+              filters.startDate || "2025-09-01";
+            document.getElementById("endDate").value =
+              filters.endDate || "2025-09-25";
+            document.getElementById("timeRange").value =
+              filters.timeRange || "month";
+          } catch (error) {
+            console.error("Error loading saved filters:", error);
+          }
+        }
+
+        // Set default values if not saved
+        if (!document.getElementById("startDate").value) {
+          document.getElementById("startDate").value = "2025-09-01";
+        }
+        if (!document.getElementById("endDate").value) {
+          document.getElementById("endDate").value = "2025-09-25";
+        }
+        if (!document.getElementById("timeRange").value) {
+          document.getElementById("timeRange").value = "month";
+        }
+      }
+
+      // Save filter state
+      function saveFilterState() {
+        const filters = {
+          startDate: document.getElementById("startDate").value,
+          endDate: document.getElementById("endDate").value,
+          timeRange: document.getElementById("timeRange").value,
+        };
+        localStorage.setItem("actiwellFilters", JSON.stringify(filters));
+      }
+
+      // Add event listeners for filter changes
+      function addFilterEventListeners() {
+        document
+          .getElementById("startDate")
+          .addEventListener("change", saveFilterState);
+        document
+          .getElementById("endDate")
+          .addEventListener("change", saveFilterState);
+        document
+          .getElementById("timeRange")
+          .addEventListener("change", saveFilterState);
+      }
+
+      // Persistent data storage for cumulative metrics
+      function getPersistentData() {
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        const monthKey = `actiwell_data_${currentYear}_${currentMonth + 1}`;
+
+        const stored = localStorage.getItem(monthKey);
+        if (stored) {
+          return JSON.parse(stored);
+        }
+
+        // Initialize new month data
+        return {
+          visitors: 0,
+          checkins: 0,
+          revenue: 0,
+          trials: 0,
+          lastUpdate: new Date().toISOString(),
+          dailyIncrements: {}, // Track daily increments to avoid decreasing
+        };
+      }
+
+      function savePersistentData(data) {
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        const monthKey = `actiwell_data_${currentYear}_${currentMonth + 1}`;
+
+        localStorage.setItem(monthKey, JSON.stringify(data));
+      }
+
+      // Generate monthly visitor data with persistent cumulative logic
+      function generateMonthlyVisitorData() {
+        const persistentData = getPersistentData();
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        const today = currentDate.getDate();
+
+        // Check if we need to add more visitors for today
+        const todayKey = `day_${today}`;
+        if (!persistentData.dailyIncrements[todayKey]) {
+          // Generate visitors for today (3-5 visitors)
+          const todayVisitors = Math.floor(rng.next() * 3) + 3;
+          persistentData.dailyIncrements[todayKey] = todayVisitors;
+          persistentData.visitors += todayVisitors;
+          persistentData.lastUpdate = new Date().toISOString();
+          savePersistentData(persistentData);
+        }
+
+        // Generate data for the current month based on stored increments
+        const data = [];
+        const clubs = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+        const interests = [
+          "Gym",
+          "Fitness",
+          "Dance",
+          "Yoga",
+          "Pilates",
+          "Swimming",
+        ];
+        const statuses = ["Đã đăng ký", "Quan tâm", "Chưa quyết định"];
+        const durations = [
+          "30 phút",
+          "45 phút",
+          "60 phút",
+          "75 phút",
+          "90 phút",
+        ];
+
+        let id = 1;
+
+        // Generate visitors based on stored daily increments
+        for (let day = 1; day <= today; day++) {
+          const dayKey = `day_${day}`;
+          const visitorCount = persistentData.dailyIncrements[dayKey] || 0;
+
+          for (let i = 0; i < visitorCount; i++) {
+            const hour = Math.floor(rng.next() * 12) + 8; // 8:00-19:00
+            const minute = Math.floor(rng.next() * 4) * 15; // 0, 15, 30, 45
+            const date = new Date(currentYear, currentMonth, day, hour, minute);
+
+            data.push({
+              id: id++,
+              name: `Khách tham quan ${String(id).padStart(3, "0")}`,
+              phone: `090${String(Math.floor(rng.next() * 10000000)).padStart(
+                8,
+                "0"
+              )}`,
+              time: date.toLocaleString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+              club: clubs[Math.floor(rng.next() * clubs.length)],
+              interest: interests[Math.floor(rng.next() * interests.length)],
+              duration: durations[Math.floor(rng.next() * durations.length)],
+              status: statuses[Math.floor(rng.next() * statuses.length)],
+              date: date,
+            });
+          }
+        }
+
+        return data;
+      }
+
+      // Update data from consistent source
+      function updateDataFromConsistentSource() {
+        // Get persistent data
+        const persistentData = getPersistentData();
+
+        // Update visitors count in all metric cards
+        const visitorsElements = document.querySelectorAll(
+          '[data-type="visitors"] h4'
+        );
+        visitorsElements.forEach((element) => {
+          element.textContent = persistentData.visitors;
+        });
+
+        // Also update the summary section
+        const summaryVisitorsElement = document.querySelector(
+          '.text-center.clickable-card[onclick="openVisitorsDetail()"] h4'
+        );
+        if (summaryVisitorsElement) {
+          summaryVisitorsElement.textContent = persistentData.visitors;
+        }
+
+        // Update other cumulative metrics
+        updateCumulativeMetrics(persistentData);
+
+        // Update Live members count
+        updateLiveMembersCount();
+      }
+
+      // Update other cumulative metrics that should only increase
+      function updateCumulativeMetrics(persistentData) {
+        // Update check-in MTD (if element exists)
+        const checkinElements = document.querySelectorAll(
+          '[data-type="checkin"] h4'
+        );
+        checkinElements.forEach((element) => {
+          if (persistentData.checkins > 0) {
+            element.textContent = persistentData.checkins;
+          }
+        });
+
+        // Update trial guests (if element exists)
+        const trialElements = document.querySelectorAll(
+          '[data-type="trial"] h4'
+        );
+        trialElements.forEach((element) => {
+          if (persistentData.trials > 0) {
+            element.textContent = persistentData.trials;
+          }
+        });
+
+        // Update revenue metrics (if elements exist)
+        const revenueElements = document.querySelectorAll(
+          '[data-type="revenue"] h4'
+        );
+        revenueElements.forEach((element) => {
+          if (persistentData.revenue > 0) {
+            element.textContent = persistentData.revenue;
+          }
+        });
+      }
+
+      // Update Live members count
+      function updateLiveMembersCount() {
+        // Generate random live members count (simulating real-time data)
+        const liveCount = Math.floor(rng.next() * 50) + 60; // 60-110 members
+
+        const liveElement = document.getElementById("liveMembersCount");
+        if (liveElement) {
+          liveElement.textContent = liveCount;
+        }
+
+        // Update live status indicator
+        const statusElement = document.getElementById("liveStatus");
+        if (statusElement) {
+          statusElement.innerHTML = '<i class="fas fa-circle me-1"></i>Live';
+          statusElement.className = "badge bg-light text-success";
+        }
+      }
+
+      // Simulate real-time updates for Live data
+      function startLiveUpdates() {
+        // Update every 30 seconds to simulate real-time data
+        setInterval(updateLiveMembersCount, 30000);
+
+        // Initial update
+        updateLiveMembersCount();
+      }
+
+      // Run when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        loadRevenueSettings();
+        initializeFilters();
+        addFilterEventListeners();
+        updateDataFromConsistentSource();
+        updateBurnRate();
+        startLiveUpdates();
+      });
+
+      // Also run immediately if DOM is already ready
+      if (document.readyState === "loading") {
+        console.log("DOM still loading, waiting for DOMContentLoaded...");
+      } else {
+        console.log("DOM already ready, running immediately...");
+        loadRevenueSettings();
+      }
+    </script>
+
+    <!-- Data Consistency Script -->
+    <script src="assets/js/data-consistency.js"></script>
+
+    <!-- Initialize Shared Data Layer -->
+    <script>
+      (function () {
+        console.log("=== Initializing Shared Data Layer ===");
+
+        // Wait for all modules to be ready
+        if (window.SharedDataLayer && window.SharedState) {
+          window.SharedDataLayer.waitForDependencies(function () {
+            console.log("✅ All dependencies ready, initializing...");
+
+            // Get current state from URL parameters or use defaults
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialState = {
+              timeKey: urlParams.get("time") || "today",
+              location: urlParams.get("location") || "all",
+              service: urlParams.get("service") || "all",
+            };
+
+            // Set initial state
+            window.SharedState.setState(initialState);
+
+            // Initialize data layer with auto-update
+            const kpis = window.SharedDataLayer.init({
+              runChecks: true,
+              onUpdate: function (newKpis, newState) {
+                console.log("🔄 KPIs updated:", newKpis);
+                // Update UI here if needed
+                if (typeof updateDataFromConsistentSource === "function") {
+                  updateDataFromConsistentSource();
+                }
+              },
+            });
+
+            // Store KPIs globally for access by other scripts
+            window.currentKPIs = kpis;
+
+            console.log("✅ Shared Data Layer initialized with KPIs:", kpis);
+
+            // Initialize Navigation Wrapper to preserve all onclick functions
+            if (window.NavigationWrapper) {
+              window.NavigationWrapper.init();
+              console.log(
+                "✅ Navigation Wrapper initialized - all metric cards preserved"
+              );
+            } else {
+              console.warn("⚠️ Navigation Wrapper not available");
+            }
+          });
+        } else {
+          console.error("❌ SharedDataLayer or SharedState not available");
+        }
+      })();
+    </script>
+
+    <!-- E2E Tests (Development only) -->
+    <script src="assets/js/tests/e2e-navigation-test.js"></script>
+    <script src="assets/js/tests/breadcrumb-tests.js"></script>
+
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat(
+            (this.next() * (max - min) + min).toFixed(decimals)
+          );
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  </body>
+</html>

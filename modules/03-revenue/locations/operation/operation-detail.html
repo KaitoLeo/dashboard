@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Chỉ số vận hành - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-cogs me-2"></i>
+                Chi tiết Chỉ số vận hành
+              </h2>
+              <p class="text-muted">
+                Thống kê chi tiết về hoạt động vận hành của các CLB
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Operation Overview -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body">
+              <h6 class="card-title">Check-in hôm nay</h6>
+              <h3 class="mb-0">245</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body">
+              <h6 class="card-title">Check-in MTD</h6>
+              <h3 class="mb-0">1,850</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body">
+              <h6 class="card-title">Khách tham quan</h6>
+              <h3 class="mb-0">10</h3>
+              <small>lượt hôm nay</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body">
+              <h6 class="card-title">Khách tập thử</h6>
+              <h3 class="mb-0">8</h3>
+              <small>lượt hôm nay</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check-in Statistics -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-sign-in-alt me-2"></i>
+                Thống kê Check-in theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>CLB</th>
+                      <th>Hôm nay</th>
+                      <th>Hôm qua</th>
+                      <th>MTD</th>
+                      <th>Trung bình/ngày</th>
+                      <th>% Thay đổi</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td>65</td>
+                      <td>58</td>
+                      <td>520</td>
+                      <td>22.6</td>
+                      <td class="text-success">+12.1%</td>
+                      <td><span class="badge bg-success">Tăng</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td>52</td>
+                      <td>48</td>
+                      <td>420</td>
+                      <td>18.3</td>
+                      <td class="text-success">+8.3%</td>
+                      <td><span class="badge bg-success">Tăng</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td>48</td>
+                      <td>45</td>
+                      <td>380</td>
+                      <td>16.5</td>
+                      <td class="text-success">+6.7%</td>
+                      <td><span class="badge bg-success">Tăng</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hào Nam</strong></td>
+                      <td>45</td>
+                      <td>42</td>
+                      <td>350</td>
+                      <td>15.2</td>
+                      <td class="text-success">+7.1%</td>
+                      <td><span class="badge bg-success">Tăng</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td>35</td>
+                      <td>38</td>
+                      <td>180</td>
+                      <td>7.8</td>
+                      <td class="text-danger">-7.9%</td>
+                      <td><span class="badge bg-warning">Giảm</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check-in Charts -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Check-in theo giờ hôm nay
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="hourlyCheckinChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Phân bố check-in theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="checkinDistributionChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PT Fitness Statistics -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-dumbbell me-2"></i>
+                Thống kê PT Fitness và Fit
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6 mb-4">
+                  <h6 class="text-primary">Personal Training</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>CLB</th>
+                          <th>Hôm nay</th>
+                          <th>MTD</th>
+                          <th>Online</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Tôn Thất Thuyết</td>
+                          <td>12</td>
+                          <td>180</td>
+                          <td>15</td>
+                        </tr>
+                        <tr>
+                          <td>Huỳnh Thúc Kháng</td>
+                          <td>10</td>
+                          <td>150</td>
+                          <td>12</td>
+                        </tr>
+                        <tr>
+                          <td>Giảng Võ</td>
+                          <td>8</td>
+                          <td>120</td>
+                          <td>8</td>
+                        </tr>
+                        <tr>
+                          <td>Hào Nam</td>
+                          <td>9</td>
+                          <td>135</td>
+                          <td>10</td>
+                        </tr>
+                        <tr>
+                          <td>Nguyễn Tuân</td>
+                          <td>6</td>
+                          <td>90</td>
+                          <td>5</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <h6 class="text-success">Fit Classes</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>CLB</th>
+                          <th>Hôm nay</th>
+                          <th>MTD</th>
+                          <th>Online</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Tôn Thất Thuyết</td>
+                          <td>8</td>
+                          <td>120</td>
+                          <td>20</td>
+                        </tr>
+                        <tr>
+                          <td>Huỳnh Thúc Kháng</td>
+                          <td>6</td>
+                          <td>90</td>
+                          <td>15</td>
+                        </tr>
+                        <tr>
+                          <td>Giảng Võ</td>
+                          <td>5</td>
+                          <td>75</td>
+                          <td>12</td>
+                        </tr>
+                        <tr>
+                          <td>Hào Nam</td>
+                          <td>4</td>
+                          <td>60</td>
+                          <td>8</td>
+                        </tr>
+                        <tr>
+                          <td>Nguyễn Tuân</td>
+                          <td>5</td>
+                          <td>75</td>
+                          <td>10</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Activities -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-users me-2"></i>
+                Hoạt động hội viên
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row text-center">
+                <div class="col-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <i class="fas fa-lock fa-2x text-primary mb-2"></i>
+                      <h6>Tủ khóa</h6>
+                      <h4 class="text-primary">180</h4>
+                      <small class="text-muted">lượt sử dụng</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <i class="fas fa-towel fa-2x text-success mb-2"></i>
+                      <h6>Khăn tắm</h6>
+                      <h4 class="text-success">95</h4>
+                      <small class="text-muted">lượt sử dụng</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <i class="fas fa-pause fa-2x text-warning mb-2"></i>
+                      <h6>Thẻ tạm ngưng</h6>
+                      <h4 class="text-warning">12</h4>
+                      <small class="text-muted">thẻ</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <i class="fas fa-check-circle fa-2x text-info mb-2"></i>
+                      <h6>Thẻ hiệu lực</h6>
+                      <h4 class="text-info">1,250</h4>
+                      <small class="text-muted">thẻ</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Xu hướng check-in 30 ngày
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="checkinTrendChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peak Hours Analysis -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-clock me-2"></i>
+                Phân tích giờ cao điểm
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-4 mb-3">
+                  <div class="alert alert-primary">
+                    <h6><i class="fas fa-sun me-2"></i>Giờ cao điểm sáng</h6>
+                    <p class="mb-1"><strong>6:00 - 9:00</strong></p>
+                    <p class="mb-0">Trung bình: 45 lượt/giờ</p>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <div class="alert alert-warning">
+                    <h6><i class="fas fa-sun me-2"></i>Giờ cao điểm chiều</h6>
+                    <p class="mb-1"><strong>17:00 - 20:00</strong></p>
+                    <p class="mb-0">Trung bình: 65 lượt/giờ</p>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <div class="alert alert-info">
+                    <h6><i class="fas fa-moon me-2"></i>Giờ thấp điểm</h6>
+                    <p class="mb-1"><strong>10:00 - 16:00</strong></p>
+                    <p class="mb-0">Trung bình: 15 lượt/giờ</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Equipment Usage -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-dumbbell me-2"></i>
+                Sử dụng thiết bị
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card border-primary">
+                    <div class="card-body text-center">
+                      <i class="fas fa-dumbbell fa-2x text-primary mb-2"></i>
+                      <h6>Tạ tay</h6>
+                      <h4 class="text-primary">85%</h4>
+                      <small class="text-muted">Tỷ lệ sử dụng</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card border-success">
+                    <div class="card-body text-center">
+                      <i class="fas fa-running fa-2x text-success mb-2"></i>
+                      <h6>Máy chạy bộ</h6>
+                      <h4 class="text-success">92%</h4>
+                      <small class="text-muted">Tỷ lệ sử dụng</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card border-info">
+                    <div class="card-body text-center">
+                      <i class="fas fa-swimming-pool fa-2x text-info mb-2"></i>
+                      <h6>Bể bơi</h6>
+                      <h4 class="text-info">78%</h4>
+                      <small class="text-muted">Tỷ lệ sử dụng</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card border-warning">
+                    <div class="card-body text-center">
+                      <i class="fas fa-yoga fa-2x text-warning mb-2"></i>
+                      <h6>Pilates</h6>
+                      <h4 class="text-warning">65%</h4>
+                      <small class="text-muted">Tỷ lệ sử dụng</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Hourly Check-in Chart
+      const hourlyCtx = document
+        .getElementById("hourlyCheckinChart")
+        .getContext("2d");
+      new Chart(hourlyCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "6h",
+            "7h",
+            "8h",
+            "9h",
+            "10h",
+            "11h",
+            "12h",
+            "13h",
+            "14h",
+            "15h",
+            "16h",
+            "17h",
+            "18h",
+            "19h",
+            "20h",
+            "21h",
+            "22h",
+          ],
+          datasets: [
+            {
+              label: "Check-in theo giờ",
+              data: [0, 15, 35, 25, 8, 5, 12, 8, 6, 4, 3, 8, 25, 45, 35, 20, 0],
+              backgroundColor: "#007bff",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Check-in Distribution Chart
+      const distributionCtx = document
+        .getElementById("checkinDistributionChart")
+        .getContext("2d");
+      new Chart(distributionCtx, {
+        type: "doughnut",
+        data: {
+          labels: [
+            "Tôn Thất Thuyết",
+            "Huỳnh Thúc Kháng",
+            "Giảng Võ",
+            "Hào Nam",
+            "Nguyễn Tuân",
+          ],
+          datasets: [
+            {
+              data: [65, 52, 48, 45, 35],
+              backgroundColor: [
+                "#007bff",
+                "#28a745",
+                "#17a2b8",
+                "#ffc107",
+                "#dc3545",
+              ],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        },
+      });
+
+      // Check-in Trend Chart
+      const trendCtx = document
+        .getElementById("checkinTrendChart")
+        .getContext("2d");
+      const last30Days = [];
+      const checkinData = [];
+      for (let i = 29; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        last30Days.push(date.getDate() + "/" + (date.getMonth() + 1));
+        checkinData.push(150 + rng.next() * 100);
+      }
+
+      new Chart(trendCtx, {
+        type: "line",
+        data: {
+          labels: last30Days,
+          datasets: [
+            {
+              label: "Check-in hàng ngày",
+              data: checkinData,
+              borderColor: "#28a745",
+              backgroundColor: "rgba(40, 167, 69, 0.1)",
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+</body>
+</html>

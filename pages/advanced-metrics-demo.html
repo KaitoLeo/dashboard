@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Metrics Demo - Actiwell Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .metric-card {
+        transition: transform 0.2s;
+        border-left: 4px solid #007bff;
+      }
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .metric-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .metric-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+      .formula-display {
+        background-color: #f8f9fa;
+        border-left: 4px solid #28a745;
+        padding: 10px;
+        margin: 10px 0;
+        font-family: "Courier New", monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h4 class="mb-0">
+                <i class="fas fa-calculator me-2"></i>
+                Advanced Metrics Dashboard - Công thức tính toán nâng cao
+              </h4>
+              <p class="mb-0 mt-2">
+                Triển khai các KPI quan trọng với độ ưu tiên cao
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority High Metrics -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h5 class="text-primary mb-3">
+            <i class="fas fa-fire me-2"></i>Ưu tiên cao (Triển khai ngay)
+          </h5>
+        </div>
+
+        <!-- Class Utilization Rate -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-pie fa-2x text-primary mb-2"></i>
+              <h6>Class Utilization Rate</h6>
+              <div class="metric-value text-primary" id="classUtilization">
+                78.0%
+              </div>
+              <div class="metric-label">Tỷ lệ sử dụng lớp học</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  (Booked Slots / Total Capacity) × 100</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Churn Rate -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-user-times fa-2x text-danger mb-2"></i>
+              <h6>Dynamic Churn Rate</h6>
+              <div class="metric-value text-danger" id="dynamicChurnRate">
+                5.6%
+              </div>
+              <div class="metric-label">Tỷ lệ rời bỏ động</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  (Members Lost / Average Active Members) × 100</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No-Show Rate -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-times fa-2x text-warning mb-2"></i>
+              <h6>No-Show Rate</h6>
+              <div class="metric-value text-warning" id="noShowRate">5.0%</div>
+              <div class="metric-label">Tỷ lệ không đến</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  (No-Show Bookings / Total Bookings) × 100</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revenue per Member -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-dollar-sign fa-2x text-success mb-2"></i>
+              <h6>Revenue per Member</h6>
+              <div class="metric-value text-success" id="revenuePerMember">
+                1,480,000 VNĐ
+              </div>
+              <div class="metric-label">Doanh thu trên mỗi hội viên</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  Total Revenue / Active Members</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority Medium Metrics -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h5 class="text-info mb-3">
+            <i class="fas fa-clock me-2"></i>Ưu tiên trung bình (Triển khai
+            trong 2-4 tuần)
+          </h5>
+        </div>
+
+        <!-- Peak Hour Utilization -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-clock fa-2x text-info mb-2"></i>
+              <h6>Peak Hour Utilization</h6>
+              <div class="metric-value text-info" id="peakHourUtilization">
+                75.0%
+              </div>
+              <div class="metric-label">Tỷ lệ sử dụng giờ cao điểm</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  (Peak Hour Bookings / Peak Hour Capacity) × 100</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member Lifetime Value -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-gem fa-2x text-purple mb-2"></i>
+              <h6>Member Lifetime Value</h6>
+              <div class="metric-value text-purple" id="memberLifetimeValue">
+                18,000,000 VNĐ
+              </div>
+              <div class="metric-label">Giá trị trọn đời hội viên</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  Avg Monthly Revenue × Avg Membership Duration</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revenue Growth Rate -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x text-success mb-2"></i>
+              <h6>Revenue Growth Rate</h6>
+              <div class="metric-value text-success" id="revenueGrowthRate">
+                12.1%
+              </div>
+              <div class="metric-label">Tỷ lệ tăng trưởng doanh thu</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  ((Current - Previous) / Previous) × 100</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Staff Utilization -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-users fa-2x text-warning mb-2"></i>
+              <h6>Staff Utilization</h6>
+              <div class="metric-value text-warning" id="staffUtilization">
+                80.0%
+              </div>
+              <div class="metric-label">Tỷ lệ sử dụng nhân viên</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  (Scheduled Hours / Available Hours) × 100</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Analytics -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h5 class="text-secondary mb-3">
+            <i class="fas fa-brain me-2"></i>Phân tích nâng cao (Triển khai dài
+            hạn)
+          </h5>
+        </div>
+
+        <!-- Engagement Score -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-heart fa-2x text-pink mb-2"></i>
+              <h6>Engagement Score</h6>
+              <div class="metric-value text-pink" id="engagementScore">
+                2,012 điểm
+              </div>
+              <div class="metric-label">Điểm tương tác</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  (Check-ins + Bookings + PT Sessions) / 3</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Forecasted Monthly Revenue -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-crystal-ball fa-2x text-indigo mb-2"></i>
+              <h6>Forecasted Monthly Revenue</h6>
+              <div
+                class="metric-value text-indigo"
+                id="forecastedMonthlyRevenue"
+              >
+                3,700,000,000 VNĐ
+              </div>
+              <div class="metric-label">Dự báo doanh thu tháng</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  Current MTD Revenue × (30 / Days Passed)</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Acquisition Cost -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-bullseye fa-2x text-orange mb-2"></i>
+              <h6>Customer Acquisition Cost</h6>
+              <div
+                class="metric-value text-orange"
+                id="customerAcquisitionCost"
+              >
+                833,333 VNĐ
+              </div>
+              <div class="metric-label">Chi phí thu hút khách hàng</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  Total Marketing Spend / New Members</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revenue per Square Meter -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card metric-card">
+            <div class="card-body text-center">
+              <i class="fas fa-ruler fa-2x text-teal mb-2"></i>
+              <h6>Revenue per Square Meter</h6>
+              <div class="metric-value text-teal" id="revenuePerSquareMeter">
+                3,700,000 VNĐ/m²
+              </div>
+              <div class="metric-label">Doanh thu trên mỗi mét vuông</div>
+              <div class="formula-display mt-2">
+                <small
+                  ><strong>Công thức:</strong><br />
+                  Total Revenue / Total Facility Area</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Implementation Status -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-check-circle me-2"></i>
+                Trạng thái triển khai
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <h6 class="text-success">✅ Đã triển khai</h6>
+                  <ul class="list-unstyled">
+                    <li>• Class Utilization Rate</li>
+                    <li>• Dynamic Churn Rate</li>
+                    <li>• No-Show Rate</li>
+                    <li>• Revenue per Member</li>
+                    <li>• Peak Hour Utilization</li>
+                    <li>• Member Lifetime Value</li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <h6 class="text-warning">🔄 Đang triển khai</h6>
+                  <ul class="list-unstyled">
+                    <li>• Revenue Growth Rate</li>
+                    <li>• Staff Utilization</li>
+                    <li>• Booking Lead Time</li>
+                    <li>• Engagement Score</li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <h6 class="text-info">📋 Kế hoạch</h6>
+                  <ul class="list-unstyled">
+                    <li>• Cohort Analysis</li>
+                    <li>• Predictive Metrics</li>
+                    <li>• NPS Score</li>
+                    <li>• Advanced Forecasting</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Load Advanced Calculations Engine -->
+    <script src="../assets/js/metrics-engine/advanced-calculations.js"></script>
+    <script src="../assets/js/metrics-engine/init.js"></script>
+
+    <script>
+      // Initialize Advanced Metrics when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Advanced Metrics Demo page loaded");
+
+        // Trigger calculation of advanced metrics
+        if (
+          window.MetricsEngineInit &&
+          window.MetricsEngineInit.calculateAdvancedMetrics
+        ) {
+          window.MetricsEngineInit.calculateAdvancedMetrics();
+        }
+
+        // Update UI with calculated metrics
+        setTimeout(() => {
+          if (window.AdvancedMetrics) {
+            console.log("Advanced Metrics available:", window.AdvancedMetrics);
+            updateMetricsDisplay();
+          }
+        }, 1000);
+      });
+
+      function updateMetricsDisplay() {
+        if (!window.AdvancedMetrics) return;
+
+        // Update all metric displays
+        const metrics = window.AdvancedMetrics;
+
+        // Update metric elements
+        updateMetricElement("classUtilization", metrics.classUtilization, "%");
+        updateMetricElement("dynamicChurnRate", metrics.dynamicChurnRate, "%");
+        updateMetricElement("noShowRate", metrics.noShowRate, "%");
+        updateMetricElement(
+          "revenuePerMember",
+          metrics.revenuePerMember,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "peakHourUtilization",
+          metrics.peakHourUtilization,
+          "%"
+        );
+        updateMetricElement(
+          "memberLifetimeValue",
+          metrics.memberLifetimeValue,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "revenueGrowthRate",
+          metrics.revenueGrowthRate,
+          "%"
+        );
+        updateMetricElement("staffUtilization", metrics.staffUtilization, "%");
+        updateMetricElement(
+          "avgBookingLeadTime",
+          metrics.avgBookingLeadTime,
+          "giờ"
+        );
+        updateMetricElement("engagementScore", metrics.engagementScore, "điểm");
+        updateMetricElement(
+          "forecastedMonthlyRevenue",
+          metrics.forecastedMonthlyRevenue,
+          "VNĐ"
+        );
+        updateMetricElement(
+          "customerAcquisitionCost",
+          metrics.customerAcquisitionCost,
+          "VNĐ"
+        );
+        updateMetricElement("retentionRate", metrics.retentionRate, "%");
+        updateMetricElement(
+          "revenuePerSquareMeter",
+          metrics.revenuePerSquareMeter,
+          "VNĐ/m²"
+        );
+        updateMetricElement(
+          "peakHourRevenueEfficiency",
+          metrics.peakHourRevenueEfficiency,
+          "%"
+        );
+      }
+
+      function updateMetricElement(elementId, value, unit) {
+        const element = document.getElementById(elementId);
+        if (element && value !== undefined) {
+          if (unit === "VNĐ") {
+            element.textContent =
+              window.advancedCalculations.formatCurrency(value);
+          } else if (unit === "%") {
+            element.textContent =
+              window.advancedCalculations.formatPercentage(value);
+          } else {
+            element.textContent =
+              window.advancedCalculations.formatNumber(value) + " " + unit;
+          }
+        }
+      }
+    </script>
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>
+
+
+
+

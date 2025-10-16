@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo CRM - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <div class="d-flex align-items-center">
+          <!-- Real-time clock -->
+          <div class="text-white me-3">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span>
+          </div>
+          <div class="text-white-50 small">
+            <span id="currentDate"></span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-users me-2"></i>
+                Báo cáo CRM
+              </h2>
+              <p class="text-muted">
+                Thống kê chi tiết nguồn khách và tỉ lệ chuyển đổi
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Định nghĩa -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-book me-2"></i>
+                Định nghĩa
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <!-- Loại hình hợp đồng -->
+                <div class="col-lg-6 mb-4">
+                  <h6 class="text-primary mb-3">
+                    <i class="fas fa-file-contract me-2"></i>
+                    Loại hình hợp đồng
+                  </h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Loại hợp đồng</th>
+                          <th>Mô tả</th>
+                          <th>Số lượng</th>
+                          <th>Tỉ lệ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Hợp đồng đăng ký mới [new]</strong></td>
+                          <td>Khách hàng đăng ký lần đầu</td>
+                          <td><span class="badge bg-primary">235</span></td>
+                          <td>74.8%</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Hợp đồng tái ký [renew]</strong></td>
+                          <td>Khách hàng gia hạn hợp đồng</td>
+                          <td><span class="badge bg-success">51</span></td>
+                          <td>16.2%</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Hợp đồng nâng cấp [upgrade]</strong></td>
+                          <td>Khách hàng nâng cấp gói dịch vụ</td>
+                          <td><span class="badge bg-warning">28</span></td>
+                          <td>8.9%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Nguồn khách -->
+                <div class="col-lg-6 mb-4">
+                  <h6 class="text-primary mb-3">
+                    <i class="fas fa-users me-2"></i>
+                    Nguồn khách
+                  </h6>
+
+                  <!-- Nguồn chủ động -->
+                  <div class="mb-3">
+                    <h6 class="text-success">
+                      <i class="fas fa-handshake me-1"></i>
+                      Nguồn chủ động [nguồn sale]
+                    </h6>
+                    <div class="table-responsive">
+                      <table class="table table-sm table-bordered">
+                        <thead class="table-success">
+                          <tr>
+                            <th>Nguồn khách</th>
+                            <th>Áp dụng</th>
+                            <th>Số lượng</th>
+                            <th>Tỉ lệ</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <strong>Khách giới thiệu [refer] (BR)</strong>
+                            </td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>45</td>
+                            <td>19.1%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Voucher sale</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>38</td>
+                            <td>16.2%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Thị trường</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>52</td>
+                            <td>22.1%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Seeding</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>28</td>
+                            <td>11.9%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Data lạnh</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>35</td>
+                            <td>14.9%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Data băng</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>25</td>
+                            <td>10.6%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Renew</strong></td>
+                            <td>
+                              <span class="badge bg-success">[renew]</span>
+                            </td>
+                            <td>51</td>
+                            <td>100%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Upgrade</strong></td>
+                            <td>
+                              <span class="badge bg-warning">[upgrade]</span>
+                            </td>
+                            <td>28</td>
+                            <td>100%</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- Nguồn bị động -->
+                  <div class="mb-3">
+                    <h6 class="text-info">
+                      <i class="fas fa-bullhorn me-1"></i>
+                      Nguồn bị động [nguồn marketing]
+                    </h6>
+                    <div class="table-responsive">
+                      <table class="table table-sm table-bordered">
+                        <thead class="table-info">
+                          <tr>
+                            <th>Nguồn khách</th>
+                            <th>Áp dụng</th>
+                            <th>Số lượng</th>
+                            <th>Tỉ lệ</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><strong>Facebook ads</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>28</td>
+                            <td>11.9%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Zalo ads</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>22</td>
+                            <td>9.4%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Tiktok ads</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>18</td>
+                            <td>7.7%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Website</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>15</td>
+                            <td>6.4%</td>
+                          </tr>
+                          <tr>
+                            <td><strong>Hotline</strong></td>
+                            <td><span class="badge bg-primary">[new]</span></td>
+                            <td>12</td>
+                            <td>5.1%</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ghi chú áp dụng -->
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="alert alert-info">
+                    <h6 class="alert-heading">
+                      <i class="fas fa-info-circle me-2"></i>
+                      Ghi chú áp dụng
+                    </h6>
+                    <ul class="mb-0">
+                      <li>
+                        <strong>Nguồn chủ động:</strong> Khách giới thiệu
+                        [refer], Voucher sale, Thị trường, Seeding, Data lạnh,
+                        Data băng → Áp dụng với
+                        <span class="badge bg-primary"
+                          >Hợp đồng đăng ký mới [new]</span
+                        >
+                      </li>
+                      <li>
+                        <strong>Renew:</strong> Áp dụng với
+                        <span class="badge bg-success"
+                          >Hợp đồng tái ký [renew]</span
+                        >
+                      </li>
+                      <li>
+                        <strong>Upgrade:</strong> Áp dụng với
+                        <span class="badge bg-warning"
+                          >Hợp đồng nâng cấp [upgrade]</span
+                        >
+                      </li>
+                      <li>
+                        <strong>Nguồn bị động:</strong> Facebook ads, Zalo ads,
+                        Tiktok ads, Website, Hotline → Áp dụng với
+                        <span class="badge bg-primary"
+                          >Hợp đồng đăng ký mới [new]</span
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logic tính toán -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="alert alert-info">
+            <h6 class="alert-heading">
+              <i class="fas fa-calculator me-2"></i>
+              Logic tính toán tỉ lệ chuyển đổi
+            </h6>
+            <div class="row">
+              <div class="col-md-4">
+                <strong>Tỉ lệ tham quan:</strong><br />
+                <small
+                  >Số khách tham quan / Số khách đã hẹn = 856/856 = 100%</small
+                >
+              </div>
+              <div class="col-md-4">
+                <strong>Tỉ lệ tập thử:</strong><br />
+                <small
+                  >Số khách tập thử / Số khách tham quan = 565/856 =
+                  66.0%</small
+                >
+              </div>
+              <div class="col-md-4">
+                <strong>Tỉ lệ chốt hợp đồng:</strong><br />
+                <small
+                  >Số hợp đồng chốt / Số khách tập thử = 310/565 = 54.9%</small
+                >
+              </div>
+            </div>
+            <hr />
+            <small class="text-muted">
+              <i class="fas fa-info-circle me-1"></i>
+              <strong>Lưu ý:</strong> Tỉ lệ chốt hợp đồng được tính dựa trên số
+              khách thực sự tập thử, không phải tổng nguồn khách. Điều này phản
+              ánh chính xác hiệu quả của quy trình chuyển đổi từ tập thử sang
+              chốt hợp đồng.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tổng nguồn khách</h5>
+              <h2 class="mb-0">1,250</h2>
+              <small>khách hàng</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tỉ lệ chốt hợp đồng</h5>
+              <h2 class="mb-0">54.9%</h2>
+              <small>310/565 (từ khách tập thử)</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tỉ lệ tham quan</h5>
+              <h2 class="mb-0">100%</h2>
+              <small>856/856 (từ khách đã hẹn)</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tỉ lệ tập thử</h5>
+              <h2 class="mb-0">66.0%</h2>
+              <small>565/856 (từ khách tham quan)</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nguồn khách theo loại hình hợp đồng -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Nguồn khách chủ động (Sale) - Hợp đồng mới [new]
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="activeSourceChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Nguồn khách bị động (Marketing) - Hợp đồng mới [new]
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="passiveSourceChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nguồn khách tái ký và nâng cấp -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Nguồn khách tái ký [renew]
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="renewSourceChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Nguồn khách nâng cấp [upgrade]
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="upgradeSourceChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chi tiết nguồn khách -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-table me-2"></i>
+                Thống kê Hợp đồng theo nguồn khách
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Nguồn khách</th>
+                      <th>Loại</th>
+                      <th>Hợp đồng mới [new]</th>
+                      <th>Hợp đồng tái ký [renew]</th>
+                      <th>Hợp đồng nâng cấp [upgrade]</th>
+                      <th>Tổng cộng</th>
+                      <th>Tỉ lệ chốt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Khách giới thiệu [refer]</strong></td>
+                      <td><span class="badge bg-primary">Chủ động</span></td>
+                      <td>45</td>
+                      <td>12</td>
+                      <td>8</td>
+                      <td><strong>65</strong></td>
+                      <td><span class="badge bg-success">32.3%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Voucher sale</strong></td>
+                      <td><span class="badge bg-primary">Chủ động</span></td>
+                      <td>38</td>
+                      <td>8</td>
+                      <td>5</td>
+                      <td><strong>51</strong></td>
+                      <td><span class="badge bg-success">28.4%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thị trường</strong></td>
+                      <td><span class="badge bg-primary">Chủ động</span></td>
+                      <td>52</td>
+                      <td>15</td>
+                      <td>6</td>
+                      <td><strong>73</strong></td>
+                      <td><span class="badge bg-success">26.0%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Facebook ads</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>28</td>
+                      <td>5</td>
+                      <td>3</td>
+                      <td><strong>36</strong></td>
+                      <td><span class="badge bg-warning">18.2%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Zalo ads</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>22</td>
+                      <td>4</td>
+                      <td>2</td>
+                      <td><strong>28</strong></td>
+                      <td><span class="badge bg-warning">15.8%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Website</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>18</td>
+                      <td>3</td>
+                      <td>1</td>
+                      <td><strong>22</strong></td>
+                      <td><span class="badge bg-warning">12.5%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hotline</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>15</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td><strong>18</strong></td>
+                      <td><span class="badge bg-warning">10.0%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thống kê Doanh thu theo nguồn khách -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-table me-2"></i>
+                Thống kê Doanh thu theo nguồn khách
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Nguồn khách</th>
+                      <th>Loại</th>
+                      <th>Hợp đồng mới [new]</th>
+                      <th>Hợp đồng tái ký [renew]</th>
+                      <th>Hợp đồng nâng cấp [upgrade]</th>
+                      <th>Tổng doanh thu (VNĐ)</th>
+                      <th>Tỉ lệ chốt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Khách giới thiệu [refer]</strong></td>
+                      <td><span class="badge bg-primary">Chủ động</span></td>
+                      <td>45</td>
+                      <td>12</td>
+                      <td>8</td>
+                      <td>
+                        <strong class="text-success">1,950,000,000</strong>
+                      </td>
+                      <td><span class="badge bg-success">68%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Voucher sale</strong></td>
+                      <td><span class="badge bg-primary">Chủ động</span></td>
+                      <td>35</td>
+                      <td>8</td>
+                      <td>5</td>
+                      <td>
+                        <strong class="text-success">1,440,000,000</strong>
+                      </td>
+                      <td><span class="badge bg-success">63%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thị trường</strong></td>
+                      <td><span class="badge bg-primary">Chủ động</span></td>
+                      <td>52</td>
+                      <td>15</td>
+                      <td>6</td>
+                      <td>
+                        <strong class="text-success">2,190,000,000</strong>
+                      </td>
+                      <td><span class="badge bg-warning">54%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Facebook ads</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>28</td>
+                      <td>5</td>
+                      <td>3</td>
+                      <td>
+                        <strong class="text-success">1,080,000,000</strong>
+                      </td>
+                      <td><span class="badge bg-warning">36%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Zalo ads</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>22</td>
+                      <td>4</td>
+                      <td>2</td>
+                      <td><strong class="text-success">840,000,000</strong></td>
+                      <td><span class="badge bg-warning">28%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Website</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>18</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td><strong class="text-success">690,000,000</strong></td>
+                      <td><span class="badge bg-warning">22%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>TikTok ads</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>15</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td><strong class="text-success">540,000,000</strong></td>
+                      <td><span class="badge bg-warning">18%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hotline</strong></td>
+                      <td><span class="badge bg-info">Bị động</span></td>
+                      <td>12</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td><strong class="text-success">450,000,000</strong></td>
+                      <td><span class="badge bg-warning">15%</span></td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <th colspan="2">TỔNG CỘNG</th>
+                      <th>235</th>
+                      <th>51</th>
+                      <th>28</th>
+                      <th>
+                        <strong class="text-success">9,180,000,000</strong>
+                      </th>
+                      <th>-</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tỉ lệ chuyển đổi -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Tỉ lệ chuyển đổi theo giai đoạn
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="conversionChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Xu hướng chuyển đổi 12 tháng
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="trendChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thống kê theo giai đoạn chăm sóc -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-table me-2"></i>
+                Thống kê theo giai đoạn chăm sóc
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Giai đoạn</th>
+                      <th>Số lượng khách</th>
+                      <th>Tỉ lệ chuyển đổi</th>
+                      <th>Hợp đồng chốt</th>
+                      <th>Doanh thu (VNĐ)</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Nguồn khách</strong></td>
+                      <td>1,250</td>
+                      <td>100%</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td><span class="badge bg-info">Đầu vào</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Đã hẹn</strong></td>
+                      <td>856</td>
+                      <td>68.5%</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td><span class="badge bg-warning">Đang xử lý</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Tham quan</strong></td>
+                      <td>856</td>
+                      <td>100%</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td><span class="badge bg-warning">Đang xử lý</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Tập thử</strong></td>
+                      <td>565</td>
+                      <td>66.0%</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td><span class="badge bg-warning">Đang xử lý</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Chốt hợp đồng</strong></td>
+                      <td>310</td>
+                      <td>54.9%</td>
+                      <td>310</td>
+                      <td>
+                        <strong class="text-success">9,180,000,000</strong>
+                      </td>
+                      <td><span class="badge bg-success">Hoàn thành</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chi tiết tỉ lệ hẹn -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-table me-2"></i>
+                Chi tiết tỉ lệ hẹn
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-primary">Số hỏng</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Lý do</th>
+                          <th>Số lượng</th>
+                          <th>Tỉ lệ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Sai số</td>
+                          <td>45</td>
+                          <td>11.5%</td>
+                        </tr>
+                        <tr>
+                          <td>Thuê bao</td>
+                          <td>38</td>
+                          <td>9.7%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-warning">Không hẹn</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Lý do</th>
+                          <th>Số lượng</th>
+                          <th>Tỉ lệ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Nhà xa</td>
+                          <td>52</td>
+                          <td>13.3%</td>
+                        </tr>
+                        <tr>
+                          <td>Không có nhu cầu</td>
+                          <td>68</td>
+                          <td>17.4%</td>
+                        </tr>
+                        <tr>
+                          <td>Không nghe máy</td>
+                          <td>43</td>
+                          <td>11.0%</td>
+                        </tr>
+                        <tr>
+                          <td>Trùng số</td>
+                          <td>28</td>
+                          <td>7.2%</td>
+                        </tr>
+                        <tr>
+                          <td>Khảo giá</td>
+                          <td>35</td>
+                          <td>9.0%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-lg-6">
+                  <h6 class="text-info">Chưa hẹn</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Trạng thái</th>
+                          <th>Số lượng</th>
+                          <th>Tỉ lệ</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Đã tư vấn dịch vụ - địa điểm tập luyện</td>
+                          <td>89</td>
+                          <td>22.8%</td>
+                        </tr>
+                        <tr>
+                          <td>Đã báo giá cơ bản [note]</td>
+                          <td>67</td>
+                          <td>17.2%</td>
+                        </tr>
+                        <tr>
+                          <td>Đã báo chương trình ưu đãi [note]</td>
+                          <td>54</td>
+                          <td>13.8%</td>
+                        </tr>
+                        <tr>
+                          <td>Đã add zalo [note]</td>
+                          <td>43</td>
+                          <td>11.0%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-success">Đã hẹn</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Thông tin</th>
+                          <th>Giá trị</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Số lượng đã hẹn</td>
+                          <td><strong>856</strong></td>
+                        </tr>
+                        <tr>
+                          <td>Ngày giờ hẹn</td>
+                          <td>Trong 3 ngày tới</td>
+                        </tr>
+                        <tr>
+                          <td>Tỉ lệ hẹn thành công</td>
+                          <td><strong>68.5%</strong></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- So sánh Tỉ lệ Marketing vs Tỉ lệ Chốt hợp đồng -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-balance-scale me-2"></i>
+                So sánh Tỉ lệ Marketing vs Tỉ lệ Chốt hợp đồng
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="card border-primary">
+                    <div class="card-header bg-primary text-white">
+                      <h6 class="mb-0">Tỉ lệ Marketing (Từ nguồn khách)</h6>
+                    </div>
+                    <div class="card-body">
+                      <p class="text-muted">
+                        Tỉ lệ này đo lường hiệu quả của marketing trong việc tạo
+                        ra khách hàng tiềm năng
+                      </p>
+                      <div class="row text-center">
+                        <div class="col-4">
+                          <h4 class="text-primary">68.5%</h4>
+                          <small>Tỉ lệ hẹn</small><br />
+                          <small>856/1,250</small>
+                        </div>
+                        <div class="col-4">
+                          <h4 class="text-info">45.2%</h4>
+                          <small>Tỉ lệ tập thử</small><br />
+                          <small>565/1,250</small>
+                        </div>
+                        <div class="col-4">
+                          <h4 class="text-success">24.8%</h4>
+                          <small>Tỉ lệ chốt</small><br />
+                          <small>310/1,250</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card border-success">
+                    <div class="card-header bg-success text-white">
+                      <h6 class="mb-0">
+                        Tỉ lệ Chốt hợp đồng (Từ khách tập thử)
+                      </h6>
+                    </div>
+                    <div class="card-body">
+                      <p class="text-muted">
+                        Tỉ lệ này đo lường hiệu quả của quy trình chuyển đổi từ
+                        tập thử sang chốt hợp đồng
+                      </p>
+                      <div class="row text-center">
+                        <div class="col-4">
+                          <h4 class="text-primary">100%</h4>
+                          <small>Tỉ lệ tham quan</small><br />
+                          <small>856/856</small>
+                        </div>
+                        <div class="col-4">
+                          <h4 class="text-warning">66.0%</h4>
+                          <small>Tỉ lệ tập thử</small><br />
+                          <small>565/856</small>
+                        </div>
+                        <div class="col-4">
+                          <h4 class="text-success">54.9%</h4>
+                          <small>Tỉ lệ chốt</small><br />
+                          <small>310/565</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="alert alert-warning mt-3">
+                <h6 class="alert-heading">
+                  <i class="fas fa-exclamation-triangle me-2"></i>
+                  Tại sao cần phân biệt hai loại tỉ lệ này?
+                </h6>
+                <ul class="mb-0">
+                  <li>
+                    <strong>Tỉ lệ Marketing:</strong> Giúp đánh giá hiệu quả của
+                    các kênh marketing và chiến lược thu hút khách hàng
+                  </li>
+                  <li>
+                    <strong>Tỉ lệ Chốt hợp đồng:</strong> Giúp đánh giá hiệu quả
+                    của quy trình chăm sóc khách hàng và chất lượng dịch vụ
+                  </li>
+                  <li>
+                    <strong>Kết hợp cả hai:</strong> Giúp tối ưu hóa toàn bộ quy
+                    trình từ marketing đến chốt hợp đồng
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phân tích hiệu quả -->
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-trophy me-2"></i>
+                Nguồn khách hiệu quả nhất
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group">
+                <div class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Khách giới thiệu [refer]</h6>
+                    <span class="badge bg-warning">1st</span>
+                  </div>
+                  <p class="mb-1">
+                    Tỉ lệ chốt: 32.3% (65/201) - Từ nguồn khách
+                  </p>
+                  <small>Nguồn chủ động - Chất lượng cao</small>
+                </div>
+                <div class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Voucher sale</h6>
+                    <span class="badge bg-secondary">2nd</span>
+                  </div>
+                  <p class="mb-1">
+                    Tỉ lệ chốt: 28.4% (51/179) - Từ nguồn khách
+                  </p>
+                  <small>Nguồn chủ động - Giá trị cao</small>
+                </div>
+                <div class="list-group-item">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">Thị trường</h6>
+                    <span class="badge bg-secondary">3rd</span>
+                  </div>
+                  <p class="mb-1">
+                    Tỉ lệ chốt: 26.0% (73/281) - Từ nguồn khách
+                  </p>
+                  <small>Nguồn chủ động - Số lượng lớn</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-lightbulb me-2"></i>
+                Khuyến nghị cải thiện
+              </h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tăng cường chương trình giới thiệu khách hàng
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Cải thiện chất lượng Facebook ads và Zalo ads
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tối ưu hóa website để tăng tỉ lệ chuyển đổi
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Đào tạo nhân viên tư vấn qua hotline
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Phân tích và cải thiện quy trình chăm sóc khách hàng
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Active Source Chart
+      const activeCtx = document.getElementById("activeSourceChart");
+      if (activeCtx) {
+        new Chart(activeCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Khách giới thiệu [refer]",
+              "Voucher sale",
+              "Thị trường",
+              "Seeding",
+              "Data lạnh",
+              "Data băng",
+            ],
+            datasets: [
+              {
+                data: [65, 51, 73, 28, 35, 22],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(0, 123, 255, 0.8)",
+                  "rgba(23, 162, 184, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                  "rgba(220, 53, 69, 0.8)",
+                  "rgba(108, 117, 125, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(0, 123, 255, 1)",
+                  "rgba(23, 162, 184, 1)",
+                  "rgba(255, 193, 7, 1)",
+                  "rgba(220, 53, 69, 1)",
+                  "rgba(108, 117, 125, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Nguồn khách chủ động (Sale)",
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+      }
+
+      // Passive Source Chart
+      const passiveCtx = document.getElementById("passiveSourceChart");
+      if (passiveCtx) {
+        new Chart(passiveCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Facebook ads",
+              "Zalo ads",
+              "Tiktok ads",
+              "Website",
+              "Hotline",
+            ],
+            datasets: [
+              {
+                data: [36, 28, 15, 22, 18],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(0, 123, 255, 0.8)",
+                  "rgba(23, 162, 184, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                  "rgba(220, 53, 69, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(0, 123, 255, 1)",
+                  "rgba(23, 162, 184, 1)",
+                  "rgba(255, 193, 7, 1)",
+                  "rgba(220, 53, 69, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Nguồn khách bị động (Marketing)",
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+      }
+
+      // Conversion Chart
+      const conversionCtx = document.getElementById("conversionChart");
+      if (conversionCtx) {
+        new Chart(conversionCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Nguồn khách",
+              "Đã hẹn",
+              "Tham quan",
+              "Tập thử",
+              "Chốt hợp đồng",
+            ],
+            datasets: [
+              {
+                label: "Số lượng",
+                data: [1250, 856, 856, 565, 310],
+                backgroundColor: [
+                  "rgba(108, 117, 125, 0.8)",
+                  "rgba(0, 123, 255, 0.8)",
+                  "rgba(23, 162, 184, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                  "rgba(40, 167, 69, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(108, 117, 125, 1)",
+                  "rgba(0, 123, 255, 1)",
+                  "rgba(23, 162, 184, 1)",
+                  "rgba(255, 193, 7, 1)",
+                  "rgba(40, 167, 69, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Tỉ lệ chuyển đổi theo giai đoạn",
+              },
+              legend: {
+                display: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+
+      // Trend Chart
+      const trendCtx = document.getElementById("trendChart");
+      if (trendCtx) {
+        new Chart(trendCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "T1",
+              "T2",
+              "T3",
+              "T4",
+              "T5",
+              "T6",
+              "T7",
+              "T8",
+              "T9",
+              "T10",
+              "T11",
+              "T12",
+            ],
+            datasets: [
+              {
+                label: "Tỉ lệ chốt hợp đồng (%)",
+                data: [22, 24, 26, 23, 25, 27, 24, 26, 28, 25, 27, 24.8],
+                borderColor: "rgba(40, 167, 69, 1)",
+                backgroundColor: "rgba(40, 167, 69, 0.1)",
+                tension: 0.3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Xu hướng tỉ lệ chốt hợp đồng 12 tháng",
+              },
+              legend: {
+                position: "top",
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 30,
+              },
+            },
+          },
+        });
+      }
+
+      // Renew Source Chart
+      const renewCtx = document.getElementById("renewSourceChart");
+      if (renewCtx) {
+        new Chart(renewCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Khách giới thiệu [refer]",
+              "Voucher sale",
+              "Thị trường",
+              "Seeding",
+              "Data lạnh",
+              "Data băng",
+            ],
+            datasets: [
+              {
+                data: [12, 8, 15, 5, 8, 3],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(0, 123, 255, 0.8)",
+                  "rgba(23, 162, 184, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                  "rgba(220, 53, 69, 0.8)",
+                  "rgba(108, 117, 125, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(0, 123, 255, 1)",
+                  "rgba(23, 162, 184, 1)",
+                  "rgba(255, 193, 7, 1)",
+                  "rgba(220, 53, 69, 1)",
+                  "rgba(108, 117, 125, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Nguồn khách tái ký [renew]",
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+      }
+
+      // Upgrade Source Chart
+      const upgradeCtx = document.getElementById("upgradeSourceChart");
+      if (upgradeCtx) {
+        new Chart(upgradeCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Khách giới thiệu [refer]",
+              "Voucher sale",
+              "Thị trường",
+              "Seeding",
+              "Data lạnh",
+              "Data băng",
+            ],
+            datasets: [
+              {
+                data: [8, 5, 6, 3, 4, 2],
+                backgroundColor: [
+                  "rgba(40, 167, 69, 0.8)",
+                  "rgba(0, 123, 255, 0.8)",
+                  "rgba(23, 162, 184, 0.8)",
+                  "rgba(255, 193, 7, 0.8)",
+                  "rgba(220, 53, 69, 0.8)",
+                  "rgba(108, 117, 125, 0.8)",
+                ],
+                borderColor: [
+                  "rgba(40, 167, 69, 1)",
+                  "rgba(0, 123, 255, 1)",
+                  "rgba(23, 162, 184, 1)",
+                  "rgba(255, 193, 7, 1)",
+                  "rgba(220, 53, 69, 1)",
+                  "rgba(108, 117, 125, 1)",
+                ],
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Nguồn khách nâng cấp [upgrade]",
+              },
+              legend: {
+                position: "bottom",
+              },
+            },
+          },
+        });
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

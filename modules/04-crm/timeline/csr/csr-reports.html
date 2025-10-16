@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo CSR - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-file-alt me-2"></i>
+                Báo cáo CSR (Phiếu yêu cầu dịch vụ)
+              </h2>
+              <p class="text-muted">
+                Quản lý và theo dõi các phiếu yêu cầu dịch vụ
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-2">
+                  <label class="form-label">Từ ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDate"
+                    value="2024-01-01"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Đến ngày:</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDate"
+                    value="2024-12-31"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Trung tâm:</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="1">Tôn Thất Thuyết</option>
+                    <option value="2">Huỳnh Thúc Kháng</option>
+                    <option value="3">Giảng Võ</option>
+                    <option value="4">Hào Nam</option>
+                    <option value="5">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Loại CSR:</label>
+                  <select class="form-select" id="csrTypeFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="preserve">Bảo lưu</option>
+                    <option value="transfer">Chuyển nhượng</option>
+                    <option value="gift">Tặng tháng giới thiệu</option>
+                    <option value="extend">Gia hạn</option>
+                    <option value="upgrade">Nâng cấp</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Trạng thái:</label>
+                  <select class="form-select" id="statusFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="pending">Chờ duyệt</option>
+                    <option value="approved">Đã duyệt</option>
+                    <option value="rejected">Từ chối</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-search me-1"></i>Lọc
+                  </button>
+                  <button class="btn btn-success ms-2" onclick="exportReport()">
+                    <i class="fas fa-download me-1"></i>Xuất
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Tổng CSR</h5>
+              <h2 class="mb-0">156</h2>
+              <small>phiếu</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Chờ duyệt</h5>
+              <h2 class="mb-0">23</h2>
+              <small>phiếu</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Đã duyệt</h5>
+              <h2 class="mb-0">128</h2>
+              <small>phiếu</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-danger text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Từ chối</h5>
+              <h2 class="mb-0">5</h2>
+              <small>phiếu</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CSR Tabs -->
+      <ul class="nav nav-tabs" id="csrTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="all-csr-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#all-csr"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-list me-1"></i>Tất cả CSR
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="pending-csr-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#pending-csr"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-clock me-1"></i>Chờ duyệt
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="csr-types-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#csr-types"
+            type="button"
+            role="tab"
+          >
+            <i class="fas fa-tags me-1"></i>Phân loại CSR
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="csrTabsContent">
+        <!-- All CSR Tab -->
+        <div class="tab-pane fade show active" id="all-csr" role="tabpanel">
+          <!-- CSR List -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-table me-2"></i>
+                    Danh sách CSR
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Mã CSR</th>
+                          <th>Khách hàng</th>
+                          <th>Loại CSR</th>
+                          <th>Chi tiết</th>
+                          <th>Ngày tạo</th>
+                          <th>Người tạo</th>
+                          <th>Trạng thái</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>CSR001</strong></td>
+                          <td>Nguyễn Văn A</td>
+                          <td><span class="badge bg-info">Bảo lưu</span></td>
+                          <td>Bảo lưu 3 tháng do công tác</td>
+                          <td>15/12/2024</td>
+                          <td>Trần Thị B</td>
+                          <td>
+                            <span class="badge bg-success">Đã duyệt</span>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewCSR('CSR001')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printCSR('CSR001')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>CSR002</strong></td>
+                          <td>Lê Văn C</td>
+                          <td>
+                            <span class="badge bg-warning">Chuyển nhượng</span>
+                          </td>
+                          <td>Chuyển nhượng cho anh trai</td>
+                          <td>14/12/2024</td>
+                          <td>Phạm Thị D</td>
+                          <td>
+                            <span class="badge bg-warning">Chờ duyệt</span>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewCSR('CSR002')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printCSR('CSR002')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>CSR003</strong></td>
+                          <td>Hoàng Văn E</td>
+                          <td>
+                            <span class="badge bg-success"
+                              >Tặng tháng giới thiệu</span
+                            >
+                          </td>
+                          <td>Tặng 1 tháng cho người giới thiệu</td>
+                          <td>13/12/2024</td>
+                          <td>Nguyễn Văn F</td>
+                          <td>
+                            <span class="badge bg-success">Đã duyệt</span>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewCSR('CSR003')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printCSR('CSR003')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>CSR004</strong></td>
+                          <td>Vũ Thị G</td>
+                          <td><span class="badge bg-primary">Gia hạn</span></td>
+                          <td>Gia hạn 6 tháng - Nối ngày sử dụng</td>
+                          <td>12/12/2024</td>
+                          <td>Đặng Văn H</td>
+                          <td>
+                            <span class="badge bg-warning">Chờ duyệt</span>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewCSR('CSR004')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printCSR('CSR004')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>CSR005</strong></td>
+                          <td>Bùi Văn I</td>
+                          <td>
+                            <span class="badge bg-secondary">Nâng cấp</span>
+                          </td>
+                          <td>Nâng cấp từ Basic lên Premium</td>
+                          <td>11/12/2024</td>
+                          <td>Lý Thị K</td>
+                          <td>
+                            <span class="badge bg-success">Đã duyệt</span>
+                          </td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-outline-primary"
+                              onclick="viewCSR('CSR005')"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
+                            <button
+                              class="btn btn-sm btn-outline-success"
+                              onclick="printCSR('CSR005')"
+                            >
+                              <i class="fas fa-print"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending CSR Tab -->
+        <div class="tab-pane fade" id="pending-csr" role="tabpanel">
+          <!-- Pending CSR List -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-clock me-2"></i>
+                    CSR chờ duyệt
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Mã CSR</th>
+                          <th>Khách hàng</th>
+                          <th>Loại CSR</th>
+                          <th>Chi tiết</th>
+                          <th>Ngày tạo</th>
+                          <th>Người tạo</th>
+                          <th>Thời gian chờ</th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>CSR002</strong></td>
+                          <td>Lê Văn C</td>
+                          <td>
+                            <span class="badge bg-warning">Chuyển nhượng</span>
+                          </td>
+                          <td>Chuyển nhượng cho anh trai</td>
+                          <td>14/12/2024</td>
+                          <td>Phạm Thị D</td>
+                          <td>1 ngày</td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-success"
+                              onclick="approveCSR('CSR002')"
+                            >
+                              <i class="fas fa-check"></i> Duyệt
+                            </button>
+                            <button
+                              class="btn btn-sm btn-danger"
+                              onclick="rejectCSR('CSR002')"
+                            >
+                              <i class="fas fa-times"></i> Từ chối
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>CSR004</strong></td>
+                          <td>Vũ Thị G</td>
+                          <td><span class="badge bg-primary">Gia hạn</span></td>
+                          <td>Gia hạn 6 tháng - Nối ngày sử dụng</td>
+                          <td>12/12/2024</td>
+                          <td>Đặng Văn H</td>
+                          <td>3 ngày</td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-success"
+                              onclick="approveCSR('CSR004')"
+                            >
+                              <i class="fas fa-check"></i> Duyệt
+                            </button>
+                            <button
+                              class="btn btn-sm btn-danger"
+                              onclick="rejectCSR('CSR004')"
+                            >
+                              <i class="fas fa-times"></i> Từ chối
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>CSR006</strong></td>
+                          <td>Ngô Văn L</td>
+                          <td><span class="badge bg-info">Bảo lưu</span></td>
+                          <td>Bảo lưu 2 tháng do bệnh</td>
+                          <td>10/12/2024</td>
+                          <td>Trần Thị M</td>
+                          <td>5 ngày</td>
+                          <td>
+                            <button
+                              class="btn btn-sm btn-success"
+                              onclick="approveCSR('CSR006')"
+                            >
+                              <i class="fas fa-check"></i> Duyệt
+                            </button>
+                            <button
+                              class="btn btn-sm btn-danger"
+                              onclick="rejectCSR('CSR006')"
+                            >
+                              <i class="fas fa-times"></i> Từ chối
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CSR Types Tab -->
+        <div class="tab-pane fade" id="csr-types" role="tabpanel">
+          <!-- CSR by Type Statistics -->
+          <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Bảo lưu</h5>
+                  <h2 class="mb-0">45</h2>
+                  <small>phiếu</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Chuyển nhượng</h5>
+                  <h2 class="mb-0">32</h2>
+                  <small>phiếu</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Tặng tháng giới thiệu</h5>
+                  <h2 class="mb-0">28</h2>
+                  <small>phiếu</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                  <h5 class="card-title">Gia hạn</h5>
+                  <h2 class="mb-0">38</h2>
+                  <small>phiếu</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CSR Type Details -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Thống kê CSR theo loại
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>Loại CSR</th>
+                          <th>Số lượng</th>
+                          <th>Tỉ lệ</th>
+                          <th>Đã duyệt</th>
+                          <th>Chờ duyệt</th>
+                          <th>Từ chối</th>
+                          <th>Tỉ lệ duyệt</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Bảo lưu</strong></td>
+                          <td>45</td>
+                          <td>28.8%</td>
+                          <td>42</td>
+                          <td>2</td>
+                          <td>1</td>
+                          <td><span class="badge bg-success">93.3%</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Chuyển nhượng</strong></td>
+                          <td>32</td>
+                          <td>20.5%</td>
+                          <td>28</td>
+                          <td>3</td>
+                          <td>1</td>
+                          <td><span class="badge bg-success">87.5%</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Tặng tháng giới thiệu</strong></td>
+                          <td>28</td>
+                          <td>17.9%</td>
+                          <td>26</td>
+                          <td>1</td>
+                          <td>1</td>
+                          <td><span class="badge bg-success">92.9%</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Gia hạn</strong></td>
+                          <td>38</td>
+                          <td>24.4%</td>
+                          <td>35</td>
+                          <td>2</td>
+                          <td>1</td>
+                          <td><span class="badge bg-success">92.1%</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>Nâng cấp</strong></td>
+                          <td>13</td>
+                          <td>8.3%</td>
+                          <td>12</td>
+                          <td>1</td>
+                          <td>0</td>
+                          <td><span class="badge bg-success">92.3%</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // CSR Functions
+      function viewCSR(csrId) {
+        alert("Xem chi tiết CSR: " + csrId);
+      }
+
+      function printCSR(csrId) {
+        alert("In CSR: " + csrId);
+      }
+
+      function approveCSR(csrId) {
+        if (confirm("Bạn có chắc chắn duyệt CSR " + csrId + "?")) {
+          alert("Đã duyệt CSR: " + csrId);
+          // Reload page or update table
+          location.reload();
+        }
+      }
+
+      function rejectCSR(csrId) {
+        if (confirm("Bạn có chắc chắn từ chối CSR " + csrId + "?")) {
+          alert("Đã từ chối CSR: " + csrId);
+          // Reload page or update table
+          location.reload();
+        }
+      }
+
+      function applyFilters() {
+        alert("Áp dụng bộ lọc");
+      }
+
+      function exportReport() {
+        alert("Xuất báo cáo CSR");
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>
+
+
+

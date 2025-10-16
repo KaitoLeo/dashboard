@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Booking MTD - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .metric-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+      }
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .chart-container {
+        position: relative;
+        height: 300px;
+      }
+      .status-badge {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+      }
+      .monthly-target {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .clickable-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+      }
+      .clickable-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .month-btn {
+        margin: 2px;
+        min-width: 80px;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+      }
+      .month-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .month-btn.active {
+        background-color: #0d6efd !important;
+        border-color: #0d6efd !important;
+        color: white !important;
+      }
+      .month-btn.past-month {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+      }
+      .month-btn.current-month {
+        background-color: #198754;
+        border-color: #198754;
+        color: white;
+      }
+      .month-btn.future-month {
+        background-color: #e9ecef;
+        border-color: #dee2e6;
+        color: #6c757d;
+        cursor: not-allowed;
+      }
+    </style>
+  
+    <!-- Booking Calculation Modules -->
+    <script src="../assets/js/booking/booking-calculations.js"></script>
+    <script src="../assets/js/booking/booking-mock-data.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/api/api-services.js"></script>
+    <script src="../assets/js/api/data-adapter.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark monthly-target">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-primary">
+            <i class="fas fa-chart-line me-2"></i>Chi tiết Booking MTD
+          </h2>
+          <p class="text-muted">
+            Thống kê chi tiết các lượt booking từ đầu tháng đến nay
+          </p>
+        </div>
+      </div>
+
+      <!-- Year Filter and Month Selection -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-calendar-alt me-2"></i>Lọc theo Năm và Tháng
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-3 mb-3">
+                  <label class="form-label">Chọn năm:</label>
+                  <select
+                    class="form-select"
+                    id="yearFilter"
+                    onchange="updateMonthList()"
+                  >
+                    <option value="2024">2024</option>
+                    <option value="2025" selected>2025</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Chọn tháng:</label>
+                  <div class="row" id="monthList">
+                    <!-- Months will be populated dynamically -->
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <div class="d-flex gap-2">
+                    <button
+                      class="btn btn-primary"
+                      onclick="applyYearMonthFilter()"
+                    >
+                      <i class="fas fa-filter me-1"></i>Áp dụng
+                    </button>
+                    <button
+                      class="btn btn-secondary"
+                      onclick="resetToCurrentMonth()"
+                    >
+                      <i class="fas fa-undo me-1"></i>Về tháng này
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="alert alert-info mb-0" id="currentSelectionInfo">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Hiển thị:</strong>
+                    <span id="selectedYearMonth">Tháng 12/2025 (MTD)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card monthly-target text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x mb-2"></i>
+              <h6>Tổng booking MTD</h6>
+              <h3>756</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-check-circle fa-2x mb-2"></i>
+              <h6>Đã hoàn thành</h6>
+              <h3>692</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-day fa-2x mb-2"></i>
+              <h6>Trung bình/ngày</h6>
+              <h3>25.2</h3>
+              <small>lượt</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-12 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng booking theo tuần
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="weeklyTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Comparison -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>So sánh với các tháng trước
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h6 class="text-muted">Tháng này</h6>
+                      <h4 class="text-primary">756</h4>
+                      <small class="text-muted">lượt</small>
+                      <div class="mt-2">
+                        <span class="badge bg-success">+12%</span>
+                        <small class="text-muted">vs tháng trước</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h6 class="text-muted">Tháng trước</h6>
+                      <h4 class="text-secondary">675</h4>
+                      <small class="text-muted">lượt</small>
+                      <div class="mt-2">
+                        <span class="badge bg-info">+8%</span>
+                        <small class="text-muted">vs tháng trước nữa</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h6 class="text-muted">Cùng kỳ năm ngoái</h6>
+                      <h4 class="text-secondary">698</h4>
+                      <small class="text-muted">lượt</small>
+                      <div class="mt-2">
+                        <span class="badge bg-success">+8.3%</span>
+                        <small class="text-muted">tăng trưởng YoY</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h6 class="text-muted">Trung bình 6 tháng</h6>
+                      <h4 class="text-secondary">720</h4>
+                      <small class="text-muted">lượt</small>
+                      <div class="mt-2">
+                        <span class="badge bg-success">+5%</span>
+                        <small class="text-muted">vs trung bình</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ theo dịch vụ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="serviceDistributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Hiệu suất theo trung tâm
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="locationPerformanceChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking by Location and Service -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-building me-2"></i>Booking theo Cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showLocationDetail('Tôn Thất Thuyết')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-building text-primary fa-2x mb-2"></i>
+                      <h6>Tôn Thất Thuyết</h6>
+                      <h4 class="text-primary">210</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showLocationDetail('Huỳnh Thúc Kháng')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-building text-success fa-2x mb-2"></i>
+                      <h6>Huỳnh Thúc Kháng</h6>
+                      <h4 class="text-success">185</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showLocationDetail('Giảng Võ')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-building text-info fa-2x mb-2"></i>
+                      <h6>Giảng Võ</h6>
+                      <h4 class="text-info">160</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showLocationDetail('Hào Nam')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-building text-warning fa-2x mb-2"></i>
+                      <h6>Hào Nam</h6>
+                      <h4 class="text-warning">140</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showLocationDetail('Nguyễn Tuân')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-building text-secondary fa-2x mb-2"></i>
+                      <h6>Nguyễn Tuân</h6>
+                      <h4 class="text-secondary">61</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-dumbbell me-2"></i>Booking theo Dịch vụ tập
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showServiceDetail('Membership')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-id-card text-primary fa-2x mb-2"></i>
+                      <h6>Membership</h6>
+                      <h4 class="text-primary">280</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showServiceDetail('PT Fitness')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-user-tie text-warning fa-2x mb-2"></i>
+                      <h6>PT Fitness</h6>
+                      <h4 class="text-warning">216</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showServiceDetail('Pilates')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-leaf text-success fa-2x mb-2"></i>
+                      <h6>Pilates</h6>
+                      <h4 class="text-success">180</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div
+                    class="card bg-light clickable-card"
+                    onclick="showServiceDetail('Swimming Coach')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-swimmer text-info fa-2x mb-2"></i>
+                      <h6>Swimming Coach</h6>
+                      <h4 class="text-info">140</h4>
+                      <small class="text-muted">lượt booking</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Performance Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Hiệu suất theo ngày trong tháng
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Ngày</th>
+                      <th>Thứ</th>
+                      <th>Booking</th>
+                      <th>Hoàn thành</th>
+                      <th>Tỷ lệ</th>
+                      <th>Đánh giá TB</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>01/12</td>
+                      <td>CN</td>
+                      <td><span class="badge bg-primary">18</span></td>
+                      <td><span class="badge bg-success">16</span></td>
+                      <td><span class="text-success">88.9%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.5</td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td>02/12</td>
+                      <td>T2</td>
+                      <td><span class="badge bg-primary">22</span></td>
+                      <td><span class="badge bg-success">20</span></td>
+                      <td><span class="text-success">90.9%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.6</td>
+                      <td>Đầu tuần</td>
+                    </tr>
+                    <tr>
+                      <td>03/12</td>
+                      <td>T3</td>
+                      <td><span class="badge bg-primary">25</span></td>
+                      <td><span class="badge bg-success">23</span></td>
+                      <td><span class="text-success">92.0%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.7</td>
+                      <td>Bình thường</td>
+                    </tr>
+                    <tr>
+                      <td>04/12</td>
+                      <td>T4</td>
+                      <td><span class="badge bg-primary">28</span></td>
+                      <td><span class="badge bg-success">26</span></td>
+                      <td><span class="text-success">92.9%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.8</td>
+                      <td>Cao điểm</td>
+                    </tr>
+                    <tr>
+                      <td>05/12</td>
+                      <td>T5</td>
+                      <td><span class="badge bg-primary">30</span></td>
+                      <td><span class="badge bg-success">28</span></td>
+                      <td><span class="text-success">93.3%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.9</td>
+                      <td>Rất cao</td>
+                    </tr>
+                    <tr>
+                      <td>06/12</td>
+                      <td>T6</td>
+                      <td><span class="badge bg-primary">32</span></td>
+                      <td><span class="badge bg-success">30</span></td>
+                      <td><span class="text-success">93.8%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.8</td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <tr>
+                      <td>07/12</td>
+                      <td>T7</td>
+                      <td><span class="badge bg-primary">29</span></td>
+                      <td><span class="badge bg-success">27</span></td>
+                      <td><span class="text-success">93.1%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.7</td>
+                      <td>Cuối tuần</td>
+                    </tr>
+                    <!-- Thêm các ngày khác... -->
+                    <tr class="table-info">
+                      <td><strong>Hôm nay</strong></td>
+                      <td><strong>T6</strong></td>
+                      <td><span class="badge bg-warning">28</span></td>
+                      <td><span class="badge bg-success">24</span></td>
+                      <td><span class="text-warning">85.7%</span></td>
+                      <td><i class="fas fa-star text-warning"></i> 4.6</td>
+                      <td><strong>Đang diễn ra</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Performance Metrics -->
+      <div class="row mb-4">
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-star fa-2x text-warning mb-2"></i>
+              <h6>Đánh giá TB</h6>
+              <h4 class="text-warning">4.7/5</h4>
+              <small class="text-muted">từ hội viên</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-users fa-2x text-info mb-2"></i>
+              <h6>Hội viên mới</h6>
+              <h4 class="text-info">89</h4>
+              <small class="text-muted">lần đầu booking</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x text-primary mb-2"></i>
+              <h6>Tăng trưởng</h6>
+              <h4 class="text-primary">+12%</h4>
+              <small class="text-muted">so với tháng trước</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location Detail Modal -->
+    <div
+      class="modal fade"
+      id="locationDetailModal"
+      tabindex="-1"
+      aria-labelledby="locationDetailModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="locationDetailModalLabel">
+              <i class="fas fa-building me-2"></i>Chi tiết Booking theo Cơ sở
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                  <div class="card-body text-center">
+                    <h6>Tổng Booking</h6>
+                    <h4 id="locationTotalBooking">0</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-success text-white">
+                  <div class="card-body text-center">
+                    <h6>Đã hoàn thành</h6>
+                    <h4 id="locationCompleted">0</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                  <div class="card-body text-center">
+                    <h6>Đang chờ</h6>
+                    <h4 id="locationPending">0</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-danger text-white">
+                  <div class="card-body text-center">
+                    <h6>Đã hủy</h6>
+                    <h4 id="locationCancelled">0</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>STT</th>
+                    <th>Ngày</th>
+                    <th>Giờ</th>
+                    <th>Tên khách hàng</th>
+                    <th>SĐT</th>
+                    <th>Dịch vụ</th>
+                    <th>Trạng thái</th>
+                    <th>Ghi chú</th>
+                  </tr>
+                </thead>
+                <tbody id="locationDetailTableBody">
+                  <!-- Data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Detail Modal -->
+    <div
+      class="modal fade"
+      id="serviceDetailModal"
+      tabindex="-1"
+      aria-labelledby="serviceDetailModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="serviceDetailModalLabel">
+              <i class="fas fa-dumbbell me-2"></i>Chi tiết Booking theo Dịch vụ
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row mb-3">
+              <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                  <div class="card-body text-center">
+                    <h6>Tổng Booking</h6>
+                    <h4 id="serviceTotalBooking">0</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-success text-white">
+                  <div class="card-body text-center">
+                    <h6>Đã hoàn thành</h6>
+                    <h4 id="serviceCompleted">0</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                  <div class="card-body text-center">
+                    <h6>Đang chờ</h6>
+                    <h4 id="servicePending">0</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card bg-danger text-white">
+                  <div class="card-body text-center">
+                    <h6>Đã hủy</h6>
+                    <h4 id="serviceCancelled">0</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>STT</th>
+                    <th>Ngày</th>
+                    <th>Giờ</th>
+                    <th>Tên khách hàng</th>
+                    <th>SĐT</th>
+                    <th>Cơ sở</th>
+                    <th>Trạng thái</th>
+                    <th>Ghi chú</th>
+                  </tr>
+                </thead>
+                <tbody id="serviceDetailTableBody">
+                  <!-- Data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Global variables for year/month filtering
+      let currentYear = new Date().getFullYear();
+      let currentMonth = new Date().getMonth() + 1;
+      let selectedYear = currentYear;
+      let selectedMonth = currentMonth;
+      let isMTDView = true;
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Booking MTD Detail page loaded");
+        initializeYearMonthFilter();
+        createCharts();
+      });
+
+      // Initialize year/month filter
+      function initializeYearMonthFilter() {
+        updateMonthList();
+        updateSelectionInfo();
+      }
+
+      // Update month list based on selected year
+      function updateMonthList() {
+        const yearFilter = document.getElementById("yearFilter");
+        const monthList = document.getElementById("monthList");
+        const selectedYear = parseInt(yearFilter.value);
+
+        monthList.innerHTML = "";
+
+        const monthNames = [
+          "Tháng 1",
+          "Tháng 2",
+          "Tháng 3",
+          "Tháng 4",
+          "Tháng 5",
+          "Tháng 6",
+          "Tháng 7",
+          "Tháng 8",
+          "Tháng 9",
+          "Tháng 10",
+          "Tháng 11",
+          "Tháng 12",
+        ];
+
+        for (let i = 1; i <= 12; i++) {
+          const monthBtn = document.createElement("button");
+          monthBtn.className = "btn btn-outline-secondary month-btn col-2";
+          monthBtn.textContent = monthNames[i - 1];
+          monthBtn.value = i;
+          monthBtn.onclick = () => selectMonth(i);
+
+          // Determine button state
+          if (selectedYear === currentYear) {
+            if (i < currentMonth) {
+              monthBtn.className += " past-month";
+            } else if (i === currentMonth) {
+              monthBtn.className += " current-month";
+            } else {
+              monthBtn.className += " future-month";
+              monthBtn.disabled = true;
+            }
+          } else if (selectedYear < currentYear) {
+            monthBtn.className += " past-month";
+          } else {
+            monthBtn.className += " future-month";
+            monthBtn.disabled = true;
+          }
+
+          // Mark as active if it's the current selection
+          if (selectedYear === selectedYear && i === selectedMonth) {
+            monthBtn.className += " active";
+          }
+
+          monthList.appendChild(monthBtn);
+        }
+      }
+
+      // Select a month
+      function selectMonth(month) {
+        selectedMonth = month;
+        isMTDView = false;
+
+        // Update button states
+        const monthButtons = document.querySelectorAll(".month-btn");
+        monthButtons.forEach((btn) => {
+          btn.classList.remove("active");
+          if (parseInt(btn.value) === month) {
+            btn.classList.add("active");
+          }
+        });
+
+        updateSelectionInfo();
+      }
+
+      // Apply year/month filter
+      function applyYearMonthFilter() {
+        const yearFilter = document.getElementById("yearFilter");
+        selectedYear = parseInt(yearFilter.value);
+
+        console.log(
+          `Applying filter: Year ${selectedYear}, Month ${selectedMonth}`
+        );
+
+        // Update data based on selection
+        updateDataForSelectedPeriod();
+        updateSelectionInfo();
+
+        // Show success message
+        showFilterSuccessMessage();
+      }
+
+      // Reset to current month (MTD)
+      function resetToCurrentMonth() {
+        selectedYear = currentYear;
+        selectedMonth = currentMonth;
+        isMTDView = true;
+
+        // Update year filter
+        document.getElementById("yearFilter").value = currentYear;
+
+        // Update month list
+        updateMonthList();
+
+        // Reset to current month data
+        resetToCurrentMonthData();
+        updateSelectionInfo();
+
+        console.log("Reset to current month (MTD)");
+      }
+
+      // Update selection info display
+      function updateSelectionInfo() {
+        const infoElement = document.getElementById("selectedYearMonth");
+        if (isMTDView) {
+          infoElement.textContent = `Tháng ${selectedMonth}/${selectedYear} (MTD)`;
+        } else {
+          infoElement.textContent = `Tháng ${selectedMonth}/${selectedYear}`;
+        }
+      }
+
+      // Update data for selected period
+      function updateDataForSelectedPeriod() {
+        console.log(`Updating data for ${selectedYear}/${selectedMonth}`);
+
+        // Generate sample data for selected period
+        const sampleData = generateSampleDataForPeriod(
+          selectedYear,
+          selectedMonth
+        );
+
+        // Update summary cards
+        updateSummaryCards(sampleData);
+
+        // Update charts
+        updateChartsForPeriod(sampleData);
+
+        // Update other data displays
+        updateOtherDataDisplays(sampleData);
+      }
+
+      // Reset to current month data
+      function resetToCurrentMonthData() {
+        console.log("Resetting to current month data");
+
+        // Reset to original MTD data
+        const originalData = generateOriginalMTDData();
+
+        // Update summary cards
+        updateSummaryCards(originalData);
+
+        // Update charts
+        updateChartsForPeriod(originalData);
+
+        // Update other data displays
+        updateOtherDataDisplays(originalData);
+      }
+
+      // Generate sample data for specific period
+      function generateSampleDataForPeriod(year, month) {
+        // This would generate data based on the selected year/month
+        // For demo purposes, we'll use the original data with some variations
+        const baseData = {
+          totalBooking: 756,
+          completed: 692,
+          averagePerDay: 25.2,
+          membershipVisitors: 8,
+          ptFitnessVisitors: 5,
+          pilatesVisitors: 3,
+          swimmingVisitors: 2,
+        };
+
+        // Add some variation based on month
+        const monthVariation = month / 12;
+        const yearVariation = year === 2024 ? 0.8 : 1.0;
+
+        return {
+          totalBooking: Math.floor(
+            baseData.totalBooking * monthVariation * yearVariation
+          ),
+          completed: Math.floor(
+            baseData.completed * monthVariation * yearVariation
+          ),
+          averagePerDay: (
+            baseData.averagePerDay *
+            monthVariation *
+            yearVariation
+          ).toFixed(1),
+          membershipVisitors: Math.floor(
+            baseData.membershipVisitors * monthVariation * yearVariation
+          ),
+          ptFitnessVisitors: Math.floor(
+            baseData.ptFitnessVisitors * monthVariation * yearVariation
+          ),
+          pilatesVisitors: Math.floor(
+            baseData.pilatesVisitors * monthVariation * yearVariation
+          ),
+          swimmingVisitors: Math.floor(
+            baseData.swimmingVisitors * monthVariation * yearVariation
+          ),
+        };
+      }
+
+      // Generate original MTD data
+      function generateOriginalMTDData() {
+        return {
+          totalBooking: 756,
+          completed: 692,
+          averagePerDay: 25.2,
+          membershipVisitors: 8,
+          ptFitnessVisitors: 5,
+          pilatesVisitors: 3,
+          swimmingVisitors: 2,
+        };
+      }
+
+      // Update summary cards
+      function updateSummaryCards(data) {
+        document.querySelector(".card.monthly-target h3").textContent =
+          data.totalBooking;
+        document.querySelector(".card.bg-success h3").textContent =
+          data.completed;
+        document.querySelector(".card.bg-primary h3").textContent =
+          data.averagePerDay;
+      }
+
+      // Update charts for selected period
+      function updateChartsForPeriod(data) {
+        // This would update the charts with new data
+        console.log("Updating charts with data:", data);
+        // Chart update logic would go here
+      }
+
+      // Update other data displays
+      function updateOtherDataDisplays(data) {
+        // This would update other data displays
+        console.log("Updating other displays with data:", data);
+        // Other display update logic would go here
+      }
+
+      // Show filter success message
+      function showFilterSuccessMessage() {
+        const alertDiv = document.createElement("div");
+        alertDiv.className =
+          "alert alert-success alert-dismissible fade show position-fixed";
+        alertDiv.style.cssText =
+          "top: 20px; right: 20px; z-index: 9999; min-width: 300px;";
+        alertDiv.innerHTML = `
+          <i class="fas fa-check-circle me-2"></i>
+          <strong>Thành công!</strong> Đã áp dụng bộ lọc cho tháng ${selectedMonth}/${selectedYear}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        document.body.appendChild(alertDiv);
+
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+          if (alertDiv.parentNode) {
+            alertDiv.parentNode.removeChild(alertDiv);
+          }
+        }, 3000);
+      }
+
+      function createCharts() {
+        try {
+          console.log("Creating charts...");
+
+          // Weekly Trend Chart
+          const weeklyCtx = document.getElementById("weeklyTrendChart");
+          if (weeklyCtx && typeof Chart !== "undefined") {
+            new Chart(weeklyCtx, {
+              type: "line",
+              data: {
+                labels: ["Tuần 1", "Tuần 2", "Tuần 3", "Tuần 4", "Tuần 5"],
+                datasets: [
+                  {
+                    label: "Booking",
+                    data: [180, 195, 210, 171, 0],
+                    borderColor: "#667eea",
+                    backgroundColor: "rgba(102, 126, 234, 0.1)",
+                    tension: 0.4,
+                    fill: true,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 30,
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    position: "top",
+                  },
+                },
+              },
+            });
+          }
+
+          // Service Distribution Chart
+          const serviceCtx = document.getElementById(
+            "serviceDistributionChart"
+          );
+          if (serviceCtx && typeof Chart !== "undefined") {
+            new Chart(serviceCtx, {
+              type: "doughnut",
+              data: {
+                labels: [
+                  "Membership",
+                  "PT Fitness",
+                  "Pilates",
+                  "Swimming Coach",
+                ],
+                datasets: [
+                  {
+                    data: [280, 216, 180, 140],
+                    backgroundColor: [
+                      "#667eea",
+                      "#28a745",
+                      "#17a2b8",
+                      "#ffc107",
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        const total = context.dataset.data.reduce(
+                          (a, b) => a + b,
+                          0
+                        );
+                        const percentage = (
+                          (context.parsed / total) *
+                          100
+                        ).toFixed(1);
+                        return (
+                          context.label +
+                          ": " +
+                          context.parsed +
+                          " (" +
+                          percentage +
+                          "%)"
+                        );
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+
+          // Location Performance Chart
+          const locationCtx = document.getElementById(
+            "locationPerformanceChart"
+          );
+          if (locationCtx && typeof Chart !== "undefined") {
+            new Chart(locationCtx, {
+              type: "bar",
+              data: {
+                labels: [
+                  "Tôn Thất Thuyết",
+                  "Huỳnh Thúc Kháng",
+                  "Giảng Võ",
+                  "Hào Nam",
+                  "Nguyễn Tuân",
+                ],
+                datasets: [
+                  {
+                    label: "Booking",
+                    data: [210, 185, 160, 140, 61],
+                    backgroundColor: [
+                      "rgba(102, 126, 234, 0.8)",
+                      "rgba(40, 167, 69, 0.8)",
+                      "rgba(23, 162, 184, 0.8)",
+                      "rgba(255, 193, 7, 0.8)",
+                      "rgba(111, 66, 193, 0.8)",
+                    ],
+                    borderColor: [
+                      "#667eea",
+                      "#28a745",
+                      "#17a2b8",
+                      "#ffc107",
+                      "#6f42c1",
+                    ],
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      stepSize: 50,
+                    },
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              },
+            });
+          }
+
+          console.log("Charts created successfully");
+        } catch (error) {
+          console.error("Error creating charts:", error);
+        }
+      }
+
+      // Sample booking data
+      const sampleBookingData = [
+        {
+          id: 1,
+          date: "01/12",
+          time: "08:30",
+          customer: "Nguyễn Văn A",
+          phone: "0901234567",
+          location: "Tôn Thất Thuyết",
+          service: "Membership",
+          status: "completed",
+          note: "Thành công",
+        },
+        {
+          id: 2,
+          date: "01/12",
+          time: "09:15",
+          customer: "Trần Thị B",
+          phone: "0901234568",
+          location: "Tôn Thất Thuyết",
+          service: "Pilates",
+          status: "completed",
+          note: "Thành công",
+        },
+        {
+          id: 3,
+          date: "01/12",
+          time: "10:00",
+          customer: "Lê Văn C",
+          phone: "0901234569",
+          location: "Huỳnh Thúc Kháng",
+          service: "Swimming Coach",
+          status: "pending",
+          note: "Chờ xác nhận",
+        },
+        {
+          id: 4,
+          date: "01/12",
+          time: "11:30",
+          customer: "Phạm Thị D",
+          phone: "0901234570",
+          location: "Giảng Võ",
+          service: "PT Fitness",
+          status: "completed",
+          note: "Thành công",
+        },
+        {
+          id: 5,
+          date: "01/12",
+          time: "14:00",
+          customer: "Hoàng Văn E",
+          phone: "0901234571",
+          location: "Hào Nam",
+          service: "PT Fitness",
+          status: "cancelled",
+          note: "Khách hủy",
+        },
+        {
+          id: 6,
+          date: "02/12",
+          time: "08:00",
+          customer: "Vũ Thị F",
+          phone: "0901234572",
+          location: "Tôn Thất Thuyết",
+          service: "Membership",
+          status: "completed",
+          note: "Thành công",
+        },
+        {
+          id: 7,
+          date: "02/12",
+          time: "09:30",
+          customer: "Đặng Văn G",
+          phone: "0901234573",
+          location: "Huỳnh Thúc Kháng",
+          service: "Pilates",
+          status: "completed",
+          note: "Thành công",
+        },
+        {
+          id: 8,
+          date: "02/12",
+          time: "10:45",
+          customer: "Bùi Thị H",
+          phone: "0901234574",
+          location: "Nguyễn Tuân",
+          service: "Swimming Coach",
+          status: "pending",
+          note: "Chờ xác nhận",
+        },
+        {
+          id: 9,
+          date: "02/12",
+          time: "13:15",
+          customer: "Phan Văn I",
+          phone: "0901234575",
+          location: "Giảng Võ",
+          service: "PT Fitness",
+          status: "completed",
+          note: "Thành công",
+        },
+        {
+          id: 10,
+          date: "02/12",
+          time: "15:30",
+          customer: "Ngô Thị J",
+          phone: "0901234576",
+          location: "Hào Nam",
+          service: "PT Fitness",
+          status: "completed",
+          note: "Thành công",
+        },
+      ];
+
+      // Show location detail modal
+      function showLocationDetail(locationName) {
+        console.log("Showing location detail for:", locationName);
+
+        // Filter data by location
+        const locationData = sampleBookingData.filter(
+          (item) => item.location === locationName
+        );
+
+        // Update modal title
+        document.getElementById(
+          "locationDetailModalLabel"
+        ).innerHTML = `<i class="fas fa-building me-2"></i>Chi tiết Booking - ${locationName}`;
+
+        // Calculate statistics
+        const total = locationData.length;
+        const completed = locationData.filter(
+          (item) => item.status === "completed"
+        ).length;
+        const pending = locationData.filter(
+          (item) => item.status === "pending"
+        ).length;
+        const cancelled = locationData.filter(
+          (item) => item.status === "cancelled"
+        ).length;
+
+        // Update metric cards
+        document.getElementById("locationTotalBooking").textContent = total;
+        document.getElementById("locationCompleted").textContent = completed;
+        document.getElementById("locationPending").textContent = pending;
+        document.getElementById("locationCancelled").textContent = cancelled;
+
+        // Update table
+        const tbody = document.getElementById("locationDetailTableBody");
+        tbody.innerHTML = "";
+
+        locationData.forEach((item, index) => {
+          const statusBadge = getStatusBadge(item.status);
+          const row = `
+            <tr>
+              <td>${index + 1}</td>
+              <td><span class="badge bg-info">${item.date}</span></td>
+              <td><span class="badge bg-secondary">${item.time}</span></td>
+              <td><strong>${item.customer}</strong></td>
+              <td><code>${item.phone}</code></td>
+              <td><span class="badge bg-primary">${item.service}</span></td>
+              <td>${statusBadge}</td>
+              <td><small class="text-muted">${item.note}</small></td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+        });
+
+        // Show modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("locationDetailModal")
+        );
+        modal.show();
+      }
+
+      // Show service detail modal
+      function showServiceDetail(serviceName) {
+        console.log("Showing service detail for:", serviceName);
+
+        // Filter data by service
+        const serviceData = sampleBookingData.filter(
+          (item) => item.service === serviceName
+        );
+
+        // Update modal title
+        document.getElementById(
+          "serviceDetailModalLabel"
+        ).innerHTML = `<i class="fas fa-dumbbell me-2"></i>Chi tiết Booking - ${serviceName}`;
+
+        // Calculate statistics
+        const total = serviceData.length;
+        const completed = serviceData.filter(
+          (item) => item.status === "completed"
+        ).length;
+        const pending = serviceData.filter(
+          (item) => item.status === "pending"
+        ).length;
+        const cancelled = serviceData.filter(
+          (item) => item.status === "cancelled"
+        ).length;
+
+        // Update metric cards
+        document.getElementById("serviceTotalBooking").textContent = total;
+        document.getElementById("serviceCompleted").textContent = completed;
+        document.getElementById("servicePending").textContent = pending;
+        document.getElementById("serviceCancelled").textContent = cancelled;
+
+        // Update table
+        const tbody = document.getElementById("serviceDetailTableBody");
+        tbody.innerHTML = "";
+
+        serviceData.forEach((item, index) => {
+          const statusBadge = getStatusBadge(item.status);
+          const row = `
+            <tr>
+              <td>${index + 1}</td>
+              <td><span class="badge bg-info">${item.date}</span></td>
+              <td><span class="badge bg-secondary">${item.time}</span></td>
+              <td><strong>${item.customer}</strong></td>
+              <td><code>${item.phone}</code></td>
+              <td><span class="badge bg-primary">${item.location}</span></td>
+              <td>${statusBadge}</td>
+              <td><small class="text-muted">${item.note}</small></td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+        });
+
+        // Show modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("serviceDetailModal")
+        );
+        modal.show();
+      }
+
+      // Get status badge HTML
+      function getStatusBadge(status) {
+        switch (status) {
+          case "completed":
+            return '<span class="badge bg-success">Hoàn thành</span>';
+          case "pending":
+            return '<span class="badge bg-warning">Đang chờ</span>';
+          case "cancelled":
+            return '<span class="badge bg-danger">Đã hủy</span>';
+          default:
+            return '<span class="badge bg-secondary">Không xác định</span>';
+        }
+      }
+    </script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

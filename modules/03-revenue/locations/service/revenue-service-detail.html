@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo doanh số theo dịch vụ - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title mb-0">
+                <i class="fas fa-cogs me-2"></i>
+                Báo cáo doanh số theo dịch vụ
+              </h4>
+              <small class="text-muted">Tháng 12/2024</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Membership</h5>
+              <h2 class="mb-0">1,200,000,000</h2>
+              <small>VNĐ (64.9%)</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Fitness</h5>
+              <h2 class="mb-0">450,000,000</h2>
+              <small>VNĐ (24.3%)</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Swimming Coach</h5>
+              <h2 class="mb-0">150,000,000</h2>
+              <small>VNĐ (8.1%)</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <h5 class="card-title">Pilates</h5>
+              <h2 class="mb-0">50,000,000</h2>
+              <small>VNĐ (2.7%)</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Biểu đồ doanh thu theo dịch vụ</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="serviceRevenueChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Tỉ trọng doanh thu theo dịch vụ</h5>
+            </div>
+            <div class="card-body">
+              <canvas id="serviceShareChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Details -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                Chi tiết doanh thu theo gói dịch vụ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Dịch vụ</th>
+                      <th>Gói</th>
+                      <th>Doanh thu (VNĐ)</th>
+                      <th>Tỉ trọng (%)</th>
+                      <th>Số hợp đồng</th>
+                      <th>Giá trị TB/HĐ (VNĐ)</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td rowspan="4"><strong>Membership</strong></td>
+                      <td>Gói 1 tháng</td>
+                      <td>600,000,000</td>
+                      <td>32.4%</td>
+                      <td>1,200</td>
+                      <td>500,000</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>Gói 3 tháng</td>
+                      <td>450,000,000</td>
+                      <td>24.3%</td>
+                      <td>300</td>
+                      <td>1,500,000</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>Gói 6 tháng</td>
+                      <td>300,000,000</td>
+                      <td>16.2%</td>
+                      <td>100</td>
+                      <td>3,000,000</td>
+                      <td><span class="badge bg-warning">Trung bình</span></td>
+                    </tr>
+                    <tr>
+                      <td>Gói 12 tháng</td>
+                      <td>500,000,000</td>
+                      <td>27.0%</td>
+                      <td>50</td>
+                      <td>10,000,000</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td rowspan="2"><strong>Fitness</strong></td>
+                      <td>PT 1-1</td>
+                      <td>300,000,000</td>
+                      <td>16.2%</td>
+                      <td>200</td>
+                      <td>1,500,000</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>Group Class</td>
+                      <td>150,000,000</td>
+                      <td>8.1%</td>
+                      <td>500</td>
+                      <td>300,000</td>
+                      <td><span class="badge bg-info">Ổn định</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Swimming Coach</strong></td>
+                      <td>Bơi lội</td>
+                      <td>150,000,000</td>
+                      <td>8.1%</td>
+                      <td>300</td>
+                      <td>500,000</td>
+                      <td><span class="badge bg-info">Ổn định</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Pilates</strong></td>
+                      <td>Pilates</td>
+                      <td>50,000,000</td>
+                      <td>2.7%</td>
+                      <td>100</td>
+                      <td>500,000</td>
+                      <td>
+                        <span class="badge bg-warning">Cần cải thiện</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <th colspan="2">TỔNG CỘNG</th>
+                      <th>1,850,000,000</th>
+                      <th>100%</th>
+                      <th>2,750</th>
+                      <th>673,000</th>
+                      <th>-</th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Trend -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                Xu hướng doanh thu theo dịch vụ (6 tháng gần đây)
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="serviceTrendChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis -->
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Phân tích hiệu suất</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <h6>Dịch vụ dẫn đầu:</h6>
+                <p class="text-success">Membership - 1,200M VNĐ (64.9%)</p>
+              </div>
+              <div class="mb-3">
+                <h6>Dịch vụ cần cải thiện:</h6>
+                <p class="text-warning">Pilates - 50M VNĐ (2.7%)</p>
+              </div>
+              <div class="mb-3">
+                <h6>Gói phổ biến nhất:</h6>
+                <p class="text-info">Gói 1 tháng - 1,200 hợp đồng</p>
+              </div>
+              <div class="mb-3">
+                <h6>Gói có giá trị cao nhất:</h6>
+                <p class="text-primary">Gói 12 tháng - 10M VNĐ/HĐ</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Khuyến nghị chiến lược</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tăng cường marketing cho dịch vụ Pilates
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Khuyến khích nâng cấp từ gói 1 tháng lên 3 tháng
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Phát triển thêm gói dịch vụ kết hợp
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Tối ưu hóa giá cả cho gói 6 tháng
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check-circle text-success me-2"></i>
+                  Mở rộng dịch vụ Swimming Coach và Fitness
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Initialize charts when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        initializeServiceCharts();
+      });
+
+      function initializeServiceCharts() {
+        // Service Revenue Bar Chart
+        const ctx1 = document.getElementById("serviceRevenueChart");
+        if (ctx1) {
+          new Chart(ctx1, {
+            type: "bar",
+            data: {
+              labels: ["Membership", "Fitness", "Swimming Coach", "Pilates"],
+              datasets: [
+                {
+                  label: "Doanh thu (VNĐ)",
+                  data: [1200000000, 450000000, 150000000, 50000000],
+                  backgroundColor: [
+                    "rgba(40, 167, 69, 0.8)",
+                    "rgba(0, 123, 255, 0.8)",
+                    "rgba(23, 162, 184, 0.8)",
+                    "rgba(255, 193, 7, 0.8)",
+                  ],
+                  borderColor: [
+                    "rgba(40, 167, 69, 1)",
+                    "rgba(0, 123, 255, 1)",
+                    "rgba(23, 162, 184, 1)",
+                    "rgba(255, 193, 7, 1)",
+                  ],
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Doanh thu theo dịch vụ",
+                },
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function (value) {
+                      return (value / 1000000).toFixed(0) + "M";
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // Service Share Pie Chart
+        const ctx2 = document.getElementById("serviceShareChart");
+        if (ctx2) {
+          new Chart(ctx2, {
+            type: "doughnut",
+            data: {
+              labels: ["Membership", "Fitness", "Swimming Coach", "Pilates"],
+              datasets: [
+                {
+                  data: [64.9, 24.3, 8.1, 2.7],
+                  backgroundColor: [
+                    "rgba(40, 167, 69, 0.8)",
+                    "rgba(0, 123, 255, 0.8)",
+                    "rgba(23, 162, 184, 0.8)",
+                    "rgba(255, 193, 7, 0.8)",
+                  ],
+                  borderColor: [
+                    "rgba(40, 167, 69, 1)",
+                    "rgba(0, 123, 255, 1)",
+                    "rgba(23, 162, 184, 1)",
+                    "rgba(255, 193, 7, 1)",
+                  ],
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Tỉ trọng doanh thu theo dịch vụ (%)",
+                },
+                legend: {
+                  position: "bottom",
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return context.label + ": " + context.parsed + " lượt";
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+
+        // Service Trend Line Chart
+        const ctx3 = document.getElementById("serviceTrendChart");
+        if (ctx3) {
+          new Chart(ctx3, {
+            type: "line",
+            data: {
+              labels: [
+                "Tháng 7",
+                "Tháng 8",
+                "Tháng 9",
+                "Tháng 10",
+                "Tháng 11",
+                "Tháng 12",
+              ],
+              datasets: [
+                {
+                  label: "Membership",
+                  data: [
+                    1100000000, 1150000000, 1200000000, 1180000000, 1220000000,
+                    1200000000,
+                  ],
+                  borderColor: "rgba(40, 167, 69, 1)",
+                  backgroundColor: "rgba(40, 167, 69, 0.1)",
+                  tension: 0.3,
+                },
+                {
+                  label: "Fitness",
+                  data: [
+                    400000000, 420000000, 430000000, 440000000, 450000000,
+                    450000000,
+                  ],
+                  borderColor: "rgba(0, 123, 255, 1)",
+                  backgroundColor: "rgba(0, 123, 255, 0.1)",
+                  tension: 0.3,
+                },
+                {
+                  label: "Swimming Coach",
+                  data: [
+                    140000000, 145000000, 150000000, 148000000, 152000000,
+                    150000000,
+                  ],
+                  borderColor: "rgba(23, 162, 184, 1)",
+                  backgroundColor: "rgba(23, 162, 184, 0.1)",
+                  tension: 0.3,
+                },
+                {
+                  label: "Pilates",
+                  data: [
+                    45000000, 48000000, 50000000, 49000000, 51000000, 50000000,
+                  ],
+                  borderColor: "rgba(255, 193, 7, 1)",
+                  backgroundColor: "rgba(255, 193, 7, 0.1)",
+                  tension: 0.3,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "Xu hướng doanh thu 6 tháng gần đây",
+                },
+                legend: {
+                  position: "top",
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function (value) {
+                      return (value / 1000000).toFixed(0) + "M";
+                    },
+                  },
+                },
+              },
+            },
+          });
+        }
+      }
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

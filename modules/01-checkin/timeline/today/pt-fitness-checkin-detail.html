@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết PT Fitness Check-in Hôm qua - Actiwell Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Dashboard
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="checkin-yesterday-detail.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-dark">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-dumbbell text-warning fs-3 me-3"></i>
+            <div>
+              <h2 class="text-warning mb-0">
+                Chi tiết PT Fitness Check-in Hôm qua
+              </h2>
+              <p class="text-muted mb-0">
+                Thống kê chi tiết về hoạt động PT Fitness ngày hôm qua
+              </p>
+              <!-- Breadcrumb Container -->
+              <div id="breadcrumb-container" class="mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-calendar-day text-info fs-4 me-2"></i>
+                <h6 class="mb-0">Hôm qua</h6>
+              </div>
+              <h4 class="text-info mb-0">52</h4>
+              <small class="text-muted">lượt check-in</small>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-user text-success fs-4 me-2"></i>
+                <h6 class="mb-0">Lớp 1:1</h6>
+              </div>
+              <h4 class="text-success mb-0">28</h4>
+              <small class="text-muted">hội viên hôm qua</small>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-user-friends text-info fs-4 me-2"></i>
+                <h6 class="mb-0">Lớp 1:2</h6>
+              </div>
+              <h4 class="text-info mb-0">16</h4>
+              <small class="text-muted">hội viên hôm qua</small>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-users text-warning fs-4 me-2"></i>
+                <h6 class="mb-0">Lớp nhóm</h6>
+              </div>
+              <h4 class="text-warning mb-0">8</h4>
+              <small class="text-muted">hội viên hôm qua</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ theo loại lớp Hôm
+                qua
+              </h5>
+            </div>
+            <div class="card-body">
+              <div
+                class="chart-container"
+                style="position: relative; height: 300px; width: 100%"
+              >
+                <canvas id="classTypeChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Xu hướng theo giờ Hôm qua
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="hourlyTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Danh sách check-in PT Fitness
+                Hôm qua
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Filter Section -->
+              <div class="row mb-3">
+                <div class="col mb-3">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col mb-3">
+                  <label class="form-label">Loại lớp</label>
+                  <select class="form-select" id="classTypeFilter">
+                    <option value="all">Tất cả loại</option>
+                    <option value="1-1">Lớp 1:1</option>
+                    <option value="1-2">Lớp 1:2</option>
+                    <option value="group">Lớp nhóm</option>
+                  </select>
+                </div>
+                <div class="col mb-3">
+                  <label class="form-label">Dịch vụ</label>
+                  <select class="form-select" id="serviceFilter">
+                    <option value="all">Tất cả dịch vụ</option>
+                    <option value="pt-gym">PT Gym</option>
+                    <option value="pt-kickfit">PT kickfit</option>
+                    <option value="streching">Streching</option>
+                    <option value="ems">EMS</option>
+                    <option value="mix">MIX</option>
+                  </select>
+                </div>
+                <div class="col mb-3">
+                  <label class="form-label">Huấn luyện viên</label>
+                  <select class="form-select" id="instructorFilter">
+                    <option value="all">Tất cả huấn luyện viên</option>
+                    <option value="Thầy Minh">Thầy Minh</option>
+                    <option value="Cô Lan">Cô Lan</option>
+                    <option value="Thầy Tuấn">Thầy Tuấn</option>
+                    <option value="Cô Hương">Cô Hương</option>
+                    <option value="Thầy Nam">Thầy Nam</option>
+                    <option value="Cô Mai">Cô Mai</option>
+                    <option value="Thầy Đức">Thầy Đức</option>
+                  </select>
+                </div>
+                <div class="col mb-3">
+                  <label class="form-label">Nhân viên chăm sóc</label>
+                  <select class="form-select" id="staffFilter">
+                    <option value="all">Tất cả nhân viên</option>
+                    <option value="Nguyễn Thị Lan">Nguyễn Thị Lan</option>
+                    <option value="Lê Văn Minh">Lê Văn Minh</option>
+                    <option value="Phạm Thị Hoa">Phạm Thị Hoa</option>
+                    <option value="Hoàng Văn Đức">Hoàng Văn Đức</option>
+                    <option value="Võ Thị Mai">Võ Thị Mai</option>
+                    <option value="Ngô Văn Tùng">Ngô Văn Tùng</option>
+                    <option value="Lý Thị Hương">Lý Thị Hương</option>
+                  </select>
+                </div>
+                <div class="col mb-3 d-flex align-items-end">
+                  <button
+                    class="btn btn-warning w-100"
+                    onclick="applyFilters()"
+                  >
+                    <i class="fas fa-search me-1"></i>Áp dụng
+                  </button>
+                </div>
+                <div class="col mb-3 d-flex align-items-end">
+                  <button
+                    class="btn btn-outline-secondary w-100"
+                    onclick="resetFilters()"
+                  >
+                    <i class="fas fa-undo me-1"></i>Reset
+                  </button>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Hội viên</th>
+                      <th>Cơ sở</th>
+                      <th>Loại lớp</th>
+                      <th>Dịch vụ</th>
+                      <th>Huấn luyện viên</th>
+                      <th>Nhân viên chăm sóc</th>
+                      <th>Giờ check-in</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ptFitnessCheckinTableBody">
+                    <!-- Data will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination">
+                  <!-- Pagination will be generated here -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // Sample data for PT Fitness check-ins (52 records total)
+      const ptFitnessCheckinData = generatePTFitnessCheckinData(52);
+
+      // Generate sample data
+      function generatePTFitnessCheckinData(count) {
+        const data = [];
+        const locations = [
+          { name: "Tôn Thất Thuyết", key: "ton-that-thuyet" },
+          { name: "Huỳnh Thúc Kháng", key: "huynh-thuc-khang" },
+          { name: "Giảng Võ", key: "giang-vo" },
+          { name: "Hào Nam", key: "hao-nam" },
+          { name: "Nguyễn Tuân", key: "nguyen-tuan" },
+        ];
+        const classTypes = [
+          { name: "Lớp 1:1", key: "1-1" },
+          { name: "Lớp 1:2", key: "1-2" },
+          { name: "Lớp nhóm", key: "group" },
+        ];
+        const services = [
+          { name: "PT Gym", key: "pt-gym" },
+          { name: "PT kickfit", key: "pt-kickfit" },
+          { name: "Streching", key: "streching" },
+          { name: "EMS", key: "ems" },
+          { name: "MIX", key: "mix" },
+        ];
+        const instructors = [
+          "Thầy Minh",
+          "Cô Lan",
+          "Thầy Tuấn",
+          "Cô Hương",
+          "Thầy Nam",
+          "Cô Mai",
+          "Thầy Đức",
+          "Cô Linh",
+          "Thầy Hùng",
+          "Cô Nga",
+        ];
+        const staffMembers = [
+          "Nguyễn Thị Lan",
+          "Lê Văn Minh",
+          "Phạm Thị Hoa",
+          "Hoàng Văn Đức",
+          "Võ Thị Mai",
+          "Ngô Văn Tùng",
+          "Lý Thị Hương",
+          "Trần Văn Đức",
+          "Bùi Thị Hoa",
+          "Đặng Văn Minh",
+          "Nguyễn Thị Mai",
+          "Lê Văn Hùng",
+        ];
+        const hours = [
+          "06",
+          "07",
+          "08",
+          "09",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+        ];
+        const minutes = [
+          "00",
+          "05",
+          "10",
+          "15",
+          "20",
+          "25",
+          "30",
+          "35",
+          "40",
+          "45",
+          "50",
+          "55",
+        ];
+
+        for (let i = 1; i <= count; i++) {
+          const location =
+            locations[Math.floor(rng.next() * locations.length)];
+          const classType =
+            classTypes[Math.floor(rng.next() * classTypes.length)];
+          const service = services[Math.floor(rng.next() * services.length)];
+          const instructor =
+            instructors[Math.floor(rng.next() * instructors.length)];
+          const staff =
+            staffMembers[Math.floor(rng.next() * staffMembers.length)];
+          const hour = hours[Math.floor(rng.next() * hours.length)];
+          const minute = minutes[Math.floor(rng.next() * minutes.length)];
+
+          data.push({
+            id: i,
+            memberName: `Hội viên PT ${String(i).padStart(3, "0")}`,
+            classType: classType.name,
+            classTypeKey: classType.key,
+            service: service.name,
+            serviceKey: service.key,
+            checkinTime: `${hour}:${minute}`,
+            instructor: instructor,
+            staffInCharge: staff,
+            location: location.name,
+            locationKey: location.key,
+          });
+        }
+
+        return data;
+      }
+
+      // Pagination variables
+      let currentPage = 1;
+      const recordsPerPage = 20;
+      let filteredData = [...ptFitnessCheckinData];
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        updateDateTime();
+        loadPTFitnessCheckinData();
+        updateMetricsFromData(ptFitnessCheckinData);
+        createCharts(ptFitnessCheckinData);
+        setInterval(updateDateTime, 1000);
+      });
+
+      function updateDateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString("vi-VN");
+        const dateString = now.toLocaleDateString("vi-VN");
+
+        const timeElement = document.getElementById("currentTime");
+        const dateElement = document.getElementById("currentDate");
+
+        if (timeElement) timeElement.textContent = timeString;
+        if (dateElement) dateElement.textContent = dateString;
+      }
+
+      function loadPTFitnessCheckinData(data = filteredData) {
+        const tbody = document.getElementById("ptFitnessCheckinTableBody");
+        tbody.innerHTML = "";
+
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const endIndex = startIndex + recordsPerPage;
+        const pageData = data.slice(startIndex, endIndex);
+
+        pageData.forEach((checkin, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${startIndex + index + 1}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${checkin.memberName.charAt(0)}
+                </div>
+                <div>
+                  <div class="fw-bold">${checkin.memberName}</div>
+                  <small class="text-muted">ID: ${checkin.id}</small>
+                </div>
+              </div>
+            </td>
+            <td>${checkin.location}</td>
+            <td>
+              <span class="badge ${getClassTypeBadgeClass(
+                checkin.classType
+              )}">${checkin.classType}</span>
+            </td>
+            <td>
+              <span class="badge ${getServiceBadgeClass(checkin.service)}">${
+            checkin.service
+          }</span>
+            </td>
+            <td>${checkin.instructor}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 24px; height: 24px; font-size: 10px;">
+                  ${
+                    checkin.staffInCharge
+                      ? checkin.staffInCharge.split(" ").pop().charAt(0)
+                      : "N/A"
+                  }
+                </div>
+                <div>
+                  <div class="fw-bold small">${
+                    checkin.staffInCharge || "Chưa phân công"
+                  }</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="text-warning fw-bold">${checkin.checkinTime}</span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        generatePagination(data.length);
+      }
+
+      function getClassTypeBadgeClass(classType) {
+        switch (classType) {
+          case "Lớp nhóm":
+            return "bg-primary";
+          case "Lớp 1:1":
+            return "bg-success";
+          case "Lớp 1:2":
+            return "bg-info";
+          default:
+            return "bg-secondary";
+        }
+      }
+
+      function getServiceBadgeClass(service) {
+        switch (service) {
+          case "PT Gym":
+            return "bg-success";
+          case "PT kickfit":
+            return "bg-warning";
+          case "Streching":
+            return "bg-info";
+          case "EMS":
+            return "bg-danger";
+          case "MIX":
+            return "bg-primary";
+          default:
+            return "bg-secondary";
+        }
+      }
+
+      function getClassTypeCounts(data) {
+        const counts = { "Lớp nhóm": 0, "Lớp 1:1": 0, "Lớp 1:2": 0 };
+        data.forEach((item) => {
+          if (counts[item.classType] !== undefined) {
+            counts[item.classType] += 1;
+          }
+        });
+        return counts;
+      }
+
+      function updateMetricsFromData(data) {
+        const total = data.length;
+        const counts = getClassTypeCounts(data);
+
+        // Update metric cards by their headings
+        const metricCards = document.querySelectorAll(
+          ".row.mb-4 .card .card-body"
+        );
+        metricCards.forEach((body) => {
+          const titleEl = body.querySelector("h6");
+          const valueEl = body.querySelector("h4");
+          if (!titleEl || !valueEl) return;
+          const title = titleEl.textContent.trim();
+          if (title.includes("Hôm qua")) {
+            valueEl.textContent = String(total);
+          } else if (title.includes("Lớp 1:1")) {
+            valueEl.textContent = String(counts["Lớp 1:1"] || 0);
+          } else if (title.includes("Lớp 1:2")) {
+            valueEl.textContent = String(counts["Lớp 1:2"] || 0);
+          } else if (title.includes("Lớp nhóm")) {
+            valueEl.textContent = String(counts["Lớp nhóm"] || 0);
+          }
+        });
+      }
+
+      function createCharts(data) {
+        const counts = getClassTypeCounts(data);
+        // Class Type Chart
+        const classTypeCtx = document
+          .getElementById("classTypeChart")
+          .getContext("2d");
+        new Chart(classTypeCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Lớp nhóm", "Lớp 1:1", "Lớp 1:2"],
+            datasets: [
+              {
+                data: [
+                  counts["Lớp nhóm"] || 0,
+                  counts["Lớp 1:1"] || 0,
+                  counts["Lớp 1:2"] || 0,
+                ],
+                backgroundColor: ["#ffc107", "#28a745", "#20c997"],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right",
+                labels: {
+                  padding: 20,
+                  usePointStyle: true,
+                  pointStyle: "circle",
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const label = context.label || "";
+                    const value = context.parsed;
+                    const total = context.dataset.data.reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return `${label}: ${value} lượt (${percentage}%)`;
+                  },
+                },
+              },
+            },
+            elements: {
+              arc: {
+                borderWidth: 2,
+                borderColor: "#fff",
+              },
+            },
+          },
+        });
+
+        // Hourly Trend Chart
+        const hourlyTrendCtx = document
+          .getElementById("hourlyTrendChart")
+          .getContext("2d");
+        new Chart(hourlyTrendCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "08:00",
+              "09:00",
+              "10:00",
+              "11:00",
+              "14:00",
+              "15:00",
+              "16:00",
+              "17:00",
+            ],
+            datasets: [
+              {
+                label: "Số lượng check-in",
+                data: [5, 8, 6, 4, 7, 9, 8, 5],
+                backgroundColor: "#ffc107",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+
+      function applyFilters() {
+        const locationFilter = document.getElementById("locationFilter").value;
+        const classTypeFilter =
+          document.getElementById("classTypeFilter").value;
+        const serviceFilter = document.getElementById("serviceFilter").value;
+        const instructorFilter =
+          document.getElementById("instructorFilter").value;
+        const staffFilter = document.getElementById("staffFilter").value;
+
+        let filteredData = ptFitnessCheckinData.filter((item) => {
+          const locationMatch =
+            locationFilter === "all" || item.locationKey === locationFilter;
+          const classTypeMatch =
+            classTypeFilter === "all" || item.classTypeKey === classTypeFilter;
+          const serviceMatch =
+            serviceFilter === "all" || item.serviceKey === serviceFilter;
+          const instructorMatch =
+            instructorFilter === "all" || item.instructor === instructorFilter;
+          const staffMatch =
+            staffFilter === "all" || item.staffInCharge === staffFilter;
+
+          return (
+            locationMatch &&
+            classTypeMatch &&
+            serviceMatch &&
+            instructorMatch &&
+            staffMatch
+          );
+        });
+
+        filteredData = filteredData;
+        currentPage = 1;
+        loadPTFitnessCheckinData();
+        updateMetricsFromData(filteredData);
+        createCharts(filteredData);
+      }
+
+      function resetFilters() {
+        document.getElementById("locationFilter").value = "all";
+        document.getElementById("classTypeFilter").value = "all";
+        document.getElementById("serviceFilter").value = "all";
+        document.getElementById("instructorFilter").value = "all";
+        document.getElementById("staffFilter").value = "all";
+        filteredData = [...ptFitnessCheckinData];
+        currentPage = 1;
+        loadPTFitnessCheckinData();
+        updateMetricsFromData(ptFitnessCheckinData);
+        createCharts(ptFitnessCheckinData);
+      }
+
+      // Generate pagination
+      function generatePagination(totalRecords) {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+        if (totalPages <= 1) return;
+
+        // Previous button
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+        prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage - 1
+        })">Trước</a>`;
+        pagination.appendChild(prevLi);
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+          const li = document.createElement("li");
+          li.className = `page-item ${i === currentPage ? "active" : ""}`;
+          li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+          pagination.appendChild(li);
+        }
+
+        // Next button
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${
+          currentPage === totalPages ? "disabled" : ""
+        }`;
+        nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage + 1
+        })">Tiếp</a>`;
+        pagination.appendChild(nextLi);
+      }
+
+      // Change page
+      function changePage(page) {
+        if (page < 1 || page > Math.ceil(filteredData.length / recordsPerPage))
+          return;
+        currentPage = page;
+        loadPTFitnessCheckinData();
+      }
+    </script>
+
+    <!-- Router System Scripts -->
+    <script src="../assets/js/router/url-mapping.js"></script>
+    <script src="../assets/js/helpers/url-builder.js"></script>
+    <script src="../assets/js/components/HeaderBreadcrumbs.js"></script>
+    <script src="../assets/js/helpers/breadcrumb-integration.js"></script>
+    <script src="../assets/js/navigation-init.js"></script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+  
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+</body>
+</html>

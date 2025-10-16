@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Performance Monitor Demo - Actiwell</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .metric-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid #007bff;
+        margin-bottom: 1rem;
+      }
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .metric-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .metric-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+      .performance-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+      .performance-excellent {
+        background-color: #28a745;
+      }
+      .performance-good {
+        background-color: #17a2b8;
+      }
+      .performance-warning {
+        background-color: #ffc107;
+      }
+      .performance-critical {
+        background-color: #dc3545;
+      }
+      .chart-container {
+        height: 300px;
+        margin: 20px 0;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .category-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .control-panel {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 2rem;
+      }
+      .log-entry {
+        font-family: "Courier New", monospace;
+        font-size: 0.8rem;
+        padding: 5px;
+        margin: 2px 0;
+        border-radius: 3px;
+      }
+      .log-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+      }
+      .log-warning {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      .log-error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .log-success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h4 class="mb-0">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                Performance Monitor - Giám sát hiệu suất hệ thống
+              </h4>
+              <p class="mb-0 mt-2">
+                Theo dõi và tối ưu hóa hiệu suất của hệ thống metrics
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Panel -->
+      <div class="control-panel">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h6 class="mb-0">
+              <i class="fas fa-cog me-2"></i>
+              Điều khiển Performance Monitor
+            </h6>
+          </div>
+          <div class="col-md-6 text-end">
+            <button
+              class="btn btn-success me-2"
+              onclick="startPerformanceTest()"
+            >
+              <i class="fas fa-play me-1"></i> Bắt đầu Test
+            </button>
+            <button
+              class="btn btn-warning me-2"
+              onclick="optimizePerformance()"
+            >
+              <i class="fas fa-magic me-1"></i> Tối ưu hóa
+            </button>
+            <button class="btn btn-info me-2" onclick="generateReport()">
+              <i class="fas fa-chart-bar me-1"></i> Báo cáo
+            </button>
+            <button class="btn btn-danger" onclick="resetMetrics()">
+              <i class="fas fa-refresh me-1"></i> Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Overview -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-chart-line me-2"></i>Performance Overview
+        </h5>
+        <small>Tổng quan hiệu suất hệ thống</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+            <h6>Average Calculation Time</h6>
+            <div class="metric-value text-primary" id="avgCalculationTime">
+              0ms
+            </div>
+            <div class="metric-label">Thời gian tính toán trung bình</div>
+            <div
+              class="performance-indicator performance-excellent"
+              id="calcTimeIndicator"
+            ></div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-memory fa-2x text-success mb-2"></i>
+            <h6>Memory Usage</h6>
+            <div class="metric-value text-success" id="memoryUsage">0 MB</div>
+            <div class="metric-label">Sử dụng bộ nhớ</div>
+            <div
+              class="performance-indicator performance-excellent"
+              id="memoryIndicator"
+            ></div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+            <h6>Error Rate</h6>
+            <div class="metric-value text-warning" id="errorRate">0%</div>
+            <div class="metric-label">Tỷ lệ lỗi</div>
+            <div
+              class="performance-indicator performance-excellent"
+              id="errorIndicator"
+            ></div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-check-circle fa-2x text-info mb-2"></i>
+            <h6>Success Rate</h6>
+            <div class="metric-value text-info" id="successRate">100%</div>
+            <div class="metric-label">Tỷ lệ thành công</div>
+            <div
+              class="performance-indicator performance-excellent"
+              id="successIndicator"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-chart-bar me-2"></i>Performance Metrics
+        </h5>
+        <small>Chi tiết các chỉ số hiệu suất</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-stopwatch fa-2x text-primary mb-2"></i>
+            <h6>Max Calculation Time</h6>
+            <div class="metric-value text-primary" id="maxCalculationTime">
+              0ms
+            </div>
+            <div class="metric-label">Thời gian tính toán tối đa</div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-stopwatch fa-2x text-success mb-2"></i>
+            <h6>Min Calculation Time</h6>
+            <div class="metric-value text-success" id="minCalculationTime">
+              0ms
+            </div>
+            <div class="metric-label">Thời gian tính toán tối thiểu</div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-memory fa-2x text-info mb-2"></i>
+            <h6>Max Memory Usage</h6>
+            <div class="metric-value text-info" id="maxMemoryUsage">0 MB</div>
+            <div class="metric-label">Sử dụng bộ nhớ tối đa</div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-memory fa-2x text-warning mb-2"></i>
+            <h6>Min Memory Usage</h6>
+            <div class="metric-value text-warning" id="minMemoryUsage">
+              0 MB
+            </div>
+            <div class="metric-label">Sử dụng bộ nhớ tối thiểu</div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-calculator fa-2x text-danger mb-2"></i>
+            <h6>Total Calculations</h6>
+            <div class="metric-value text-danger" id="totalCalculations">0</div>
+            <div class="metric-label">Tổng số phép tính</div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-bug fa-2x text-purple mb-2"></i>
+            <h6>Error Count</h6>
+            <div class="metric-value text-purple" id="errorCount">0</div>
+            <div class="metric-label">Số lỗi</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optimization Status -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-cogs me-2"></i>Optimization Status
+        </h5>
+        <small>Trạng thái tối ưu hóa</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-database fa-2x text-primary mb-2"></i>
+            <h6>Cache Status</h6>
+            <div class="metric-value text-primary" id="cacheStatus">
+              Enabled
+            </div>
+            <div class="metric-label">Trạng thái cache</div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-layer-group fa-2x text-success mb-2"></i>
+            <h6>Batch Processing</h6>
+            <div class="metric-value text-success" id="batchProcessingStatus">
+              Enabled
+            </div>
+            <div class="metric-label">Xử lý theo lô</div>
+          </div>
+        </div>
+
+        <div class="card metric-card">
+          <div class="card-body text-center">
+            <i class="fas fa-lazy fa-2x text-info mb-2"></i>
+            <h6>Lazy Loading</h6>
+            <div class="metric-value text-info" id="lazyLoadingStatus">
+              Enabled
+            </div>
+            <div class="metric-label">Tải lười</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-lightbulb me-2"></i>Recommendations
+        </h5>
+        <small>Đề xuất tối ưu hóa</small>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div id="recommendationsList">
+                <div class="alert alert-info">
+                  <i class="fas fa-info-circle me-2"></i>
+                  Chưa có đề xuất nào. Hãy chạy performance test để nhận đề xuất
+                  tối ưu hóa.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Log -->
+      <div class="category-header">
+        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Performance Log</h5>
+        <small>Nhật ký hiệu suất</small>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div
+                id="performanceLog"
+                style="max-height: 300px; overflow-y: auto"
+              >
+                <div class="log-entry log-info">
+                  <i class="fas fa-info-circle me-1"></i>
+                  [INFO] Performance Monitor initialized
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Report -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Performance Report
+              </h5>
+            </div>
+            <div class="card-body">
+              <div id="performanceReport">
+                <div class="alert alert-info">
+                  <i class="fas fa-info-circle me-2"></i>
+                  Chưa có báo cáo nào. Hãy chạy performance test để tạo báo cáo.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Load Performance Monitor -->
+    <script src="../assets/js/metrics-engine/performance-monitor.js"></script>
+
+    <!-- Load Comprehensive Calculations Engine -->
+    <script src="../assets/js/metrics-engine/comprehensive-calculations.js"></script>
+
+    <script>
+      // Initialize Performance Monitor Demo
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Performance Monitor Demo loaded");
+
+        // Start monitoring
+        startMonitoring();
+
+        // Update display
+        updatePerformanceDisplay();
+      });
+
+      function startMonitoring() {
+        // Update display every 2 seconds
+        setInterval(updatePerformanceDisplay, 2000);
+
+        // Log monitoring start
+        addLogEntry("Performance monitoring started", "info");
+      }
+
+      function updatePerformanceDisplay() {
+        if (window.performanceMonitor) {
+          const report = window.performanceMonitor.getPerformanceReport();
+
+          // Update overview metrics
+          document.getElementById("avgCalculationTime").textContent =
+            report.calculationTime.average.toFixed(2) + "ms";
+          document.getElementById("memoryUsage").textContent = formatBytes(
+            report.memoryUsage.average
+          );
+          document.getElementById("errorRate").textContent =
+            (report.errors.rate * 100).toFixed(2) + "%";
+          document.getElementById("successRate").textContent =
+            ((1 - report.errors.rate) * 100).toFixed(2) + "%";
+
+          // Update detailed metrics
+          document.getElementById("maxCalculationTime").textContent =
+            report.calculationTime.max.toFixed(2) + "ms";
+          document.getElementById("minCalculationTime").textContent =
+            report.calculationTime.min.toFixed(2) + "ms";
+          document.getElementById("maxMemoryUsage").textContent = formatBytes(
+            report.memoryUsage.max
+          );
+          document.getElementById("minMemoryUsage").textContent = formatBytes(
+            report.memoryUsage.min
+          );
+          document.getElementById("totalCalculations").textContent =
+            report.calculationTime.count;
+          document.getElementById("errorCount").textContent =
+            report.errors.count;
+
+          // Update optimization status
+          document.getElementById("cacheStatus").textContent = report
+            .optimizations.cacheEnabled
+            ? "Enabled"
+            : "Disabled";
+          document.getElementById("batchProcessingStatus").textContent = report
+            .optimizations.batchProcessing
+            ? "Enabled"
+            : "Disabled";
+          document.getElementById("lazyLoadingStatus").textContent = report
+            .optimizations.lazyLoading
+            ? "Enabled"
+            : "Disabled";
+
+          // Update performance indicators
+          updatePerformanceIndicators(report);
+        }
+      }
+
+      function updatePerformanceIndicators(report) {
+        // Calculation time indicator
+        const calcTimeIndicator = document.getElementById("calcTimeIndicator");
+        if (report.calculationTime.average < 100) {
+          calcTimeIndicator.className =
+            "performance-indicator performance-excellent";
+        } else if (report.calculationTime.average < 500) {
+          calcTimeIndicator.className =
+            "performance-indicator performance-good";
+        } else if (report.calculationTime.average < 1000) {
+          calcTimeIndicator.className =
+            "performance-indicator performance-warning";
+        } else {
+          calcTimeIndicator.className =
+            "performance-indicator performance-critical";
+        }
+
+        // Memory indicator
+        const memoryIndicator = document.getElementById("memoryIndicator");
+        if (report.memoryUsage.average < 10 * 1024 * 1024) {
+          // 10MB
+          memoryIndicator.className =
+            "performance-indicator performance-excellent";
+        } else if (report.memoryUsage.average < 50 * 1024 * 1024) {
+          // 50MB
+          memoryIndicator.className = "performance-indicator performance-good";
+        } else if (report.memoryUsage.average < 100 * 1024 * 1024) {
+          // 100MB
+          memoryIndicator.className =
+            "performance-indicator performance-warning";
+        } else {
+          memoryIndicator.className =
+            "performance-indicator performance-critical";
+        }
+
+        // Error indicator
+        const errorIndicator = document.getElementById("errorIndicator");
+        if (report.errors.rate < 0.01) {
+          // 1%
+          errorIndicator.className =
+            "performance-indicator performance-excellent";
+        } else if (report.errors.rate < 0.05) {
+          // 5%
+          errorIndicator.className = "performance-indicator performance-good";
+        } else if (report.errors.rate < 0.1) {
+          // 10%
+          errorIndicator.className =
+            "performance-indicator performance-warning";
+        } else {
+          errorIndicator.className =
+            "performance-indicator performance-critical";
+        }
+
+        // Success indicator
+        const successIndicator = document.getElementById("successIndicator");
+        if (report.errors.rate < 0.01) {
+          successIndicator.className =
+            "performance-indicator performance-excellent";
+        } else if (report.errors.rate < 0.05) {
+          successIndicator.className = "performance-indicator performance-good";
+        } else if (report.errors.rate < 0.1) {
+          successIndicator.className =
+            "performance-indicator performance-warning";
+        } else {
+          successIndicator.className =
+            "performance-indicator performance-critical";
+        }
+      }
+
+      function startPerformanceTest() {
+        addLogEntry("Starting performance test...", "info");
+
+        // Simulate performance test
+        const testDuration = 5000; // 5 seconds
+        const startTime = Date.now();
+
+        const testInterval = setInterval(() => {
+          // Simulate calculation
+          if (window.comprehensiveCalculations) {
+            const sampleData = generateSampleData();
+            const metrics =
+              window.comprehensiveCalculations.calculateAllComprehensiveMetrics(
+                sampleData
+              );
+
+            // Record success
+            window.performanceMonitor.recordSuccess();
+          }
+
+          // Check if test is complete
+          if (Date.now() - startTime >= testDuration) {
+            clearInterval(testInterval);
+            addLogEntry("Performance test completed", "success");
+            updatePerformanceDisplay();
+          }
+        }, 100);
+      }
+
+      function generateSampleData() {
+        return {
+          visitor: {
+            totalVisitors: 1000 + Math.floor(Math.random() * 100),
+            convertedVisitors: 152 + Math.floor(Math.random() * 20),
+            returningVisitors: 685 + Math.floor(Math.random() * 50),
+            sourceVisitors: 500 + Math.floor(Math.random() * 30),
+            sourceConversions: 112 + Math.floor(Math.random() * 15),
+            sourceRevenue: 500000000 + Math.floor(Math.random() * 50000000),
+            sourceCost: 175000000 + Math.floor(Math.random() * 10000000),
+          },
+          sales: {
+            saleTiep: 281 + Math.floor(Math.random() * 20),
+            ptTiep: 221 + Math.floor(Math.random() * 15),
+            inbodyMeasurements: 127 + Math.floor(Math.random() * 10),
+            sales: [
+              { leadDate: "2024-01-01", saleDate: "2024-01-15" },
+              { leadDate: "2024-01-05", saleDate: "2024-01-18" },
+              { leadDate: "2024-01-10", saleDate: "2024-01-22" },
+            ],
+            numberOfSales: 50 + Math.floor(Math.random() * 10),
+            averageDealSize: 5000000 + Math.floor(Math.random() * 500000),
+            salesCycleLength: 12 + Math.floor(Math.random() * 3),
+          },
+          facility: {
+            usedSpace: 750 + Math.floor(Math.random() * 50),
+            totalSpace: 1000,
+            usageTime: 600 + Math.floor(Math.random() * 50),
+            availableTime: 800,
+            usedLockers: 150 + Math.floor(Math.random() * 20),
+            totalLockers: 220,
+            peakHourRevenue: 225000000 + Math.floor(Math.random() * 25000000),
+            totalRevenue: 500000000 + Math.floor(Math.random() * 50000000),
+            offPeakUsage: 200 + Math.floor(Math.random() * 30),
+            offPeakCapacity: 565,
+          },
+          member: {
+            checkins: 2500 + Math.floor(Math.random() * 200),
+            bookings: 800 + Math.floor(Math.random() * 100),
+            ptSessions: 300 + Math.floor(Math.random() * 50),
+            totalInteractions: 3600 + Math.floor(Math.random() * 300),
+            daysActive: 30,
+            channelSpend: 50000000 + Math.floor(Math.random() * 5000000),
+            newMembers: 60 + Math.floor(Math.random() * 10),
+            avgMonthlyRevenue: 1500000 + Math.floor(Math.random() * 100000),
+            avgMembershipDuration: 12 + Math.floor(Math.random() * 2),
+            memberData: {
+              daysSinceLastActivity: Math.floor(Math.random() * 10),
+              paymentDelays: Math.floor(Math.random() * 3),
+              engagementLevel: 0.5 + Math.random() * 0.5,
+            },
+          },
+          financial: {
+            totalRevenue: 500000000 + Math.floor(Math.random() * 50000000),
+            totalSquareFootage: 1000,
+            top20Revenue: 325000000 + Math.floor(Math.random() * 25000000),
+            currentGrowthRate: 15 + Math.floor(Math.random() * 5),
+            previousGrowthRate: 12 + Math.floor(Math.random() * 3),
+            sourceSpend: 75000000 + Math.floor(Math.random() * 10000000),
+            newMembers: 60 + Math.floor(Math.random() * 10),
+            operationalCosts: 178500000 + Math.floor(Math.random() * 10000000),
+            serviceRevenue: 300000000 + Math.floor(Math.random() * 30000000),
+            serviceCosts: 173100000 + Math.floor(Math.random() * 10000000),
+          },
+          performance: {
+            revenueGenerated: 500000000 + Math.floor(Math.random() * 50000000),
+            staffHours: 2000 + Math.floor(Math.random() * 100),
+            totalRevenue: 500000000 + Math.floor(Math.random() * 50000000),
+            totalStaffHours: 2000 + Math.floor(Math.random() * 100),
+            productiveHours: 1770 + Math.floor(Math.random() * 100),
+            totalHours: 2000 + Math.floor(Math.random() * 100),
+            ratings: [4, 5, 4, 5, 4, 3, 5, 4, 4, 5],
+            completedServices: 923 + Math.floor(Math.random() * 50),
+            totalServices: 1000 + Math.floor(Math.random() * 50),
+            satisfactionScore: 4.2 + (Math.random() - 0.5) * 0.5,
+            completionRate: 92.3 + (Math.random() - 0.5) * 5,
+            efficiencyScore: 88.5 + (Math.random() - 0.5) * 5,
+          },
+          digital: {
+            websiteVisitors: 10000 + Math.floor(Math.random() * 1000),
+            websiteConversions: 320 + Math.floor(Math.random() * 50),
+            likes: 1500 + Math.floor(Math.random() * 200),
+            comments: 300 + Math.floor(Math.random() * 50),
+            shares: 200 + Math.floor(Math.random() * 30),
+            followers: 5000 + Math.floor(Math.random() * 500),
+            digitalRevenue: 200000000 + Math.floor(Math.random() * 20000000),
+            digitalCost: 52000000 + Math.floor(Math.random() * 5000000),
+            totalSessions: 14000 + Math.floor(Math.random() * 1000),
+            activeUsers: 5000 + Math.floor(Math.random() * 500),
+            featureUsage: 9420 + Math.floor(Math.random() * 500),
+            totalSessions: 14000 + Math.floor(Math.random() * 1000),
+            totalUsers: 5000 + Math.floor(Math.random() * 500),
+            returningUsers: 3945 + Math.floor(Math.random() * 300),
+          },
+          predictive: {
+            historicalAverage: 1000 + Math.floor(Math.random() * 100),
+            seasonalFactor: 1.1 + (Math.random() - 0.5) * 0.2,
+            growthRate: 15 + Math.floor(Math.random() * 5),
+            currentRevenue: 500000000 + Math.floor(Math.random() * 50000000),
+            growthRate: 15 + Math.floor(Math.random() * 5),
+            timePeriod: 1,
+            currentCapacity: 1500 + Math.floor(Math.random() * 100),
+            utilizationRate: 80 + Math.floor(Math.random() * 10),
+            growthFactor: 1.2 + (Math.random() - 0.5) * 0.2,
+            memberData: {
+              daysSinceLastActivity: Math.floor(Math.random() * 14),
+              paymentDelays: Math.floor(Math.random() * 2),
+              engagementLevel: 0.3 + Math.random() * 0.7,
+              satisfactionScore: 3 + Math.random() * 2,
+            },
+            revenueVolatility: 62500000 + Math.floor(Math.random() * 10000000),
+            averageRevenue: 500000000 + Math.floor(Math.random() * 50000000),
+            riskFactors: 8 + Math.floor(Math.random() * 3),
+            totalFactors: 92 + Math.floor(Math.random() * 10),
+          },
+        };
+      }
+
+      function optimizePerformance() {
+        addLogEntry("Starting performance optimization...", "info");
+
+        if (window.performanceMonitor) {
+          window.performanceMonitor.optimizePerformance();
+          addLogEntry("Performance optimization completed", "success");
+          updatePerformanceDisplay();
+        }
+      }
+
+      function generateReport() {
+        addLogEntry("Generating performance report...", "info");
+
+        if (window.performanceMonitor) {
+          const report = window.performanceMonitor.getPerformanceReport();
+
+          // Display report
+          const reportContainer = document.getElementById("performanceReport");
+          reportContainer.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Performance Summary</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Average Calculation Time:</strong> ${report.calculationTime.average.toFixed(
+                                  2
+                                )}ms</li>
+                                <li><strong>Max Calculation Time:</strong> ${report.calculationTime.max.toFixed(
+                                  2
+                                )}ms</li>
+                                <li><strong>Min Calculation Time:</strong> ${report.calculationTime.min.toFixed(
+                                  2
+                                )}ms</li>
+                                <li><strong>Total Calculations:</strong> ${
+                                  report.calculationTime.count
+                                }</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Memory Usage</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Average Memory:</strong> ${formatBytes(
+                                  report.memoryUsage.average
+                                )}</li>
+                                <li><strong>Max Memory:</strong> ${formatBytes(
+                                  report.memoryUsage.max
+                                )}</li>
+                                <li><strong>Min Memory:</strong> ${formatBytes(
+                                  report.memoryUsage.min
+                                )}</li>
+                                <li><strong>Memory Records:</strong> ${
+                                  report.memoryUsage.count
+                                }</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h6>Error Statistics</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Error Count:</strong> ${
+                                  report.errors.count
+                                }</li>
+                                <li><strong>Error Rate:</strong> ${(
+                                  report.errors.rate * 100
+                                ).toFixed(2)}%</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Optimizations</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Cache:</strong> ${
+                                  report.optimizations.cacheEnabled
+                                    ? "Enabled"
+                                    : "Disabled"
+                                }</li>
+                                <li><strong>Batch Processing:</strong> ${
+                                  report.optimizations.batchProcessing
+                                    ? "Enabled"
+                                    : "Disabled"
+                                }</li>
+                                <li><strong>Lazy Loading:</strong> ${
+                                  report.optimizations.lazyLoading
+                                    ? "Enabled"
+                                    : "Disabled"
+                                }</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Recommendations</h6>
+                            <ul>
+                                ${report.recommendations
+                                  .map((rec) => `<li>${rec}</li>`)
+                                  .join("")}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+          addLogEntry("Performance report generated", "success");
+        }
+      }
+
+      function resetMetrics() {
+        addLogEntry("Resetting performance metrics...", "warning");
+
+        if (window.performanceMonitor) {
+          window.performanceMonitor.resetMetrics();
+          addLogEntry("Performance metrics reset", "success");
+          updatePerformanceDisplay();
+        }
+      }
+
+      function addLogEntry(message, type) {
+        const logContainer = document.getElementById("performanceLog");
+        const timestamp = new Date().toLocaleTimeString();
+        const icon =
+          type === "info"
+            ? "fas fa-info-circle"
+            : type === "warning"
+            ? "fas fa-exclamation-triangle"
+            : type === "error"
+            ? "fas fa-times-circle"
+            : "fas fa-check-circle";
+
+        const logEntry = document.createElement("div");
+        logEntry.className = `log-entry log-${type}`;
+        logEntry.innerHTML = `<i class="${icon} me-1"></i>[${timestamp}] ${message}`;
+
+        logContainer.appendChild(logEntry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+      }
+
+      function formatBytes(bytes) {
+        if (bytes === 0) return "0 Bytes";
+
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      }
+    </script>
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>
+
+
+
+

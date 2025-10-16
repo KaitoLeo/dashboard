@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tất cả công thức tính toán - Actiwell Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .formula-card {
+        transition: transform 0.2s;
+        border-left: 4px solid #007bff;
+        margin-bottom: 1rem;
+      }
+      .formula-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .formula-display {
+        background-color: #f8f9fa;
+        border-left: 4px solid #28a745;
+        padding: 10px;
+        margin: 10px 0;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        border-radius: 4px;
+      }
+      .category-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .formula-name {
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 0.5rem;
+      }
+      .formula-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      .formula-math {
+        background-color: #e9ecef;
+        padding: 8px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        margin: 5px 0;
+      }
+      .formula-example {
+        background-color: #d4edda;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h4 class="mb-0">
+                <i class="fas fa-calculator me-2"></i>
+                Tất cả công thức tính toán - Actiwell Dashboard
+              </h4>
+              <p class="mb-0 mt-2">
+                Tổng hợp 50+ công thức tính toán được triển khai trong hệ thống
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Stats -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <i class="fas fa-layer-group fa-2x text-primary mb-2"></i>
+              <h5 class="text-primary">8</h5>
+              <p class="mb-0">Nhóm metrics</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <i class="fas fa-calculator fa-2x text-success mb-2"></i>
+              <h5 class="text-success">50+</h5>
+              <p class="mb-0">Công thức tính toán</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+              <h5 class="text-info">100%</h5>
+              <p class="mb-0">Coverage</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center">
+            <div class="card-body">
+              <i class="fas fa-rocket fa-2x text-warning mb-2"></i>
+              <h5 class="text-warning">Real-time</h5>
+              <p class="mb-0">Auto-update</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. VISITOR & CONVERSION STATISTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-users me-2"></i>1. Visitor & Conversion Statistics
+        </h5>
+        <small>Thống kê khách tham quan và chuyển đổi</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Visitor Conversion Rate</div>
+            <div class="formula-description">
+              Tỷ lệ chuyển đổi khách tham quan
+            </div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Converted Visitors / Total Visitors) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (152 / 1000) × 100 = 15.2%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Visitor Retention Rate</div>
+            <div class="formula-description">
+              Tỷ lệ giữ chân khách tham quan
+            </div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Returning Visitors / Total Visitors) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (685 / 1000) × 100 = 68.5%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Source Effectiveness Rate</div>
+            <div class="formula-description">Hiệu quả nguồn khách hàng</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Conversions from Source / Total Source Visitors) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (112 / 500) × 100 = 22.4%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Source ROI</div>
+            <div class="formula-description">ROI theo nguồn</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Revenue from Source - Cost of Source) / Cost of Source × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (500M - 175M) / 175M × 100 = 185.7%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SALES & CONVERSION METRICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-handshake me-2"></i>2. Sales & Conversion Metrics
+        </h5>
+        <small>Thống kê bán hàng và chuyển đổi</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Sale Tiếp Rate</div>
+            <div class="formula-description">Tỷ lệ PT tiếp</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (PT Tiếp / Sale Tiếp) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (221 / 281) × 100 = 78.6%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Inbody Measurement Rate</div>
+            <div class="formula-description">Tỷ lệ đo Inbody</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Số khách đo Inbody / Sale Tiếp) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (127 / 281) × 100 = 45.2%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">PT Conversion Rate</div>
+            <div class="formula-description">Tỷ lệ chuyển đổi PT</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (PT Tiếp / Sale Tiếp) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (221 / 281) × 100 = 78.6%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Inbody Conversion Rate</div>
+            <div class="formula-description">Tỷ lệ chuyển đổi Inbody</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Số khách đo Inbody / PT Tiếp) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (127 / 221) × 100 = 57.5%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Average Sales Cycle</div>
+            <div class="formula-description">
+              Thời gian trung bình từ lead đến sale
+            </div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Sum of (Sale Date - Lead Date) / Total Sales
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (14 + 13 + 12) / 3 = 13 ngày
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Sales Velocity</div>
+            <div class="formula-description">Tốc độ bán hàng</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Number of Sales × Average Deal Size) / Sales Cycle Length
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (50 × 5M) / 12 = 20.8M VNĐ/ngày
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. FACILITY & CAPACITY METRICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-building me-2"></i>3. Facility & Capacity Metrics
+        </h5>
+        <small>Thống kê cơ sở vật chất và năng lực</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Floor Space Utilization</div>
+            <div class="formula-description">Tỷ lệ sử dụng không gian</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Used Space / Total Space) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (750 / 1000) × 100 = 75%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Equipment Utilization Rate</div>
+            <div class="formula-description">Tỷ lệ sử dụng thiết bị</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Equipment Usage Time / Total Available Time) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (600 / 800) × 100 = 75%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Locker Utilization</div>
+            <div class="formula-description">Tỷ lệ sử dụng tủ đồ</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Used Lockers / Total Lockers) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (150 / 220) × 100 = 68.2%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Peak Hour Revenue Concentration</div>
+            <div class="formula-description">
+              Tập trung doanh thu giờ cao điểm
+            </div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Peak Hour Revenue / Total Revenue) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (225M / 500M) × 100 = 45%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Off-Peak Utilization</div>
+            <div class="formula-description">Sử dụng giờ thấp điểm</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Off-Peak Usage / Off-Peak Capacity) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (200 / 565) × 100 = 35.4%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. MEMBER ANALYTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-user-friends me-2"></i>4. Member Analytics
+        </h5>
+        <small>Phân tích hội viên</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Member Activity Score</div>
+            <div class="formula-description">Điểm hoạt động hội viên</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Check-ins + Bookings + PT Sessions) / 3
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (2500 + 800 + 300) / 3 = 1200 điểm
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Member Engagement Level</div>
+            <div class="formula-description">Mức độ tương tác</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Total Interactions / Days Active) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (3600 / 30) × 100 = 120%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Member Acquisition Cost by Channel</div>
+            <div class="formula-description">CAC theo kênh</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Channel Marketing Spend / New Members from Channel
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 50M / 60 = 833,333 VNĐ
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Member Lifetime Value by Segment</div>
+            <div class="formula-description">MLV theo phân khúc</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Average Monthly Revenue × Average Membership Duration
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 1.5M × 12 = 18M VNĐ
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Member Churn Prediction Score</div>
+            <div class="formula-description">Điểm dự đoán rời bỏ</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Weighted factors (Activity, Payment, Engagement)
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 0.3×0.2 + 0.4×0.1 + 0.3×0.2 = 0.16
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. FINANCIAL ANALYTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-chart-line me-2"></i>5. Financial Analytics
+        </h5>
+        <small>Phân tích tài chính</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Revenue per Square Foot</div>
+            <div class="formula-description">Doanh thu trên mỗi mét vuông</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Total Revenue / Total Square Footage
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 500M / 1000 = 500,000 VNĐ/m²
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Revenue Concentration Index</div>
+            <div class="formula-description">Chỉ số tập trung doanh thu</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Top 20% Revenue / Total Revenue) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (325M / 500M) × 100 = 65%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Revenue Growth Acceleration</div>
+            <div class="formula-description">Gia tốc tăng trưởng doanh thu</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Current Growth Rate - Previous Growth Rate) / Previous Growth
+              Rate × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (15 - 12) / 12 × 100 = 25%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Cost per Acquisition by Source</div>
+            <div class="formula-description">Chi phí thu hút theo nguồn</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Source Marketing Spend / New Members from Source
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 75M / 60 = 1.25M VNĐ
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Operational Cost Ratio</div>
+            <div class="formula-description">Tỷ lệ chi phí vận hành</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Operational Costs / Total Revenue) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (178.5M / 500M) × 100 = 35.7%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Profit Margin by Service</div>
+            <div class="formula-description">Biên lợi nhuận theo dịch vụ</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Service Revenue - Service Costs) / Service Revenue × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (300M - 173.1M) / 300M × 100 = 42.3%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. PERFORMANCE METRICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-trophy me-2"></i>6. Performance Metrics
+        </h5>
+        <small>Thống kê hiệu suất</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Staff Productivity Index</div>
+            <div class="formula-description">Chỉ số năng suất nhân viên</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Revenue Generated / Staff Hours) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (500M / 2000) × 100 = 250,000 VNĐ/giờ
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Staff Revenue per Hour</div>
+            <div class="formula-description">Doanh thu/giờ của nhân viên</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Total Revenue / Total Staff Hours
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 500M / 2000 = 250,000 VNĐ/giờ
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Staff Utilization Efficiency</div>
+            <div class="formula-description">Hiệu quả sử dụng nhân viên</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Productive Hours / Total Hours) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (1770 / 2000) × 100 = 88.5%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Service Satisfaction Score</div>
+            <div class="formula-description">Điểm hài lòng dịch vụ</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Sum of Ratings / Number of Ratings) × 20
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (4.2 / 5) × 20 = 16.8/20
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Service Completion Rate</div>
+            <div class="formula-description">Tỷ lệ hoàn thành dịch vụ</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Completed Services / Total Services) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (923 / 1000) × 100 = 92.3%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Service Quality Index</div>
+            <div class="formula-description">Chỉ số chất lượng dịch vụ</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Satisfaction Score + Completion Rate + Efficiency Score) / 3
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (4.2 + 92.3 + 88.5) / 3 = 61.7
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. DIGITAL ANALYTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-digital-tachograph me-2"></i>7. Digital Analytics
+        </h5>
+        <small>Phân tích số</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Website Conversion Rate</div>
+            <div class="formula-description">Tỷ lệ chuyển đổi website</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Website Conversions / Website Visitors) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (320 / 10000) × 100 = 3.2%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Social Media Engagement Rate</div>
+            <div class="formula-description">Tỷ lệ tương tác mạng xã hội</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Likes + Comments + Shares) / Followers × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (1500 + 300 + 200) / 5000 × 100 = 40%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Digital Marketing ROI</div>
+            <div class="formula-description">ROI marketing số</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Digital Revenue - Digital Cost) / Digital Cost × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (200M - 52M) / 52M × 100 = 284.6%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">App Usage Frequency</div>
+            <div class="formula-description">Tần suất sử dụng app</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Total App Sessions / Active Users
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 14000 / 5000 = 2.8 lần/ngày
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">App Feature Utilization</div>
+            <div class="formula-description">Sử dụng tính năng app</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Feature Usage / Total App Sessions) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (9420 / 14000) × 100 = 67.3%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">App Retention Rate</div>
+            <div class="formula-description">Tỷ lệ giữ chân app</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Returning Users / Total Users) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (3945 / 5000) × 100 = 78.9%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. PREDICTIVE ANALYTICS -->
+      <div class="category-header">
+        <h5 class="mb-0">
+          <i class="fas fa-crystal-ball me-2"></i>8. Predictive Analytics
+        </h5>
+        <small>Phân tích dự đoán</small>
+      </div>
+      <div class="stats-grid">
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Demand Forecasting</div>
+            <div class="formula-description">Dự báo nhu cầu</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Historical Average × Seasonal Factor × Growth Rate
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 1000 × 1.1 × 1.15 = 1,265 lượt
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Revenue Forecasting</div>
+            <div class="formula-description">Dự báo doanh thu</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Current Revenue × (1 + Growth Rate) ^ Time Period
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 500M × (1 + 0.15)¹ = 575M VNĐ
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Capacity Planning</div>
+            <div class="formula-description">Lập kế hoạch năng lực</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Current Capacity × Utilization Rate × Growth Factor
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 1500 × 0.8 × 1.2 = 1,440 chỗ
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Churn Risk Score</div>
+            <div class="formula-description">Điểm rủi ro rời bỏ</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              Weighted factors (Activity, Payment, Engagement, Satisfaction)
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> 0.25×0.7 + 0.3×0.9 + 0.25×0.7 + 0.2×0.8 =
+              0.77
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Revenue Risk Assessment</div>
+            <div class="formula-description">Đánh giá rủi ro doanh thu</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Revenue Volatility / Average Revenue) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (62.5M / 500M) × 100 = 12.5%
+            </div>
+          </div>
+        </div>
+
+        <div class="card formula-card">
+          <div class="card-body">
+            <div class="formula-name">Operational Risk Index</div>
+            <div class="formula-description">Chỉ số rủi ro vận hành</div>
+            <div class="formula-math">
+              <strong>Công thức:</strong><br />
+              (Risk Factors / Total Factors) × 100
+            </div>
+            <div class="formula-example">
+              <strong>Ví dụ:</strong> (8 / 92) × 100 = 8.7%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-check-circle me-2"></i>
+                Tổng kết triển khai
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <h6 class="text-success">✅ Đã triển khai</h6>
+                  <ul class="list-unstyled">
+                    <li>• 8 nhóm metrics chính</li>
+                    <li>• 50+ công thức tính toán</li>
+                    <li>• Visitor & Conversion</li>
+                    <li>• Sales & Conversion</li>
+                    <li>• Facility & Capacity</li>
+                    <li>• Member Analytics</li>
+                    <li>• Financial Analytics</li>
+                    <li>• Performance Metrics</li>
+                    <li>• Digital Analytics</li>
+                    <li>• Predictive Analytics</li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <h6 class="text-info">📊 Tính năng</h6>
+                  <ul class="list-unstyled">
+                    <li>• Real-time calculation</li>
+                    <li>• Auto-update system</li>
+                    <li>• Cache optimization</li>
+                    <li>• Error handling</li>
+                    <li>• Format utilities</li>
+                    <li>• Batch processing</li>
+                    <li>• Performance monitoring</li>
+                    <li>• Responsive design</li>
+                  </ul>
+                </div>
+                <div class="col-md-4">
+                  <h6 class="text-primary">🚀 Lợi ích</h6>
+                  <ul class="list-unstyled">
+                    <li>• Quản lý toàn diện</li>
+                    <li>• Dự báo chính xác</li>
+                    <li>• Tối ưu hiệu suất</li>
+                    <li>• Phân tích sâu</li>
+                    <li>• Ra quyết định thông minh</li>
+                    <li>• Tăng trưởng bền vững</li>
+                    <li>• Cạnh tranh hiệu quả</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>
+
+
+
+

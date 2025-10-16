@@ -1,0 +1,2294 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Member Movement Analysis - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-primary">
+            <i class="fas fa-users me-2"></i>Member Movement Analysis
+          </h2>
+          <p class="text-muted">
+            Phân tích dòng chảy hội viên và các chỉ số quan trọng
+          </p>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Bộ lọc</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Khoảng thời gian</label>
+                  <select class="form-select" id="timeRangeFilter">
+                    <option value="this-month">Tháng này</option>
+                    <option value="last-month">Tháng trước</option>
+                    <option value="last-3-months">3 tháng gần đây</option>
+                    <option value="last-6-months">6 tháng gần đây</option>
+                    <option value="this-year">Năm nay</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Loại membership</label>
+                  <select class="form-select" id="membershipFilter">
+                    <option value="all">Tất cả loại</option>
+                    <option value="basic">Basic</option>
+                    <option value="premium">Premium</option>
+                    <option value="vip">VIP</option>
+                    <option value="corporate">Corporate</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">&nbsp;</label>
+                  <button
+                    class="btn btn-primary w-100"
+                    onclick="applyFilters()"
+                  >
+                    <i class="fas fa-search me-1"></i>Áp dụng bộ lọc
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Movement Overview -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Member Movement Overview
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div
+                    class="card bg-primary text-white"
+                    style="cursor: pointer"
+                    onclick="showMemberDetails('opening', 'Opening Balance')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-play-circle fa-2x mb-2"></i>
+                      <h6>Opening Balance</h6>
+                      <h3>1,250</h3>
+                      <small>hội viên active đầu kỳ</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div
+                    class="card bg-success text-white"
+                    style="cursor: pointer"
+                    onclick="showMemberDetails('newJoiners', 'New Joiners')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-user-plus fa-2x mb-2"></i>
+                      <h6>New Joiners</h6>
+                      <h3>60</h3>
+                      <small>khách hàng mới</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div
+                    class="card bg-info text-white"
+                    style="cursor: pointer"
+                    onclick="showMemberDetails('renewals', 'Renewals')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-sync-alt fa-2x mb-2"></i>
+                      <h6>Renewals</h6>
+                      <h3>80</h3>
+                      <small>hội viên gia hạn</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div
+                    class="card bg-warning text-white"
+                    style="cursor: pointer"
+                    onclick="showMemberDetails('closing', 'Closing Balance')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-stop-circle fa-2x mb-2"></i>
+                      <h6>Closing Balance</h6>
+                      <h3>1,310</h3>
+                      <small>hội viên active cuối kỳ</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="alert alert-info">
+                    <h6>
+                      <i class="fas fa-calculator me-2"></i>Công thức tính:
+                    </h6>
+                    <p class="mb-0">
+                      <strong
+                        >Closing Balance = Opening Balance + New Joiners +
+                        Renewals - Cancellations - Expired - Freezes</strong
+                      >
+                    </p>
+                    <p class="mb-0">1,310 = 1,250 + 60 + 80 - 40 - 30 - 10</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Loss Analysis -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0 text-danger">
+                <i class="fas fa-chart-line-down me-2"></i>Member Loss Analysis
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div
+                    class="card bg-danger text-white"
+                    style="cursor: pointer"
+                    onclick="showMemberDetails('cancellations', 'Cancellations')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-times-circle fa-2x mb-2"></i>
+                      <h6>Cancellations</h6>
+                      <h3>40</h3>
+                      <small>hủy hợp đồng</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div
+                    class="card bg-secondary text-white"
+                    style="cursor: pointer"
+                    onclick="showMemberDetails('expired', 'Expired')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-calendar-times fa-2x mb-2"></i>
+                      <h6>Expired</h6>
+                      <h3>30</h3>
+                      <small>hết hạn không gia hạn</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div
+                    class="card bg-dark text-white"
+                    style="cursor: pointer"
+                    onclick="showMemberDetails('freezes', 'Freezes')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-pause-circle fa-2x mb-2"></i>
+                      <h6>Freezes</h6>
+                      <h3>10</h3>
+                      <small>tạm ngưng thẻ</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div
+                    class="card bg-light text-dark"
+                    style="cursor: pointer"
+                    onclick="showMemberDetails('silent', 'Silent Members')"
+                  >
+                    <div class="card-body text-center">
+                      <i class="fas fa-user-slash fa-2x text-muted mb-2"></i>
+                      <h6>Silent Members</h6>
+                      <h3 class="text-muted">25</h3>
+                      <small class="text-muted">có đăng ký không đi tập</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Performance Ratios -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0 text-primary">
+                <i class="fas fa-percentage me-2"></i>Key Performance Ratios
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="fas fa-chart-pie fa-2x text-danger mb-2"></i>
+                      <h6>Churn Rate</h6>
+                      <h3 class="text-danger">5.6%</h3>
+                      <small class="text-muted">tỉ lệ rời bỏ</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="fas fa-sync fa-2x text-success mb-2"></i>
+                      <h6>Renewal Rate</h6>
+                      <h3 class="text-success">64.0%</h3>
+                      <small class="text-muted">tỉ lệ gia hạn</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="fas fa-balance-scale fa-2x text-info mb-2"></i>
+                      <h6>New/Existing</h6>
+                      <h3 class="text-info">4.8%</h3>
+                      <small class="text-muted">tỉ lệ mới/cũ</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="fas fa-heart fa-2x text-primary mb-2"></i>
+                      <h6>Retention Rate</h6>
+                      <h3 class="text-primary">94.4%</h3>
+                      <small class="text-muted">tỉ lệ giữ chân</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bố Member Movement
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="memberMovementChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng Member Movement
+                theo tháng
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="memberTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Analysis by Location -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Chi tiết Member Movement theo
+                cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>STT</th>
+                      <th>Cơ sở</th>
+                      <th>Opening</th>
+                      <th>New</th>
+                      <th>Renewal</th>
+                      <th>Cancellation</th>
+                      <th>Expired</th>
+                      <th>Freeze</th>
+                      <th>Closing</th>
+                      <th>Churn Rate</th>
+                      <th>Renewal Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      onclick="showLocationDetails('ton-that-thuyet', 'Tôn Thất Thuyết')"
+                      style="cursor: pointer"
+                    >
+                      <td>1</td>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td><span class="badge bg-primary">250</span></td>
+                      <td><span class="badge bg-success">12</span></td>
+                      <td><span class="badge bg-info">18</span></td>
+                      <td><span class="badge bg-danger">8</span></td>
+                      <td><span class="badge bg-secondary">6</span></td>
+                      <td><span class="badge bg-dark">2</span></td>
+                      <td><span class="badge bg-warning">264</span></td>
+                      <td><span class="text-danger">5.6%</span></td>
+                      <td><span class="text-success">72.0%</span></td>
+                    </tr>
+                    <tr
+                      onclick="showLocationDetails('huynh-thuc-khang', 'Huỳnh Thúc Kháng')"
+                      style="cursor: pointer"
+                    >
+                      <td>2</td>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td><span class="badge bg-primary">300</span></td>
+                      <td><span class="badge bg-success">15</span></td>
+                      <td><span class="badge bg-info">22</span></td>
+                      <td><span class="badge bg-danger">6</span></td>
+                      <td><span class="badge bg-secondary">4</span></td>
+                      <td><span class="badge bg-dark">1</span></td>
+                      <td><span class="badge bg-warning">326</span></td>
+                      <td><span class="text-success">3.3%</span></td>
+                      <td><span class="text-success">78.6%</span></td>
+                    </tr>
+                    <tr
+                      onclick="showLocationDetails('giang-vo', 'Giảng Võ')"
+                      style="cursor: pointer"
+                    >
+                      <td>3</td>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td><span class="badge bg-primary">280</span></td>
+                      <td><span class="badge bg-success">10</span></td>
+                      <td><span class="badge bg-info">16</span></td>
+                      <td><span class="badge bg-danger">12</span></td>
+                      <td><span class="badge bg-secondary">8</span></td>
+                      <td><span class="badge bg-dark">3</span></td>
+                      <td><span class="badge bg-warning">283</span></td>
+                      <td><span class="text-warning">7.1%</span></td>
+                      <td><span class="text-warning">66.7%</span></td>
+                    </tr>
+                    <tr
+                      onclick="showLocationDetails('hao-nam', 'Hào Nam')"
+                      style="cursor: pointer"
+                    >
+                      <td>4</td>
+                      <td><strong>Hào Nam</strong></td>
+                      <td><span class="badge bg-primary">220</span></td>
+                      <td><span class="badge bg-success">8</span></td>
+                      <td><span class="badge bg-info">14</span></td>
+                      <td><span class="badge bg-danger">7</span></td>
+                      <td><span class="badge bg-secondary">5</span></td>
+                      <td><span class="badge bg-dark">2</span></td>
+                      <td><span class="badge bg-warning">228</span></td>
+                      <td><span class="text-warning">5.5%</span></td>
+                      <td><span class="text-success">73.7%</span></td>
+                    </tr>
+                    <tr
+                      onclick="showLocationDetails('nguyen-tuan', 'Nguyễn Tuân')"
+                      style="cursor: pointer"
+                    >
+                      <td>5</td>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td><span class="badge bg-primary">200</span></td>
+                      <td><span class="badge bg-success">15</span></td>
+                      <td><span class="badge bg-info">10</span></td>
+                      <td><span class="badge bg-danger">7</span></td>
+                      <td><span class="badge bg-secondary">7</span></td>
+                      <td><span class="badge bg-dark">2</span></td>
+                      <td><span class="badge bg-warning">209</span></td>
+                      <td><span class="text-danger">7.0%</span></td>
+                      <td><span class="text-warning">58.8%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Details by Selected Location -->
+      <div class="row mb-4" id="memberDetailsSection" style="display: none">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-users me-2"></i>Chi tiết hội viên -
+                <span id="selectedLocationName"></span>
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6 mb-4">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <h6 class="text-success mb-0">
+                      New Joiners (Khách hàng mới)
+                    </h6>
+                    <button
+                      class="btn btn-outline-success btn-sm"
+                      onclick="toggleTable('newJoiners')"
+                    >
+                      <i class="fas fa-chevron-down" id="newJoinersIcon"></i>
+                    </button>
+                  </div>
+                  <div
+                    class="table-responsive"
+                    id="newJoinersTable"
+                    style="display: none"
+                  >
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tên</th>
+                          <th>Loại thẻ</th>
+                          <th>Ngày đăng ký</th>
+                          <th>Nguồn</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Dynamic content will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <h6 class="text-danger mb-0">
+                      Cancellations (Hủy hợp đồng)
+                    </h6>
+                    <button
+                      class="btn btn-outline-danger btn-sm"
+                      onclick="toggleTable('cancellations')"
+                    >
+                      <i class="fas fa-chevron-down" id="cancellationsIcon"></i>
+                    </button>
+                  </div>
+                  <div
+                    class="table-responsive"
+                    id="cancellationsTable"
+                    style="display: none"
+                  >
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tên</th>
+                          <th>Loại thẻ</th>
+                          <th>Ngày hủy</th>
+                          <th>Lý do</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Dynamic content will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6 mb-4">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <h6 class="text-info mb-0">Renewals (Gia hạn)</h6>
+                    <button
+                      class="btn btn-outline-info btn-sm"
+                      onclick="toggleTable('renewals')"
+                    >
+                      <i class="fas fa-chevron-down" id="renewalsIcon"></i>
+                    </button>
+                  </div>
+                  <div
+                    class="table-responsive"
+                    id="renewalsTable"
+                    style="display: none"
+                  >
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tên</th>
+                          <th>Loại thẻ</th>
+                          <th>Ngày gia hạn</th>
+                          <th>Gói gia hạn</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Dynamic content will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <h6 class="text-secondary mb-0">Expired (Hết hạn)</h6>
+                    <button
+                      class="btn btn-outline-secondary btn-sm"
+                      onclick="toggleTable('expired')"
+                    >
+                      <i class="fas fa-chevron-down" id="expiredIcon"></i>
+                    </button>
+                  </div>
+                  <div
+                    class="table-responsive"
+                    id="expiredTable"
+                    style="display: none"
+                  >
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tên</th>
+                          <th>Loại thẻ</th>
+                          <th>Ngày hết hạn</th>
+                          <th>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Dynamic content will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6 mb-4">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <h6 class="text-dark mb-0">Freezes (Tạm ngưng)</h6>
+                    <button
+                      class="btn btn-outline-dark btn-sm"
+                      onclick="toggleTable('freezes')"
+                    >
+                      <i class="fas fa-chevron-down" id="freezesIcon"></i>
+                    </button>
+                  </div>
+                  <div
+                    class="table-responsive"
+                    id="freezesTable"
+                    style="display: none"
+                  >
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tên</th>
+                          <th>Loại thẻ</th>
+                          <th>Ngày tạm ngưng</th>
+                          <th>Lý do</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Dynamic content will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-2"
+                  >
+                    <h6 class="text-warning mb-0">
+                      Closing Balance (Số dư cuối kỳ)
+                    </h6>
+                    <button
+                      class="btn btn-outline-warning btn-sm"
+                      onclick="toggleTable('closing')"
+                    >
+                      <i class="fas fa-chevron-down" id="closingIcon"></i>
+                    </button>
+                  </div>
+                  <div
+                    class="table-responsive"
+                    id="closingTable"
+                    style="display: none"
+                  >
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Tên</th>
+                          <th>Loại thẻ</th>
+                          <th>Ngày bắt đầu</th>
+                          <th>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Dynamic content will be loaded here -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-lightbulb me-2"></i>Khuyến nghị cải thiện
+                Member Movement
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-success">Tăng cường thu hút khách mới:</h6>
+                  <ul>
+                    <li>Tối ưu hóa marketing campaigns</li>
+                    <li>Cải thiện referral program</li>
+                    <li>Tăng cường digital marketing</li>
+                    <li>Mở rộng partnerships</li>
+                  </ul>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-warning">Giảm tỉ lệ rời bỏ:</h6>
+                  <ul>
+                    <li>Cải thiện customer experience</li>
+                    <li>Tăng cường engagement programs</li>
+                    <li>Hỗ trợ khách hàng tốt hơn</li>
+                    <li>Phân tích nguyên nhân churn</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Member Movement Chart
+      const memberMovementCtx = document
+        .getElementById("memberMovementChart")
+        .getContext("2d");
+      new Chart(memberMovementCtx, {
+        type: "doughnut",
+        data: {
+          labels: [
+            "Số dư đầu kỳ",
+            "Khách hàng mới",
+            "Gia hạn",
+            "Hủy hợp đồng",
+            "Hết hạn",
+            "Tạm ngưng",
+          ],
+          datasets: [
+            {
+              data: [1250, 60, 80, 40, 30, 10],
+              backgroundColor: [
+                "#0d6efd",
+                "#198754",
+                "#0dcaf0",
+                "#dc3545",
+                "#6c757d",
+                "#212529",
+              ],
+              borderWidth: 2,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Phân bố Member Movement",
+            },
+            legend: {
+              position: "bottom",
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                  const percentage = ((context.parsed / total) * 100).toFixed(
+                    1
+                  );
+                  return context.label + ": " + percentage + "%";
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Member Trend Chart
+      const memberTrendCtx = document
+        .getElementById("memberTrendChart")
+        .getContext("2d");
+      new Chart(memberTrendCtx, {
+        type: "line",
+        data: {
+          labels: [
+            "T1",
+            "T2",
+            "T3",
+            "T4",
+            "T5",
+            "T6",
+            "T7",
+            "T8",
+            "T9",
+            "T10",
+            "T11",
+            "T12",
+          ],
+          datasets: [
+            {
+              label: "Số dư đầu kỳ",
+              data: [
+                1200, 1210, 1220, 1230, 1240, 1250, 1245, 1250, 1255, 1260,
+                1255, 1250,
+              ],
+              borderColor: "#0d6efd",
+              backgroundColor: "rgba(13, 110, 253, 0.1)",
+              tension: 0.4,
+            },
+            {
+              label: "Khách hàng mới",
+              data: [45, 50, 55, 60, 65, 70, 68, 72, 75, 78, 80, 60],
+              borderColor: "#198754",
+              backgroundColor: "rgba(25, 135, 84, 0.1)",
+              tension: 0.4,
+            },
+            {
+              label: "Số dư cuối kỳ",
+              data: [
+                1210, 1220, 1230, 1240, 1250, 1260, 1255, 1260, 1265, 1270,
+                1265, 1310,
+              ],
+              borderColor: "#ffc107",
+              backgroundColor: "rgba(255, 193, 7, 0.1)",
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Xu hướng Member Movement theo tháng",
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Filter functionality
+      function applyFilters() {
+        const location = document.getElementById("locationFilter").value;
+        const timeRange = document.getElementById("timeRangeFilter").value;
+        const membership = document.getElementById("membershipFilter").value;
+
+        // Show loading
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML =
+          '<i class="fas fa-spinner fa-spin me-1"></i>Đang tải...';
+        button.disabled = true;
+
+        // Simulate API call
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.disabled = false;
+
+          // Show success message
+          const alert = document.createElement("div");
+          alert.className =
+            "alert alert-success alert-dismissible fade show mt-3";
+          alert.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>
+                    Đã áp dụng bộ lọc: ${getLocationName(
+                      location
+                    )} - ${getTimeRangeName(timeRange)} - ${getMembershipName(
+            membership
+          )}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+          document.querySelector(".card-body").appendChild(alert);
+        }, 1000);
+      }
+
+      function getLocationName(value) {
+        const locations = {
+          all: "Tất cả cơ sở",
+          "ton-that-thuyet": "Tôn Thất Thuyết",
+          "huynh-thuc-khang": "Huỳnh Thúc Kháng",
+          "giang-vo": "Giảng Võ",
+          "hao-nam": "Hào Nam",
+          "nguyen-tuan": "Nguyễn Tuân",
+        };
+        return locations[value] || value;
+      }
+
+      function getTimeRangeName(value) {
+        const timeRanges = {
+          "this-month": "Tháng này",
+          "last-month": "Tháng trước",
+          "last-3-months": "3 tháng gần đây",
+          "last-6-months": "6 tháng gần đây",
+          "this-year": "Năm nay",
+        };
+        return timeRanges[value] || value;
+      }
+
+      function getMembershipName(value) {
+        const memberships = {
+          all: "Tất cả loại",
+          basic: "Basic",
+          premium: "Premium",
+          vip: "VIP",
+          corporate: "Corporate",
+        };
+        return memberships[value] || value;
+      }
+
+      // Location details data
+      const locationDetails = {
+        "ton-that-thuyet": {
+          newJoiners: [
+            {
+              name: "Trần Thị B",
+              cardType: "Premium",
+              date: "18/12/2024",
+              source: "Referral",
+            },
+            {
+              name: "Phan Văn I",
+              cardType: "VIP",
+              date: "20/12/2024",
+              source: "Walk-in",
+            },
+            {
+              name: "Lê Thị M",
+              cardType: "Basic",
+              date: "22/12/2024",
+              source: "Facebook",
+            },
+            {
+              name: "Nguyễn Văn N",
+              cardType: "Premium",
+              date: "24/12/2024",
+              source: "Google Ads",
+            },
+          ],
+          cancellations: [
+            {
+              name: "Phan Văn I",
+              cardType: "VIP",
+              date: "18/12/2024",
+              reason: "Chuyển công tác",
+            },
+            {
+              name: "Trần Thị O",
+              cardType: "Basic",
+              date: "19/12/2024",
+              reason: "Chi phí cao",
+            },
+            {
+              name: "Lê Văn P",
+              cardType: "Premium",
+              date: "21/12/2024",
+              reason: "Không có thời gian",
+            },
+          ],
+        },
+        "huynh-thuc-khang": {
+          newJoiners: [
+            {
+              name: "Nguyễn Văn A",
+              cardType: "VIP",
+              date: getRandomRecentDate(),
+              source: "Facebook",
+            },
+            {
+              name: "Trần Thị Q",
+              cardType: "Premium",
+              date: "17/12/2024",
+              source: "Instagram",
+            },
+            {
+              name: "Lê Văn R",
+              cardType: "Basic",
+              date: "19/12/2024",
+              source: "Referral",
+            },
+            {
+              name: "Phạm Thị S",
+              cardType: "VIP",
+              date: "23/12/2024",
+              source: "Walk-in",
+            },
+            {
+              name: "Hoàng Văn T1",
+              cardType: "Basic",
+              date: "16/12/2024",
+              source: "Google Ads",
+            },
+            {
+              name: "Vũ Thị T2",
+              cardType: "Premium",
+              date: "18/12/2024",
+              source: "Facebook",
+            },
+            {
+              name: "Đặng Văn T3",
+              cardType: "Basic",
+              date: "20/12/2024",
+              source: "Referral",
+            },
+            {
+              name: "Bùi Thị T4",
+              cardType: "VIP",
+              date: "21/12/2024",
+              source: "Walk-in",
+            },
+            {
+              name: "Phan Văn T5",
+              cardType: "Premium",
+              date: "22/12/2024",
+              source: "Instagram",
+            },
+            {
+              name: "Ngô Thị T6",
+              cardType: "Basic",
+              date: "24/12/2024",
+              source: "Google Ads",
+            },
+            {
+              name: "Lê Văn T7",
+              cardType: "Premium",
+              date: "25/12/2024",
+              source: "Facebook",
+            },
+            {
+              name: "Trần Thị T8",
+              cardType: "VIP",
+              date: "26/12/2024",
+              source: "Referral",
+            },
+            {
+              name: "Nguyễn Văn T9",
+              cardType: "Basic",
+              date: "27/12/2024",
+              source: "Walk-in",
+            },
+            {
+              name: "Phạm Thị T10",
+              cardType: "Premium",
+              date: "28/12/2024",
+              source: "Instagram",
+            },
+            {
+              name: "Hoàng Văn T11",
+              cardType: "VIP",
+              date: "29/12/2024",
+              source: "Google Ads",
+            },
+          ],
+          renewals: [
+            {
+              name: "Lê Văn R1",
+              cardType: "Premium",
+              date: "15/12/2024",
+              package: "6 tháng",
+            },
+            {
+              name: "Trần Thị R2",
+              cardType: "VIP",
+              date: "16/12/2024",
+              package: "12 tháng",
+            },
+            {
+              name: "Nguyễn Văn R3",
+              cardType: "Basic",
+              date: "17/12/2024",
+              package: "3 tháng",
+            },
+            {
+              name: "Phạm Thị R4",
+              cardType: "Premium",
+              date: "18/12/2024",
+              package: "6 tháng",
+            },
+            {
+              name: "Hoàng Văn R5",
+              cardType: "VIP",
+              date: "19/12/2024",
+              package: "12 tháng",
+            },
+            {
+              name: "Vũ Thị R6",
+              cardType: "Basic",
+              date: "20/12/2024",
+              package: "3 tháng",
+            },
+            {
+              name: "Đặng Văn R7",
+              cardType: "Premium",
+              date: "21/12/2024",
+              package: "6 tháng",
+            },
+            {
+              name: "Bùi Thị R8",
+              cardType: "VIP",
+              date: "22/12/2024",
+              package: "12 tháng",
+            },
+            {
+              name: "Phan Văn R9",
+              cardType: "Basic",
+              date: "23/12/2024",
+              package: "3 tháng",
+            },
+            {
+              name: "Ngô Thị R10",
+              cardType: "Premium",
+              date: "24/12/2024",
+              package: "6 tháng",
+            },
+            {
+              name: "Lê Văn R11",
+              cardType: "VIP",
+              date: "25/12/2024",
+              package: "12 tháng",
+            },
+            {
+              name: "Trần Thị R12",
+              cardType: "Basic",
+              date: "26/12/2024",
+              package: "3 tháng",
+            },
+            {
+              name: "Nguyễn Văn R13",
+              cardType: "Premium",
+              date: "27/12/2024",
+              package: "6 tháng",
+            },
+            {
+              name: "Phạm Thị R14",
+              cardType: "VIP",
+              date: "28/12/2024",
+              package: "12 tháng",
+            },
+            {
+              name: "Hoàng Văn R15",
+              cardType: "Basic",
+              date: "29/12/2024",
+              package: "3 tháng",
+            },
+            {
+              name: "Vũ Thị R16",
+              cardType: "Premium",
+              date: "30/12/2024",
+              package: "6 tháng",
+            },
+            {
+              name: "Đặng Văn R17",
+              cardType: "VIP",
+              date: "31/12/2024",
+              package: "12 tháng",
+            },
+            {
+              name: "Bùi Thị R18",
+              cardType: "Basic",
+              date: "01/01/2025",
+              package: "3 tháng",
+            },
+            {
+              name: "Phan Văn R19",
+              cardType: "Premium",
+              date: "02/01/2025",
+              package: "6 tháng",
+            },
+            {
+              name: "Ngô Thị R20",
+              cardType: "VIP",
+              date: "03/01/2025",
+              package: "12 tháng",
+            },
+            {
+              name: "Lê Văn R21",
+              cardType: "Basic",
+              date: "04/01/2025",
+              package: "3 tháng",
+            },
+            {
+              name: "Trần Thị R22",
+              cardType: "Premium",
+              date: "05/01/2025",
+              package: "6 tháng",
+            },
+          ],
+          cancellations: [
+            {
+              name: "Ngô Thị K",
+              cardType: "Premium",
+              date: "20/12/2024",
+              reason: "Không hài lòng",
+            },
+            {
+              name: "Đặng Văn T",
+              cardType: "Basic",
+              date: "22/12/2024",
+              reason: "Chuyển nhà",
+            },
+            {
+              name: "Bùi Thị C1",
+              cardType: "VIP",
+              date: "18/12/2024",
+              reason: "Chi phí cao",
+            },
+            {
+              name: "Phan Văn C2",
+              cardType: "Premium",
+              date: "19/12/2024",
+              reason: "Không có thời gian",
+            },
+            {
+              name: "Ngô Thị C3",
+              cardType: "Basic",
+              date: "21/12/2024",
+              reason: "Chuyển công tác",
+            },
+            {
+              name: "Lê Văn C4",
+              cardType: "VIP",
+              date: "23/12/2024",
+              reason: "Không hài lòng",
+            },
+          ],
+          expired: [
+            {
+              name: "Trần Thị E1",
+              cardType: "Basic",
+              date: "15/12/2024",
+              status: "Không gia hạn",
+            },
+            {
+              name: "Nguyễn Văn E2",
+              cardType: "Premium",
+              date: "18/12/2024",
+              status: "Không gia hạn",
+            },
+            {
+              name: "Phạm Thị E3",
+              cardType: "VIP",
+              date: "20/12/2024",
+              status: "Không gia hạn",
+            },
+            {
+              name: "Hoàng Văn E4",
+              cardType: "Basic",
+              date: "22/12/2024",
+              status: "Không gia hạn",
+            },
+          ],
+          freezes: [
+            {
+              name: "Vũ Thị F1",
+              cardType: "Premium",
+              date: "25/12/2024",
+              reason: "Du lịch",
+            },
+          ],
+          closing: [
+            {
+              name: "Nguyễn Văn A",
+              cardType: "VIP",
+              date: "15/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Trần Thị Q",
+              cardType: "Premium",
+              date: "17/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Lê Văn R",
+              cardType: "Basic",
+              date: "19/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Phạm Thị S",
+              cardType: "VIP",
+              date: "23/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Hoàng Văn T1",
+              cardType: "Basic",
+              date: "16/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Vũ Thị T2",
+              cardType: "Premium",
+              date: "18/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Đặng Văn T3",
+              cardType: "Basic",
+              date: "20/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Bùi Thị T4",
+              cardType: "VIP",
+              date: "21/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Phan Văn T5",
+              cardType: "Premium",
+              date: "22/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Ngô Thị T6",
+              cardType: "Basic",
+              date: "24/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Lê Văn T7",
+              cardType: "Premium",
+              date: "25/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Trần Thị T8",
+              cardType: "VIP",
+              date: "26/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Nguyễn Văn T9",
+              cardType: "Basic",
+              date: "27/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Phạm Thị T10",
+              cardType: "Premium",
+              date: "28/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Hoàng Văn T11",
+              cardType: "VIP",
+              date: "29/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Lê Văn R1",
+              cardType: "Premium",
+              date: "15/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Trần Thị R2",
+              cardType: "VIP",
+              date: "16/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Nguyễn Văn R3",
+              cardType: "Basic",
+              date: "17/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Phạm Thị R4",
+              cardType: "Premium",
+              date: "18/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Hoàng Văn R5",
+              cardType: "VIP",
+              date: "19/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Vũ Thị R6",
+              cardType: "Basic",
+              date: "20/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Đặng Văn R7",
+              cardType: "Premium",
+              date: "21/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Bùi Thị R8",
+              cardType: "VIP",
+              date: "22/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Phan Văn R9",
+              cardType: "Basic",
+              date: "23/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Ngô Thị R10",
+              cardType: "Premium",
+              date: "24/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Lê Văn R11",
+              cardType: "VIP",
+              date: "25/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Trần Thị R12",
+              cardType: "Basic",
+              date: "26/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Nguyễn Văn R13",
+              cardType: "Premium",
+              date: "27/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Phạm Thị R14",
+              cardType: "VIP",
+              date: "28/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Hoàng Văn R15",
+              cardType: "Basic",
+              date: "29/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Vũ Thị R16",
+              cardType: "Premium",
+              date: "30/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Đặng Văn R17",
+              cardType: "VIP",
+              date: "31/12/2024",
+              status: "Active",
+            },
+            {
+              name: "Bùi Thị R18",
+              cardType: "Basic",
+              date: "01/01/2025",
+              status: "Active",
+            },
+            {
+              name: "Phan Văn R19",
+              cardType: "Premium",
+              date: "02/01/2025",
+              status: "Active",
+            },
+            {
+              name: "Ngô Thị R20",
+              cardType: "VIP",
+              date: "03/01/2025",
+              status: "Active",
+            },
+            {
+              name: "Lê Văn R21",
+              cardType: "Basic",
+              date: "04/01/2025",
+              status: "Active",
+            },
+            {
+              name: "Trần Thị R22",
+              cardType: "Premium",
+              date: "05/01/2025",
+              status: "Active",
+            },
+            {
+              name: "Vũ Thị F1",
+              cardType: "Premium",
+              date: "25/12/2024",
+              status: "Frozen",
+            },
+          ],
+        },
+        "giang-vo": {
+          newJoiners: [
+            {
+              name: "Phạm Thị D",
+              cardType: "Premium",
+              date: "22/12/2024",
+              source: "Walk-in",
+            },
+            {
+              name: "Hoàng Văn U",
+              cardType: "Basic",
+              date: "24/12/2024",
+              source: "Google Ads",
+            },
+            {
+              name: "Vũ Thị V",
+              cardType: "Premium",
+              date: "25/12/2024",
+              source: "Facebook",
+            },
+          ],
+          cancellations: [
+            {
+              name: "Đặng Văn G",
+              cardType: "Premium",
+              date: "12/12/2024",
+              reason: "Không có thời gian",
+            },
+            {
+              name: "Bùi Thị W",
+              cardType: "Basic",
+              date: "14/12/2024",
+              reason: "Chi phí cao",
+            },
+            {
+              name: "Phan Văn X",
+              cardType: "VIP",
+              date: "16/12/2024",
+              reason: "Chuyển công tác",
+            },
+          ],
+        },
+        "hao-nam": {
+          newJoiners: [
+            {
+              name: "Lê Văn C",
+              cardType: "Basic",
+              date: "20/12/2024",
+              source: "Google Ads",
+            },
+            {
+              name: "Trần Thị Y",
+              cardType: "Premium",
+              date: "23/12/2024",
+              source: "Referral",
+            },
+            {
+              name: "Nguyễn Văn Z",
+              cardType: "Basic",
+              date: "25/12/2024",
+              source: "Instagram",
+            },
+          ],
+          cancellations: [
+            {
+              name: "Bùi Thị H",
+              cardType: "Basic",
+              date: "15/12/2024",
+              reason: "Chi phí cao",
+            },
+            {
+              name: "Đặng Văn AA",
+              cardType: "Premium",
+              date: "17/12/2024",
+              reason: "Không có thời gian",
+            },
+          ],
+        },
+        "nguyen-tuan": {
+          newJoiners: [
+            {
+              name: "Hoàng Văn E",
+              cardType: "Basic",
+              date: "25/12/2024",
+              source: "Instagram",
+            },
+            {
+              name: "Phạm Thị BB",
+              cardType: "Premium",
+              date: "26/12/2024",
+              source: "Facebook",
+            },
+            {
+              name: "Lê Văn CC",
+              cardType: "VIP",
+              date: "27/12/2024",
+              source: "Walk-in",
+            },
+          ],
+          cancellations: [
+            {
+              name: "Vũ Thị F",
+              cardType: "Basic",
+              date: "10/12/2024",
+              reason: "Chuyển nhà",
+            },
+            {
+              name: "Nguyễn Văn DD",
+              cardType: "Premium",
+              date: "13/12/2024",
+              reason: "Không hài lòng",
+            },
+            {
+              name: "Trần Thị EE",
+              cardType: "Basic",
+              date: "15/12/2024",
+              reason: "Chi phí cao",
+            },
+          ],
+        },
+      };
+
+      function showLocationDetails(locationId, locationName) {
+        // Update location name
+        document.getElementById("selectedLocationName").textContent =
+          locationName;
+
+        // Show the details section
+        document.getElementById("memberDetailsSection").style.display = "block";
+
+        // Get data for the selected location
+        const data = locationDetails[locationId];
+        if (!data) {
+          console.warn("No data found for location:", locationId);
+          return;
+        }
+
+        // Update new joiners table
+        const newJoinersTable = document.querySelector(
+          "#newJoinersTable tbody"
+        );
+        newJoinersTable.innerHTML = "";
+        data.newJoiners.forEach((member) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${member.name}</td>
+            <td>${member.cardType}</td>
+            <td>${member.date}</td>
+            <td>${member.source}</td>
+          `;
+          newJoinersTable.appendChild(row);
+        });
+
+        // Update cancellations table
+        const cancellationsTable = document.querySelector(
+          "#cancellationsTable tbody"
+        );
+        cancellationsTable.innerHTML = "";
+        data.cancellations.forEach((member) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${member.name}</td>
+            <td>${member.cardType}</td>
+            <td>${member.date}</td>
+            <td>${member.reason}</td>
+          `;
+          cancellationsTable.appendChild(row);
+        });
+
+        // Update renewals table
+        const renewalsTable = document.querySelector("#renewalsTable tbody");
+        renewalsTable.innerHTML = "";
+        data.renewals.forEach((member) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${member.name}</td>
+            <td>${member.cardType}</td>
+            <td>${member.date}</td>
+            <td>${member.package}</td>
+          `;
+          renewalsTable.appendChild(row);
+        });
+
+        // Update expired table
+        const expiredTable = document.querySelector("#expiredTable tbody");
+        expiredTable.innerHTML = "";
+        data.expired.forEach((member) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${member.name}</td>
+            <td>${member.cardType}</td>
+            <td>${member.date}</td>
+            <td>${member.status}</td>
+          `;
+          expiredTable.appendChild(row);
+        });
+
+        // Update freezes table
+        const freezesTable = document.querySelector("#freezesTable tbody");
+        freezesTable.innerHTML = "";
+        data.freezes.forEach((member) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${member.name}</td>
+            <td>${member.cardType}</td>
+            <td>${member.date}</td>
+            <td>${member.reason}</td>
+          `;
+          freezesTable.appendChild(row);
+        });
+
+        // Update closing table
+        const closingTable = document.querySelector("#closingTable tbody");
+        closingTable.innerHTML = "";
+        data.closing.forEach((member) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${member.name}</td>
+            <td>${member.cardType}</td>
+            <td>${member.date}</td>
+            <td>${member.status}</td>
+          `;
+          closingTable.appendChild(row);
+        });
+
+        // Scroll to the details section
+        document
+          .getElementById("memberDetailsSection")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      // Toggle table visibility
+      function toggleTable(tableType) {
+        const table = document.getElementById(tableType + "Table");
+        const icon = document.getElementById(tableType + "Icon");
+
+        if (table.style.display === "none") {
+          table.style.display = "block";
+          icon.className = "fas fa-chevron-up";
+        } else {
+          table.style.display = "none";
+          icon.className = "fas fa-chevron-down";
+        }
+      }
+
+      // Generate current date
+      function getCurrentDate() {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, "0");
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const year = today.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+
+      // Generate random date within last 30 days
+      function getRandomRecentDate() {
+        const today = new Date();
+        const randomDays = Math.floor(rng.next() * 30);
+        const randomDate = new Date(
+          today.getTime() - randomDays * 24 * 60 * 60 * 1000
+        );
+        const day = String(randomDate.getDate()).padStart(2, "0");
+        const month = String(randomDate.getMonth() + 1).padStart(2, "0");
+        const year = randomDate.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+
+      // Update all dates in location details
+      function updateDatesInLocationDetails() {
+        Object.keys(locationDetails).forEach((locationId) => {
+          const location = locationDetails[locationId];
+
+          // Update new joiners dates
+          if (location.newJoiners) {
+            location.newJoiners.forEach((member) => {
+              member.date = getRandomRecentDate();
+            });
+          }
+
+          // Update renewals dates
+          if (location.renewals) {
+            location.renewals.forEach((member) => {
+              member.date = getRandomRecentDate();
+            });
+          }
+
+          // Update cancellations dates
+          if (location.cancellations) {
+            location.cancellations.forEach((member) => {
+              member.date = getRandomRecentDate();
+            });
+          }
+
+          // Update expired dates
+          if (location.expired) {
+            location.expired.forEach((member) => {
+              member.date = getRandomRecentDate();
+            });
+          }
+
+          // Update freezes dates
+          if (location.freezes) {
+            location.freezes.forEach((member) => {
+              member.date = getRandomRecentDate();
+            });
+          }
+
+          // Update closing dates
+          if (location.closing) {
+            location.closing.forEach((member) => {
+              member.date = getRandomRecentDate();
+            });
+          }
+        });
+      }
+
+      // Update dates when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        updateDatesInLocationDetails();
+      });
+
+      // Show member details for specific category
+      function showMemberDetails(category, categoryName) {
+        // Create modal or section to show member details
+        const modalHtml = `
+          <div class="modal fade" id="memberDetailsModal" tabindex="-1" aria-labelledby="memberDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="memberDetailsModalLabel">
+                    <i class="fas fa-users me-2"></i>Danh sách ${categoryName}
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <!-- Filter Section -->
+                  <div class="row mb-3">
+                    <div class="col-md-3">
+                      <label class="form-label">Lọc theo trung tâm:</label>
+                      <select class="form-select" id="centerFilter" onchange="filterMembers()">
+                        <option value="all">Tất cả trung tâm</option>
+                        <option value="Tôn Thất Thuyết">Tôn Thất Thuyết</option>
+                        <option value="Huỳnh Thúc Kháng">Huỳnh Thúc Kháng</option>
+                        <option value="Giảng Võ">Giảng Võ</option>
+                        <option value="Hào Nam">Hào Nam</option>
+                        <option value="Nguyễn Tuân">Nguyễn Tuân</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Lọc theo loại thẻ:</label>
+                      <select class="form-select" id="membershipFilter" onchange="filterMembers()">
+                        <option value="all">Tất cả loại thẻ</option>
+                        <option value="Basic">Basic</option>
+                        <option value="Premium">Premium</option>
+                        <option value="VIP">VIP</option>
+                        <option value="Corporate">Corporate</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Khoảng thời gian:</label>
+                      <select class="form-select" id="timeFilter" onchange="filterMembers()">
+                        <option value="all">Tất cả thời gian</option>
+                        <option value="today">Hôm nay</option>
+                        <option value="yesterday">Hôm qua</option>
+                        <option value="thisWeek">Tuần này</option>
+                        <option value="lastWeek">Tuần trước</option>
+                        <option value="thisMonth">Tháng này</option>
+                        <option value="lastMonth">Tháng trước</option>
+                        <option value="last7days">7 ngày qua</option>
+                        <option value="last30days">30 ngày qua</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Tìm kiếm:</label>
+                      <input type="text" class="form-control" id="searchInput" placeholder="Tìm theo tên hoặc mã hội viên..." onkeyup="filterMembers()">
+                    </div>
+                  </div>
+                  
+                  <!-- Results Summary -->
+                  <div class="alert alert-info mb-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Hiển thị <span id="filteredCount">0</span> / <span id="totalCount">0</span> hội viên
+                  </div>
+                  
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>STT</th>
+                          <th>Mã hội viên</th>
+                          <th>Tên hội viên</th>
+                          <th>Trung tâm</th>
+                          <th>Loại thẻ</th>
+                          <th>Ngày ${getCategoryDateLabel(category)}</th>
+                          <th>Trạng thái</th>
+                        </tr>
+                      </thead>
+                      <tbody id="memberDetailsTableBody">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" onclick="resetFilters()">
+                    <i class="fas fa-undo me-1"></i>Reset bộ lọc
+                  </button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Remove existing modal if any
+        const existingModal = document.getElementById("memberDetailsModal");
+        if (existingModal) {
+          existingModal.remove();
+        }
+
+        // Add modal to body
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
+
+        // Populate table with sample data
+        populateMemberDetailsTable(category);
+
+        // Show modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("memberDetailsModal")
+        );
+        modal.show();
+      }
+
+      // Get date label for category
+      function getCategoryDateLabel(category) {
+        const labels = {
+          opening: "bắt đầu",
+          newJoiners: "tham gia",
+          renewals: "gia hạn",
+          closing: "kết thúc",
+          cancellations: "hủy",
+          expired: "hết hạn",
+          freezes: "tạm ngưng",
+          silent: "cuối cùng",
+        };
+        return labels[category] || "cập nhật";
+      }
+
+      // Store original data for filtering
+      let originalMemberData = [];
+      let currentCategory = "";
+
+      // Populate member details table
+      function populateMemberDetailsTable(category) {
+        currentCategory = category;
+        const tableBody = document.getElementById("memberDetailsTableBody");
+        tableBody.innerHTML = "";
+
+        // Sample data for each category
+        const memberData = {
+          opening: generateMemberData(50, "Opening Balance"),
+          newJoiners: generateMemberData(60, "New Joiners"),
+          renewals: generateMemberData(80, "Renewals"),
+          closing: generateMemberData(50, "Closing Balance"),
+          cancellations: generateMemberData(40, "Cancellations"),
+          expired: generateMemberData(30, "Expired"),
+          freezes: generateMemberData(10, "Freezes"),
+          silent: generateMemberData(25, "Silent Members"),
+        };
+
+        // Store original data
+        originalMemberData = memberData[category] || [];
+
+        // Update total count
+        document.getElementById("totalCount").textContent =
+          originalMemberData.length;
+
+        // Display all members initially
+        displayMembers(originalMemberData);
+      }
+
+      // Display members in table
+      function displayMembers(members) {
+        const tableBody = document.getElementById("memberDetailsTableBody");
+        tableBody.innerHTML = "";
+
+        members.forEach((member, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td><strong>${member.id}</strong></td>
+            <td>${member.name}</td>
+            <td><span class="badge bg-primary">${member.center}</span></td>
+            <td><span class="badge bg-info">${member.membershipType}</span></td>
+            <td>${member.date}</td>
+            <td><span class="badge ${getStatusBadgeClass(currentCategory)}">${
+            member.status
+          }</span></td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+        // Update filtered count
+        document.getElementById("filteredCount").textContent = members.length;
+      }
+
+      // Filter members based on criteria
+      function filterMembers() {
+        const centerFilter = document.getElementById("centerFilter").value;
+        const membershipFilter =
+          document.getElementById("membershipFilter").value;
+        const timeFilter = document.getElementById("timeFilter").value;
+        const searchInput = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+
+        console.log("Filtering with:", {
+          centerFilter,
+          membershipFilter,
+          timeFilter,
+          searchInput,
+          totalMembers: originalMemberData.length,
+        });
+
+        let filteredMembers = originalMemberData.filter((member) => {
+          // Filter by center
+          const centerMatch =
+            centerFilter === "all" || member.center === centerFilter;
+
+          // Filter by membership type
+          const membershipMatch =
+            membershipFilter === "all" ||
+            member.membershipType === membershipFilter;
+
+          // Filter by time
+          const timeMatch = isDateInRange(member.date, timeFilter);
+
+          // Filter by search text
+          const searchMatch =
+            searchInput === "" ||
+            member.name.toLowerCase().includes(searchInput) ||
+            member.id.toLowerCase().includes(searchInput);
+
+          const isMatch =
+            centerMatch && membershipMatch && timeMatch && searchMatch;
+
+          if (membershipFilter !== "all" && !membershipMatch) {
+            console.log(
+              "Filtered out member:",
+              member.id,
+              "membershipType:",
+              member.membershipType,
+              "filter:",
+              membershipFilter
+            );
+          }
+
+          return isMatch;
+        });
+
+        console.log("Filtered results:", {
+          originalCount: originalMemberData.length,
+          filteredCount: filteredMembers.length,
+          membershipFilter,
+          sampleMembers: filteredMembers.slice(0, 3).map((m) => ({
+            id: m.id,
+            membershipType: m.membershipType,
+          })),
+        });
+
+        displayMembers(filteredMembers);
+      }
+
+      // Check if date is in specified time range
+      function isDateInRange(dateString, timeFilter) {
+        if (timeFilter === "all") return true;
+
+        const memberDate = parseDate(dateString);
+        const today = new Date();
+
+        switch (timeFilter) {
+          case "today":
+            return isSameDay(memberDate, today);
+          case "yesterday":
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            return isSameDay(memberDate, yesterday);
+          case "thisWeek":
+            return isInThisWeek(memberDate);
+          case "lastWeek":
+            return isInLastWeek(memberDate);
+          case "thisMonth":
+            return isInThisMonth(memberDate);
+          case "lastMonth":
+            return isInLastMonth(memberDate);
+          case "last7days":
+            return isInLastNDays(memberDate, 7);
+          case "last30days":
+            return isInLastNDays(memberDate, 30);
+          default:
+            return true;
+        }
+      }
+
+      // Parse date string to Date object
+      function parseDate(dateString) {
+        const [day, month, year] = dateString.split("/");
+        return new Date(year, month - 1, day);
+      }
+
+      // Check if two dates are the same day
+      function isSameDay(date1, date2) {
+        return (
+          date1.getDate() === date2.getDate() &&
+          date1.getMonth() === date2.getMonth() &&
+          date1.getFullYear() === date2.getFullYear()
+        );
+      }
+
+      // Check if date is in this week
+      function isInThisWeek(date) {
+        const today = new Date();
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setHours(23, 59, 59, 999);
+
+        return date >= startOfWeek && date <= endOfWeek;
+      }
+
+      // Check if date is in last week
+      function isInLastWeek(date) {
+        const today = new Date();
+        const startOfLastWeek = new Date(today);
+        startOfLastWeek.setDate(today.getDate() - today.getDay() - 7);
+        startOfLastWeek.setHours(0, 0, 0, 0);
+
+        const endOfLastWeek = new Date(startOfLastWeek);
+        endOfLastWeek.setDate(startOfLastWeek.getDate() + 6);
+        endOfLastWeek.setHours(23, 59, 59, 999);
+
+        return date >= startOfLastWeek && date <= endOfLastWeek;
+      }
+
+      // Check if date is in this month
+      function isInThisMonth(date) {
+        const today = new Date();
+        return (
+          date.getMonth() === today.getMonth() &&
+          date.getFullYear() === today.getFullYear()
+        );
+      }
+
+      // Check if date is in last month
+      function isInLastMonth(date) {
+        const today = new Date();
+        const lastMonth = new Date(
+          today.getFullYear(),
+          today.getMonth() - 1,
+          1
+        );
+        const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0);
+
+        return date >= lastMonth && date <= lastMonthEnd;
+      }
+
+      // Check if date is in last N days
+      function isInLastNDays(date, days) {
+        const today = new Date();
+        const nDaysAgo = new Date(today);
+        nDaysAgo.setDate(today.getDate() - days);
+        nDaysAgo.setHours(0, 0, 0, 0);
+
+        return date >= nDaysAgo && date <= today;
+      }
+
+      // Reset all filters
+      function resetFilters() {
+        document.getElementById("centerFilter").value = "all";
+        document.getElementById("membershipFilter").value = "all";
+        document.getElementById("timeFilter").value = "all";
+        document.getElementById("searchInput").value = "";
+        displayMembers(originalMemberData);
+      }
+
+      // Generate sample member data
+      function generateMemberData(count, category) {
+        const centers = [
+          "Tôn Thất Thuyết",
+          "Huỳnh Thúc Kháng",
+          "Giảng Võ",
+          "Hào Nam",
+          "Nguyễn Tuân",
+        ];
+        const membershipTypes = ["Basic", "Premium", "VIP", "Corporate"];
+        const statuses = {
+          "Opening Balance": "Active",
+          "New Joiners": "Mới",
+          Renewals: "Gia hạn",
+          "Closing Balance": "Active",
+          Cancellations: "Đã hủy",
+          Expired: "Hết hạn",
+          Freezes: "Tạm ngưng",
+          "Silent Members": "Không hoạt động",
+        };
+
+        const members = [];
+        for (let i = 1; i <= count; i++) {
+          members.push({
+            id: `MEM${String(i).padStart(3, "0")}`,
+            name: `Hội viên ${i}`,
+            center: centers[Math.floor(rng.next() * centers.length)],
+            membershipType:
+              membershipTypes[
+                Math.floor(rng.next() * membershipTypes.length)
+              ],
+            date: getRandomRecentDate(),
+            status: statuses[category] || "Active",
+          });
+        }
+        return members;
+      }
+
+      // Get status badge class
+      function getStatusBadgeClass(category) {
+        const classes = {
+          opening: "bg-success",
+          newJoiners: "bg-success",
+          renewals: "bg-info",
+          closing: "bg-success",
+          cancellations: "bg-danger",
+          expired: "bg-secondary",
+          freezes: "bg-warning",
+          silent: "bg-dark",
+        };
+        return classes[category] || "bg-primary";
+      }
+    </script>
+    <!-- Filter Integration Script -->
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/filter-handler.js"></script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+</body>
+</html>

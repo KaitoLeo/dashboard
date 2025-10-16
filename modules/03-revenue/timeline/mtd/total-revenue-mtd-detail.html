@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tổng Doanh thu MTD - Chi tiết Tính toán - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="revenue-mtd-detail.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại MTD Detail
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-primary">
+            <i class="fas fa-calculator me-2"></i>Tổng Doanh thu MTD - Chi tiết
+            Tính toán
+          </h2>
+          <p class="text-muted">
+            Phân tích chi tiết cách tính toán và nguồn dữ liệu của tổng doanh
+            thu tháng hiện tại
+          </p>
+        </div>
+      </div>
+
+      <!-- Key Metrics -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x mb-2"></i>
+              <h6>Tổng Doanh thu MTD</h6>
+              <h3 id="mtdValue">1,850,000,000</h3>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+              <h6>Ngày trong tháng</h6>
+              <h3>22</h3>
+              <small>ngày</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-building fa-2x mb-2"></i>
+              <h6>Số cơ sở</h6>
+              <h3>5</h3>
+              <small>CLB</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+              <i class="fas fa-receipt fa-2x mb-2"></i>
+              <h6>Tổng giao dịch</h6>
+              <h3>2,850</h3>
+              <small>giao dịch</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculation Formula -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-calculator me-2"></i>Công thức tính toán
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="alert alert-info">
+                <h6 class="mb-3">
+                  <i class="fas fa-formula me-2"></i>Công thức chính:
+                </h6>
+                <div class="formula-box bg-light p-3 rounded">
+                  <h5 class="text-primary mb-3">
+                    <strong
+                      >Tổng Doanh thu MTD = Σ(Doanh thu từng cơ sở) + Doanh thu
+                      online + Doanh thu dịch vụ khác</strong
+                    >
+                  </h5>
+                  <div class="example-calculation">
+                    <h6 class="text-success mb-2">Ví dụ tính toán thực tế:</h6>
+                    <div
+                      class="calculation-example bg-white p-3 rounded border"
+                    >
+                      <h4 class="text-primary mb-0">
+                        <strong
+                          >1,850,000,000 = 450M + 380M + 320M + 290M + 200M +
+                          210M</strong
+                        >
+                      </h4>
+                      <small class="text-muted"
+                        >Tôn Thất Thuyết + Huỳnh Thúc Kháng + Giảng Võ + Hào Nam
+                        + Nguyễn Tuân + Online & Dịch vụ</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Breakdown by Source -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bố doanh thu theo
+                nguồn
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="revenueSourceChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i>Doanh thu theo cơ sở
+              </h5>
+            </div>
+            <div class="card-body">
+              <div style="height: 400px">
+                <canvas id="revenueByLocationChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Sources -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-database me-2"></i>Nguồn dữ liệu và cách thu
+                thập
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-primary">1. Hệ thống POS (Point of Sale)</h6>
+                  <ul>
+                    <li>
+                      <strong>Nguồn:</strong> Hệ thống bán hàng tại các cơ sở
+                    </li>
+                    <li>
+                      <strong>Dữ liệu:</strong> Giao dịch membership, PT
+                      sessions, dịch vụ
+                    </li>
+                    <li><strong>Tần suất cập nhật:</strong> Real-time</li>
+                    <li><strong>Độ chính xác:</strong> 99.9%</li>
+                  </ul>
+
+                  <h6 class="text-success">2. Hệ thống Online</h6>
+                  <ul>
+                    <li><strong>Nguồn:</strong> Website, App, E-commerce</li>
+                    <li>
+                      <strong>Dữ liệu:</strong> Đơn hàng online, thanh toán điện
+                      tử
+                    </li>
+                    <li><strong>Tần suất cập nhật:</strong> Real-time</li>
+                    <li><strong>Độ chính xác:</strong> 99.8%</li>
+                  </ul>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-info">3. Hệ thống CRM</h6>
+                  <ul>
+                    <li><strong>Nguồn:</strong> Quản lý khách hàng</li>
+                    <li>
+                      <strong>Dữ liệu:</strong> Lịch sử giao dịch, thanh toán
+                    </li>
+                    <li><strong>Tần suất cập nhật:</strong> Mỗi 15 phút</li>
+                    <li><strong>Độ chính xác:</strong> 99.5%</li>
+                  </ul>
+
+                  <h6 class="text-warning">4. Báo cáo tài chính</h6>
+                  <ul>
+                    <li><strong>Nguồn:</strong> Kế toán, ngân hàng</li>
+                    <li>
+                      <strong>Dữ liệu:</strong> Xác nhận thanh toán, sao kê
+                    </li>
+                    <li><strong>Tần suất cập nhật:</strong> Hàng ngày</li>
+                    <li><strong>Độ chính xác:</strong> 100%</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Breakdown Table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Chi tiết doanh thu theo từng
+                nguồn
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Nguồn doanh thu</th>
+                      <th>Số tiền (VNĐ)</th>
+                      <th>Tỉ trọng</th>
+                      <th>Số giao dịch</th>
+                      <th>Trung bình/GD</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Membership (Thẻ hội viên)</strong></td>
+                      <td><span class="text-primary">1,200,000,000</span></td>
+                      <td><span class="badge bg-primary">64.9%</span></td>
+                      <td>1,850</td>
+                      <td>648,649</td>
+                      <td>Gói 1-12 tháng</td>
+                    </tr>
+                    <tr>
+                      <td><strong>PT Fitnesss (Huấn luyện cá nhân)</strong></td>
+                      <td><span class="text-success">450,000,000</span></td>
+                      <td><span class="badge bg-success">24.3%</span></td>
+                      <td>750</td>
+                      <td>600,000</td>
+                      <td>1-1, 1-2, 1-3</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Group Classes (Lớp tập nhóm)</strong></td>
+                      <td><span class="text-info">120,000,000</span></td>
+                      <td><span class="badge bg-info">6.5%</span></td>
+                      <td>480</td>
+                      <td>250,000</td>
+                      <td>Yoga, Pilates, Zumba</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Dịch vụ bổ sung</strong></td>
+                      <td><span class="text-warning">80,000,000</span></td>
+                      <td><span class="badge bg-warning">4.3%</span></td>
+                      <td>200</td>
+                      <td>400,000</td>
+                      <td>Massage, Spa, PT</td>
+                    </tr>
+                    <tr class="table-success">
+                      <td><strong>TỔNG CỘNG</strong></td>
+                      <td>
+                        <strong class="text-success">1,850,000,000</strong>
+                      </td>
+                      <td><span class="badge bg-success">100%</span></td>
+                      <td><strong>2,850</strong></td>
+                      <td><strong>649,123</strong></td>
+                      <td><strong>MTD 22/09/2025</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculation Methodology -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-cogs me-2"></i>Phương pháp tính toán chi tiết
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6">
+                  <h6 class="text-primary">Bước 1: Thu thập dữ liệu</h6>
+                  <ol>
+                    <li>Lấy tất cả giao dịch từ ngày 1/9/2025 đến 22/9/2025</li>
+                    <li>Lọc các giao dịch có trạng thái "Hoàn thành"</li>
+                    <li>Loại bỏ các giao dịch "Hủy" hoặc "Hoàn tiền"</li>
+                    <li>Xác minh với sao kê ngân hàng</li>
+                  </ol>
+
+                  <h6 class="text-success">Bước 2: Phân loại doanh thu</h6>
+                  <ol>
+                    <li>Membership: Các gói thẻ 1-12 tháng</li>
+                    <li>PT Fitnesss: Huấn luyện cá nhân</li>
+                    <li>Group Classes: Lớp tập nhóm</li>
+                    <li>Dịch vụ: Massage, spa, phụ kiện</li>
+                  </ol>
+                </div>
+                <div class="col-lg-6">
+                  <h6 class="text-info">Bước 3: Tính toán tổng hợp</h6>
+                  <ol>
+                    <li>Cộng tất cả doanh thu theo từng loại</li>
+                    <li>Tính tỉ trọng phần trăm</li>
+                    <li>Kiểm tra tính nhất quán</li>
+                    <li>Xác nhận với bộ phận tài chính</li>
+                  </ol>
+
+                  <h6 class="text-warning">Bước 4: Báo cáo và kiểm tra</h6>
+                  <ol>
+                    <li>Tạo báo cáo chi tiết</li>
+                    <li>So sánh với mục tiêu tháng</li>
+                    <li>Phân tích xu hướng</li>
+                    <li>Đề xuất hành động</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quality Assurance -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-shield-alt me-2"></i>Đảm bảo chất lượng dữ liệu
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="text-center p-3">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <h6>Kiểm tra tự động</h6>
+                    <p>
+                      Hệ thống tự động kiểm tra tính hợp lệ của dữ liệu mỗi 15
+                      phút
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="text-center p-3">
+                    <i class="fas fa-user-check fa-3x text-info mb-3"></i>
+                    <h6>Xác nhận thủ công</h6>
+                    <p>Bộ phận tài chính xác nhận dữ liệu hàng ngày</p>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="text-center p-3">
+                    <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+                    <h6>Phân tích xu hướng</h6>
+                    <p>So sánh với dữ liệu lịch sử để phát hiện bất thường</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script>
+      // Revenue Source Chart
+      const revenueSourceCtx = document
+        .getElementById("revenueSourceChart")
+        .getContext("2d");
+      new Chart(revenueSourceCtx, {
+        type: "doughnut",
+        data: {
+          labels: [
+            "Membership",
+            "PT Fitnesss",
+            "Group Classes",
+            "Dịch vụ bổ sung",
+          ],
+          datasets: [
+            {
+              data: [1200000000, 450000000, 120000000, 80000000],
+              backgroundColor: ["#0d6efd", "#198754", "#0dcaf0", "#ffc107"],
+              borderWidth: 2,
+              borderColor: "#fff",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Phân bố doanh thu theo nguồn",
+            },
+            legend: {
+              position: "bottom",
+            },
+          },
+        },
+      });
+
+      // Revenue by Location Chart
+      const revenueByLocationCtx = document
+        .getElementById("revenueByLocationChart")
+        .getContext("2d");
+      new Chart(revenueByLocationCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "Tôn Thất Thuyết",
+            "Huỳnh Thúc Kháng",
+            "Giảng Võ",
+            "Hào Nam",
+            "Nguyễn Tuân",
+          ],
+          datasets: [
+            {
+              label: "Doanh thu (VNĐ)",
+              data: [450000000, 380000000, 320000000, 290000000, 200000000],
+              backgroundColor: [
+                "#0d6efd",
+                "#198754",
+                "#0dcaf0",
+                "#ffc107",
+                "#dc3545",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Doanh thu theo cơ sở",
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function (value) {
+                  return (value / 1000000).toFixed(0) + "M";
+                },
+              },
+            },
+          },
+        },
+      });
+    </script>
+
+    <!-- Filter Integration Script -->
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/filter-handler.js"></script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+</body>
+</html>

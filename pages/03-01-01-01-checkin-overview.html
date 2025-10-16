@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tổng quan Hội viên Check-in</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src="../assets/js/data-consistency.js"></script>
+  
+    <!-- Checkin Calculation Modules -->
+    <script src="../assets/js/checkin/checkin-calculations.js"></script>
+    <script src="../assets/js/checkin/checkin-mock-data.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/api/api-services.js"></script>
+    <script src="../assets/js/api/data-adapter.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h2 class="mb-1">Tổng quan Hội viên Check-in</h2>
+              <p class="text-muted mb-0">
+                Thống kê chi tiết tất cả hội viên check-in
+              </p>
+            </div>
+            <div>
+              <button class="btn btn-outline-secondary me-2" onclick="goBack()">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại
+              </button>
+              <button class="btn btn-primary">
+                <i class="fas fa-download me-1"></i>Xuất báo cáo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="row mb-4">
+        <!-- Tổng hội viên -->
+        <div class="col-lg col-md-4 col-sm-6 mb-3">
+          <div
+            class="card border-0 shadow-sm clickable-card h-100"
+            onclick="openMembersListDetail()"
+            style="cursor: pointer"
+            data-metric="totalMembers"
+            data-type="members"
+          >
+            <div
+              class="card-body text-center d-flex flex-column justify-content-center"
+            >
+              <div class="mb-2">
+                <i class="fas fa-users text-primary fs-3"></i>
+              </div>
+              <h6 class="mb-2">Tổng hội viên</h6>
+              <h4 class="text-primary mb-1">1,250</h4>
+              <small class="text-muted">hội viên</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Check-in MTD -->
+        <div class="col-lg col-md-4 col-sm-6 mb-3">
+          <div
+            class="card border-0 shadow-sm clickable-card h-100"
+            onclick="openCheckinMTDDetail()"
+            style="cursor: pointer"
+            data-metric="checkinMTD"
+            data-type="checkin"
+          >
+            <div
+              class="card-body text-center d-flex flex-column justify-content-center"
+            >
+              <div class="mb-2">
+                <i class="fas fa-chart-line text-success fs-3"></i>
+              </div>
+              <h6 class="mb-2">Check-in MTD</h6>
+              <h4 class="text-success mb-1">5,080</h4>
+              <small class="text-muted">lượt</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hội viên có check-in MTD -->
+        <div class="col-lg col-md-4 col-sm-6 mb-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div
+              class="card-body text-center d-flex flex-column justify-content-center"
+            >
+              <div class="mb-2">
+                <i class="fas fa-user-check text-primary fs-3"></i>
+              </div>
+              <h6 class="mb-2">Hội viên có check-in</h6>
+              <h4 class="text-primary mb-1" id="membersWithCheckinMTD">
+                1,180
+              </h4>
+              <small class="text-muted">hội viên tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tỷ lệ check-in -->
+        <div class="col-lg col-md-4 col-sm-6 mb-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div
+              class="card-body text-center d-flex flex-column justify-content-center"
+            >
+              <div class="mb-2">
+                <i class="fas fa-chart-bar text-info fs-3"></i>
+              </div>
+              <h6 class="mb-2">Tỷ lệ check-in</h6>
+              <h4 class="text-info mb-1" id="avgCheckinRate">85,2%</h4>
+              <small class="text-muted">tháng này</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional KPI Cards Row 2 -->
+      <div class="row mb-4">
+        <!-- Giờ cao điểm -->
+        <div class="col-lg col-md-4 col-sm-6 mb-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div
+              class="card-body text-center d-flex flex-column justify-content-center"
+            >
+              <div class="mb-2">
+                <i class="fas fa-clock text-warning fs-3"></i>
+              </div>
+              <h6 class="mb-2">Giờ cao điểm</h6>
+              <h4 class="text-warning mb-1">18:00-20:00</h4>
+              <small class="text-muted">giờ</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ngày cao điểm -->
+        <div class="col-lg col-md-4 col-sm-6 mb-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div
+              class="card-body text-center d-flex flex-column justify-content-center"
+            >
+              <div class="mb-2">
+                <i class="fas fa-calendar text-info fs-3"></i>
+              </div>
+              <h6 class="mb-2">Ngày cao điểm</h6>
+              <h4 class="text-info mb-1">Thứ 2</h4>
+              <small class="text-muted">trong tuần</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Check-in sai giờ MTD -->
+        <div class="col-lg col-md-4 col-sm-6 mb-3">
+          <div
+            class="card border-0 shadow-sm clickable-card h-100"
+            onclick="openLateCheckinMTDDetail()"
+            style="cursor: pointer"
+            data-metric="lateCheckinMTD"
+            data-type="lateCheckin"
+          >
+            <div
+              class="card-body text-center d-flex flex-column justify-content-center"
+            >
+              <div class="mb-2">
+                <i class="fas fa-exclamation-triangle text-danger fs-3"></i>
+              </div>
+              <h6 class="mb-2">Check-in sai giờ MTD</h6>
+              <h4 class="text-danger mb-1">1,247</h4>
+              <small class="text-muted">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phân tích tần suất -->
+        <div class="col-lg col-md-4 col-sm-6 mb-3">
+          <div
+            class="card border-0 shadow-sm clickable-card h-100"
+            onclick="openFrequencyAnalysis()"
+            style="cursor: pointer"
+            data-metric="frequency"
+            data-type="analysis"
+          >
+            <div
+              class="card-body text-center d-flex flex-column justify-content-center"
+            >
+              <div class="mb-2">
+                <i class="fas fa-chart-line text-info fs-3"></i>
+              </div>
+              <h6 class="mb-2">Phân tích tần suất</h6>
+              <h4 class="text-info mb-1">78.5%</h4>
+              <small class="text-muted">tỷ lệ duy trì</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check-in Metrics -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h4 class="text-success mb-3">
+            <i class="fas fa-chart-bar me-2"></i>Chi tiết Check-in
+          </h4>
+        </div>
+
+        <!-- 4 Metric Cards nhỏ -->
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div
+            class="card bg-light clickable-card"
+            onclick="openCheckinFrequencyDetail('yesterday')"
+            style="cursor: pointer"
+            data-metric="checkin"
+            data-type="yesterday"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-minus fa-2x text-primary mb-2"></i>
+              <h6>Check-in hôm qua</h6>
+              <h4 class="text-primary">349</h4>
+              <small class="text-muted">lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div
+            class="card bg-light clickable-card"
+            onclick="openCheckinFrequencyDetail('today')"
+            style="cursor: pointer"
+            data-metric="checkin"
+            data-type="today"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-users fa-2x text-primary mb-2"></i>
+              <h6>Hội viên check-in hôm nay</h6>
+              <h4 class="text-primary">350</h4>
+              <small class="text-muted">lượt</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x text-success mb-2"></i>
+              <h6>Tỷ lệ check-in</h6>
+              <h4 class="text-success" id="todayCheckinRate">80,8%</h4>
+              <small class="text-muted">hôm nay</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ Check-in theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="checkinDistributionChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng Check-in 7 ngày
+                qua
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="checkinTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check-in Table -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Chi tiết Check-in theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>CLB</th>
+                      <th class="text-center">Hôm nay</th>
+                      <th class="text-center">Hôm qua</th>
+                      <th class="text-center">MTD</th>
+                      <th class="text-center">Tỷ lệ (%)</th>
+                      <th class="text-center">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>CLB Huỳnh Thúc Kháng</strong></td>
+                      <td class="text-center">85</td>
+                      <td class="text-center">82</td>
+                      <td class="text-center">1,890</td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            style="width: 85%"
+                          >
+                            85%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-success">Tốt</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CLB Nguyễn Tuân</strong></td>
+                      <td class="text-center">72</td>
+                      <td class="text-center">68</td>
+                      <td class="text-center">1,650</td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-warning"
+                            role="progressbar"
+                            style="width: 72%"
+                          >
+                            72%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-warning">Trung bình</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CLB Giảng Võ</strong></td>
+                      <td class="text-center">88</td>
+                      <td class="text-center">85</td>
+                      <td class="text-center">1,880</td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            style="width: 88%"
+                          >
+                            88%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-success">Tốt</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CLB Tôn Thất Thuyết</strong></td>
+                      <td class="text-center">92</td>
+                      <td class="text-center">89</td>
+                      <td class="text-center">2,100</td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            style="width: 92%"
+                          >
+                            92%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-success">Tốt</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CLB Hào Nam</strong></td>
+                      <td class="text-center">78</td>
+                      <td class="text-center">75</td>
+                      <td class="text-center">1,720</td>
+                      <td class="text-center">
+                        <div class="progress" style="height: 20px">
+                          <div
+                            class="progress-bar bg-warning"
+                            role="progressbar"
+                            style="width: 78%"
+                          >
+                            78%
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-warning">Trung bình</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      function goBack() {
+        window.history.back();
+      }
+
+      function openCheckinFrequencyDetail(type) {
+        if (type === "week") {
+          window.location.href =
+            "03-01-01-05-checkin-frequency-detail.html?type=week";
+        } else if (type === "month") {
+          window.location.href =
+            "03-01-01-05-checkin-frequency-detail.html?type=month";
+        } else if (type === "yesterday") {
+          window.location.href = "03-01-01-03-checkin-yesterday-detail.html";
+        } else if (type === "today") {
+          window.location.href = "03-01-01-05-checkin-frequency-detail.html";
+        } else {
+          window.location.href = "03-01-01-05-checkin-frequency-detail.html";
+        }
+      }
+
+      function openCheckinMTDDetail() {
+        window.location.href = "03-01-01-04-checkin-mtd-detail.html";
+      }
+
+      function openMembersListDetail() {
+        window.location.href = "03-01-08-02-members-list-detail.html";
+      }
+
+      function openPTTodayDetail() {
+        window.location.href = "03-01-03-02-pt-checkin-today-detail.html";
+      }
+
+      function openMembershipCheckinDetail() {
+        window.location.href =
+          "03-01-02-02-membership-checkin-today-detail.html?type=membership";
+      }
+
+      function openLateCheckinMTDDetail() {
+        window.location.href = "03-01-07-03-late-checkin-mtd-detail.html";
+      }
+
+      function openFrequencyAnalysis() {
+        window.location.href = "03-01-01-06-checkin-frequency-analysis.html";
+      }
+
+      function createCharts() {
+        try {
+          console.log("Creating checkin overview charts...");
+
+          // Check-in Distribution Chart
+          const distributionCtx = document.getElementById(
+            "checkinDistributionChart"
+          );
+          if (distributionCtx && typeof Chart !== "undefined") {
+            new Chart(distributionCtx, {
+              type: "doughnut",
+              data: {
+                labels: [
+                  "CLB Tôn Thất Thuyết",
+                  "CLB Huỳnh Thúc Kháng",
+                  "CLB Giảng Võ",
+                  "CLB Hào Nam",
+                  "CLB Nguyễn Tuân",
+                ],
+                datasets: [
+                  {
+                    data: [2100, 1890, 1880, 1720, 1650],
+                    backgroundColor: [
+                      "#007bff",
+                      "#28a745",
+                      "#17a2b8",
+                      "#6c757d",
+                      "#ffc107",
+                    ],
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        const total = context.dataset.data.reduce(
+                          (a, b) => a + b,
+                          0
+                        );
+                        const percentage = (
+                          (context.parsed / total) *
+                          100
+                        ).toFixed(1);
+                        return (
+                          context.label +
+                          ": " +
+                          context.parsed +
+                          " lượt (" +
+                          percentage +
+                          "%)"
+                        );
+                      },
+                    },
+                  },
+                },
+              },
+            });
+          }
+
+          // Check-in Trend Chart
+          const trendCtx = document.getElementById("checkinTrendChart");
+          if (trendCtx && typeof Chart !== "undefined") {
+            new Chart(trendCtx, {
+              type: "line",
+              data: {
+                labels: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+                datasets: [
+                  {
+                    label: "Check-in",
+                    data: [245, 238, 252, 268, 275, 198, 165],
+                    borderColor: "#007bff",
+                    backgroundColor: "rgba(0, 123, 255, 0.1)",
+                    tension: 0.4,
+                    fill: true,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+                tooltip: {
+                  enabled: true,
+                  callbacks: {
+                    title: function (context) {
+                      return context[0].label;
+                    },
+                    label: function (context) {
+                      console.log("Tooltip callback triggered:", context);
+                      return (
+                        context.dataset.label +
+                        ": " +
+                        context.parsed.y +
+                        " lượt"
+                      );
+                    },
+                    afterBody: function (context) {
+                      return "Tổng: " + context[0].parsed.y + " lượt";
+                    },
+                  },
+                },
+              },
+            });
+          }
+
+          console.log("Checkin overview charts created successfully");
+        } catch (error) {
+          console.error("Error creating checkin overview charts:", error);
+        }
+      }
+
+      // Calculate average check-in rate MTD
+      function calculateAvgCheckinRateMTD() {
+        // Sample data: daily check-in rates from day 1 to current day (24th)
+        const dailyRates = [
+          90,
+          85,
+          92,
+          88,
+          95,
+          87,
+          89,
+          91,
+          86,
+          93, // Days 1-10
+          88,
+          90,
+          87,
+          92,
+          89,
+          91,
+          85,
+          88,
+          90,
+          87, // Days 11-20
+          89,
+          91,
+          88,
+          80.8, // Days 21-24 (current day - updated to match today's rate)
+        ];
+
+        const currentDay = 24; // September 24th
+        const totalRate = dailyRates.reduce((sum, rate) => sum + rate, 0);
+        const avgRate = totalRate / currentDay;
+
+        return Math.round(avgRate * 10) / 10; // Round to 1 decimal place
+      }
+
+      // Update average check-in rate
+      function updateAvgCheckinRate() {
+        const avgRate = calculateAvgCheckinRateMTD();
+        const element = document.getElementById("avgCheckinRate");
+        if (element) {
+          element.textContent = avgRate + "%";
+        }
+      }
+
+      // Update members with check-in MTD
+      function updateMembersWithCheckinMTD() {
+        const membersWithCheckin = calculateMembersWithCheckinMTD();
+        const element = document.getElementById("membersWithCheckinMTD");
+        if (element) {
+          element.textContent = membersWithCheckin.toLocaleString();
+        }
+      }
+
+      // Update today's check-in rate
+      function updateTodayCheckinRate() {
+        const checkinRate = calculateTodayCheckinRate();
+        const element = document.getElementById("todayCheckinRate");
+        if (element) {
+          element.textContent = checkinRate + "%";
+        }
+      }
+
+      // Calculate today's check-in rate
+      function calculateTodayCheckinRate() {
+        // Lấy dữ liệu từ ConsistentData nếu có
+        if (window.ConsistentData) {
+          const todayData = window.ConsistentData.getData("today", "all");
+          const totalActiveMembers = 1250; // Tổng hội viên đang hoạt động
+
+          // Tính tổng hội viên check-in hôm nay
+          const todayCheckinMembers =
+            todayData.membershipCheckin +
+            todayData.ptFitnessCheckin +
+            todayData.pilatesCheckin +
+            todayData.swimmingCoachCheckin;
+
+          // Tính tỷ lệ: (Hội viên check-in hôm nay / Tổng hội viên đang hoạt động) × 100
+          const rate = (todayCheckinMembers / totalActiveMembers) * 100;
+          return Math.round(rate * 10) / 10; // Làm tròn 1 chữ số thập phân
+        }
+
+        // Fallback: sử dụng dữ liệu mặc định
+        const todayCheckinMembers = 350; // Hội viên check-in hôm nay
+        const totalActiveMembers = 1250; // Tổng hội viên đang hoạt động
+        const rate = (todayCheckinMembers / totalActiveMembers) * 100;
+        return Math.round(rate * 10) / 10;
+      }
+
+      // Calculate members with check-in MTD
+      function calculateMembersWithCheckinMTD() {
+        // Giả sử có 1,180 hội viên có ít nhất 1 lần check-in trong tháng này
+        // Dữ liệu này có thể được lấy từ API hoặc database
+        return 1180;
+      }
+
+      // Function to export frequency data
+      function exportFrequencyData() {
+        alert("Chức năng xuất Excel sẽ được triển khai sau");
+      }
+
+      // Update data from consistent source
+      function updateDataFromConsistentSource() {
+        if (window.ConsistentData) {
+          const mtdData = window.ConsistentData.getData("mtd", "all");
+          const checkinData = window.ConsistentData.getCheckinData(
+            "mtd",
+            "all"
+          );
+          const yesterdayData = window.ConsistentData.getData(
+            "yesterday",
+            "all"
+          );
+
+          // Update Check-in MTD card
+          const checkinMTDElement = document.querySelector(
+            '[data-metric="checkinMTD"] h4'
+          );
+          if (checkinMTDElement) {
+            checkinMTDElement.textContent = checkinData.total.toLocaleString();
+          }
+
+          // Update Check-in hôm qua card (total of all departments)
+          const yesterdayCheckinElement = document.querySelector(
+            '[data-type="yesterday"] h4'
+          );
+          if (yesterdayCheckinElement) {
+            const totalYesterday =
+              yesterdayData.membershipCheckin +
+              yesterdayData.ptFitnessCheckin +
+              yesterdayData.pilatesCheckin +
+              yesterdayData.swimmingCoachCheckin;
+            yesterdayCheckinElement.textContent =
+              totalYesterday.toLocaleString();
+          }
+
+          // Update Check-in hôm nay card (total of all departments)
+          const todayCheckinElement = document.querySelector(
+            '[data-type="today"] h4'
+          );
+          if (todayCheckinElement) {
+            const todayData = window.ConsistentData.getData("today", "all");
+            const totalToday =
+              todayData.membershipCheckin +
+              todayData.ptFitnessCheckin +
+              todayData.pilatesCheckin +
+              todayData.swimmingCoachCheckin;
+            todayCheckinElement.textContent = totalToday.toLocaleString();
+          }
+        }
+      }
+
+      // Force refresh charts with updated tooltips
+      function refreshCharts() {
+        // Destroy existing charts if they exist
+        Chart.helpers.each(Chart.instances, function (instance) {
+          instance.destroy();
+        });
+
+        // Recreate charts
+        createCharts();
+      }
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Checkin overview page loaded");
+        updateDataFromConsistentSource();
+        createCharts();
+        updateAvgCheckinRate();
+        updateMembersWithCheckinMTD();
+        updateTodayCheckinRate();
+
+        // Force refresh after a short delay to ensure tooltips are applied
+        setTimeout(refreshCharts, 100);
+      });
+    </script>
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

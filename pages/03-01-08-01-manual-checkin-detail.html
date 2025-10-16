@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Check-in Thủ Công - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+    <!-- Checkin Calculation Modules -->
+    <script src="../assets/js/checkin/checkin-calculations.js"></script>
+    <script src="../assets/js/checkin/checkin-mock-data.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/api/api-services.js"></script>
+    <script src="../assets/js/api/data-adapter.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="../index.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại Dashboard
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-white">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span> |
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2 class="text-info">
+            <i class="fas fa-hand-paper me-2"></i>Check-in Thủ Công
+          </h2>
+          <p class="text-muted">Thống kê chi tiết các lượt check-in thủ công</p>
+        </div>
+      </div>
+
+      <!-- Metric Cards -->
+      <div class="row mb-4">
+        <!-- Manual Check-in MTD Card -->
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm bg-warning-subtle">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-hand-paper text-warning fs-4 me-2"></i>
+                <h6 class="mb-0 text-warning">Check-in Thủ Công</h6>
+              </div>
+              <h4 class="text-warning mb-0" id="totalManualCheckinMTD">850</h4>
+              <small class="text-muted">lượt tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Manual Check-in Today Card -->
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm bg-danger-subtle">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-hand-paper text-danger fs-4 me-2"></i>
+                <h6 class="mb-0 text-danger">Check-in Thủ Công</h6>
+              </div>
+              <h4 class="text-danger mb-0" id="totalManualCheckin">47</h4>
+              <small class="text-muted">lượt hôm nay</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membership Manual Check-ins -->
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm clickable bg-pink-subtle">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-users text-pink fs-4 me-2"></i>
+                <h6 class="mb-0 text-pink">Membership</h6>
+              </div>
+              <h4 class="text-pink mb-0">425</h4>
+              <small class="text-muted">lượt thủ công Tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- PT Fitness Manual Check-ins -->
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm clickable bg-primary-subtle">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-dumbbell text-primary fs-4 me-2"></i>
+                <h6 class="mb-0 text-primary">PT Fitness</h6>
+              </div>
+              <h4 class="text-primary mb-0">200</h4>
+              <small class="text-muted">lượt thủ công Tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pilates Manual Check-ins -->
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm clickable bg-warning-subtle">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-leaf text-warning fs-4 me-2"></i>
+                <h6 class="mb-0 text-warning">Pilates</h6>
+              </div>
+              <h4 class="text-warning mb-0">150</h4>
+              <small class="text-muted">lượt thủ công Tháng này</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Swimming Coach Manual Check-ins -->
+        <div class="col mb-3">
+          <div class="card border-0 shadow-sm clickable bg-success-subtle">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-swimmer text-success fs-4 me-2"></i>
+                <h6 class="mb-0 text-success">Swimming Coach</h6>
+              </div>
+              <h4 class="text-success mb-0">75</h4>
+              <small class="text-muted">lượt thủ công Tháng này</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Section -->
+      <div class="row mb-4">
+        <!-- Manual Check-in Distribution Chart -->
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bố Check-in Thủ Công
+                theo Bộ phận
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="manualCheckinDistributionChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manual Check-in Trend Chart -->
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Xu hướng Check-in Thủ Công
+                (7 ngày qua)
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="manualCheckinTrendChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Table Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Phân tích Check-in Thủ Công
+                theo cơ sở Hôm nay
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Cơ sở</th>
+                      <th class="text-center">Membership</th>
+                      <th class="text-center">PT Fitness</th>
+                      <th class="text-center">Pilates</th>
+                      <th class="text-center">Swimming Coach</th>
+                      <th class="text-center">Tổng lượt</th>
+                      <th class="text-center">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody id="manualCheckinAnalysisTableBody">
+                    <!-- Data will be loaded dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed List Section -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>Thủ công chi tiết trong Tháng
+                này
+              </h5>
+              <div class="d-flex gap-2">
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  onclick="exportToExcel()"
+                >
+                  <i class="fas fa-file-excel me-1"></i>Xuất Excel
+                </button>
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  onclick="printReport()"
+                >
+                  <i class="fas fa-print me-1"></i>In báo cáo
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <!-- Filters -->
+              <div class="row mb-3">
+                <div class="col-md-2">
+                  <label class="form-label">Thời gian</label>
+                  <select
+                    class="form-select"
+                    id="timeRangeFilter"
+                    onchange="updateDateFilters()"
+                  >
+                    <option value="today">Hôm nay</option>
+                    <option value="yesterday">Hôm qua</option>
+                    <option value="thisWeek">Tuần này</option>
+                    <option value="thisMonth" selected>Tháng này</option>
+                    <option value="lastMonth">Tháng trước</option>
+                    <option value="thisYear">Năm này</option>
+                    <option value="custom">Tùy chọn</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Cơ sở</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả cơ sở</option>
+                    <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                    <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                    <option value="giang-vo">Giảng Võ</option>
+                    <option value="hao-nam">Hào Nam</option>
+                    <option value="nguyen-tuan">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Bộ phận</label>
+                  <select class="form-select" id="departmentFilter">
+                    <option value="all">Tất cả bộ phận</option>
+                    <option value="pt-fitness">PT Fitness</option>
+                    <option value="pilates">Pilates</option>
+                    <option value="swimming-coach">Swimming Coach</option>
+                    <option value="membership">Membership</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Từ ngày</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="startDateFilter"
+                    value="2025-01-01"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Đến ngày</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="endDateFilter"
+                    value="2025-01-31"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Lý do</label>
+                  <select class="form-select" id="reasonFilter">
+                    <option value="all">Tất cả lý do</option>
+                    <option value="quen-the">Quên thẻ</option>
+                    <option value="the-bi-hong">Thẻ bị hỏng</option>
+                    <option value="he-thong-loi">Hệ thống lỗi</option>
+                    <option value="khac">Khác</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-2 d-flex align-items-end">
+                  <button
+                    class="btn btn-primary w-100"
+                    onclick="applyFilters()"
+                  >
+                    <i class="fas fa-search me-1"></i>Lọc
+                  </button>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                  <button
+                    class="btn btn-outline-secondary w-100"
+                    onclick="resetFilters()"
+                  >
+                    <i class="fas fa-undo me-1"></i>Reset
+                  </button>
+                </div>
+              </div>
+
+              <!-- Table -->
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>STT</th>
+                      <th>Hội viên</th>
+                      <th>Cơ sở</th>
+                      <th>Bộ phận</th>
+                      <th>Nhân viên thực hiện</th>
+                      <th>Lý do thủ công</th>
+                      <th>Giờ check-in</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody id="manualCheckinTableBody">
+                    <!-- Data will be loaded here -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination">
+                  <!-- Pagination will be generated here -->
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/filter-handler.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // Update current time and date
+      function updateDateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString("vi-VN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+        const dateString = now.toLocaleDateString("vi-VN", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        document.getElementById("currentTime").textContent = timeString;
+        document.getElementById("currentDate").textContent = dateString;
+      }
+
+      // Update every second
+      setInterval(updateDateTime, 1000);
+      updateDateTime();
+
+      // Sample data for manual check-ins
+      const manualCheckinData = [
+        {
+          id: "manual_1",
+          memberId: "HV001",
+          memberName: "Nguyễn Văn A",
+          location: "Tôn Thất Thuyết",
+          locationKey: "ton-that-thuyet",
+          department: "Membership",
+          departmentKey: "membership",
+          staffPerformed: "Nguyễn Thị Lan",
+          reason: "Quên thẻ",
+          reasonKey: "quen-the",
+          checkinTime: "08:15",
+          notes: "Khách hàng quên thẻ, đã xác minh danh tính",
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: "manual_2",
+          memberId: "HV002",
+          memberName: "Trần Thị B",
+          location: "Huỳnh Thúc Kháng",
+          locationKey: "huynh-thuc-khang",
+          department: "PT Fitness",
+          departmentKey: "pt-fitness",
+          staffPerformed: "Lê Văn C",
+          reason: "Thẻ bị hỏng",
+          reasonKey: "the-bi-hong",
+          checkinTime: "07:45",
+          notes: "Thẻ bị hỏng, cần làm thẻ mới",
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: "manual_3",
+          memberId: "HV003",
+          memberName: "Phạm Văn C",
+          location: "Giảng Võ",
+          locationKey: "giang-vo",
+          department: "Pilates",
+          departmentKey: "pilates",
+          staffPerformed: "Hoàng Thị D",
+          reason: "Hệ thống lỗi",
+          reasonKey: "he-thong-loi",
+          checkinTime: "09:30",
+          notes: "Hệ thống bị lỗi, check-in thủ công",
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: "manual_4",
+          memberId: "HV004",
+          memberName: "Vũ Thị D",
+          location: "Hào Nam",
+          locationKey: "hao-nam",
+          department: "Swimming Coach",
+          departmentKey: "swimming-coach",
+          staffPerformed: "Đặng Văn E",
+          reason: "Khác",
+          reasonKey: "khac",
+          checkinTime: "10:15",
+          notes: "Khách hàng yêu cầu check-in thủ công",
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: "manual_5",
+          memberId: "HV005",
+          memberName: "Bùi Văn E",
+          location: "Nguyễn Tuân",
+          locationKey: "nguyen-tuan",
+          department: "Membership",
+          departmentKey: "membership",
+          staffPerformed: "Phan Thị F",
+          reason: "Quên thẻ",
+          reasonKey: "quen-the",
+          checkinTime: "11:00",
+          notes: "Quên thẻ, đã xác minh qua CMND",
+          createdAt: new Date().toISOString(),
+        },
+      ];
+
+      // Generate more sample data
+      function generateMoreManualData() {
+        const locations = [
+          { name: "Tôn Thất Thuyết", key: "ton-that-thuyet" },
+          { name: "Huỳnh Thúc Kháng", key: "huynh-thuc-khang" },
+          { name: "Giảng Võ", key: "giang-vo" },
+          { name: "Hào Nam", key: "hao-nam" },
+          { name: "Nguyễn Tuân", key: "nguyen-tuan" },
+        ];
+
+        const departments = [
+          { name: "Membership", key: "membership" },
+          { name: "PT Fitness", key: "pt-fitness" },
+          { name: "Pilates", key: "pilates" },
+          { name: "Swimming Coach", key: "swimming-coach" },
+        ];
+
+        const reasons = [
+          { name: "Quên thẻ", key: "quen-the" },
+          { name: "Thẻ bị hỏng", key: "the-bi-hong" },
+          { name: "Hệ thống lỗi", key: "he-thong-loi" },
+          { name: "Khác", key: "khac" },
+        ];
+
+        const staffNames = [
+          "Nguyễn Thị Lan",
+          "Lê Văn C",
+          "Hoàng Thị D",
+          "Đặng Văn E",
+          "Phan Thị F",
+          "Trần Văn G",
+          "Võ Thị H",
+          "Bùi Văn I",
+        ];
+
+        const memberNames = [
+          "Nguyễn Văn A",
+          "Trần Thị B",
+          "Phạm Văn C",
+          "Vũ Thị D",
+          "Bùi Văn E",
+          "Đặng Thị F",
+          "Hoàng Văn G",
+          "Phan Thị H",
+          "Võ Văn I",
+          "Lê Thị K",
+        ];
+
+        // Generate exactly 850 records total (5 existing + 845 new) for MTD
+        for (let i = 6; i <= 850; i++) {
+          const location =
+            locations[Math.floor(rng.next() * locations.length)];
+          const department =
+            departments[Math.floor(rng.next() * departments.length)];
+          const reason = reasons[Math.floor(rng.next() * reasons.length)];
+          const staff =
+            staffNames[Math.floor(rng.next() * staffNames.length)];
+          const member =
+            memberNames[Math.floor(rng.next() * memberNames.length)];
+
+          const hour = Math.floor(rng.next() * 12) + 6; // 6-17
+          const minute = Math.floor(rng.next() * 60);
+          const timeString = `${hour.toString().padStart(2, "0")}:${minute
+            .toString()
+            .padStart(2, "0")}`;
+
+          manualCheckinData.push({
+            id: `manual_${i}`,
+            memberId: `HV${i.toString().padStart(3, "0")}`,
+            memberName: member,
+            location: location.name,
+            locationKey: location.key,
+            department: department.name,
+            departmentKey: department.key,
+            staffPerformed: staff,
+            reason: reason.name,
+            reasonKey: reason.key,
+            checkinTime: timeString,
+            notes: `Ghi chú cho check-in thủ công ${i}`,
+            createdAt: new Date().toISOString(),
+          });
+        }
+
+        // Ensure we have exactly 850 records for MTD
+        console.log(
+          `Generated ${manualCheckinData.length} manual check-in records for MTD`
+        );
+      }
+
+      // Pagination variables
+      let currentPage = 1;
+      const recordsPerPage = 20;
+      let filteredData = [];
+
+      // Load manual check-in data
+      function loadManualCheckinData() {
+        generateMoreManualData();
+        filteredData = [...manualCheckinData]; // Copy all data
+        displayData();
+      }
+
+      // Display data with pagination
+      function displayData() {
+        const tbody = document.getElementById("manualCheckinTableBody");
+        tbody.innerHTML = "";
+
+        // Calculate pagination
+        const startIndex = (currentPage - 1) * recordsPerPage;
+        const endIndex = startIndex + recordsPerPage;
+        const paginatedData = filteredData.slice(startIndex, endIndex);
+
+        paginatedData.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${startIndex + index + 1}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${item.memberName.charAt(0)}
+                </div>
+                <div>
+                  <div class="fw-bold">${item.memberName}</div>
+                  <small class="text-muted">${item.memberId}</small>
+                </div>
+              </div>
+            </td>
+            <td>${item.location}</td>
+            <td>
+              <span class="badge ${getDepartmentBadgeClass(
+                item.department
+              )} rounded-pill">${item.department}</span>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <i class="fas fa-user me-2 text-muted"></i>
+                <span>${item.staffPerformed}</span>
+              </div>
+            </td>
+            <td>
+              <span class="badge ${getReasonBadgeClass(
+                item.reasonKey
+              )} rounded-pill">${item.reason}</span>
+            </td>
+            <td>${item.checkinTime}</td>
+            <td>
+              <span class="text-muted" title="${item.notes}">
+                ${
+                  item.notes.length > 30
+                    ? item.notes.substring(0, 30) + "..."
+                    : item.notes
+                }
+              </span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Generate pagination
+        generatePagination(filteredData.length);
+      }
+
+      // Smart pagination with ellipses
+      function generatePagination(totalRecords) {
+        const totalPages = Math.ceil(totalRecords / recordsPerPage);
+        const pagination = document.getElementById("pagination");
+
+        if (!pagination) return;
+
+        pagination.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        const maxVisiblePages = 7;
+        let startPage = Math.max(
+          1,
+          currentPage - Math.floor(maxVisiblePages / 2)
+        );
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        // Adjust start page if we're near the end
+        if (endPage - startPage + 1 < maxVisiblePages) {
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        // Previous button
+        const prevLi = document.createElement("li");
+        prevLi.className = `page-item ${currentPage === 1 ? "disabled" : ""}`;
+        prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage - 1
+        })">Trước</a>`;
+        pagination.appendChild(prevLi);
+
+        // First page
+        if (startPage > 1) {
+          const firstLi = document.createElement("li");
+          firstLi.className = "page-item";
+          firstLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(1)">1</a>`;
+          pagination.appendChild(firstLi);
+
+          if (startPage > 2) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+        }
+
+        // Page numbers
+        for (let i = startPage; i <= endPage; i++) {
+          const li = document.createElement("li");
+          li.className = `page-item ${i === currentPage ? "active" : ""}`;
+          li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+          pagination.appendChild(li);
+        }
+
+        // Last page
+        if (endPage < totalPages) {
+          if (endPage < totalPages - 1) {
+            const ellipsisLi = document.createElement("li");
+            ellipsisLi.className = "page-item disabled";
+            ellipsisLi.innerHTML = `<span class="page-link">...</span>`;
+            pagination.appendChild(ellipsisLi);
+          }
+
+          const lastLi = document.createElement("li");
+          lastLi.className = "page-item";
+          lastLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a>`;
+          pagination.appendChild(lastLi);
+        }
+
+        // Next button
+        const nextLi = document.createElement("li");
+        nextLi.className = `page-item ${
+          currentPage === totalPages ? "disabled" : ""
+        }`;
+        nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${
+          currentPage + 1
+        })">Sau</a>`;
+        pagination.appendChild(nextLi);
+      }
+
+      function changePage(page) {
+        const totalPages = Math.ceil(filteredData.length / recordsPerPage);
+        if (page < 1 || page > totalPages) return;
+
+        currentPage = page;
+        displayData();
+      }
+
+      // Get department badge class
+      function getDepartmentBadgeClass(department) {
+        const classes = {
+          "PT Fitness": "bg-primary",
+          Pilates: "bg-warning",
+          "Swimming Coach": "bg-success",
+          Membership: "bg-info",
+        };
+        return classes[department] || "bg-secondary";
+      }
+
+      // Get reason badge class
+      function getReasonBadgeClass(reasonKey) {
+        const classes = {
+          "quen-the": "bg-warning",
+          "the-bi-hong": "bg-danger",
+          "he-thong-loi": "bg-info",
+          khac: "bg-secondary",
+        };
+        return classes[reasonKey] || "bg-secondary";
+      }
+
+      // Create charts
+      function createCharts() {
+        // Manual Check-in Distribution Chart
+        const distributionCtx = document
+          .getElementById("manualCheckinDistributionChart")
+          .getContext("2d");
+
+        new Chart(distributionCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Membership", "PT Fitness", "Pilates", "Swimming Coach"],
+            datasets: [
+              {
+                data: [425, 200, 150, 75],
+                backgroundColor: [
+                  "#e83e8c", // Pink for Membership
+                  "#0d6efd", // Blue for PT Fitness
+                  "#ffc107", // Yellow for Pilates
+                  "#198754", // Green for Swimming Coach
+                ],
+                borderWidth: 2,
+                borderColor: "#fff",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const total = context.dataset.data.reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+                    const percentage = ((context.parsed / total) * 100).toFixed(
+                      1
+                    );
+                    return (
+                      context.label +
+                      ": " +
+                      context.parsed +
+                      " lượt (" +
+                      percentage +
+                      "%)"
+                    );
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // Manual Check-in Trend Chart
+        const trendCtx = document
+          .getElementById("manualCheckinTrendChart")
+          .getContext("2d");
+
+        new Chart(trendCtx, {
+          type: "line",
+          data: {
+            labels: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+            datasets: [
+              {
+                label: "Check-in Thủ Công",
+                data: [35, 42, 38, 45, 47, 41, 39],
+                borderColor: "#dc3545",
+                backgroundColor: "rgba(220, 53, 69, 0.1)",
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: "#dc3545",
+                pointBorderColor: "#fff",
+                pointBorderWidth: 2,
+                pointRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(0,0,0,0.1)",
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+              },
+              tooltip: {
+                enabled: true,
+                callbacks: {
+                  title: function (context) {
+                    return context[0].label;
+                  },
+                  label: function (context) {
+                    return (
+                      context.dataset.label + ": " + context.parsed.y + " lượt"
+                    );
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      // Create analysis table
+      function createManualCheckinAnalysisTable() {
+        const tbody = document.getElementById("manualCheckinAnalysisTableBody");
+        if (!tbody) return;
+
+        const locationData = [
+          {
+            name: "Tôn Thất Thuyết",
+            membership: 170,
+            ptFitness: 80,
+            pilates: 60,
+            swimming: 30,
+          },
+          {
+            name: "Huỳnh Thúc Kháng",
+            membership: 120,
+            ptFitness: 60,
+            pilates: 45,
+            swimming: 25,
+          },
+          {
+            name: "Giảng Võ",
+            membership: 80,
+            ptFitness: 40,
+            pilates: 30,
+            swimming: 15,
+          },
+          {
+            name: "Hào Nam",
+            membership: 40,
+            ptFitness: 15,
+            pilates: 10,
+            swimming: 5,
+          },
+          {
+            name: "Nguyễn Tuân",
+            membership: 15,
+            ptFitness: 5,
+            pilates: 5,
+            swimming: 0,
+          },
+        ];
+
+        tbody.innerHTML = "";
+
+        locationData.forEach((location, index) => {
+          const total =
+            location.membership +
+            location.ptFitness +
+            location.pilates +
+            location.swimming;
+
+          let status, statusClass, totalClass;
+          if (total >= 300) {
+            status = "Xuất sắc";
+            statusClass = "bg-success";
+            totalClass = "text-success";
+          } else if (total >= 200) {
+            status = "Tốt";
+            statusClass = "bg-success";
+            totalClass = "text-primary";
+          } else if (total >= 100) {
+            status = "Trung bình";
+            statusClass = "bg-warning";
+            totalClass = "text-warning";
+          } else {
+            status = "Cần cải thiện";
+            statusClass = "bg-danger";
+            totalClass = "text-danger";
+          }
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td><strong>${location.name}</strong></td>
+            <td class="text-center">
+              <span class="badge bg-info rounded-pill">${
+                location.membership
+              }</span>
+            </td>
+            <td class="text-center">
+              <span class="badge bg-primary rounded-pill">${
+                location.ptFitness
+              }</span>
+            </td>
+            <td class="text-center">
+              <span class="badge bg-warning rounded-pill">${
+                location.pilates
+              }</span>
+            </td>
+            <td class="text-center">
+              <span class="badge bg-success rounded-pill">${
+                location.swimming
+              }</span>
+            </td>
+            <td class="text-center">
+              <strong class="${totalClass}">${total}</strong>
+            </td>
+            <td class="text-center">
+              <span class="badge ${statusClass}">${status}</span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        const totalMembership = locationData.reduce(
+          (sum, loc) => sum + loc.membership,
+          0
+        );
+        const totalPTFitness = locationData.reduce(
+          (sum, loc) => sum + loc.ptFitness,
+          0
+        );
+        const totalPilates = locationData.reduce(
+          (sum, loc) => sum + loc.pilates,
+          0
+        );
+        const totalSwimming = locationData.reduce(
+          (sum, loc) => sum + loc.swimming,
+          0
+        );
+        const grandTotal =
+          totalMembership + totalPTFitness + totalPilates + totalSwimming;
+
+        const totalRow = document.createElement("tr");
+        totalRow.className = "table-dark";
+        totalRow.innerHTML = `
+          <td></td>
+          <td><strong class="text-white">TỔNG CỘNG</strong></td>
+          <td class="text-center">
+            <span class="badge bg-info rounded-pill"><strong>${totalMembership}</strong></span>
+          </td>
+          <td class="text-center">
+            <span class="badge bg-primary rounded-pill"><strong>${totalPTFitness}</strong></span>
+          </td>
+          <td class="text-center">
+            <span class="badge bg-warning rounded-pill"><strong>${totalPilates}</strong></span>
+          </td>
+          <td class="text-center">
+            <span class="badge bg-success rounded-pill"><strong>${totalSwimming}</strong></span>
+          </td>
+          <td class="text-center">
+            <strong class="text-white">${grandTotal}</strong>
+          </td>
+          <td class="text-center">
+            <strong class="text-white">-</strong>
+          </td>
+        `;
+        tbody.appendChild(totalRow);
+      }
+
+      // Export to Excel function
+      function exportToExcel() {
+        alert("Chức năng xuất Excel sẽ được triển khai");
+      }
+
+      // Print report function
+      function printReport() {
+        window.print();
+      }
+
+      // Update date filters based on time range selection
+      function updateDateFilters() {
+        const timeRange = document.getElementById("timeRangeFilter").value;
+        const startDateInput = document.getElementById("startDateFilter");
+        const endDateInput = document.getElementById("endDateFilter");
+        const today = new Date();
+
+        switch (timeRange) {
+          case "today":
+            startDateInput.value = today.toISOString().split("T")[0];
+            endDateInput.value = today.toISOString().split("T")[0];
+            break;
+          case "yesterday":
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            startDateInput.value = yesterday.toISOString().split("T")[0];
+            endDateInput.value = yesterday.toISOString().split("T")[0];
+            break;
+          case "thisWeek":
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay());
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            startDateInput.value = startOfWeek.toISOString().split("T")[0];
+            endDateInput.value = endOfWeek.toISOString().split("T")[0];
+            break;
+          case "thisMonth":
+            const startOfMonth = new Date(
+              today.getFullYear(),
+              today.getMonth(),
+              1
+            );
+            const endOfMonth = new Date(
+              today.getFullYear(),
+              today.getMonth() + 1,
+              0
+            );
+            startDateInput.value = startOfMonth.toISOString().split("T")[0];
+            endDateInput.value = endOfMonth.toISOString().split("T")[0];
+            break;
+          case "lastMonth":
+            const startOfLastMonth = new Date(
+              today.getFullYear(),
+              today.getMonth() - 1,
+              1
+            );
+            const endOfLastMonth = new Date(
+              today.getFullYear(),
+              today.getMonth(),
+              0
+            );
+            startDateInput.value = startOfLastMonth.toISOString().split("T")[0];
+            endDateInput.value = endOfLastMonth.toISOString().split("T")[0];
+            break;
+          case "thisYear":
+            const startOfYear = new Date(today.getFullYear(), 0, 1);
+            const endOfYear = new Date(today.getFullYear(), 11, 31);
+            startDateInput.value = startOfYear.toISOString().split("T")[0];
+            endDateInput.value = endOfYear.toISOString().split("T")[0];
+            break;
+          case "custom":
+            // Keep current values
+            break;
+        }
+      }
+
+      // Generate sample data for the entire year
+      function generateYearlyData() {
+        const yearlyData = [];
+        const currentYear = new Date().getFullYear();
+
+        // Generate data for each month
+        for (let month = 0; month < 12; month++) {
+          const daysInMonth = new Date(currentYear, month + 1, 0).getDate();
+          const recordsPerMonth = Math.floor(rng.next() * 50) + 20; // 20-70 records per month
+
+          for (let i = 0; i < recordsPerMonth; i++) {
+            const day = Math.floor(rng.next() * daysInMonth) + 1;
+            const hour = Math.floor(rng.next() * 12) + 6; // 6-17
+            const minute = Math.floor(rng.next() * 60);
+            const timeString = `${hour.toString().padStart(2, "0")}:${minute
+              .toString()
+              .padStart(2, "0")}`;
+
+            const locations = [
+              { name: "Tôn Thất Thuyết", key: "ton-that-thuyet" },
+              { name: "Huỳnh Thúc Kháng", key: "huynh-thuc-khang" },
+              { name: "Giảng Võ", key: "giang-vo" },
+              { name: "Hào Nam", key: "hao-nam" },
+              { name: "Nguyễn Tuân", key: "nguyen-tuan" },
+            ];
+
+            const departments = [
+              { name: "Membership", key: "membership" },
+              { name: "PT Fitness", key: "pt-fitness" },
+              { name: "Pilates", key: "pilates" },
+              { name: "Swimming Coach", key: "swimming-coach" },
+            ];
+
+            const reasons = [
+              { name: "Quên thẻ", key: "quen-the" },
+              { name: "Thẻ bị hỏng", key: "the-bi-hong" },
+              { name: "Hệ thống lỗi", key: "he-thong-loi" },
+              { name: "Khác", key: "khac" },
+            ];
+
+            const staffNames = [
+              "Nguyễn Thị Lan",
+              "Lê Văn C",
+              "Hoàng Thị D",
+              "Đặng Văn E",
+              "Phan Thị F",
+              "Trần Văn G",
+              "Võ Thị H",
+              "Bùi Văn I",
+            ];
+
+            const memberNames = [
+              "Nguyễn Văn A",
+              "Trần Thị B",
+              "Phạm Văn C",
+              "Vũ Thị D",
+              "Bùi Văn E",
+              "Đặng Thị F",
+              "Hoàng Văn G",
+              "Phan Thị H",
+              "Võ Văn I",
+              "Lê Thị K",
+            ];
+
+            const location =
+              locations[Math.floor(rng.next() * locations.length)];
+            const department =
+              departments[Math.floor(rng.next() * departments.length)];
+            const reason = reasons[Math.floor(rng.next() * reasons.length)];
+            const staff =
+              staffNames[Math.floor(rng.next() * staffNames.length)];
+            const member =
+              memberNames[Math.floor(rng.next() * memberNames.length)];
+
+            const recordDate = new Date(currentYear, month, day);
+
+            yearlyData.push({
+              id: `manual_${month}_${i}`,
+              memberId: `HV${(month * 100 + i).toString().padStart(3, "0")}`,
+              memberName: member,
+              location: location.name,
+              locationKey: location.key,
+              department: department.name,
+              departmentKey: department.key,
+              staffPerformed: staff,
+              reason: reason.name,
+              reasonKey: reason.key,
+              checkinTime: timeString,
+              notes: `Ghi chú cho check-in thủ công tháng ${month + 1}`,
+              createdAt: recordDate.toISOString(),
+            });
+          }
+        }
+
+        return yearlyData;
+      }
+
+      // Apply filters function
+      function applyFilters() {
+        const timeRange = document.getElementById("timeRangeFilter").value;
+        const startDate = document.getElementById("startDateFilter").value;
+        const endDate = document.getElementById("endDateFilter").value;
+        const location = document.getElementById("locationFilter").value;
+        const department = document.getElementById("departmentFilter").value;
+        const reason = document.getElementById("reasonFilter").value;
+
+        // Generate yearly data if not exists
+        if (!window.yearlyManualData) {
+          window.yearlyManualData = generateYearlyData();
+        }
+
+        // Filter data based on criteria
+        let filteredData = window.yearlyManualData.filter((item) => {
+          const itemDate = new Date(item.createdAt).toISOString().split("T")[0];
+          const matchesDate = itemDate >= startDate && itemDate <= endDate;
+          const matchesLocation =
+            location === "all" || item.locationKey === location;
+          const matchesDepartment =
+            department === "all" || item.departmentKey === department;
+          const matchesReason = reason === "all" || item.reasonKey === reason;
+
+          return (
+            matchesDate && matchesLocation && matchesDepartment && matchesReason
+          );
+        });
+
+        // Load filtered data
+        loadFilteredManualCheckinData(filteredData);
+      }
+
+      // Load filtered manual check-in data
+      function loadFilteredManualCheckinData(data) {
+        const tbody = document.getElementById("manualCheckinTableBody");
+        tbody.innerHTML = "";
+
+        data.forEach((item, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  ${item.memberName.charAt(0)}
+                </div>
+                <div>
+                  <div class="fw-bold">${item.memberName}</div>
+                  <small class="text-muted">${item.memberId}</small>
+                </div>
+              </div>
+            </td>
+            <td>${item.location}</td>
+            <td>
+              <span class="badge ${getDepartmentBadgeClass(
+                item.department
+              )} rounded-pill">${item.department}</span>
+            </td>
+            <td>
+              <div class="d-flex align-items-center">
+                <i class="fas fa-user me-2 text-muted"></i>
+                <span>${item.staffPerformed}</span>
+              </div>
+            </td>
+            <td>
+              <span class="badge ${getReasonBadgeClass(
+                item.reasonKey
+              )} rounded-pill">${item.reason}</span>
+            </td>
+            <td>${item.checkinTime}</td>
+            <td>
+              <span class="text-muted" title="${item.notes}">
+                ${
+                  item.notes.length > 30
+                    ? item.notes.substring(0, 30) + "..."
+                    : item.notes
+                }
+              </span>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+
+      // Reset filters function
+      function resetFilters() {
+        document.getElementById("timeRangeFilter").value = "thisMonth";
+        document.getElementById("locationFilter").value = "all";
+        document.getElementById("departmentFilter").value = "all";
+        document.getElementById("reasonFilter").value = "all";
+        updateDateFilters();
+        applyFilters();
+      }
+
+      // Initialize page
+      document.addEventListener("DOMContentLoaded", function () {
+        loadManualCheckinData(); // Load all 47 records with pagination
+        createCharts();
+        createManualCheckinAnalysisTable();
+      });
+    </script>
+  
+    <script>
+      // Seeded Random Number Generator for Consistent Data
+      class SeededRandom {
+        constructor(seed = 12345) {
+          this.seed = seed;
+        }
+
+        next() {
+          this.seed = (this.seed * 9301 + 49297) % 233280;
+          return this.seed / 233280;
+        }
+
+        nextInt(min, max) {
+          return Math.floor(this.next() * (max - min + 1)) + min;
+        }
+
+        nextFloat(min, max, decimals = 2) {
+          return parseFloat((this.next() * (max - min) + min).toFixed(decimals));
+        }
+
+        choice(array) {
+          return array[this.nextInt(0, array.length - 1)];
+        }
+      }
+
+      // Initialize seeded random generator
+      const rng = new SeededRandom(12345);
+    </script>
+  
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

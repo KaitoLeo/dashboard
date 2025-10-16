@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết PT Fitness Check-in Hôm qua - Actiwell Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+
+    <!-- Checkin Calculation Modules -->
+    <script src="../assets/js/checkin/checkin-calculations.js"></script>
+    <script src="../assets/js/checkin/checkin-mock-data.js"></script>
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-semibold" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Dashboard
+        </a>
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="checkin-yesterday-detail.html">
+            <i class="fas fa-arrow-left me-1"></i>Quay lại
+          </a>
+        </div>
+        <div class="navbar-nav">
+          <span class="navbar-text text-dark">
+            <i class="fas fa-clock me-1"></i>
+            <span id="currentTime"></span>
+            <span class="mx-1">|</span>
+            <span id="currentDate"></span>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container-fluid py-4">
+      <header class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-dumbbell text-warning fs-1 me-3"></i>
+            <div>
+              <h2 class="text-warning mb-1">
+                Chi tiết PT Fitness Check-in Hôm qua
+              </h2>
+              <p class="text-muted mb-0">
+                Thống kê chi tiết về hoạt động PT Fitness ngày hôm qua
+              </p>
+              <div id="breadcrumb-container" class="mt-3"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="row g-3 mb-4">
+        <article class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-calendar-day text-info fs-4 me-2"></i>
+                <h6 class="mb-0">Hôm qua</h6>
+              </div>
+              <h4 class="text-info mb-0" id="totalCheckins">0</h4>
+              <small class="text-muted">lượt check-in</small>
+            </div>
+          </div>
+        </article>
+        <article class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-user text-success fs-4 me-2"></i>
+                <h6 class="mb-0">Lớp 1:1</h6>
+              </div>
+              <h4 class="text-success mb-0" id="class1v1Count">0</h4>
+              <small class="text-muted">lượt hôm qua</small>
+            </div>
+          </div>
+        </article>
+        <article class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-user-friends text-info fs-4 me-2"></i>
+                <h6 class="mb-0">Lớp 1:2</h6>
+              </div>
+              <h4 class="text-info mb-0" id="class1v2Count">0</h4>
+              <small class="text-muted">lượt hôm qua</small>
+            </div>
+          </div>
+        </article>
+        <article class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <div
+                class="d-flex align-items-center justify-content-center mb-2"
+              >
+                <i class="fas fa-users text-warning fs-4 me-2"></i>
+                <h6 class="mb-0">Lớp nhóm</h6>
+              </div>
+              <h4 class="text-warning mb-0" id="classGroupCount">0</h4>
+              <small class="text-muted">lượt hôm qua</small>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Phân bổ theo loại lớp hôm
+                qua
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="classTypeChart" height="280"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-0">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Khung giờ check-in nổi bật
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="hourlyTrendChart" height="280"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-0">
+          <h5 class="mb-0">
+            <i class="fas fa-filter me-2"></i>Bộ lọc chi tiết
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-xl-2 col-lg-4 col-md-6">
+              <label class="form-label" for="locationFilter">Cơ sở</label>
+              <select class="form-select" id="locationFilter">
+                <option value="all">Tất cả cơ sở</option>
+                <option value="ton-that-thuyet">Tôn Thất Thuyết</option>
+                <option value="huynh-thuc-khang">Huỳnh Thúc Kháng</option>
+                <option value="giang-vo">Giảng Võ</option>
+                <option value="hao-nam">Hào Nam</option>
+                <option value="nguyen-tuan">Nguyễn Tuân</option>
+              </select>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-6">
+              <label class="form-label" for="classTypeFilter">Loại lớp</label>
+              <select class="form-select" id="classTypeFilter">
+                <option value="all">Tất cả loại</option>
+                <option value="1-1">Lớp 1:1</option>
+                <option value="1-2">Lớp 1:2</option>
+                <option value="group">Lớp nhóm</option>
+              </select>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-6">
+              <label class="form-label" for="serviceFilter">Dịch vụ</label>
+              <select class="form-select" id="serviceFilter">
+                <option value="all">Tất cả dịch vụ</option>
+                <option value="pt-gym">PT Gym</option>
+                <option value="pt-kickfit">PT kickfit</option>
+                <option value="streching">Streching</option>
+                <option value="ems">EMS</option>
+                <option value="mix">MIX</option>
+              </select>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-6">
+              <label class="form-label" for="instructorFilter"
+                >Huấn luyện viên</label
+              >
+              <select class="form-select" id="instructorFilter">
+                <option value="all">Tất cả HLV</option>
+                <option value="Thầy Minh">Thầy Minh</option>
+                <option value="Cô Lan">Cô Lan</option>
+                <option value="Thầy Tuấn">Thầy Tuấn</option>
+                <option value="Cô Hương">Cô Hương</option>
+                <option value="Thầy Nam">Thầy Nam</option>
+                <option value="Cô Mai">Cô Mai</option>
+                <option value="Thầy Đức">Thầy Đức</option>
+              </select>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-6">
+              <label class="form-label" for="staffFilter"
+                >Nhân viên chăm sóc</label
+              >
+              <select class="form-select" id="staffFilter">
+                <option value="all">Tất cả nhân viên</option>
+                <option value="Nguyễn Thị Lan">Nguyễn Thị Lan</option>
+                <option value="Lê Văn Minh">Lê Văn Minh</option>
+                <option value="Phạm Thị Hoa">Phạm Thị Hoa</option>
+                <option value="Hoàng Văn Đức">Hoàng Văn Đức</option>
+                <option value="Vũ Thị Mai">Vũ Thị Mai</option>
+                <option value="Ngô Văn Tùng">Ngô Văn Tùng</option>
+                <option value="Lý Thị Hương">Lý Thị Hương</option>
+              </select>
+            </div>
+            <div class="col-xl-2 col-lg-4 col-md-6 d-flex align-items-end">
+              <div class="d-grid gap-2 w-100">
+                <button
+                  type="button"
+                  class="btn btn-warning"
+                  id="applyFilterBtn"
+                >
+                  <i class="fas fa-search me-1"></i>Áp dụng
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="resetFilterBtn"
+                >
+                  <i class="fas fa-undo me-1"></i>Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h5 class="mb-0">
+            <i class="fas fa-table me-2"></i>Danh sách check-in chi tiết
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>STT</th>
+                  <th>Hội viên</th>
+                  <th>Cơ sở</th>
+                  <th>Loại lớp</th>
+                  <th>Dịch vụ</th>
+                  <th>Huấn luyện viên</th>
+                  <th>Nhân viên chăm sóc</th>
+                  <th>Giờ check-in</th>
+                </tr>
+              </thead>
+              <tbody id="ptFitnessCheckinTableBody"></tbody>
+            </table>
+          </div>
+          <nav aria-label="Phân trang chi tiết" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination"></ul>
+          </nav>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/screens/pt-fitness-checkin-detail.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

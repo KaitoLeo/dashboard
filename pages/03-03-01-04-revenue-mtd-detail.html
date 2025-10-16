@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết Doanh thu MTD - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    
+    <!-- Revenue Calculation Modules -->
+    <script src="../assets/js/revenue/revenue-calculations.js"></script>
+    <script src="../assets/js/revenue/revenue-mock-data.js"></script>
+    
+    <style>
+      .metric-card {
+        transition: all 0.3s ease;
+        cursor: default;
+      }
+
+      .metric-card:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+      
+      .updated {
+        animation: pulse 0.5s ease-in-out;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-chart-line me-2"></i>
+                Chi tiết Doanh thu MTD (Month-to-Date)
+              </h2>
+              <p class="text-muted">
+                Doanh thu thực tế lũy kế từ đầu tháng đến hiện tại
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Overview -->
+      <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-primary text-white metric-card">
+            <div class="card-body">
+              <h6 class="card-title">Tổng doanh thu MTD</h6>
+              <h3 class="mb-0" id="mtdValue">1,850,000,000</h3>
+              <small>VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-success text-white metric-card">
+            <div class="card-body">
+              <h6 class="card-title">Tăng trưởng so với tháng trước</h6>
+              <h3 class="mb-0" id="growthValue">+12.5%</h3>
+              <small>+205,000,000 VNĐ</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-info text-white metric-card">
+            <div class="card-body">
+              <h6 class="card-title">Trung bình ngày</h6>
+              <h3 class="mb-0" id="dailyAvgValue">61,666,667</h3>
+              <small>VNĐ/ngày</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+          <div class="card bg-warning text-white metric-card">
+            <div class="card-body">
+              <h6 class="card-title">Ngày còn lại trong tháng</h6>
+              <h3 class="mb-0" id="remainingDaysValue">
+                <script>
+                  const now = new Date();
+                  const lastDay = new Date(
+                    now.getFullYear(),
+                    now.getMonth() + 1,
+                    0
+                  ).getDate();
+                  const currentDay = now.getDate();
+                  document.write(lastDay - currentDay);
+                </script>
+              </h3>
+              <small>ngày</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Club -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-building me-2"></i>
+                Doanh thu theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>CLB</th>
+                      <th>Doanh thu MTD</th>
+                      <th>Tỉ trọng</th>
+                      <th>Mục tiêu</th>
+                      <th>% Hoàn thành</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td>450,000,000</td>
+                      <td>24.3%</td>
+                      <td>600,000,000</td>
+                      <td>75%</td>
+                      <td>
+                        <span class="badge bg-warning">Đang thực hiện</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td>380,000,000</td>
+                      <td>20.5%</td>
+                      <td>500,000,000</td>
+                      <td>76%</td>
+                      <td>
+                        <span class="badge bg-warning">Đang thực hiện</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td>320,000,000</td>
+                      <td>17.3%</td>
+                      <td>400,000,000</td>
+                      <td>80%</td>
+                      <td><span class="badge bg-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hào Nam</strong></td>
+                      <td>420,000,000</td>
+                      <td>22.7%</td>
+                      <td>550,000,000</td>
+                      <td>76.4%</td>
+                      <td>
+                        <span class="badge bg-warning">Đang thực hiện</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td>280,000,000</td>
+                      <td>15.1%</td>
+                      <td>450,000,000</td>
+                      <td>62.2%</td>
+                      <td>
+                        <span class="badge bg-danger">Cần cải thiện</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Department -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-pie me-2"></i>
+                Doanh thu theo bộ phận
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="departmentRevenueChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-users me-2"></i>
+                Doanh thu theo nhân viên (Top 10)
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Nhân viên</th>
+                      <th>Bộ phận</th>
+                      <th>Doanh thu</th>
+                      <th>%</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Nguyễn Văn A</td>
+                      <td>Membership</td>
+                      <td>180,000,000</td>
+                      <td>9.7%</td>
+                    </tr>
+                    <tr>
+                      <td>Trần Thị B</td>
+                      <td>Fitness</td>
+                      <td>165,000,000</td>
+                      <td>8.9%</td>
+                    </tr>
+                    <tr>
+                      <td>Lê Văn C</td>
+                      <td>Membership</td>
+                      <td>150,000,000</td>
+                      <td>8.1%</td>
+                    </tr>
+                    <tr>
+                      <td>Phạm Thị D</td>
+                      <td>Swimming Coach</td>
+                      <td>140,000,000</td>
+                      <td>7.6%</td>
+                    </tr>
+                    <tr>
+                      <td>Hoàng Văn E</td>
+                      <td>Pilates</td>
+                      <td>135,000,000</td>
+                      <td>7.3%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-credit-card me-2"></i>
+                Doanh thu theo hình thức thanh toán
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i
+                        class="fas fa-money-bill-wave fa-2x text-success mb-2"
+                      ></i>
+                      <h6>Tiền mặt</h6>
+                      <h4 class="text-success">925,000,000</h4>
+                      <small class="text-muted">50%</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="fas fa-university fa-2x text-primary mb-2"></i>
+                      <h6>Chuyển khoản</h6>
+                      <h4 class="text-primary">555,000,000</h4>
+                      <small class="text-muted">30%</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="fas fa-mobile-alt fa-2x text-info mb-2"></i>
+                      <h6>MPOS</h6>
+                      <h4 class="text-info">277,500,000</h4>
+                      <small class="text-muted">15%</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <i class="fas fa-credit-card fa-2x text-warning mb-2"></i>
+                      <h6>Cà thẻ</h6>
+                      <h4 class="text-warning">92,500,000</h4>
+                      <small class="text-muted">5%</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Service -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-dumbbell me-2"></i>
+                Doanh thu theo dịch vụ
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-4 mb-3">
+                  <div class="card border-primary">
+                    <div class="card-body">
+                      <h6 class="card-title text-primary">Membership</h6>
+                      <h4>1,110,000,000</h4>
+                      <small class="text-muted">60% tổng doanh thu</small>
+                      <div class="progress mt-2">
+                        <div
+                          class="progress-bar bg-primary"
+                          style="width: 60%"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 mb-3">
+                  <div class="card border-success">
+                    <div class="card-body">
+                      <h6 class="card-title text-success">Personal Training</h6>
+                      <h4>555,000,000</h4>
+                      <small class="text-muted">30% tổng doanh thu</small>
+                      <div class="progress mt-2">
+                        <div
+                          class="progress-bar bg-success"
+                          style="width: 30%"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 mb-3">
+                  <div class="card border-secondary">
+                    <div class="card-body">
+                      <h6 class="card-title text-secondary">Swimming Coach</h6>
+                      <h4>110,000,000</h4>
+                      <small class="text-muted">6% tổng doanh thu</small>
+                      <div class="progress mt-2">
+                        <div
+                          class="progress-bar bg-secondary"
+                          style="width: 6%"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 mb-3">
+                  <div class="card border-success">
+                    <div class="card-body">
+                      <h6 class="card-title text-success">Pilates</h6>
+                      <h4>75,000,000</h4>
+                      <small class="text-muted">4% tổng doanh thu</small>
+                      <div class="progress mt-2">
+                        <div
+                          class="progress-bar bg-success"
+                          style="width: 4%"
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Revenue Trend -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-area me-2"></i>
+                Xu hướng doanh thu hàng ngày
+              </h5>
+            </div>
+            <div class="card-body">
+              <canvas id="dailyRevenueChart" height="100"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+      // Wait for DOM to be ready before creating charts
+      document.addEventListener("DOMContentLoaded", function () {
+        // Department Revenue Chart
+        const departmentCtx = document
+          .getElementById("departmentRevenueChart")
+          .getContext("2d");
+        new Chart(departmentCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Membership",
+              "Personal Training",
+              "Swimming Coach",
+              "Pilates",
+              "Operation",
+            ],
+            datasets: [
+              {
+                data: [60, 30, 5, 5, 0],
+                backgroundColor: [
+                  "#007bff",
+                  "#28a745",
+                  "#17a2b8",
+                  "#ffc107",
+                  "#6c757d",
+                ],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        });
+
+        // Daily Revenue Chart
+        const dailyCtx = document
+          .getElementById("dailyRevenueChart")
+          .getContext("2d");
+        new Chart(dailyCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "1/12",
+              "2/12",
+              "3/12",
+              "4/12",
+              "5/12",
+              "6/12",
+              "7/12",
+              "8/12",
+              "9/12",
+              "10/12",
+              "11/12",
+              "12/12",
+              "13/12",
+              "14/12",
+              "15/12",
+              "16/12",
+              "17/12",
+              "18/12",
+              "19/12",
+              "20/12",
+              "21/12",
+              "22/12",
+              "23/12",
+            ],
+            datasets: [
+              {
+                label: "Doanh thu hàng ngày (VNĐ)",
+                data: [
+                  65000000, 72000000, 68000000, 75000000, 80000000, 85000000,
+                  78000000, 82000000, 88000000, 90000000, 85000000, 92000000,
+                  95000000, 88000000, 90000000, 85000000, 80000000, 75000000,
+                  70000000, 65000000, 60000000, 55000000, 50000000,
+                ],
+                borderColor: "#007bff",
+                backgroundColor: "rgba(0, 123, 255, 0.1)",
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function (value) {
+                    return value / 1000000 + "M";
+                  },
+                },
+              },
+            },
+          },
+        });
+      }); // Close DOMContentLoaded event listener
+    </script>
+
+    <!-- Filter Integration Script -->
+    <script src="../assets/js/data-consistency.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/filter-handler.js"></script>
+
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Dynamic Revenue Calculations Script -->
+    <script>
+      /**
+       * Revenue MTD Detail - Dynamic Calculations
+       * Uses RevenueCalculations and RevenueMockData modules
+       */
+
+      // Wait for all modules to load
+      window.addEventListener('load', function() {
+        console.log('🚀 Initializing Revenue MTD Detail with dynamic calculations...');
+        
+        // Check if modules are loaded
+        if (typeof window.revenueCalc === 'undefined' || typeof window.currentMonthRevenue === 'undefined') {
+          console.error('❌ Revenue modules not loaded!');
+          return;
+        }
+
+        // Initialize page
+        initializeRevenueMTD();
+        
+        // Auto-refresh every 5 minutes
+        setInterval(initializeRevenueMTD, 5 * 60 * 1000);
+      });
+
+      /**
+       * Initialize Revenue MTD page with dynamic data
+       */
+      function initializeRevenueMTD() {
+        try {
+          console.log('📊 Calculating MTD revenue metrics...');
+          
+          // Get current revenue data
+          const currentRevenue = window.currentMonthRevenue;
+          const lastRevenue = window.lastMonthRevenue;
+          const currentDate = new Date();
+          
+          // Calculate MTD metrics
+          const mtdRevenue = window.revenueCalc.calculateMTDRevenue(currentRevenue, currentDate);
+          const lastMonthTotal = window.revenueCalc.calculateMTDRevenue(lastRevenue, new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 31));
+          const growthRate = window.revenueCalc.calculateRevenueGrowth(mtdRevenue, lastMonthTotal);
+          const dailyAverage = window.revenueCalc.calculateDailyAverage(mtdRevenue, currentDate);
+          const daysRemaining = window.revenueCalc.calculateDaysRemaining(currentDate);
+          
+          // Update UI
+          updateMetricCards({
+            mtdRevenue,
+            growthRate,
+            growthAmount: mtdRevenue - lastMonthTotal,
+            dailyAverage,
+            daysRemaining
+          });
+          
+          // Update charts
+          updateRevenueCharts(currentRevenue);
+          
+          // Update tables
+          updateRevenueTables(currentRevenue);
+          
+          console.log('✅ Revenue MTD metrics updated successfully!');
+          console.log(`   💰 MTD Revenue: ${window.revenueCalc.formatCurrency(mtdRevenue)} VNĐ`);
+          console.log(`   📈 Growth Rate: ${growthRate.toFixed(1)}%`);
+          console.log(`   📊 Daily Average: ${window.revenueCalc.formatCurrency(dailyAverage)} VNĐ`);
+          
+        } catch (error) {
+          console.error('❌ Error updating Revenue MTD:', error);
+        }
+      }
+
+      /**
+       * Update metric cards with calculated data
+       */
+      function updateMetricCards(metrics) {
+        // MTD Revenue
+        updateElementWithAnimation('mtdValue', window.revenueCalc.formatCurrency(metrics.mtdRevenue));
+        
+        // Growth Rate
+        const growthSign = metrics.growthRate >= 0 ? '+' : '';
+        const growthText = `${growthSign}${metrics.growthRate.toFixed(1)}%`;
+        updateElementWithAnimation('growthValue', growthText);
+        
+        // Growth Amount (in small text)
+        const growthAmountEl = document.querySelector('#growthValue').parentElement.querySelector('small');
+        if (growthAmountEl) {
+          const amountSign = metrics.growthAmount >= 0 ? '+' : '';
+          growthAmountEl.textContent = `${amountSign}${window.revenueCalc.formatCurrency(Math.abs(metrics.growthAmount))} VNĐ`;
+        }
+        
+        // Daily Average
+        updateElementWithAnimation('dailyAvgValue', window.revenueCalc.formatCurrency(metrics.dailyAverage));
+        
+        // Days Remaining
+        updateElementWithAnimation('remainingDaysValue', metrics.daysRemaining.toString());
+      }
+
+      /**
+       * Update element with animation
+       */
+      function updateElementWithAnimation(elementId, value) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        // Add loading class
+        element.classList.add('loading');
+        
+        setTimeout(() => {
+          element.textContent = value;
+          element.classList.remove('loading');
+          element.classList.add('updated');
+          
+          setTimeout(() => {
+            element.classList.remove('updated');
+          }, 500);
+        }, 100);
+      }
+
+      /**
+       * Update revenue charts with real data
+       */
+      function updateRevenueCharts(revenue) {
+        // Group revenue by service
+        const services = ["Membership", "PT Fitness", "Pilates", "Swimming Coach"];
+        const revenueByService = window.revenueCalc.calculateRevenueByService(revenue, services);
+        const servicePercentages = window.revenueCalc.calculatePercentageDistribution(revenueByService);
+        
+        // Update department chart (if exists)
+        const departmentChart = Chart.getChart('departmentRevenueChart');
+        if (departmentChart) {
+          departmentChart.data.labels = services;
+          departmentChart.data.datasets[0].data = services.map(s => servicePercentages[s].toFixed(1));
+          departmentChart.update();
+        }
+        
+        // Update daily trend chart
+        updateDailyTrendChart(revenue);
+      }
+
+      /**
+       * Update daily trend chart
+       */
+      function updateDailyTrendChart(revenue) {
+        const dailyTrendChart = Chart.getChart('dailyTrendChart');
+        if (!dailyTrendChart) return;
+        
+        // Group revenue by date
+        const revenueByDate = window.RevenueMockData.groupByDate(revenue);
+        const dates = Object.keys(revenueByDate).sort();
+        
+        // Calculate daily totals
+        const dailyTotals = dates.map(date => {
+          return revenueByDate[date].reduce((sum, r) => sum + r.amount, 0);
+        });
+        
+        // Format dates for display (DD/MM)
+        const labels = dates.map(date => {
+          const d = new Date(date);
+          return `${d.getDate()}/${d.getMonth() + 1}`;
+        });
+        
+        // Update chart
+        dailyTrendChart.data.labels = labels;
+        dailyTrendChart.data.datasets[0].data = dailyTotals;
+        dailyTrendChart.update();
+      }
+
+      /**
+       * Update revenue tables with real data
+       */
+      function updateRevenueTables(revenue) {
+        // Group by location
+        const locations = ["Tôn Thất Thuyết", "Huỳnh Thúc Kháng", "Giảng Võ", "Hào Nam", "Nguyễn Tuân"];
+        const revenueByLocation = window.revenueCalc.calculateRevenueByLocation(revenue, locations);
+        const locationPercentages = window.revenueCalc.calculatePercentageDistribution(revenueByLocation);
+        
+        // Calculate total revenue for percentage calculations
+        const totalRevenue = Object.values(revenueByLocation).reduce((sum, amount) => sum + amount, 0);
+        
+        // Update club revenue table (this would need the actual table element)
+        console.log('📊 Revenue by Location:', {
+          revenueByLocation,
+          locationPercentages,
+          totalRevenue
+        });
+      }
+    </script>
+  </body>
+</html>
+
+  
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Daily Report - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+    <style>
+      .clickable-metric {
+        transition: all 0.3s ease;
+        text-decoration: underline;
+      }
+
+      .clickable-metric:hover {
+        transform: scale(1.1);
+        text-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+      }
+
+      .modal-xl {
+        max-width: 90%;
+      }
+
+      .table th {
+        white-space: nowrap;
+      }
+
+      .metric-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-arrow-left me-2"></i>
+          <i class="fas fa-heartbeat me-2"></i>
+          Actiwell Reports
+        </a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">
+                <i class="fas fa-robot me-2"></i>
+                Auto Daily Report
+              </h2>
+              <p class="text-muted" id="reportInfo">
+                Báo cáo tự động hàng ngày - Cập nhật lần cuối:
+                <span id="lastUpdate"></span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+          <div
+            class="card bg-primary text-white h-100 metric-card"
+            onclick="window.location.href='checkin-today-detail.html'"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-calendar-check fa-2x mb-2"></i>
+              <h3 class="mb-1">245</h3>
+              <p class="mb-0">Check-in hôm nay</p>
+              <small class="opacity-75">Click để xem chi tiết</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div
+            class="card bg-success text-white h-100 metric-card"
+            onclick="window.location.href='checkin-mtd-detail.html'"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-chart-line fa-2x mb-2"></i>
+              <h3 class="mb-1">1,850</h3>
+              <p class="mb-0">Check-in MTD</p>
+              <small class="opacity-75">Click để xem chi tiết</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div
+            class="card bg-info text-white h-100 metric-card"
+            onclick="window.location.href='visitors-detail.html'"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-eye fa-2x mb-2"></i>
+              <h3 class="mb-1">10</h3>
+              <p class="mb-0">Khách tham quan</p>
+              <small class="opacity-75">Click để xem chi tiết</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div
+            class="card bg-warning text-white h-100 metric-card"
+            onclick="window.location.href='trial-guests-detail.html'"
+          >
+            <div class="card-body text-center">
+              <i class="fas fa-dumbbell fa-2x mb-2"></i>
+              <h3 class="mb-1">12</h3>
+              <p class="mb-0">Khách tập thử</p>
+              <small class="opacity-75">Click để xem chi tiết</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-md-2">
+                  <label class="form-label">Từ ngày:</label>
+                  <input type="date" class="form-control" id="startDate" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Đến ngày:</label>
+                  <input type="date" class="form-control" id="endDate" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Trung tâm:</label>
+                  <select class="form-select" id="locationFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="1">Tôn Thất Thuyết</option>
+                    <option value="2">Huỳnh Thúc Kháng</option>
+                    <option value="3">Giảng Võ</option>
+                    <option value="4">Hào Nam</option>
+                    <option value="5">Nguyễn Tuân</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Bộ phận:</label>
+                  <select class="form-select" id="departmentFilter">
+                    <option value="all">Tất cả</option>
+                    <option value="membership">Membership</option>
+                    <option value="fitness">Fitness</option>
+                    <option value="pool">Swimming Coach</option>
+                    <option value="pilates">Pilates</option>
+                    <option value="operation">Operation</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Loại báo cáo:</label>
+                  <select class="form-select" id="reportType">
+                    <option value="daily">Báo cáo ngày</option>
+                    <option value="range">Báo cáo khoảng</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-search me-1"></i>Lọc
+                  </button>
+                  <button
+                    class="btn btn-secondary ms-1"
+                    onclick="resetFilters()"
+                  >
+                    <i class="fas fa-undo me-1"></i>Reset
+                  </button>
+                  <button class="btn btn-success ms-1" onclick="exportReport()">
+                    <i class="fas fa-download me-1"></i>Xuất
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Summary by Club -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Chỉ số doanh thu theo CLB
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table id="clubTable" class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>CLB</th>
+                      <th>Mục tiêu (Target)</th>
+                      <th>Doanh thu MTD</th>
+                      <th>Doanh thu ngày</th>
+                      <th>Tỉ lệ hoàn thành (%)</th>
+                      <th>Tỉ trọng (%)</th>
+                      <th>Mục tiêu còn lại</th>
+                      <th>Cần đạt/ngày</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tôn Thất Thuyết</strong></td>
+                      <td><strong class="text-primary">500,000,000</strong></td>
+                      <td><strong class="text-success">375,000,000</strong></td>
+                      <td><strong class="text-info">18,500,000</strong></td>
+                      <td><span class="badge bg-success">75.0%</span></td>
+                      <td><span class="badge bg-primary">20.3%</span></td>
+                      <td><strong class="text-danger">125,000,000</strong></td>
+                      <td><strong class="text-warning">7,812,500</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Huỳnh Thúc Kháng</strong></td>
+                      <td><strong class="text-primary">450,000,000</strong></td>
+                      <td><strong class="text-success">340,000,000</strong></td>
+                      <td><strong class="text-info">16,200,000</strong></td>
+                      <td><span class="badge bg-success">75.6%</span></td>
+                      <td><span class="badge bg-primary">18.4%</span></td>
+                      <td><strong class="text-danger">110,000,000</strong></td>
+                      <td><strong class="text-warning">6,875,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Giảng Võ</strong></td>
+                      <td><strong class="text-primary">400,000,000</strong></td>
+                      <td><strong class="text-success">295,000,000</strong></td>
+                      <td><strong class="text-info">14,800,000</strong></td>
+                      <td><span class="badge bg-success">73.8%</span></td>
+                      <td><span class="badge bg-primary">15.9%</span></td>
+                      <td><strong class="text-danger">105,000,000</strong></td>
+                      <td><strong class="text-warning">6,562,500</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Hào Nam</strong></td>
+                      <td><strong class="text-primary">350,000,000</strong></td>
+                      <td><strong class="text-success">260,000,000</strong></td>
+                      <td><strong class="text-info">12,500,000</strong></td>
+                      <td><span class="badge bg-success">74.3%</span></td>
+                      <td><span class="badge bg-primary">14.1%</span></td>
+                      <td><strong class="text-danger">90,000,000</strong></td>
+                      <td><strong class="text-warning">5,625,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nguyễn Tuân</strong></td>
+                      <td><strong class="text-primary">300,000,000</strong></td>
+                      <td><strong class="text-success">220,000,000</strong></td>
+                      <td><strong class="text-info">10,800,000</strong></td>
+                      <td><span class="badge bg-success">73.3%</span></td>
+                      <td><span class="badge bg-primary">11.9%</span></td>
+                      <td><strong class="text-danger">80,000,000</strong></td>
+                      <td><strong class="text-warning">5,000,000</strong></td>
+                    </tr>
+                    <tr></tr>
+                    <tr></tr>
+                    <tr></tr>
+                    <tr></tr>
+                    <tr></tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <td><strong>TỔNG CỘNG</strong></td>
+                      <td>
+                        <strong class="text-primary">2,000,000,000</strong>
+                      </td>
+                      <td>
+                        <strong class="text-success">1,490,000,000</strong>
+                      </td>
+                      <td><strong class="text-info">72,800,000</strong></td>
+                      <td><span class="badge bg-success">74.5%</span></td>
+                      <td><span class="badge bg-primary">100.0%</span></td>
+                      <td><strong class="text-danger">510,000,000</strong></td>
+                      <td><strong class="text-warning">31,875,000</strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by Department -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-chart-bar me-2"></i>
+                Chỉ số doanh thu theo bộ phận
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table
+                  id="departmentTable"
+                  class="table table-striped table-hover"
+                >
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Bộ phận</th>
+                      <th>Mục tiêu (Target)</th>
+                      <th>Doanh thu MTD</th>
+                      <th>Doanh thu ngày</th>
+                      <th>Tỉ lệ hoàn thành (%)</th>
+                      <th>Tỉ trọng (%)</th>
+                      <th>Mục tiêu còn lại</th>
+                      <th>Cần đạt/ngày</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Membership</strong></td>
+                      <td><strong class="text-primary">900,000,000</strong></td>
+                      <td><strong class="text-success">680,000,000</strong></td>
+                      <td><strong class="text-info">32,500,000</strong></td>
+                      <td><span class="badge bg-success">75.6%</span></td>
+                      <td><span class="badge bg-primary">45.6%</span></td>
+                      <td><strong class="text-danger">220,000,000</strong></td>
+                      <td><strong class="text-warning">13,750,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Fitness</strong></td>
+                      <td><strong class="text-primary">600,000,000</strong></td>
+                      <td><strong class="text-success">445,000,000</strong></td>
+                      <td><strong class="text-info">21,200,000</strong></td>
+                      <td><span class="badge bg-success">74.2%</span></td>
+                      <td><span class="badge bg-primary">29.9%</span></td>
+                      <td><strong class="text-danger">155,000,000</strong></td>
+                      <td><strong class="text-warning">9,687,500</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Swimming Coach</strong></td>
+                      <td><strong class="text-primary">300,000,000</strong></td>
+                      <td><strong class="text-success">220,000,000</strong></td>
+                      <td><strong class="text-info">10,800,000</strong></td>
+                      <td><span class="badge bg-success">73.3%</span></td>
+                      <td><span class="badge bg-primary">14.8%</span></td>
+                      <td><strong class="text-danger">80,000,000</strong></td>
+                      <td><strong class="text-warning">5,000,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Pilates</strong></td>
+                      <td><strong class="text-primary">150,000,000</strong></td>
+                      <td><strong class="text-success">110,000,000</strong></td>
+                      <td><strong class="text-info">5,200,000</strong></td>
+                      <td><span class="badge bg-success">73.3%</span></td>
+                      <td><span class="badge bg-primary">7.4%</span></td>
+                      <td><strong class="text-danger">40,000,000</strong></td>
+                      <td><strong class="text-warning">2,500,000</strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Operation</strong></td>
+                      <td><strong class="text-primary">50,000,000</strong></td>
+                      <td><strong class="text-success">35,000,000</strong></td>
+                      <td><strong class="text-info">2,100,000</strong></td>
+                      <td><span class="badge bg-success">70.0%</span></td>
+                      <td><span class="badge bg-primary">2.3%</span></td>
+                      <td><strong class="text-danger">15,000,000</strong></td>
+                      <td><strong class="text-warning">937,500</strong></td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="table-dark">
+                    <tr>
+                      <td><strong>TỔNG CỘNG</strong></td>
+                      <td>
+                        <strong class="text-primary">2,000,000,000</strong>
+                      </td>
+                      <td>
+                        <strong class="text-success">1,490,000,000</strong>
+                      </td>
+                      <td><strong class="text-info">72,800,000</strong></td>
+                      <td><span class="badge bg-success">74.5%</span></td>
+                      <td><span class="badge bg-primary">100.0%</span></td>
+                      <td><strong class="text-danger">510,000,000</strong></td>
+                      <td><strong class="text-warning">31,875,000</strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Details -->
+      <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-credit-card me-2"></i>
+                Chỉ số theo hình thức thanh toán
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Hình thức</th>
+                      <th>Hôm nay</th>
+                      <th>MTD</th>
+                      <th>Tỉ lệ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Đặt cọc (Deposit)</strong></td>
+                      <td><strong class="text-warning">15,200,000</strong></td>
+                      <td><strong class="text-warning">285,000,000</strong></td>
+                      <td><span class="badge bg-warning">19.1%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thanh toán đủ (PIF)</strong></td>
+                      <td><strong class="text-success">42,800,000</strong></td>
+                      <td><strong class="text-success">890,000,000</strong></td>
+                      <td><span class="badge bg-success">59.7%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Thanh toán nợ (PB)</strong></td>
+                      <td><strong class="text-info">14,800,000</strong></td>
+                      <td><strong class="text-info">315,000,000</strong></td>
+                      <td><span class="badge bg-info">21.1%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-money-bill-wave me-2"></i>
+                Chỉ số theo hình thức thu tiền
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Hình thức</th>
+                      <th>Hôm nay</th>
+                      <th>MTD</th>
+                      <th>Tỉ lệ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Tiền mặt (Cash)</strong></td>
+                      <td><strong class="text-primary">18,200,000</strong></td>
+                      <td><strong class="text-primary">380,000,000</strong></td>
+                      <td><span class="badge bg-primary">25.5%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Chuyển khoản</strong></td>
+                      <td><strong class="text-success">35,600,000</strong></td>
+                      <td><strong class="text-success">720,000,000</strong></td>
+                      <td><span class="badge bg-success">48.3%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>MPOS</strong></td>
+                      <td><strong class="text-info">12,800,000</strong></td>
+                      <td><strong class="text-info">260,000,000</strong></td>
+                      <td><span class="badge bg-info">17.4%</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Cà thẻ (Credit)</strong></td>
+                      <td><strong class="text-warning">6,200,000</strong></td>
+                      <td><strong class="text-warning">130,000,000</strong></td>
+                      <td><span class="badge bg-warning">8.7%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PT Fitness Statistics -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-dumbbell me-2"></i>
+                Chỉ số PT
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6 mb-4">
+                  <h6 class="text-primary mb-3">Số buổi tập PT</h6>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>CLB</th>
+                          <th>Hôm qua</th>
+                          <th>Hôm nay</th>
+                          <th>MTD</th>
+                          <th>Online</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Tôn Thất Thuyết</strong></td>
+                          <td>12</td>
+                          <td>15</td>
+                          <td>285</td>
+                          <td>2</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Huỳnh Thúc Kháng</strong></td>
+                          <td>10</td>
+                          <td>12</td>
+                          <td>245</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Giảng Võ</strong></td>
+                          <td>8</td>
+                          <td>10</td>
+                          <td>220</td>
+                          <td>2</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Hào Nam</strong></td>
+                          <td>6</td>
+                          <td>8</td>
+                          <td>180</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Nguyễn Tuân</strong></td>
+                          <td>5</td>
+                          <td>6</td>
+                          <td>155</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Láng Hạ</strong></td>
+                          <td>4</td>
+                          <td>5</td>
+                          <td>125</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Đống Đa</strong></td>
+                          <td>3</td>
+                          <td>4</td>
+                          <td>95</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Hai Bà Trưng</strong></td>
+                          <td>3</td>
+                          <td>4</td>
+                          <td>85</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Thanh Xuân</strong></td>
+                          <td>2</td>
+                          <td>3</td>
+                          <td>75</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Cầu Giấy</strong></td>
+                          <td>2</td>
+                          <td>3</td>
+                          <td>65</td>
+                          <td>0</td>
+                        </tr>
+                      </tbody>
+                      <tfoot class="table-dark">
+                        <tr>
+                          <td><strong>TỔNG CỘNG</strong></td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showPTSessionsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >41</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showPTSessionsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >51</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showPTSessionsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >1,085</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showPTSessionsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >7</strong
+                            >
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <h6 class="text-success mb-3">Số buổi tập Fit</h6>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>CLB</th>
+                          <th>Hôm qua</th>
+                          <th>Hôm nay</th>
+                          <th>MTD</th>
+                          <th>Online</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Tôn Thất Thuyết</strong></td>
+                          <td>8</td>
+                          <td>10</td>
+                          <td>185</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Huỳnh Thúc Kháng</strong></td>
+                          <td>7</td>
+                          <td>8</td>
+                          <td>165</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Giảng Võ</strong></td>
+                          <td>6</td>
+                          <td>7</td>
+                          <td>145</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Hào Nam</strong></td>
+                          <td>4</td>
+                          <td>5</td>
+                          <td>125</td>
+                          <td>0</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Nguyễn Tuân</strong></td>
+                          <td>3</td>
+                          <td>4</td>
+                          <td>105</td>
+                          <td>0</td>
+                        </tr>
+                      </tbody>
+                      <tfoot class="table-dark">
+                        <tr>
+                          <td><strong>TỔNG CỘNG</strong></td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showFitShowsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >28</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showFitShowsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >34</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showFitShowsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >725</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showFitShowsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >3</strong
+                            >
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Operation Statistics -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <i class="fas fa-cogs me-2"></i>
+                Chỉ số vận hành
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-6 mb-4">
+                  <h6 class="text-primary mb-3">Lượt hội viên check-in</h6>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>CLB</th>
+                          <th>Hôm nay</th>
+                          <th>MTD</th>
+                          <th>Đúng giờ</th>
+                          <th>Thủ công</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Tôn Thất Thuyết</strong></td>
+                          <td>65</td>
+                          <td>1,485</td>
+                          <td>58</td>
+                          <td>7</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Huỳnh Thúc Kháng</strong></td>
+                          <td>58</td>
+                          <td>1,320</td>
+                          <td>52</td>
+                          <td>6</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Giảng Võ</strong></td>
+                          <td>52</td>
+                          <td>1,185</td>
+                          <td>47</td>
+                          <td>5</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Hào Nam</strong></td>
+                          <td>45</td>
+                          <td>1,025</td>
+                          <td>40</td>
+                          <td>5</td>
+                        </tr>
+                        <tr>
+                          <td><strong>Nguyễn Tuân</strong></td>
+                          <td>38</td>
+                          <td>865</td>
+                          <td>34</td>
+                          <td>4</td>
+                        </tr>
+                      </tbody>
+                      <tfoot class="table-dark">
+                        <tr>
+                          <td><strong>TỔNG CỘNG</strong></td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showCheckinTodayDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >258</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showCheckinMTDDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >5,880</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showCheckinTodayDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >231</strong
+                            >
+                          </td>
+                          <td>
+                            <strong
+                              class="clickable-metric"
+                              onclick="showCheckinTodayDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >27</strong
+                            >
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <h6 class="text-success mb-3">Khách tham quan & tập thử</h6>
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead class="table-dark">
+                        <tr>
+                          <th>CLB</th>
+                          <th>Tham quan</th>
+                          <th>Tập thử</th>
+                          <th>Tổng</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><strong>Tôn Thất Thuyết</strong></td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >2</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showTrialGuestsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >3</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >5</span
+                            >
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>Huỳnh Thúc Kháng</strong></td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >2</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showTrialGuestsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >2</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showTrialGuestsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >4</span
+                            >
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>Giảng Võ</strong></td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >5</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showTrialGuestsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >2</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >7</span
+                            >
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>Hào Nam</strong></td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >4</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showTrialGuestsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >1</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >5</span
+                            >
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><strong>Nguyễn Tuân</strong></td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >3</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showTrialGuestsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >1</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >4</span
+                            >
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tfoot class="table-dark">
+                        <tr>
+                          <td><strong>TỔNG CỘNG</strong></td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >26</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showTrialGuestsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >9</span
+                            >
+                          </td>
+                          <td>
+                            <span
+                              class="clickable-metric"
+                              onclick="showVisitorsDetail()"
+                              style="cursor: pointer; color: #0d6efd !important"
+                              >35</span
+                            >
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div
+      class="modal fade"
+      id="detailModal"
+      tabindex="-1"
+      aria-labelledby="detailModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detailModalLabel">
+              <i class="fas fa-list me-2"></i>Chi tiết dữ liệu
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="modalContent">
+              <!-- Content will be loaded dynamically -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="exportDetailData()"
+            >
+              <i class="fas fa-download me-1"></i>Xuất Excel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // Sample data for filtering
+      const sampleData = {
+        // Detail data for each metric
+        detailData: {
+          checkinToday: [
+            {
+              id: 1,
+              name: "Nguyễn Văn A",
+              phone: "0901234567",
+              time: "08:30",
+              club: "Tôn Thất Thuyết",
+              type: "Hội viên",
+            },
+            {
+              id: 2,
+              name: "Trần Thị B",
+              phone: "0901234568",
+              time: "09:15",
+              club: "Huỳnh Thúc Kháng",
+              type: "Hội viên",
+            },
+            {
+              id: 3,
+              name: "Lê Văn C",
+              phone: "0901234569",
+              time: "10:00",
+              club: "Giảng Võ",
+              type: "Hội viên",
+            },
+            {
+              id: 4,
+              name: "Phạm Thị D",
+              phone: "0901234570",
+              time: "11:30",
+              club: "Hào Nam",
+              type: "Hội viên",
+            },
+            {
+              id: 5,
+              name: "Hoàng Văn E",
+              phone: "0901234571",
+              time: "14:00",
+              club: "Nguyễn Tuân",
+              type: "Hội viên",
+            },
+          ],
+          checkinMTD: [
+            {
+              id: 1,
+              name: "Nguyễn Văn A",
+              phone: "0901234567",
+              total: 15,
+              club: "Tôn Thất Thuyết",
+              lastVisit: "15/12/2024",
+            },
+            {
+              id: 2,
+              name: "Trần Thị B",
+              phone: "0901234568",
+              total: 12,
+              club: "Huỳnh Thúc Kháng",
+              lastVisit: "14/12/2024",
+            },
+            {
+              id: 3,
+              name: "Lê Văn C",
+              phone: "0901234569",
+              total: 18,
+              club: "Giảng Võ",
+              lastVisit: "15/12/2024",
+            },
+            {
+              id: 4,
+              name: "Phạm Thị D",
+              phone: "0901234570",
+              total: 10,
+              club: "Hào Nam",
+              lastVisit: "13/12/2024",
+            },
+            {
+              id: 5,
+              name: "Hoàng Văn E",
+              phone: "0901234571",
+              total: 14,
+              club: "Nguyễn Tuân",
+              lastVisit: "15/12/2024",
+            },
+          ],
+          visitors: [
+            {
+              id: 1,
+              name: "Nguyễn Thị F",
+              phone: "0901234572",
+              time: "09:00",
+              club: "Tôn Thất Thuyết",
+              interest: "Gym",
+            },
+            {
+              id: 2,
+              name: "Trần Văn G",
+              phone: "0901234573",
+              time: "10:30",
+              club: "Huỳnh Thúc Kháng",
+              interest: "Yoga",
+            },
+            {
+              id: 3,
+              name: "Lê Thị H",
+              phone: "0901234574",
+              time: "11:00",
+              club: "Giảng Võ",
+              interest: "Pilates",
+            },
+            {
+              id: 4,
+              name: "Phạm Văn I",
+              phone: "0901234575",
+              time: "14:30",
+              club: "Hào Nam",
+              interest: "Swimming",
+            },
+            {
+              id: 5,
+              name: "Hoàng Thị K",
+              phone: "0901234576",
+              time: "16:00",
+              club: "Nguyễn Tuân",
+              interest: "Fitness",
+            },
+          ],
+          trialGuests: [
+            {
+              id: 1,
+              name: "Nguyễn Văn L",
+              phone: "0901234577",
+              time: "08:45",
+              club: "Tôn Thất Thuyết",
+              session: "Membership Trial",
+            },
+            {
+              id: 2,
+              name: "Trần Thị M",
+              phone: "0901234578",
+              time: "10:15",
+              club: "Huỳnh Thúc Kháng",
+              session: "Fitness Trial",
+            },
+            {
+              id: 3,
+              name: "Lê Văn N",
+              phone: "0901234579",
+              time: "11:45",
+              club: "Giảng Võ",
+              session: "Pilates Trial",
+            },
+            {
+              id: 4,
+              name: "Phạm Thị O",
+              phone: "0901234580",
+              time: "15:00",
+              club: "Hào Nam",
+              session: "Swimming Coach Trial",
+            },
+            {
+              id: 5,
+              name: "Hoàng Văn P",
+              phone: "0901234581",
+              time: "17:30",
+              club: "Nguyễn Tuân",
+              session: "Fitness Trial",
+            },
+          ],
+          ptSessions: [
+            {
+              id: 1,
+              trainer: "Nguyễn Văn Q",
+              client: "Trần Thị R",
+              time: "08:00-09:00",
+              club: "Tôn Thất Thuyết",
+              type: "PT",
+            },
+            {
+              id: 2,
+              trainer: "Lê Thị S",
+              client: "Phạm Văn T",
+              time: "09:30-10:30",
+              club: "Huỳnh Thúc Kháng",
+              type: "PT",
+            },
+            {
+              id: 3,
+              trainer: "Hoàng Văn U",
+              client: "Nguyễn Thị V",
+              time: "11:00-12:00",
+              club: "Giảng Võ",
+              type: "PT",
+            },
+            {
+              id: 4,
+              trainer: "Trần Văn W",
+              client: "Lê Thị X",
+              time: "14:00-15:00",
+              club: "Hào Nam",
+              type: "PT",
+            },
+            {
+              id: 5,
+              trainer: "Phạm Thị Y",
+              client: "Hoàng Văn Z",
+              time: "16:00-17:00",
+              club: "Nguyễn Tuân",
+              type: "PT",
+            },
+          ],
+          fitShows: [
+            {
+              id: 1,
+              instructor: "Nguyễn Thị AA",
+              class: "Zumba",
+              time: "18:00-19:00",
+              club: "Tôn Thất Thuyết",
+              participants: 15,
+            },
+            {
+              id: 2,
+              instructor: "Trần Văn BB",
+              class: "Aerobics",
+              time: "19:30-20:30",
+              club: "Huỳnh Thúc Kháng",
+              participants: 12,
+            },
+            {
+              id: 3,
+              instructor: "Lê Thị CC",
+              class: "Yoga",
+              time: "20:00-21:00",
+              club: "Giảng Võ",
+              participants: 8,
+            },
+            {
+              id: 4,
+              instructor: "Phạm Văn DD",
+              class: "Pilates",
+              time: "18:30-19:30",
+              club: "Hào Nam",
+              participants: 10,
+            },
+            {
+              id: 5,
+              instructor: "Hoàng Thị EE",
+              class: "Dance",
+              time: "19:00-20:00",
+              club: "Nguyễn Tuân",
+              participants: 18,
+            },
+          ],
+        },
+        clubs: [
+          {
+            name: "Tôn Thất Thuyết",
+            target: 500000000,
+            mtd: 375000000,
+            daily: 18500000,
+            ratio: 20.3,
+            remaining: 125000000,
+            dailyNeed: 7812500,
+          },
+          {
+            name: "Huỳnh Thúc Kháng",
+            target: 450000000,
+            mtd: 340000000,
+            daily: 16200000,
+            ratio: 18.4,
+            remaining: 110000000,
+            dailyNeed: 6875000,
+          },
+          {
+            name: "Giảng Võ",
+            target: 400000000,
+            mtd: 295000000,
+            daily: 14800000,
+            ratio: 15.9,
+            remaining: 105000000,
+            dailyNeed: 6562500,
+          },
+          {
+            name: "Hào Nam",
+            target: 350000000,
+            mtd: 260000000,
+            daily: 12500000,
+            ratio: 14.1,
+            remaining: 90000000,
+            dailyNeed: 5625000,
+          },
+          {
+            name: "Nguyễn Tuân",
+            target: 300000000,
+            mtd: 220000000,
+            daily: 10800000,
+            ratio: 11.9,
+            remaining: 80000000,
+            dailyNeed: 5000000,
+          },
+          {
+            name: "Láng Hạ",
+            target: 280000000,
+            mtd: 195000000,
+            daily: 9200000,
+            ratio: 10.5,
+            remaining: 85000000,
+            dailyNeed: 5312500,
+          },
+          {
+            name: "Đống Đa",
+            target: 250000000,
+            mtd: 180000000,
+            daily: 8500000,
+            ratio: 9.7,
+            remaining: 70000000,
+            dailyNeed: 4375000,
+          },
+          {
+            name: "Hai Bà Trưng",
+            target: 220000000,
+            mtd: 165000000,
+            daily: 7800000,
+            ratio: 8.9,
+            remaining: 55000000,
+            dailyNeed: 3437500,
+          },
+          {
+            name: "Thanh Xuân",
+            target: 200000000,
+            mtd: 145000000,
+            daily: 6900000,
+            ratio: 7.8,
+            remaining: 55000000,
+            dailyNeed: 3437500,
+          },
+          {
+            name: "Cầu Giấy",
+            target: 180000000,
+            mtd: 130000000,
+            daily: 6200000,
+            ratio: 7.0,
+            remaining: 50000000,
+            dailyNeed: 3125000,
+          },
+        ],
+        departments: [
+          {
+            name: "Membership",
+            target: 900000000,
+            mtd: 680000000,
+            daily: 32500000,
+            ratio: 45.6,
+            remaining: 220000000,
+            dailyNeed: 13750000,
+          },
+          {
+            name: "Fitness",
+            target: 600000000,
+            mtd: 445000000,
+            daily: 21200000,
+            ratio: 29.9,
+            remaining: 155000000,
+            dailyNeed: 9687500,
+          },
+          {
+            name: "Pool",
+            target: 300000000,
+            mtd: 220000000,
+            daily: 10800000,
+            ratio: 14.8,
+            remaining: 80000000,
+            dailyNeed: 5000000,
+          },
+          {
+            name: "Pilates",
+            target: 150000000,
+            mtd: 110000000,
+            daily: 5200000,
+            ratio: 7.4,
+            remaining: 40000000,
+            dailyNeed: 2500000,
+          },
+          {
+            name: "Operation",
+            target: 50000000,
+            mtd: 35000000,
+            daily: 2100000,
+            ratio: 2.3,
+            remaining: 15000000,
+            dailyNeed: 937500,
+          },
+        ],
+      };
+
+      function applyFilters() {
+        const locationFilter = document.getElementById("locationFilter").value;
+        const departmentFilter =
+          document.getElementById("departmentFilter").value;
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const reportType = document.getElementById("reportType").value;
+
+        console.log("Filtering by:", {
+          locationFilter,
+          departmentFilter,
+          startDate,
+          endDate,
+          reportType,
+        });
+
+        // Update report info
+        updateReportInfo(startDate, endDate, reportType);
+
+        // Apply actual filtering
+        filterTables(locationFilter, departmentFilter);
+
+        // Show success message
+        if (reportType === "daily") {
+          showFilterMessage(
+            `Đã áp dụng bộ lọc:\n- Trung tâm: ${getLocationName(
+              locationFilter
+            )}\n- Bộ phận: ${getDepartmentName(
+              departmentFilter
+            )}\n- Ngày: ${formatDate(startDate)}`
+          );
+        } else {
+          showFilterMessage(
+            `Đã áp dụng bộ lọc:\n- Trung tâm: ${getLocationName(
+              locationFilter
+            )}\n- Bộ phận: ${getDepartmentName(
+              departmentFilter
+            )}\n- Từ ngày: ${formatDate(startDate)}\n- Đến ngày: ${formatDate(
+              endDate
+            )}`
+          );
+        }
+      }
+
+      function filterTables(location, department) {
+        // Filter club table
+        const clubRows = document.querySelectorAll("#clubTable tbody tr");
+        let visibleClubCount = 0;
+
+        clubRows.forEach((row) => {
+          const clubName = row.cells[0].textContent.trim();
+          let showRow = true;
+
+          if (location !== "all") {
+            const clubIndex = parseInt(location) - 1;
+            const clubNames = [
+              "Tôn Thất Thuyết",
+              "Huỳnh Thúc Kháng",
+              "Giảng Võ",
+              "Hào Nam",
+              "Nguyễn Tuân",
+            ];
+            if (
+              clubIndex < clubNames.length &&
+              clubName !== clubNames[clubIndex]
+            ) {
+              showRow = false;
+            }
+          }
+
+          row.style.display = showRow ? "" : "none";
+          if (showRow) visibleClubCount++;
+        });
+
+        // Filter department table
+        const deptRows = document.querySelectorAll("#departmentTable tbody tr");
+        let visibleDeptCount = 0;
+
+        deptRows.forEach((row) => {
+          const deptName = row.cells[0].textContent.trim();
+          let showRow = true;
+
+          if (department !== "all") {
+            const deptMap = {
+              membership: "Membership",
+              fitness: "Fitness",
+              pool: "Pool",
+              pilates: "Pilates",
+              operation: "Operation",
+            };
+            if (deptName !== deptMap[department]) {
+              showRow = false;
+            }
+          }
+
+          row.style.display = showRow ? "" : "none";
+          if (showRow) visibleDeptCount++;
+        });
+
+        // Update table headers to show filtered count
+        updateTableHeaders(visibleClubCount, visibleDeptCount);
+      }
+
+      function updateTableHeaders(visibleClubCount, visibleDeptCount) {
+        // Update club table header
+        const clubHeader = document.querySelector("#clubTable .card-header h5");
+        if (clubHeader) {
+          const originalText = "Chỉ số doanh thu theo CLB";
+          clubHeader.innerHTML = `<i class="fas fa-chart-line me-2"></i>${originalText} <span class="badge bg-primary ms-2">${visibleClubCount} CLB</span>`;
+        }
+
+        // Update department table header
+        const deptHeader = document
+          .querySelector("#departmentTable")
+          .closest(".card")
+          .querySelector(".card-header h5");
+        if (deptHeader) {
+          const originalText = "Chỉ số doanh thu theo bộ phận";
+          deptHeader.innerHTML = `<i class="fas fa-chart-bar me-2"></i>${originalText} <span class="badge bg-success ms-2">${visibleDeptCount} bộ phận</span>`;
+        }
+      }
+
+      function getLocationName(locationValue) {
+        const locationMap = {
+          all: "Tất cả",
+          1: "Tôn Thất Thuyết",
+          2: "Huỳnh Thúc Kháng",
+          3: "Giảng Võ",
+          4: "Hào Nam",
+          5: "Nguyễn Tuân",
+        };
+        return locationMap[locationValue] || "Không xác định";
+      }
+
+      function getDepartmentName(departmentValue) {
+        const departmentMap = {
+          all: "Tất cả",
+          membership: "Membership",
+          fitness: "Fitness",
+          pool: "Pool",
+          pilates: "Pilates",
+          operation: "Operation",
+        };
+        return departmentMap[departmentValue] || "Không xác định";
+      }
+
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("vi-VN");
+      }
+
+      function showFilterMessage(message) {
+        // Create or update filter message
+        let messageDiv = document.getElementById("filterMessage");
+        if (!messageDiv) {
+          messageDiv = document.createElement("div");
+          messageDiv.id = "filterMessage";
+          messageDiv.className = "alert alert-info alert-dismissible fade show";
+          messageDiv.style.position = "fixed";
+          messageDiv.style.top = "20px";
+          messageDiv.style.right = "20px";
+          messageDiv.style.zIndex = "9999";
+          messageDiv.style.minWidth = "300px";
+          document.body.appendChild(messageDiv);
+        }
+
+        messageDiv.innerHTML = `
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>Thông báo:</strong><br>
+          ${message.replace(/\n/g, "<br>")}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        // Auto hide after 5 seconds
+        setTimeout(() => {
+          if (messageDiv && messageDiv.parentNode) {
+            messageDiv.remove();
+          }
+        }, 5000);
+      }
+
+      function resetFilters() {
+        // Reset all filters to default values
+        document.getElementById("locationFilter").value = "all";
+        document.getElementById("departmentFilter").value = "all";
+        document.getElementById("reportType").value = "daily";
+
+        // Reset dates to yesterday
+        setDefaultDates();
+
+        // Show all rows
+        const allRows = document.querySelectorAll(
+          "#clubTable tbody tr, #departmentTable tbody tr"
+        );
+        allRows.forEach((row) => {
+          row.style.display = "";
+        });
+
+        // Reset table headers
+        updateTableHeaders(10, 5); // 10 clubs, 5 departments
+
+        // Show reset message
+        showFilterMessage("Đã reset tất cả bộ lọc về mặc định");
+      }
+
+      // Detail modal functions
+      function showDetailModal(title, data, columns) {
+        const modal = new bootstrap.Modal(
+          document.getElementById("detailModal")
+        );
+        const modalTitle = document.getElementById("detailModalLabel");
+        const modalContent = document.getElementById("modalContent");
+
+        modalTitle.innerHTML = `<i class="fas fa-list me-2"></i>${title}`;
+
+        let tableHTML = `
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  ${columns.map((col) => `<th>${col}</th>`).join("")}
+                </tr>
+              </thead>
+              <tbody>
+                ${data
+                  .map(
+                    (item) => `
+                  <tr>
+                    ${Object.values(item)
+                      .map((value) => `<td>${value}</td>`)
+                      .join("")}
+                  </tr>
+                `
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-3">
+            <small class="text-muted">Tổng số: <strong>${
+              data.length
+            }</strong> bản ghi</small>
+          </div>
+        `;
+
+        modalContent.innerHTML = tableHTML;
+        modal.show();
+      }
+
+      function showCheckinTodayDetail() {
+        const data = sampleData.detailData.checkinToday;
+        const columns = [
+          "STT",
+          "Tên khách hàng",
+          "Số điện thoại",
+          "Giờ check-in",
+          "CLB",
+          "Loại",
+        ];
+        showDetailModal("Chi tiết Check-in hôm nay", data, columns);
+      }
+
+      function showCheckinMTDDetail() {
+        const data = sampleData.detailData.checkinMTD;
+        const columns = [
+          "STT",
+          "Tên khách hàng",
+          "Số điện thoại",
+          "Tổng lượt",
+          "CLB",
+          "Lần cuối",
+        ];
+        showDetailModal("Chi tiết Check-in MTD", data, columns);
+      }
+
+      function showVisitorsDetail() {
+        const data = sampleData.detailData.visitors;
+        const columns = [
+          "STT",
+          "Tên khách hàng",
+          "Số điện thoại",
+          "Giờ tham quan",
+          "CLB",
+          "Quan tâm",
+        ];
+        showDetailModal("Chi tiết Khách tham quan", data, columns);
+      }
+
+      function showTrialGuestsDetail() {
+        const data = sampleData.detailData.trialGuests;
+        const columns = [
+          "STT",
+          "Tên khách hàng",
+          "Số điện thoại",
+          "Giờ tập thử",
+          "CLB",
+          "Loại buổi tập",
+        ];
+        showDetailModal("Chi tiết Khách tập thử", data, columns);
+      }
+
+      function showPTSessionsDetail() {
+        const data = sampleData.detailData.ptSessions;
+        const columns = [
+          "STT",
+          "HLV",
+          "Khách hàng",
+          "Thời gian",
+          "CLB",
+          "Loại",
+        ];
+        showDetailModal("Chi tiết PT Fitness Fitnesss", data, columns);
+      }
+
+      function showFitShowsDetail() {
+        const data = sampleData.detailData.fitShows;
+        const columns = [
+          "STT",
+          "Hướng dẫn viên",
+          "Lớp học",
+          "Thời gian",
+          "CLB",
+          "Số người tham gia",
+        ];
+        showDetailModal("Chi tiết Fit Shows", data, columns);
+      }
+
+      function exportDetailData() {
+        alert("Chức năng xuất Excel sẽ được triển khai!");
+      }
+
+      function exportReport() {
+        const locationFilter = document.getElementById("locationFilter").value;
+        const departmentFilter =
+          document.getElementById("departmentFilter").value;
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const reportType = document.getElementById("reportType").value;
+
+        if (reportType === "daily") {
+          alert(
+            `Xuất báo cáo Auto Daily Report:\n- Trung tâm: ${locationFilter}\n- Bộ phận: ${departmentFilter}\n- Ngày: ${startDate}`
+          );
+        } else {
+          alert(
+            `Xuất báo cáo Auto Daily Report:\n- Trung tâm: ${locationFilter}\n- Bộ phận: ${departmentFilter}\n- Từ ngày: ${startDate}\n- Đến ngày: ${endDate}`
+          );
+        }
+      }
+
+      function updateReportInfo(startDate, endDate, reportType) {
+        const lastUpdateElement = document.getElementById("lastUpdate");
+        const reportInfoElement = document.getElementById("reportInfo");
+
+        if (reportType === "daily") {
+          const date = new Date(startDate);
+          const formattedDate = date.toLocaleDateString("vi-VN");
+          const formattedTime = new Date().toLocaleTimeString("vi-VN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          lastUpdateElement.textContent = `${formattedDate} ${formattedTime}`;
+          reportInfoElement.innerHTML = `Báo cáo tự động hàng ngày - Ngày: <strong>${formattedDate}</strong> - Cập nhật lần cuối: <span id="lastUpdate">${formattedDate} ${formattedTime}</span>`;
+        } else {
+          const startDateObj = new Date(startDate);
+          const endDateObj = new Date(endDate);
+          const formattedStartDate = startDateObj.toLocaleDateString("vi-VN");
+          const formattedEndDate = endDateObj.toLocaleDateString("vi-VN");
+          const formattedTime = new Date().toLocaleTimeString("vi-VN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          lastUpdateElement.textContent = `${formattedTime}`;
+          reportInfoElement.innerHTML = `Báo cáo tự động theo khoảng thời gian - Từ: <strong>${formattedStartDate}</strong> đến <strong>${formattedEndDate}</strong> - Cập nhật lần cuối: <span id="lastUpdate">${formattedTime}</span>`;
+        }
+      }
+
+      function setDefaultDates() {
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        const yesterdayStr = yesterday.toISOString().split("T")[0];
+        const todayStr = today.toISOString().split("T")[0];
+
+        document.getElementById("startDate").value = yesterdayStr;
+        document.getElementById("endDate").value = yesterdayStr;
+
+        // Update report info for yesterday
+        updateReportInfo(yesterdayStr, yesterdayStr, "daily");
+      }
+
+      function handleReportTypeChange() {
+        const reportType = document.getElementById("reportType").value;
+        const startDate = document.getElementById("startDate");
+        const endDate = document.getElementById("endDate");
+
+        if (reportType === "daily") {
+          endDate.disabled = true;
+          endDate.value = startDate.value;
+        } else {
+          endDate.disabled = false;
+          if (!endDate.value) {
+            endDate.value = startDate.value;
+          }
+        }
+      }
+
+      // Initialize filters on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add IDs to tables for filtering
+        const clubTable = document.querySelector(".table-responsive table");
+        if (clubTable) clubTable.id = "clubTable";
+
+        const deptTable = document.querySelectorAll(
+          ".table-responsive table"
+        )[1];
+        if (deptTable) deptTable.id = "departmentTable";
+
+        // Set default dates to yesterday
+        setDefaultDates();
+
+        // Apply default filters on page load
+        applyFilters();
+
+        // Add event listeners
+        document
+          .getElementById("reportType")
+          .addEventListener("change", handleReportTypeChange);
+        document
+          .getElementById("startDate")
+          .addEventListener("change", function () {
+            const reportType = document.getElementById("reportType").value;
+            if (reportType === "daily") {
+              document.getElementById("endDate").value = this.value;
+            }
+          });
+      });
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>

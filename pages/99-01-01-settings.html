@@ -1,0 +1,1875 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings - Quản lý Mục tiêu & KPI - Actiwell Reports</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="../assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="fas fa-chart-line me-2"></i>Actiwell Reports
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">
+                <i class="fas fa-home me-1"></i>Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="settings.html">
+                <i class="fas fa-cog me-1"></i>Settings
+              </a>
+            </li>
+          </ul>
+          <div class="navbar-text">
+            <span id="currentTime"></span>
+            <br />
+            <small id="currentDate"></small>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="mb-0">
+                <i class="fas fa-cog me-2"></i>Settings - Quản lý Mục tiêu & KPI
+              </h4>
+              <p class="text-muted mb-0">
+                Cấu hình mục tiêu doanh số chung và KPI cho từng trung tâm
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global Revenue Target -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-bullseye me-2"></i>Mục tiêu Doanh số Chung
+              </h5>
+              <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                Nhập mục tiêu chung, sau đó sử dụng "Đề xuất KPI tự động" để
+                phân bổ cho các trung tâm
+              </small>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="globalTarget" class="form-label">
+                      Mục tiêu doanh số tháng (VNĐ)
+                    </label>
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="globalTarget"
+                        value="2,500,000,000"
+                        placeholder="Nhập số tiền"
+                      />
+                      <span class="input-group-text">VNĐ</span>
+                    </div>
+                    <div class="mt-2">
+                      <small
+                        class="text-muted"
+                        id="globalTarget-text"
+                        style="display: none"
+                      >
+                        <i class="fas fa-text-width me-1"></i>
+                        <span id="globalTarget-text-content"></span>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="globalYearlyTarget" class="form-label">
+                      Mục tiêu doanh số năm (VNĐ)
+                    </label>
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="globalYearlyTarget"
+                        value="30,000,000,000"
+                        placeholder="Nhập số tiền"
+                      />
+                      <span class="input-group-text">VNĐ</span>
+                    </div>
+                    <div class="mt-2">
+                      <small
+                        class="text-muted"
+                        id="globalYearlyTarget-text"
+                        style="display: none"
+                      >
+                        <i class="fas fa-text-width me-1"></i>
+                        <span id="globalYearlyTarget-text-content"></span>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="globalGrowthTarget" class="form-label">
+                      Mục tiêu tăng trưởng tháng (%)
+                    </label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="globalGrowthTarget"
+                        value="15"
+                        step="0.1"
+                      />
+                      <span class="input-group-text">%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="globalRetentionTarget" class="form-label">
+                      Mục tiêu tỷ lệ giữ chân (%)
+                    </label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="globalRetentionTarget"
+                        value="85"
+                        step="0.1"
+                      />
+                      <span class="input-group-text">%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-end">
+                <button class="btn btn-success me-2" onclick="suggestKPIs()">
+                  <i class="fas fa-magic me-1"></i>Đề xuất KPI tự động
+                </button>
+                <button
+                  class="btn btn-info me-2"
+                  onclick="showCustomDistribution()"
+                >
+                  <i class="fas fa-sliders-h me-1"></i>Phân bổ tùy chỉnh
+                </button>
+                <button class="btn btn-primary" onclick="saveGlobalSettings()">
+                  <i class="fas fa-save me-1"></i>Lưu Cài đặt Chung
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location-specific KPIs -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-building me-2"></i>KPI Theo Trung tâm
+              </h5>
+            </div>
+            <div class="card-body">
+              <!-- Location Tabs -->
+              <ul class="nav nav-tabs" id="locationTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active"
+                    id="ton-that-thuyet-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#ton-that-thuyet"
+                    type="button"
+                    role="tab"
+                  >
+                    Tôn Thất Thuyết
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="huynh-thuc-khang-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#huynh-thuc-khang"
+                    type="button"
+                    role="tab"
+                  >
+                    Huỳnh Thúc Kháng
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="giang-vo-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#giang-vo"
+                    type="button"
+                    role="tab"
+                  >
+                    Giảng Võ
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="hao-nam-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#hao-nam"
+                    type="button"
+                    role="tab"
+                  >
+                    Hào Nam
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="nguyen-tuan-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nguyen-tuan"
+                    type="button"
+                    role="tab"
+                  >
+                    Nguyễn Tuân
+                  </button>
+                </li>
+              </ul>
+
+              <!-- Tab Content -->
+              <div class="tab-content" id="locationTabContent">
+                <!-- Tôn Thất Thuyết -->
+                <div
+                  class="tab-pane fade show active"
+                  id="ton-that-thuyet"
+                  role="tabpanel"
+                >
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu doanh số tháng (VNĐ)</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="ton-that-thuyet-revenue"
+                            value="450,000,000"
+                            placeholder="Nhập số tiền"
+                          />
+                          <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <div class="mt-2">
+                          <small
+                            class="text-muted"
+                            id="ton-that-thuyet-revenue-text"
+                            style="display: none"
+                          >
+                            <i class="fas fa-text-width me-1"></i>
+                            <span
+                              id="ton-that-thuyet-revenue-text-content"
+                            ></span>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Mục tiêu check-in/ngày</label>
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="ton-that-thuyet-checkin"
+                            value="120"
+                            step="1"
+                          />
+                          <span class="input-group-text">lượt</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu PT Fitness Fitnesss/ngày</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="ton-that-thuyet-pt"
+                            value="25"
+                            step="1"
+                          />
+                          <span class="input-group-text">buổi</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu khách mới/tháng</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="ton-that-thuyet-new-members"
+                            value="80"
+                            step="1"
+                          />
+                          <span class="input-group-text">khách</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Huỳnh Thúc Kháng -->
+                <div
+                  class="tab-pane fade"
+                  id="huynh-thuc-khang"
+                  role="tabpanel"
+                >
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu doanh số tháng (VNĐ)</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="huynh-thuc-khang-revenue"
+                            value="380,000,000"
+                            step="1000000"
+                          />
+                          <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <div class="mt-2">
+                          <small
+                            class="text-muted"
+                            id="huynh-thuc-khang-revenue-text"
+                            style="display: none"
+                          >
+                            <i class="fas fa-text-width me-1"></i>
+                            <span
+                              id="huynh-thuc-khang-revenue-text-content"
+                            ></span>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Mục tiêu check-in/ngày</label>
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="huynh-thuc-khang-checkin"
+                            value="100"
+                            step="1"
+                          />
+                          <span class="input-group-text">lượt</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu PT Fitness Fitnesss/ngày</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="huynh-thuc-khang-pt"
+                            value="20"
+                            step="1"
+                          />
+                          <span class="input-group-text">buổi</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu khách mới/tháng</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="huynh-thuc-khang-new-members"
+                            value="65"
+                            step="1"
+                          />
+                          <span class="input-group-text">khách</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Giảng Võ -->
+                <div class="tab-pane fade" id="giang-vo" role="tabpanel">
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu doanh số tháng (VNĐ)</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="giang-vo-revenue"
+                            value="320,000,000"
+                            step="1000000"
+                          />
+                          <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <div class="mt-2">
+                          <small
+                            class="text-muted"
+                            id="giang-vo-revenue-text"
+                            style="display: none"
+                          >
+                            <i class="fas fa-text-width me-1"></i>
+                            <span id="giang-vo-revenue-text-content"></span>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Mục tiêu check-in/ngày</label>
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="giang-vo-checkin"
+                            value="85"
+                            step="1"
+                          />
+                          <span class="input-group-text">lượt</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu PT Fitness Fitnesss/ngày</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="giang-vo-pt"
+                            value="18"
+                            step="1"
+                          />
+                          <span class="input-group-text">buổi</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu khách mới/tháng</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="giang-vo-new-members"
+                            value="55"
+                            step="1"
+                          />
+                          <span class="input-group-text">khách</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Hào Nam -->
+                <div class="tab-pane fade" id="hao-nam" role="tabpanel">
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu doanh số tháng (VNĐ)</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="hao-nam-revenue"
+                            value="290,000,000"
+                            step="1000000"
+                          />
+                          <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <div class="mt-2">
+                          <small
+                            class="text-muted"
+                            id="hao-nam-revenue-text"
+                            style="display: none"
+                          >
+                            <i class="fas fa-text-width me-1"></i>
+                            <span id="hao-nam-revenue-text-content"></span>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Mục tiêu check-in/ngày</label>
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="hao-nam-checkin"
+                            value="75"
+                            step="1"
+                          />
+                          <span class="input-group-text">lượt</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu PT Fitness Fitnesss/ngày</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="hao-nam-pt"
+                            value="15"
+                            step="1"
+                          />
+                          <span class="input-group-text">buổi</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu khách mới/tháng</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="hao-nam-new-members"
+                            value="45"
+                            step="1"
+                          />
+                          <span class="input-group-text">khách</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Nguyễn Tuân -->
+                <div class="tab-pane fade" id="nguyen-tuan" role="tabpanel">
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu doanh số tháng (VNĐ)</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="nguyen-tuan-revenue"
+                            value="200,000,000"
+                            step="1000000"
+                          />
+                          <span class="input-group-text">VNĐ</span>
+                        </div>
+                        <div class="mt-2">
+                          <small
+                            class="text-muted"
+                            id="nguyen-tuan-revenue-text"
+                            style="display: none"
+                          >
+                            <i class="fas fa-text-width me-1"></i>
+                            <span id="nguyen-tuan-revenue-text-content"></span>
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label">Mục tiêu check-in/ngày</label>
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="nguyen-tuan-checkin"
+                            value="60"
+                            step="1"
+                          />
+                          <span class="input-group-text">lượt</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu PT Fitness Fitnesss/ngày</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="nguyen-tuan-pt"
+                            value="12"
+                            step="1"
+                          />
+                          <span class="input-group-text">buổi</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label class="form-label"
+                          >Mục tiêu khách mới/tháng</label
+                        >
+                        <div class="input-group">
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="nguyen-tuan-new-members"
+                            value="35"
+                            step="1"
+                          />
+                          <span class="input-group-text">khách</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-end mt-3">
+                <button
+                  class="btn btn-success"
+                  onclick="saveLocationSettings()"
+                >
+                  <i class="fas fa-save me-1"></i>Lưu Cài đặt Trung tâm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Department-specific KPIs -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">
+                <i class="fas fa-users me-2"></i>KPI Theo Bộ phận
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="text-primary">Membership</h6>
+                  <div class="mb-3">
+                    <label class="form-label"
+                      >Mục tiêu doanh số/tháng (VNĐ)</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="membership-revenue"
+                        value="1,500,000,000"
+                        step="1000000"
+                      />
+                      <span class="input-group-text">VNĐ</span>
+                    </div>
+                    <div class="mt-2">
+                      <small
+                        class="text-muted"
+                        id="membership-revenue-text"
+                        style="display: none"
+                      >
+                        <i class="fas fa-text-width me-1"></i>
+                        <span id="membership-revenue-text-content"></span>
+                      </small>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Mục tiêu khách mới/tháng</label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="membership-new-members"
+                        value="350"
+                        step="1"
+                      />
+                      <span class="input-group-text">khách</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-success">Fitness</h6>
+                  <div class="mb-3">
+                    <label class="form-label"
+                      >Mục tiêu doanh số/tháng (VNĐ)</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="fitness-revenue"
+                        value="800,000,000"
+                        step="1000000"
+                      />
+                      <span class="input-group-text">VNĐ</span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label"
+                      >Mục tiêu Group Classes/tháng</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="fitness-group-classes"
+                        value="450"
+                        step="5"
+                      />
+                      <span class="input-group-text">lớp</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="text-danger">PT</h6>
+                  <div class="mb-3">
+                    <label class="form-label"
+                      >Mục tiêu doanh số/tháng (VNĐ)</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="pt-revenue"
+                        value="400,000,000"
+                        step="1000000"
+                      />
+                      <span class="input-group-text">VNĐ</span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Mục tiêu PT Fitness Fitnesss/tháng</label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="pt-sessions"
+                        value="1800"
+                        step="10"
+                      />
+                      <span class="input-group-text">buổi</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-info">Swimming Coach</h6>
+                  <div class="mb-3">
+                    <label class="form-label"
+                      >Mục tiêu doanh số/tháng (VNĐ)</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="swimming-coach-revenue"
+                        value="180,000,000"
+                        step="1000000"
+                      />
+                      <span class="input-group-text">VNĐ</span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label"
+                      >Mục tiêu lượt sử dụng/tháng</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="swimming-coach-usage"
+                        value="1200"
+                        step="10"
+                      />
+                      <span class="input-group-text">lượt</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="text-warning">Pilates</h6>
+                  <div class="mb-3">
+                    <label class="form-label"
+                      >Mục tiêu doanh số/tháng (VNĐ)</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="pilates-revenue"
+                        value="120,000,000"
+                        step="1000000"
+                      />
+                      <span class="input-group-text">VNĐ</span>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Mục tiêu lớp Pilates/tháng</label>
+                    <div class="input-group">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="pilates-classes"
+                        value="200"
+                        step="5"
+                      />
+                      <span class="input-group-text">lớp</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <!-- Empty column for better layout -->
+                </div>
+              </div>
+              <div class="text-end">
+                <button class="btn btn-info" onclick="saveDepartmentSettings()">
+                  <i class="fas fa-save me-1"></i>Lưu Cài đặt Bộ phận
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body text-center">
+              <button class="btn btn-primary me-2" onclick="saveAllSettings()">
+                <i class="fas fa-save me-1"></i>Lưu Tất cả Cài đặt
+              </button>
+              <button class="btn btn-secondary me-2" onclick="resetSettings()">
+                <i class="fas fa-undo me-1"></i>Reset về Mặc định
+              </button>
+              <button class="btn btn-success" onclick="exportSettings()">
+                <i class="fas fa-download me-1"></i>Xuất Cài đặt
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/realtime-clock.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+      // Settings management
+      let settings = {
+        global: {
+          monthlyTarget: 2500000000,
+          yearlyTarget: 30000000000,
+          growthTarget: 15,
+          retentionTarget: 85,
+        },
+        locations: {
+          "ton-that-thuyet": {
+            revenue: 450000000,
+            checkin: 120,
+            pt: 25,
+            newMembers: 80,
+          },
+          "huynh-thuc-khang": {
+            revenue: 380000000,
+            checkin: 100,
+            pt: 20,
+            newMembers: 65,
+          },
+          "giang-vo": {
+            revenue: 320000000,
+            checkin: 85,
+            pt: 18,
+            newMembers: 55,
+          },
+          "hao-nam": {
+            revenue: 290000000,
+            checkin: 75,
+            pt: 15,
+            newMembers: 45,
+          },
+          "nguyen-tuan": {
+            revenue: 200000000,
+            checkin: 60,
+            pt: 12,
+            newMembers: 35,
+          },
+        },
+        departments: {
+          membership: {
+            revenue: 1200000000,
+            newMembers: 280,
+          },
+          fitness: {
+            ptSessions: 1800,
+            groupClasses: 450,
+          },
+          pool: {
+            usage: 1200,
+          },
+          pilates: {
+            classes: 200,
+          },
+        },
+      };
+
+      // Load settings from localStorage or use defaults
+      function loadSettings() {
+        const savedSettings = localStorage.getItem("actiwellSettings");
+        if (savedSettings) {
+          settings = JSON.parse(savedSettings);
+        }
+        updateUI();
+      }
+
+      // Update UI with current settings
+      function updateUI() {
+        // Global settings
+        document.getElementById("globalTarget").value = formatNumber(
+          settings.global.monthlyTarget
+        );
+        document.getElementById("globalYearlyTarget").value = formatNumber(
+          settings.global.yearlyTarget
+        );
+        document.getElementById("globalGrowthTarget").value =
+          settings.global.growthTarget;
+        document.getElementById("globalRetentionTarget").value =
+          settings.global.retentionTarget;
+
+        // Location settings
+        Object.keys(settings.locations).forEach((location) => {
+          const locData = settings.locations[location];
+          document.getElementById(`${location}-revenue`).value = formatNumber(
+            locData.revenue
+          );
+          document.getElementById(`${location}-checkin`).value =
+            locData.checkin;
+          document.getElementById(`${location}-pt`).value = locData.pt;
+          document.getElementById(`${location}-new-members`).value =
+            locData.newMembers;
+        });
+
+        // Department settings
+        document.getElementById("membership-revenue").value = formatNumber(
+          settings.departments.membership.revenue
+        );
+        document.getElementById("membership-new-members").value =
+          settings.departments.membership.newMembers;
+        document.getElementById("fitness-pt-sessions").value =
+          settings.departments.fitness.ptSessions;
+        document.getElementById("fitness-group-classes").value =
+          settings.departments.fitness.groupClasses;
+        document.getElementById("pool-usage").value =
+          settings.departments.pool.usage;
+        document.getElementById("pilates-classes").value =
+          settings.departments.pilates.classes;
+
+        // Update Vietnamese text for all revenue inputs
+        const revenueInputs = [
+          "globalTarget",
+          "globalYearlyTarget",
+          "ton-that-thuyet-revenue",
+          "huynh-thuc-khang-revenue",
+          "giang-vo-revenue",
+          "hao-nam-revenue",
+          "nguyen-tuan-revenue",
+          "membership-revenue",
+        ];
+
+        revenueInputs.forEach((inputId) => {
+          updateVietnameseText(inputId);
+        });
+      }
+
+      // Save global settings
+      function saveGlobalSettings() {
+        settings.global.monthlyTarget = parseFormattedNumber(
+          document.getElementById("globalTarget").value
+        );
+        settings.global.yearlyTarget = parseFormattedNumber(
+          document.getElementById("globalYearlyTarget").value
+        );
+        settings.global.growthTarget = parseFloat(
+          document.getElementById("globalGrowthTarget").value
+        );
+        settings.global.retentionTarget = parseFloat(
+          document.getElementById("globalRetentionTarget").value
+        );
+
+        localStorage.setItem("actiwellSettings", JSON.stringify(settings));
+        showNotification("Đã lưu cài đặt chung!", "success");
+      }
+
+      // Save location settings
+      function saveLocationSettings() {
+        Object.keys(settings.locations).forEach((location) => {
+          settings.locations[location].revenue = parseFormattedNumber(
+            document.getElementById(`${location}-revenue`).value
+          );
+          settings.locations[location].checkin = parseInt(
+            document.getElementById(`${location}-checkin`).value
+          );
+          settings.locations[location].pt = parseInt(
+            document.getElementById(`${location}-pt`).value
+          );
+          settings.locations[location].newMembers = parseInt(
+            document.getElementById(`${location}-new-members`).value
+          );
+        });
+
+        localStorage.setItem("actiwellSettings", JSON.stringify(settings));
+        showNotification("Đã lưu cài đặt trung tâm!", "success");
+      }
+
+      // Save department settings
+      function saveDepartmentSettings() {
+        settings.departments.membership.revenue = parseFormattedNumber(
+          document.getElementById("membership-revenue").value
+        );
+        settings.departments.membership.newMembers = parseInt(
+          document.getElementById("membership-new-members").value
+        );
+        settings.departments.fitness.ptSessions = parseInt(
+          document.getElementById("fitness-pt-sessions").value
+        );
+        settings.departments.fitness.groupClasses = parseInt(
+          document.getElementById("fitness-group-classes").value
+        );
+        settings.departments.pool.usage = parseInt(
+          document.getElementById("pool-usage").value
+        );
+        settings.departments.pilates.classes = parseInt(
+          document.getElementById("pilates-classes").value
+        );
+
+        localStorage.setItem("actiwellSettings", JSON.stringify(settings));
+        showNotification("Đã lưu cài đặt bộ phận!", "success");
+      }
+
+      // Save all settings
+      function saveAllSettings() {
+        saveGlobalSettings();
+        saveLocationSettings();
+        saveDepartmentSettings();
+        showNotification("Đã lưu tất cả cài đặt!", "success");
+      }
+
+      // Reset settings to default
+      function resetSettings() {
+        if (confirm("Bạn có chắc muốn reset tất cả cài đặt về mặc định?")) {
+          localStorage.removeItem("actiwellSettings");
+          loadSettings();
+          showNotification("Đã reset cài đặt về mặc định!", "info");
+        }
+      }
+
+      // Export settings
+      function exportSettings() {
+        const dataStr = JSON.stringify(settings, null, 2);
+        const dataBlob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "actiwell-settings.json";
+        link.click();
+        URL.revokeObjectURL(url);
+        showNotification("Đã xuất cài đặt!", "success");
+      }
+
+      // Show notification
+      function showNotification(message, type) {
+        const alertDiv = document.createElement("div");
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alertDiv.style.cssText =
+          "top: 20px; right: 20px; z-index: 9999; min-width: 300px;";
+        alertDiv.innerHTML = `
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(alertDiv);
+
+        setTimeout(() => {
+          alertDiv.remove();
+        }, 3000);
+      }
+
+      // Format number with commas
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      // Remove commas and parse number
+      function parseFormattedNumber(str) {
+        return parseInt(str.replace(/,/g, ""));
+      }
+
+      // Convert number to Vietnamese text
+      function numberToVietnameseText(num) {
+        if (num === 0) return "Không đồng";
+
+        const ones = [
+          "",
+          "một",
+          "hai",
+          "ba",
+          "bốn",
+          "năm",
+          "sáu",
+          "bảy",
+          "tám",
+          "chín",
+        ];
+        const tens = [
+          "",
+          "",
+          "hai mươi",
+          "ba mươi",
+          "bốn mươi",
+          "năm mươi",
+          "sáu mươi",
+          "bảy mươi",
+          "tám mươi",
+          "chín mươi",
+        ];
+        const hundreds = [
+          "",
+          "một trăm",
+          "hai trăm",
+          "ba trăm",
+          "bốn trăm",
+          "năm trăm",
+          "sáu trăm",
+          "bảy trăm",
+          "tám trăm",
+          "chín trăm",
+        ];
+
+        function convertGroup(group) {
+          let result = "";
+          const hundred = Math.floor(group / 100);
+          const ten = Math.floor((group % 100) / 10);
+          const one = group % 10;
+
+          if (hundred > 0) {
+            result += hundreds[hundred] + " ";
+          }
+
+          if (ten > 1) {
+            result += tens[ten] + " ";
+            if (one > 0) {
+              result += ones[one] + " ";
+            }
+          } else if (ten === 1) {
+            if (one === 0) {
+              result += "mười ";
+            } else if (one === 5) {
+              result += "mười lăm ";
+            } else {
+              result += "mười " + ones[one] + " ";
+            }
+          } else if (one > 0) {
+            result += ones[one] + " ";
+          }
+
+          return result.trim();
+        }
+
+        const units = ["", "nghìn", "triệu", "tỷ"];
+        let result = "";
+        let unitIndex = 0;
+
+        while (num > 0) {
+          const group = num % 1000;
+          if (group > 0) {
+            const groupText = convertGroup(group);
+            if (unitIndex > 0) {
+              result = groupText + " " + units[unitIndex] + " " + result;
+            } else {
+              result = groupText;
+            }
+          }
+          num = Math.floor(num / 1000);
+          unitIndex++;
+        }
+
+        return result.trim() + " đồng";
+      }
+
+      // Update Vietnamese text for a specific input
+      function updateVietnameseText(inputId) {
+        const input = document.getElementById(inputId);
+        const textElement = document.getElementById(inputId + "-text");
+        const textContent = document.getElementById(inputId + "-text-content");
+
+        if (input && textElement && textContent) {
+          const value = parseFormattedNumber(input.value);
+          if (value > 0) {
+            textContent.textContent = numberToVietnameseText(value);
+            textElement.style.display = "block";
+          } else {
+            textElement.style.display = "none";
+          }
+        }
+      }
+
+      // Add number formatting to input fields
+      function addNumberFormatting() {
+        console.log("Adding number formatting...");
+        // Only format text inputs that contain monetary values
+        const numberInputs = [
+          "globalTarget",
+          "globalYearlyTarget",
+          "ton-that-thuyet-revenue",
+          "huynh-thuc-khang-revenue",
+          "giang-vo-revenue",
+          "hao-nam-revenue",
+          "nguyen-tuan-revenue",
+          "membership-revenue",
+        ];
+
+        numberInputs.forEach((id) => {
+          const input = document.getElementById(id);
+          console.log(`Processing input: ${id}, found:`, !!input);
+          if (input) {
+            // Format on blur
+            input.addEventListener("blur", function () {
+              if (this.value) {
+                this.value = formatNumber(parseFormattedNumber(this.value));
+                updateVietnameseText(id);
+              }
+            });
+
+            // Remove commas on focus for easier editing
+            input.addEventListener("focus", function () {
+              this.value = this.value.replace(/,/g, "");
+            });
+
+            // Add paste event handler
+            input.addEventListener("paste", function () {
+              setTimeout(() => {
+                let value = this.value.replace(/,/g, "");
+                if (value && !isNaN(value)) {
+                  this.value = formatNumber(parseInt(value));
+                  updateVietnameseText(id);
+                }
+              }, 10);
+            });
+
+            // Format on input (real-time) - simple version
+            input.addEventListener("input", function () {
+              let value = this.value.replace(/,/g, "");
+              if (value && !isNaN(value)) {
+                this.value = formatNumber(parseInt(value));
+                updateVietnameseText(id);
+              } else if (value === "") {
+                updateVietnameseText(id);
+              }
+            });
+
+            // Also add keyup event for better compatibility
+            input.addEventListener("keyup", function () {
+              let value = this.value.replace(/,/g, "");
+              if (value && !isNaN(value)) {
+                this.value = formatNumber(parseInt(value));
+                updateVietnameseText(id);
+              }
+            });
+          }
+        });
+      }
+
+      // Auto-suggest KPIs based on global target
+      function suggestKPIs() {
+        const globalTarget = parseFormattedNumber(
+          document.getElementById("globalTarget").value
+        );
+
+        if (globalTarget <= 0) {
+          showNotification(
+            "Vui lòng nhập mục tiêu doanh số chung trước!",
+            "warning"
+          );
+          return;
+        }
+
+        // Current revenue distribution (based on historical data)
+        const currentDistribution = {
+          "ton-that-thuyet": 0.25, // 25% - largest center
+          "huynh-thuc-khang": 0.2, // 20%
+          "giang-vo": 0.18, // 18%
+          "hao-nam": 0.15, // 15%
+          "nguyen-tuan": 0.12, // 12%
+          membership: 0.1, // 10% - department
+        };
+
+        // Calculate suggested targets
+        const suggestions = {};
+        Object.keys(currentDistribution).forEach((key) => {
+          const percentage = currentDistribution[key];
+          const suggestedAmount = Math.round(globalTarget * percentage);
+          suggestions[key] = suggestedAmount;
+        });
+
+        // Debug: Log suggestions to console
+        console.log("Global Target:", globalTarget);
+        console.log("Current Distribution:", currentDistribution);
+        console.log("Suggestions:", suggestions);
+
+        // Verify all suggestions are calculated
+        const expectedKeys = [
+          "ton-that-thuyet",
+          "huynh-thuc-khang",
+          "giang-vo",
+          "hao-nam",
+          "nguyen-tuan",
+          "membership",
+        ];
+        const missingKeys = expectedKeys.filter((key) => !suggestions[key]);
+        if (missingKeys.length > 0) {
+          console.error("Missing suggestions for keys:", missingKeys);
+          alert(
+            "Lỗi: Thiếu suggestions cho các keys: " + missingKeys.join(", ")
+          );
+        }
+
+        // Debug: Show suggestions in alert
+        const suggestionsText = expectedKeys
+          .map((key) => `${key}: ${formatNumber(suggestions[key] || 0)} VNĐ`)
+          .join("\n");
+        console.log("Suggestions Text:", suggestionsText);
+
+        // Debug: Check if all suggestions are valid
+        const validSuggestions = expectedKeys.filter(
+          (key) => suggestions[key] && suggestions[key] > 0
+        );
+        console.log("Valid suggestions:", validSuggestions);
+        console.log(
+          "Invalid suggestions:",
+          expectedKeys.filter(
+            (key) => !suggestions[key] || suggestions[key] <= 0
+          )
+        );
+
+        // Debug: Log the settings object before applying suggestions
+        console.log(
+          "Settings before applying suggestions:",
+          JSON.parse(JSON.stringify(settings))
+        );
+
+        // Show confirmation dialog
+        const confirmMessage = `
+           Đề xuất KPI dựa trên mục tiêu ${formatNumber(globalTarget)} VNĐ:
+           
+           • Tôn Thất Thuyết: ${formatNumber(
+             suggestions["ton-that-thuyet"]
+           )} VNĐ (25%)
+           • Huỳnh Thúc Kháng: ${formatNumber(
+             suggestions["huynh-thuc-khang"]
+           )} VNĐ (20%)
+           • Giảng Võ: ${formatNumber(suggestions["giang-vo"])} VNĐ (18%)
+           • Hào Nam: ${formatNumber(suggestions["hao-nam"])} VNĐ (15%)
+           • Nguyễn Tuân: ${formatNumber(suggestions["nguyen-tuan"])} VNĐ (12%)
+           • Membership: ${formatNumber(suggestions["membership"])} VNĐ (10%)
+           
+           Tổng: ${formatNumber(
+             Object.values(suggestions).reduce((a, b) => a + b, 0)
+           )} VNĐ
+           
+           Bạn có muốn áp dụng các đề xuất này không?
+         `;
+
+        if (confirm(confirmMessage)) {
+          // Apply suggestions with debug logs
+          console.log("Applying suggestions to input fields...");
+
+          // Apply to Tôn Thất Thuyết
+          const tonThatThuyetInput = document.getElementById(
+            "ton-that-thuyet-revenue"
+          );
+          if (tonThatThuyetInput) {
+            tonThatThuyetInput.value = formatNumber(
+              suggestions["ton-that-thuyet"]
+            );
+            console.log(
+              "Applied to Tôn Thất Thuyết:",
+              formatNumber(suggestions["ton-that-thuyet"])
+            );
+          }
+
+          // Apply to Huỳnh Thúc Kháng
+          const huynhThucKhangInput = document.getElementById(
+            "huynh-thuc-khang-revenue"
+          );
+          if (huynhThucKhangInput) {
+            huynhThucKhangInput.value = formatNumber(
+              suggestions["huynh-thuc-khang"]
+            );
+            console.log(
+              "Applied to Huỳnh Thúc Kháng:",
+              formatNumber(suggestions["huynh-thuc-khang"])
+            );
+          }
+
+          // Apply to Giảng Võ
+          const giangVoInput = document.getElementById("giang-vo-revenue");
+          if (giangVoInput) {
+            giangVoInput.value = formatNumber(suggestions["giang-vo"]);
+            console.log(
+              "Applied to Giảng Võ:",
+              formatNumber(suggestions["giang-vo"])
+            );
+          }
+
+          // Apply to Hào Nam
+          const haoNamInput = document.getElementById("hao-nam-revenue");
+          if (haoNamInput) {
+            haoNamInput.value = formatNumber(suggestions["hao-nam"]);
+            console.log(
+              "Applied to Hào Nam:",
+              formatNumber(suggestions["hao-nam"])
+            );
+          }
+
+          // Apply to Nguyễn Tuân
+          const nguyenTuanInput = document.getElementById(
+            "nguyen-tuan-revenue"
+          );
+          if (nguyenTuanInput) {
+            nguyenTuanInput.value = formatNumber(suggestions["nguyen-tuan"]);
+            console.log(
+              "Applied to Nguyễn Tuân:",
+              formatNumber(suggestions["nguyen-tuan"])
+            );
+          }
+
+          // Apply to Membership
+          const membershipInput = document.getElementById("membership-revenue");
+          if (membershipInput) {
+            membershipInput.value = formatNumber(suggestions["membership"]);
+            console.log(
+              "Applied to Membership:",
+              formatNumber(suggestions["membership"])
+            );
+          }
+
+          // Update Vietnamese text
+          const revenueInputs = [
+            "ton-that-thuyet-revenue",
+            "huynh-thuc-khang-revenue",
+            "giang-vo-revenue",
+            "hao-nam-revenue",
+            "nguyen-tuan-revenue",
+            "membership-revenue",
+          ];
+
+          console.log("Updating Vietnamese text for all inputs...");
+          revenueInputs.forEach((inputId) => {
+            updateVietnameseText(inputId);
+          });
+
+          showNotification(
+            "Đã áp dụng đề xuất KPI cho tất cả trung tâm!",
+            "success"
+          );
+        }
+      }
+
+      // Add custom distribution option
+      function showCustomDistribution() {
+        const globalTarget = parseFormattedNumber(
+          document.getElementById("globalTarget").value
+        );
+
+        if (globalTarget <= 0) {
+          showNotification(
+            "Vui lòng nhập mục tiêu doanh số chung trước!",
+            "warning"
+          );
+          return;
+        }
+
+        const customDialog = `
+           <div class="modal fade" id="customDistributionModal" tabindex="-1">
+             <div class="modal-dialog modal-lg">
+               <div class="modal-content">
+                 <div class="modal-header">
+                   <h5 class="modal-title">Phân bổ KPI tùy chỉnh</h5>
+                   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                 </div>
+                 <div class="modal-body">
+                   <p>Tổng mục tiêu: <strong>${formatNumber(
+                     globalTarget
+                   )} VNĐ</strong></p>
+                   <div class="row">
+                     <div class="col-md-6">
+                       <label class="form-label">Tôn Thất Thuyết</label>
+                       <div class="input-group">
+                         <input type="number" class="form-control" id="custom-ton-that-thuyet-percent" value="25" min="0" max="100" step="0.1" placeholder="Phần trăm">
+                         <span class="input-group-text">%</span>
+                       </div>
+                       <div class="input-group mt-1">
+                         <input type="number" class="form-control" id="custom-ton-that-thuyet-amount" value="1250000000" min="0" step="1000000" placeholder="Số tiền">
+                         <span class="input-group-text">VNĐ</span>
+                       </div>
+                     </div>
+                     <div class="col-md-6">
+                       <label class="form-label">Huỳnh Thúc Kháng</label>
+                       <div class="input-group">
+                         <input type="number" class="form-control" id="custom-huynh-thuc-khang-percent" value="20" min="0" max="100" step="0.1" placeholder="Phần trăm">
+                         <span class="input-group-text">%</span>
+                       </div>
+                       <div class="input-group mt-1">
+                         <input type="number" class="form-control" id="custom-huynh-thuc-khang-amount" value="1000000000" min="0" step="1000000" placeholder="Số tiền">
+                         <span class="input-group-text">VNĐ</span>
+                       </div>
+                     </div>
+                   </div>
+                   <div class="row mt-2">
+                     <div class="col-md-6">
+                       <label class="form-label">Giảng Võ</label>
+                       <div class="input-group">
+                         <input type="number" class="form-control" id="custom-giang-vo-percent" value="18" min="0" max="100" step="0.1" placeholder="Phần trăm">
+                         <span class="input-group-text">%</span>
+                       </div>
+                       <div class="input-group mt-1">
+                         <input type="number" class="form-control" id="custom-giang-vo-amount" value="900000000" min="0" step="1000000" placeholder="Số tiền">
+                         <span class="input-group-text">VNĐ</span>
+                       </div>
+                     </div>
+                     <div class="col-md-6">
+                       <label class="form-label">Hào Nam</label>
+                       <div class="input-group">
+                         <input type="number" class="form-control" id="custom-hao-nam-percent" value="15" min="0" max="100" step="0.1" placeholder="Phần trăm">
+                         <span class="input-group-text">%</span>
+                       </div>
+                       <div class="input-group mt-1">
+                         <input type="number" class="form-control" id="custom-hao-nam-amount" value="750000000" min="0" step="1000000" placeholder="Số tiền">
+                         <span class="input-group-text">VNĐ</span>
+                       </div>
+                     </div>
+                   </div>
+                   <div class="row mt-2">
+                     <div class="col-md-6">
+                       <label class="form-label">Nguyễn Tuân</label>
+                       <div class="input-group">
+                         <input type="number" class="form-control" id="custom-nguyen-tuan-percent" value="12" min="0" max="100" step="0.1" placeholder="Phần trăm">
+                         <span class="input-group-text">%</span>
+                       </div>
+                       <div class="input-group mt-1">
+                         <input type="number" class="form-control" id="custom-nguyen-tuan-amount" value="600000000" min="0" step="1000000" placeholder="Số tiền">
+                         <span class="input-group-text">VNĐ</span>
+                       </div>
+                     </div>
+                     <div class="col-md-6">
+                       <label class="form-label">Membership</label>
+                       <div class="input-group">
+                         <input type="number" class="form-control" id="custom-membership-percent" value="10" min="0" max="100" step="0.1" placeholder="Phần trăm">
+                         <span class="input-group-text">%</span>
+                       </div>
+                       <div class="input-group mt-1">
+                         <input type="number" class="form-control" id="custom-membership-amount" value="500000000" min="0" step="1000000" placeholder="Số tiền">
+                         <span class="input-group-text">VNĐ</span>
+                       </div>
+                     </div>
+                   </div>
+                   <div class="mt-3">
+                     <div class="alert alert-info">
+                       <strong>Tổng phần trăm: <span id="totalPercentage">100</span>%</strong>
+                       <br>
+                       <strong>Tổng số tiền: <span id="totalAmount">${formatNumber(
+                         globalTarget
+                       )}</span> VNĐ</strong>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                   <button type="button" class="btn btn-primary" onclick="applyCustomDistribution()">Áp dụng</button>
+                 </div>
+               </div>
+             </div>
+           </div>
+         `;
+
+        // Remove existing modal if any
+        const existingModal = document.getElementById(
+          "customDistributionModal"
+        );
+        if (existingModal) {
+          existingModal.remove();
+        }
+
+        // Add modal to body
+        document.body.insertAdjacentHTML("beforeend", customDialog);
+
+        // Show modal
+        const modal = new bootstrap.Modal(
+          document.getElementById("customDistributionModal")
+        );
+        modal.show();
+
+        // Add event listeners for real-time calculation
+        const centers = [
+          "ton-that-thuyet",
+          "huynh-thuc-khang",
+          "giang-vo",
+          "hao-nam",
+          "nguyen-tuan",
+          "membership",
+        ];
+
+        centers.forEach((center) => {
+          // Listen to percentage changes
+          document
+            .getElementById(`custom-${center}-percent`)
+            .addEventListener("input", () => updateFromPercentage(center));
+
+          // Listen to amount changes with formatting
+          const amountInput = document.getElementById(
+            `custom-${center}-amount`
+          );
+          amountInput.addEventListener("input", () => {
+            // Format the input with commas
+            const value = amountInput.value.replace(/,/g, "");
+            if (value && !isNaN(value)) {
+              amountInput.value = formatNumber(value);
+            }
+            updateFromAmount(center);
+          });
+        });
+      }
+
+      // Update from percentage input
+      function updateFromPercentage(center) {
+        const percentInput = document.getElementById(
+          `custom-${center}-percent`
+        );
+        const amountInput = document.getElementById(`custom-${center}-amount`);
+        const globalTarget = parseInt(
+          document.getElementById("globalTarget").value.replace(/,/g, "")
+        );
+
+        const percentage = parseFloat(percentInput.value) || 0;
+        const amount = Math.round((percentage / 100) * globalTarget);
+
+        amountInput.value = amount;
+        updateCustomTotals();
+      }
+
+      // Update from amount input
+      function updateFromAmount(center) {
+        const percentInput = document.getElementById(
+          `custom-${center}-percent`
+        );
+        const amountInput = document.getElementById(`custom-${center}-amount`);
+        const globalTarget = parseInt(
+          document.getElementById("globalTarget").value.replace(/,/g, "")
+        );
+
+        // Parse amount by removing commas first
+        const amount = parseFloat(amountInput.value.replace(/,/g, "")) || 0;
+        const percentage = (amount / globalTarget) * 100;
+
+        percentInput.value = percentage.toFixed(1);
+        updateCustomTotals();
+      }
+
+      // Update custom distribution totals
+      function updateCustomTotals() {
+        const centers = [
+          "ton-that-thuyet",
+          "huynh-thuc-khang",
+          "giang-vo",
+          "hao-nam",
+          "nguyen-tuan",
+          "membership",
+        ];
+
+        let totalPercentage = 0;
+        let totalAmount = 0;
+
+        centers.forEach((center) => {
+          const percentValue =
+            parseFloat(
+              document.getElementById(`custom-${center}-percent`).value
+            ) || 0;
+          const amountValue =
+            parseFloat(
+              document
+                .getElementById(`custom-${center}-amount`)
+                .value.replace(/,/g, "")
+            ) || 0;
+          totalPercentage += percentValue;
+          totalAmount += amountValue;
+        });
+
+        document.getElementById("totalPercentage").textContent =
+          totalPercentage.toFixed(1);
+        document.getElementById("totalAmount").textContent =
+          formatNumber(totalAmount);
+
+        // Change color based on percentage
+        const totalElement = document.getElementById("totalPercentage");
+        if (Math.abs(totalPercentage - 100) < 0.1) {
+          totalElement.className = "text-success fw-bold";
+        } else {
+          totalElement.className = "text-warning fw-bold";
+        }
+      }
+
+      // Apply custom distribution
+      function applyCustomDistribution() {
+        const globalTarget = parseFormattedNumber(
+          document.getElementById("globalTarget").value
+        );
+        const centers = [
+          { center: "ton-that-thuyet", target: "ton-that-thuyet-revenue" },
+          { center: "huynh-thuc-khang", target: "huynh-thuc-khang-revenue" },
+          { center: "giang-vo", target: "giang-vo-revenue" },
+          { center: "hao-nam", target: "hao-nam-revenue" },
+          { center: "nguyen-tuan", target: "nguyen-tuan-revenue" },
+          { center: "membership", target: "membership-revenue" },
+        ];
+
+        centers.forEach(({ center, target }) => {
+          const amount =
+            parseFloat(
+              document
+                .getElementById(`custom-${center}-amount`)
+                .value.replace(/,/g, "")
+            ) || 0;
+          document.getElementById(target).value = formatNumber(amount);
+          updateVietnameseText(target);
+        });
+
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("customDistributionModal")
+        );
+        modal.hide();
+
+        showNotification("Đã áp dụng phân bổ KPI tùy chỉnh!", "success");
+
+        // Re-apply formatting after modal changes
+        setTimeout(() => {
+          addNumberFormatting();
+        }, 200);
+      }
+
+      // Re-apply formatting when tabs are clicked
+      document.addEventListener("click", function (e) {
+        if (
+          e.target.classList.contains("nav-link") ||
+          e.target.closest(".nav-link")
+        ) {
+          setTimeout(() => {
+            addNumberFormatting();
+          }, 100);
+        }
+      });
+
+      // Initialize on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        loadSettings();
+        // Add delay to ensure all elements are rendered
+        setTimeout(() => {
+          addNumberFormatting();
+        }, 100);
+        console.log("Settings page loaded");
+      });
+    </script>
+  
+    <!-- SPA System -->
+    <script src="../assets/js/spa/store.js"></script>
+    <script src="../assets/js/spa/components.js"></script>
+    <script src="../assets/js/spa/router.js"></script>
+    <script src="../assets/js/spa/integration.js"></script>
+
+    <!-- Universal Page Initializer -->
+    <script src="../assets/js/shared/page-initializer.js"></script>
+  </body>
+</html>
